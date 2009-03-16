@@ -1,9 +1,4 @@
 # Partial Tkenv config file -- see $HOME/.tkenvrc as well
-inspector "ZigBee" "ZigBee" "2" "682x577+5+25"
-inspector "ZigBee.coordinatorHost" "FFD" "2" "644x501+5+477"
-inspector "ZigBee.coordinatorHost.net" "FFDNetLayer" "2" "607x283+659+643"
-inspector "ZigBee.coordinatorHost.nic" "Nic802154" "2" "607x588+668+25"
-inspector "ZigBee.coordinatorHost.nic.mac" "Mac802154" "2" "253x388+5+25"
-inspector "ZigBee.coordinatorHost.nic.phy" "Phy802154" "2" "360x283+298+25"
+inspector "ZigBee" "ZigBee" "2" "682x577+35+175"
 inspector "zigbee" "zigbee" "2" "579x156+10+50"
 

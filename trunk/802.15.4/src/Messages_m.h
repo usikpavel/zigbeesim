@@ -353,31 +353,166 @@ inline void doUnpacking(cCommBuffer *b, MlmeScan_confirm& obj) {obj.parsimUnpack
 /**
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
- * message MldeMsg extends cMessage {
+ * message McpsMsg extends cPacket {
+ *     
+ *     
+ *     unsigned char frameType;
+ *     bool securityEnabled;
+ *     bool framePending;
+ *     bool ackRequest;
+ *     bool panIdCompression;
+ *     char destinationAddressingMode;
+ *     char frameVersion;
+ *     char sourceAddressingMode;
+ *     
+ *     unsigned char sequenceNumber;
+ *     unsigned short destinationPanIdentifier;
+ *     unsigned long destinationAddress;
+ *     unsigned short sourcePanIdentifier;
+ *     unsigned long sourceAddress;
+ *     unsigned char auxiliarySecurityHeader[];
+ *     unsigned short fcs;
  * };
  * </pre>
  */
-class MldeMsg : public cMessage
+class McpsMsg : public cPacket
+{
+  protected:
+    unsigned char frameType_var;
+    bool securityEnabled_var;
+    bool framePending_var;
+    bool ackRequest_var;
+    bool panIdCompression_var;
+    char destinationAddressingMode_var;
+    char frameVersion_var;
+    char sourceAddressingMode_var;
+    unsigned char sequenceNumber_var;
+    unsigned short destinationPanIdentifier_var;
+    unsigned long destinationAddress_var;
+    unsigned short sourcePanIdentifier_var;
+    unsigned long sourceAddress_var;
+    unsigned char *auxiliarySecurityHeader_var; // array ptr
+    unsigned int auxiliarySecurityHeader_arraysize;
+    unsigned short fcs_var;
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const McpsMsg&);
+
+  public:
+    McpsMsg(const char *name=NULL, int kind=0);
+    McpsMsg(const McpsMsg& other);
+    virtual ~McpsMsg();
+    McpsMsg& operator=(const McpsMsg& other);
+    virtual McpsMsg *dup() const {return new McpsMsg(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+    virtual unsigned char getFrameType() const;
+    virtual void setFrameType(unsigned char frameType_var);
+    virtual bool getSecurityEnabled() const;
+    virtual void setSecurityEnabled(bool securityEnabled_var);
+    virtual bool getFramePending() const;
+    virtual void setFramePending(bool framePending_var);
+    virtual bool getAckRequest() const;
+    virtual void setAckRequest(bool ackRequest_var);
+    virtual bool getPanIdCompression() const;
+    virtual void setPanIdCompression(bool panIdCompression_var);
+    virtual char getDestinationAddressingMode() const;
+    virtual void setDestinationAddressingMode(char destinationAddressingMode_var);
+    virtual char getFrameVersion() const;
+    virtual void setFrameVersion(char frameVersion_var);
+    virtual char getSourceAddressingMode() const;
+    virtual void setSourceAddressingMode(char sourceAddressingMode_var);
+    virtual unsigned char getSequenceNumber() const;
+    virtual void setSequenceNumber(unsigned char sequenceNumber_var);
+    virtual unsigned short getDestinationPanIdentifier() const;
+    virtual void setDestinationPanIdentifier(unsigned short destinationPanIdentifier_var);
+    virtual unsigned long getDestinationAddress() const;
+    virtual void setDestinationAddress(unsigned long destinationAddress_var);
+    virtual unsigned short getSourcePanIdentifier() const;
+    virtual void setSourcePanIdentifier(unsigned short sourcePanIdentifier_var);
+    virtual unsigned long getSourceAddress() const;
+    virtual void setSourceAddress(unsigned long sourceAddress_var);
+    virtual void setAuxiliarySecurityHeaderArraySize(unsigned int size);
+    virtual unsigned int getAuxiliarySecurityHeaderArraySize() const;
+    virtual unsigned char getAuxiliarySecurityHeader(unsigned int k) const;
+    virtual void setAuxiliarySecurityHeader(unsigned int k, unsigned char auxiliarySecurityHeader_var);
+    virtual unsigned short getFcs() const;
+    virtual void setFcs(unsigned short fcs_var);
+};
+
+inline void doPacking(cCommBuffer *b, McpsMsg& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, McpsMsg& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
+ * message MacCommand extends McpsMsg {
+ *     unsigned char commandType;
+ *     unsigned char commandPayload[];
+ * };
+ * </pre>
+ */
+class MacCommand : public McpsMsg
+{
+  protected:
+    unsigned char commandType_var;
+    unsigned char *commandPayload_var; // array ptr
+    unsigned int commandPayload_arraysize;
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const MacCommand&);
+
+  public:
+    MacCommand(const char *name=NULL, int kind=0);
+    MacCommand(const MacCommand& other);
+    virtual ~MacCommand();
+    MacCommand& operator=(const MacCommand& other);
+    virtual MacCommand *dup() const {return new MacCommand(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+    virtual unsigned char getCommandType() const;
+    virtual void setCommandType(unsigned char commandType_var);
+    virtual void setCommandPayloadArraySize(unsigned int size);
+    virtual unsigned int getCommandPayloadArraySize() const;
+    virtual unsigned char getCommandPayload(unsigned int k) const;
+    virtual void setCommandPayload(unsigned int k, unsigned char commandPayload_var);
+};
+
+inline void doPacking(cCommBuffer *b, MacCommand& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, MacCommand& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
+ * message MacBeacon extends McpsMsg {
+ * };
+ * </pre>
+ */
+class MacBeacon : public McpsMsg
 {
   protected:
 
     // protected and unimplemented operator==(), to prevent accidental usage
-    bool operator==(const MldeMsg&);
+    bool operator==(const MacBeacon&);
 
   public:
-    MldeMsg(const char *name=NULL, int kind=0);
-    MldeMsg(const MldeMsg& other);
-    virtual ~MldeMsg();
-    MldeMsg& operator=(const MldeMsg& other);
-    virtual MldeMsg *dup() const {return new MldeMsg(*this);}
+    MacBeacon(const char *name=NULL, int kind=0);
+    MacBeacon(const MacBeacon& other);
+    virtual ~MacBeacon();
+    MacBeacon& operator=(const MacBeacon& other);
+    virtual MacBeacon *dup() const {return new MacBeacon(*this);}
     virtual void parsimPack(cCommBuffer *b);
     virtual void parsimUnpack(cCommBuffer *b);
 
     // field getter/setter methods
 };
 
-inline void doPacking(cCommBuffer *b, MldeMsg& obj) {obj.parsimPack(b);}
-inline void doUnpacking(cCommBuffer *b, MldeMsg& obj) {obj.parsimUnpack(b);}
+inline void doPacking(cCommBuffer *b, MacBeacon& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, MacBeacon& obj) {obj.parsimUnpack(b);}
 
 /**
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
@@ -620,11 +755,11 @@ inline void doUnpacking(cCommBuffer *b, PlmeEd_confirm& obj) {obj.parsimUnpack(b
 /**
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
- * message PdMsg extends cMessage {
+ * message PdMsg extends cPacket {
  * };
  * </pre>
  */
-class PdMsg : public cMessage
+class PdMsg : public cPacket
 {
   protected:
 

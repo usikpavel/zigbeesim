@@ -52,7 +52,7 @@ void Mlme::handleSelfMsg(cMessage *msg) {
 
 void Mlme::handlePlmeMsg(cMessage *msg) {
 	std::string msgName = msg->getName();
-	if (msgName == "PLME-SET-TRX-STATE.confirm") {
+	if (msg->getKind() == PLME_SET_TRX_STATE_CONFIRM) {
 		msgName = getLastUpperMsg()->getName();
 		if (msgName == "MLME-SCAN.request") {
 			MlmeScan_request* request = check_and_cast<MlmeScan_request *> (
@@ -129,14 +129,15 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 						ed->setKind(PLME_ED_REQUEST);
 						sendPlmeDown(ed);
 					}
-				} //else if (request->getScanType() == ACTIVE_SCAN) {
-
-
-
-
-
-
-				//}
+				} else if (request->getScanType() == ACTIVE_SCAN) {
+					MacCommand* beaconRequest = new MacCommand();
+					beaconRequest->setName("Beacon Request Command");
+					beaconRequest->setKind(MAC_COMMAND_FRAME);
+					beaconRequest->setCommandType(BEACON_REQUEST);
+					beaconRequest->setCommandPayloadArraySize(0);
+					beaconRequest->setByteLength(1);
+					sendMcps(beaconRequest);
+				}
 			}
 		} else if (confirm->getPIBAttribute() == PHY_CURRENT_PAGE) {
 			if (getLastUpperMsg()->getKind() == MLME_SCAN_REQUEST) {

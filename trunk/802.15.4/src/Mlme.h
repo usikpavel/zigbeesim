@@ -27,11 +27,11 @@ protected:
 	int mcpsOut;
 	int mcpsIn;
 	/*@}*/
-	int currentChannel;
-	unsigned char currentPage;
 	/** additional variables */
 	cMessage* lastUpperMsg;
 	cMessage* timer;
+	int currentChannel;
+	unsigned char currentPage;
 	int scannedChannels;
 	char* energyLevels;
 	/** @brief Sets the level of comments to the EV output */

@@ -74,6 +74,9 @@ typedef enum {
 	MLME_SYNC_LOSS_INDICATION,
 	MLME_POLL_REQUEST,
 	MLME_POLL_CONFIRM,
+	/** MAC internal messages */
+	MAC_BEACON_FRAME,
+	MAC_COMMAND_FRAME,
 	/** PLME-SAP messages */
 	PLME_CCA_REQUEST,
 	PLME_CCA_CONFIRM,
@@ -85,6 +88,10 @@ typedef enum {
 	PLME_SET_TRX_STATE_CONFIRM,
 	PLME_SET_REQUEST,
 	PLME_SET_CONFIRM,
+	/** PD-SAP messages */
+	PD_DATA_REQUEST,
+	PD_DATA_CONFIRM,
+	PD_DATA_INDICATION
 } msgTypes;
 
 /** @brief Kinds of self messages */
