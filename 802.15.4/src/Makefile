@@ -145,7 +145,13 @@ $O/Plme.o: Plme.cc \
 	$(RTN_PROJ)/core/utils/ModuleAccess.h \
 	Plme.h
 $O/Mcps.o: Mcps.cc \
-	Mcps.h
+	typedef.h \
+	BBItems.h \
+	$(RTN_PROJ)/core/blackboard/Blackboard.h \
+	$(RTN_PROJ)/core/basicModules/BasicModule.h \
+	Messages_m.h \
+	Mcps.h \
+	$(RTN_PROJ)/core/utils/ModuleAccess.h
 $O/Mlme.o: Mlme.cc \
 	typedef.h \
 	MacPib.h \

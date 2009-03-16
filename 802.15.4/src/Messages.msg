@@ -89,7 +89,33 @@ message MlmeScan_confirm extends MlmeMsg {
     PANDescriptor panDescriptorList[];
 };
 
-message MldeMsg extends cMessage {
+message McpsMsg extends cPacket {
+    // MHR fields
+    // MHR fields - FrameControl
+    unsigned char frameType;
+    bool securityEnabled;
+    bool framePending;
+    bool ackRequest;
+    bool panIdCompression;
+    char destinationAddressingMode;
+    char frameVersion;
+    char sourceAddressingMode;
+    // MHR fields - end of FrameControl
+    unsigned char sequenceNumber;
+    unsigned short destinationPanIdentifier;
+    unsigned long destinationAddress;
+    unsigned short sourcePanIdentifier;
+    unsigned long sourceAddress;
+    unsigned char auxiliarySecurityHeader[];
+    unsigned short fcs;
+};
+
+message MacCommand extends McpsMsg {
+    unsigned char commandType;
+    unsigned char commandPayload[];
+};
+
+message MacBeacon extends McpsMsg {
 };
 
 // Physical layer messages
@@ -122,7 +148,7 @@ message PlmeEd_confirm extends PlmeMsg {
     unsigned char energyLevel;
 };
 
-message PdMsg extends cMessage {
+message PdMsg extends cPacket {
 };
 
 message PdData_request extends PdMsg {

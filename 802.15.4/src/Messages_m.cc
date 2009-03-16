@@ -2261,44 +2261,290 @@ void *MlmeScan_confirmDescriptor::getFieldStructPointer(void *object, int field,
     }
 }
 
-Register_Class(MldeMsg);
+Register_Class(McpsMsg);
 
-MldeMsg::MldeMsg(const char *name, int kind) : cMessage(name,kind)
+McpsMsg::McpsMsg(const char *name, int kind) : cPacket(name,kind)
 {
+    this->frameType_var = 0;
+    this->securityEnabled_var = 0;
+    this->framePending_var = 0;
+    this->ackRequest_var = 0;
+    this->panIdCompression_var = 0;
+    this->destinationAddressingMode_var = 0;
+    this->frameVersion_var = 0;
+    this->sourceAddressingMode_var = 0;
+    this->sequenceNumber_var = 0;
+    this->destinationPanIdentifier_var = 0;
+    this->destinationAddress_var = 0;
+    this->sourcePanIdentifier_var = 0;
+    this->sourceAddress_var = 0;
+    auxiliarySecurityHeader_arraysize = 0;
+    this->auxiliarySecurityHeader_var = 0;
+    this->fcs_var = 0;
 }
 
-MldeMsg::MldeMsg(const MldeMsg& other) : cMessage()
+McpsMsg::McpsMsg(const McpsMsg& other) : cPacket()
 {
     setName(other.getName());
+    auxiliarySecurityHeader_arraysize = 0;
+    this->auxiliarySecurityHeader_var = 0;
     operator=(other);
 }
 
-MldeMsg::~MldeMsg()
+McpsMsg::~McpsMsg()
 {
+    delete [] auxiliarySecurityHeader_var;
 }
 
-MldeMsg& MldeMsg::operator=(const MldeMsg& other)
+McpsMsg& McpsMsg::operator=(const McpsMsg& other)
 {
     if (this==&other) return *this;
-    cMessage::operator=(other);
+    cPacket::operator=(other);
+    this->frameType_var = other.frameType_var;
+    this->securityEnabled_var = other.securityEnabled_var;
+    this->framePending_var = other.framePending_var;
+    this->ackRequest_var = other.ackRequest_var;
+    this->panIdCompression_var = other.panIdCompression_var;
+    this->destinationAddressingMode_var = other.destinationAddressingMode_var;
+    this->frameVersion_var = other.frameVersion_var;
+    this->sourceAddressingMode_var = other.sourceAddressingMode_var;
+    this->sequenceNumber_var = other.sequenceNumber_var;
+    this->destinationPanIdentifier_var = other.destinationPanIdentifier_var;
+    this->destinationAddress_var = other.destinationAddress_var;
+    this->sourcePanIdentifier_var = other.sourcePanIdentifier_var;
+    this->sourceAddress_var = other.sourceAddress_var;
+    delete [] this->auxiliarySecurityHeader_var;
+    this->auxiliarySecurityHeader_var = (other.auxiliarySecurityHeader_arraysize==0) ? NULL : new unsigned char[other.auxiliarySecurityHeader_arraysize];
+    auxiliarySecurityHeader_arraysize = other.auxiliarySecurityHeader_arraysize;
+    for (unsigned int i=0; i<auxiliarySecurityHeader_arraysize; i++)
+        this->auxiliarySecurityHeader_var[i] = other.auxiliarySecurityHeader_var[i];
+    this->fcs_var = other.fcs_var;
     return *this;
 }
 
-void MldeMsg::parsimPack(cCommBuffer *b)
+void McpsMsg::parsimPack(cCommBuffer *b)
 {
-    cMessage::parsimPack(b);
+    cPacket::parsimPack(b);
+    doPacking(b,this->frameType_var);
+    doPacking(b,this->securityEnabled_var);
+    doPacking(b,this->framePending_var);
+    doPacking(b,this->ackRequest_var);
+    doPacking(b,this->panIdCompression_var);
+    doPacking(b,this->destinationAddressingMode_var);
+    doPacking(b,this->frameVersion_var);
+    doPacking(b,this->sourceAddressingMode_var);
+    doPacking(b,this->sequenceNumber_var);
+    doPacking(b,this->destinationPanIdentifier_var);
+    doPacking(b,this->destinationAddress_var);
+    doPacking(b,this->sourcePanIdentifier_var);
+    doPacking(b,this->sourceAddress_var);
+    b->pack(auxiliarySecurityHeader_arraysize);
+    doPacking(b,this->auxiliarySecurityHeader_var,auxiliarySecurityHeader_arraysize);
+    doPacking(b,this->fcs_var);
 }
 
-void MldeMsg::parsimUnpack(cCommBuffer *b)
+void McpsMsg::parsimUnpack(cCommBuffer *b)
 {
-    cMessage::parsimUnpack(b);
+    cPacket::parsimUnpack(b);
+    doUnpacking(b,this->frameType_var);
+    doUnpacking(b,this->securityEnabled_var);
+    doUnpacking(b,this->framePending_var);
+    doUnpacking(b,this->ackRequest_var);
+    doUnpacking(b,this->panIdCompression_var);
+    doUnpacking(b,this->destinationAddressingMode_var);
+    doUnpacking(b,this->frameVersion_var);
+    doUnpacking(b,this->sourceAddressingMode_var);
+    doUnpacking(b,this->sequenceNumber_var);
+    doUnpacking(b,this->destinationPanIdentifier_var);
+    doUnpacking(b,this->destinationAddress_var);
+    doUnpacking(b,this->sourcePanIdentifier_var);
+    doUnpacking(b,this->sourceAddress_var);
+    delete [] this->auxiliarySecurityHeader_var;
+    b->unpack(auxiliarySecurityHeader_arraysize);
+    if (auxiliarySecurityHeader_arraysize==0) {
+        this->auxiliarySecurityHeader_var = 0;
+    } else {
+        this->auxiliarySecurityHeader_var = new unsigned char[auxiliarySecurityHeader_arraysize];
+        doUnpacking(b,this->auxiliarySecurityHeader_var,auxiliarySecurityHeader_arraysize);
+    }
+    doUnpacking(b,this->fcs_var);
 }
 
-class MldeMsgDescriptor : public cClassDescriptor
+unsigned char McpsMsg::getFrameType() const
+{
+    return frameType_var;
+}
+
+void McpsMsg::setFrameType(unsigned char frameType_var)
+{
+    this->frameType_var = frameType_var;
+}
+
+bool McpsMsg::getSecurityEnabled() const
+{
+    return securityEnabled_var;
+}
+
+void McpsMsg::setSecurityEnabled(bool securityEnabled_var)
+{
+    this->securityEnabled_var = securityEnabled_var;
+}
+
+bool McpsMsg::getFramePending() const
+{
+    return framePending_var;
+}
+
+void McpsMsg::setFramePending(bool framePending_var)
+{
+    this->framePending_var = framePending_var;
+}
+
+bool McpsMsg::getAckRequest() const
+{
+    return ackRequest_var;
+}
+
+void McpsMsg::setAckRequest(bool ackRequest_var)
+{
+    this->ackRequest_var = ackRequest_var;
+}
+
+bool McpsMsg::getPanIdCompression() const
+{
+    return panIdCompression_var;
+}
+
+void McpsMsg::setPanIdCompression(bool panIdCompression_var)
+{
+    this->panIdCompression_var = panIdCompression_var;
+}
+
+char McpsMsg::getDestinationAddressingMode() const
+{
+    return destinationAddressingMode_var;
+}
+
+void McpsMsg::setDestinationAddressingMode(char destinationAddressingMode_var)
+{
+    this->destinationAddressingMode_var = destinationAddressingMode_var;
+}
+
+char McpsMsg::getFrameVersion() const
+{
+    return frameVersion_var;
+}
+
+void McpsMsg::setFrameVersion(char frameVersion_var)
+{
+    this->frameVersion_var = frameVersion_var;
+}
+
+char McpsMsg::getSourceAddressingMode() const
+{
+    return sourceAddressingMode_var;
+}
+
+void McpsMsg::setSourceAddressingMode(char sourceAddressingMode_var)
+{
+    this->sourceAddressingMode_var = sourceAddressingMode_var;
+}
+
+unsigned char McpsMsg::getSequenceNumber() const
+{
+    return sequenceNumber_var;
+}
+
+void McpsMsg::setSequenceNumber(unsigned char sequenceNumber_var)
+{
+    this->sequenceNumber_var = sequenceNumber_var;
+}
+
+unsigned short McpsMsg::getDestinationPanIdentifier() const
+{
+    return destinationPanIdentifier_var;
+}
+
+void McpsMsg::setDestinationPanIdentifier(unsigned short destinationPanIdentifier_var)
+{
+    this->destinationPanIdentifier_var = destinationPanIdentifier_var;
+}
+
+unsigned long McpsMsg::getDestinationAddress() const
+{
+    return destinationAddress_var;
+}
+
+void McpsMsg::setDestinationAddress(unsigned long destinationAddress_var)
+{
+    this->destinationAddress_var = destinationAddress_var;
+}
+
+unsigned short McpsMsg::getSourcePanIdentifier() const
+{
+    return sourcePanIdentifier_var;
+}
+
+void McpsMsg::setSourcePanIdentifier(unsigned short sourcePanIdentifier_var)
+{
+    this->sourcePanIdentifier_var = sourcePanIdentifier_var;
+}
+
+unsigned long McpsMsg::getSourceAddress() const
+{
+    return sourceAddress_var;
+}
+
+void McpsMsg::setSourceAddress(unsigned long sourceAddress_var)
+{
+    this->sourceAddress_var = sourceAddress_var;
+}
+
+void McpsMsg::setAuxiliarySecurityHeaderArraySize(unsigned int size)
+{
+    unsigned char *auxiliarySecurityHeader_var2 = (size==0) ? NULL : new unsigned char[size];
+    unsigned int sz = auxiliarySecurityHeader_arraysize < size ? auxiliarySecurityHeader_arraysize : size;
+    for (unsigned int i=0; i<sz; i++)
+        auxiliarySecurityHeader_var2[i] = this->auxiliarySecurityHeader_var[i];
+    for (unsigned int i=sz; i<size; i++)
+        auxiliarySecurityHeader_var2[i] = 0;
+    auxiliarySecurityHeader_arraysize = size;
+    delete [] this->auxiliarySecurityHeader_var;
+    this->auxiliarySecurityHeader_var = auxiliarySecurityHeader_var2;
+}
+
+unsigned int McpsMsg::getAuxiliarySecurityHeaderArraySize() const
+{
+    return auxiliarySecurityHeader_arraysize;
+}
+
+unsigned char McpsMsg::getAuxiliarySecurityHeader(unsigned int k) const
+{
+    if (k>=auxiliarySecurityHeader_arraysize) throw cRuntimeError("Array of size %d indexed by %d", auxiliarySecurityHeader_arraysize, k);
+    return auxiliarySecurityHeader_var[k];
+}
+
+void McpsMsg::setAuxiliarySecurityHeader(unsigned int k, unsigned char auxiliarySecurityHeader_var)
+{
+    if (k>=auxiliarySecurityHeader_arraysize) throw cRuntimeError("Array of size %d indexed by %d", auxiliarySecurityHeader_arraysize, k);
+    this->auxiliarySecurityHeader_var[k]=auxiliarySecurityHeader_var;
+}
+
+unsigned short McpsMsg::getFcs() const
+{
+    return fcs_var;
+}
+
+void McpsMsg::setFcs(unsigned short fcs_var)
+{
+    this->fcs_var = fcs_var;
+}
+
+class McpsMsgDescriptor : public cClassDescriptor
 {
   public:
-    MldeMsgDescriptor();
-    virtual ~MldeMsgDescriptor();
+    McpsMsgDescriptor();
+    virtual ~McpsMsgDescriptor();
 
     virtual bool doesSupport(cObject *obj) const;
     virtual const char *getProperty(const char *propertyname) const;
@@ -2316,34 +2562,34 @@ class MldeMsgDescriptor : public cClassDescriptor
     virtual void *getFieldStructPointer(void *object, int field, int i) const;
 };
 
-Register_ClassDescriptor(MldeMsgDescriptor);
+Register_ClassDescriptor(McpsMsgDescriptor);
 
-MldeMsgDescriptor::MldeMsgDescriptor() : cClassDescriptor("MldeMsg", "cMessage")
+McpsMsgDescriptor::McpsMsgDescriptor() : cClassDescriptor("McpsMsg", "cPacket")
 {
 }
 
-MldeMsgDescriptor::~MldeMsgDescriptor()
+McpsMsgDescriptor::~McpsMsgDescriptor()
 {
 }
 
-bool MldeMsgDescriptor::doesSupport(cObject *obj) const
+bool McpsMsgDescriptor::doesSupport(cObject *obj) const
 {
-    return dynamic_cast<MldeMsg *>(obj)!=NULL;
+    return dynamic_cast<McpsMsg *>(obj)!=NULL;
 }
 
-const char *MldeMsgDescriptor::getProperty(const char *propertyname) const
+const char *McpsMsgDescriptor::getProperty(const char *propertyname) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     return basedesc ? basedesc->getProperty(propertyname) : NULL;
 }
 
-int MldeMsgDescriptor::getFieldCount(void *object) const
+int McpsMsgDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 0+basedesc->getFieldCount(object) : 0;
+    return basedesc ? 15+basedesc->getFieldCount(object) : 15;
 }
 
-unsigned int MldeMsgDescriptor::getFieldTypeFlags(void *object, int field) const
+unsigned int McpsMsgDescriptor::getFieldTypeFlags(void *object, int field) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -2352,11 +2598,26 @@ unsigned int MldeMsgDescriptor::getFieldTypeFlags(void *object, int field) const
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
+        case 0: return FD_ISEDITABLE;
+        case 1: return FD_ISEDITABLE;
+        case 2: return FD_ISEDITABLE;
+        case 3: return FD_ISEDITABLE;
+        case 4: return FD_ISEDITABLE;
+        case 5: return FD_ISEDITABLE;
+        case 6: return FD_ISEDITABLE;
+        case 7: return FD_ISEDITABLE;
+        case 8: return FD_ISEDITABLE;
+        case 9: return FD_ISEDITABLE;
+        case 10: return FD_ISEDITABLE;
+        case 11: return FD_ISEDITABLE;
+        case 12: return FD_ISEDITABLE;
+        case 13: return FD_ISARRAY | FD_ISEDITABLE;
+        case 14: return FD_ISEDITABLE;
         default: return 0;
     }
 }
 
-const char *MldeMsgDescriptor::getFieldName(void *object, int field) const
+const char *McpsMsgDescriptor::getFieldName(void *object, int field) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -2365,11 +2626,26 @@ const char *MldeMsgDescriptor::getFieldName(void *object, int field) const
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
+        case 0: return "frameType";
+        case 1: return "securityEnabled";
+        case 2: return "framePending";
+        case 3: return "ackRequest";
+        case 4: return "panIdCompression";
+        case 5: return "destinationAddressingMode";
+        case 6: return "frameVersion";
+        case 7: return "sourceAddressingMode";
+        case 8: return "sequenceNumber";
+        case 9: return "destinationPanIdentifier";
+        case 10: return "destinationAddress";
+        case 11: return "sourcePanIdentifier";
+        case 12: return "sourceAddress";
+        case 13: return "auxiliarySecurityHeader";
+        case 14: return "fcs";
         default: return NULL;
     }
 }
 
-const char *MldeMsgDescriptor::getFieldTypeString(void *object, int field) const
+const char *McpsMsgDescriptor::getFieldTypeString(void *object, int field) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -2378,11 +2654,26 @@ const char *MldeMsgDescriptor::getFieldTypeString(void *object, int field) const
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
+        case 0: return "unsigned char";
+        case 1: return "bool";
+        case 2: return "bool";
+        case 3: return "bool";
+        case 4: return "bool";
+        case 5: return "char";
+        case 6: return "char";
+        case 7: return "char";
+        case 8: return "unsigned char";
+        case 9: return "unsigned short";
+        case 10: return "unsigned long";
+        case 11: return "unsigned short";
+        case 12: return "unsigned long";
+        case 13: return "unsigned char";
+        case 14: return "unsigned short";
         default: return NULL;
     }
 }
 
-const char *MldeMsgDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
+const char *McpsMsgDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -2395,7 +2686,7 @@ const char *MldeMsgDescriptor::getFieldProperty(void *object, int field, const c
     }
 }
 
-int MldeMsgDescriptor::getArraySize(void *object, int field) const
+int McpsMsgDescriptor::getArraySize(void *object, int field) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -2403,13 +2694,14 @@ int MldeMsgDescriptor::getArraySize(void *object, int field) const
             return basedesc->getArraySize(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    MldeMsg *pp = (MldeMsg *)object; (void)pp;
+    McpsMsg *pp = (McpsMsg *)object; (void)pp;
     switch (field) {
+        case 13: return pp->getAuxiliarySecurityHeaderArraySize();
         default: return 0;
     }
 }
 
-bool MldeMsgDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+bool McpsMsgDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -2417,13 +2709,28 @@ bool MldeMsgDescriptor::getFieldAsString(void *object, int field, int i, char *r
             return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
         field -= basedesc->getFieldCount(object);
     }
-    MldeMsg *pp = (MldeMsg *)object; (void)pp;
+    McpsMsg *pp = (McpsMsg *)object; (void)pp;
     switch (field) {
+        case 0: ulong2string(pp->getFrameType(),resultbuf,bufsize); return true;
+        case 1: bool2string(pp->getSecurityEnabled(),resultbuf,bufsize); return true;
+        case 2: bool2string(pp->getFramePending(),resultbuf,bufsize); return true;
+        case 3: bool2string(pp->getAckRequest(),resultbuf,bufsize); return true;
+        case 4: bool2string(pp->getPanIdCompression(),resultbuf,bufsize); return true;
+        case 5: long2string(pp->getDestinationAddressingMode(),resultbuf,bufsize); return true;
+        case 6: long2string(pp->getFrameVersion(),resultbuf,bufsize); return true;
+        case 7: long2string(pp->getSourceAddressingMode(),resultbuf,bufsize); return true;
+        case 8: ulong2string(pp->getSequenceNumber(),resultbuf,bufsize); return true;
+        case 9: ulong2string(pp->getDestinationPanIdentifier(),resultbuf,bufsize); return true;
+        case 10: ulong2string(pp->getDestinationAddress(),resultbuf,bufsize); return true;
+        case 11: ulong2string(pp->getSourcePanIdentifier(),resultbuf,bufsize); return true;
+        case 12: ulong2string(pp->getSourceAddress(),resultbuf,bufsize); return true;
+        case 13: ulong2string(pp->getAuxiliarySecurityHeader(i),resultbuf,bufsize); return true;
+        case 14: ulong2string(pp->getFcs(),resultbuf,bufsize); return true;
         default: return false;
     }
 }
 
-bool MldeMsgDescriptor::setFieldAsString(void *object, int field, int i, const char *value) const
+bool McpsMsgDescriptor::setFieldAsString(void *object, int field, int i, const char *value) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -2431,13 +2738,28 @@ bool MldeMsgDescriptor::setFieldAsString(void *object, int field, int i, const c
             return basedesc->setFieldAsString(object,field,i,value);
         field -= basedesc->getFieldCount(object);
     }
-    MldeMsg *pp = (MldeMsg *)object; (void)pp;
+    McpsMsg *pp = (McpsMsg *)object; (void)pp;
     switch (field) {
+        case 0: pp->setFrameType(string2ulong(value)); return true;
+        case 1: pp->setSecurityEnabled(string2bool(value)); return true;
+        case 2: pp->setFramePending(string2bool(value)); return true;
+        case 3: pp->setAckRequest(string2bool(value)); return true;
+        case 4: pp->setPanIdCompression(string2bool(value)); return true;
+        case 5: pp->setDestinationAddressingMode(string2long(value)); return true;
+        case 6: pp->setFrameVersion(string2long(value)); return true;
+        case 7: pp->setSourceAddressingMode(string2long(value)); return true;
+        case 8: pp->setSequenceNumber(string2ulong(value)); return true;
+        case 9: pp->setDestinationPanIdentifier(string2ulong(value)); return true;
+        case 10: pp->setDestinationAddress(string2ulong(value)); return true;
+        case 11: pp->setSourcePanIdentifier(string2ulong(value)); return true;
+        case 12: pp->setSourceAddress(string2ulong(value)); return true;
+        case 13: pp->setAuxiliarySecurityHeader(i,string2ulong(value)); return true;
+        case 14: pp->setFcs(string2ulong(value)); return true;
         default: return false;
     }
 }
 
-const char *MldeMsgDescriptor::getFieldStructName(void *object, int field) const
+const char *McpsMsgDescriptor::getFieldStructName(void *object, int field) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -2450,7 +2772,7 @@ const char *MldeMsgDescriptor::getFieldStructName(void *object, int field) const
     }
 }
 
-void *MldeMsgDescriptor::getFieldStructPointer(void *object, int field, int i) const
+void *McpsMsgDescriptor::getFieldStructPointer(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -2458,7 +2780,488 @@ void *MldeMsgDescriptor::getFieldStructPointer(void *object, int field, int i) c
             return basedesc->getFieldStructPointer(object, field, i);
         field -= basedesc->getFieldCount(object);
     }
-    MldeMsg *pp = (MldeMsg *)object; (void)pp;
+    McpsMsg *pp = (McpsMsg *)object; (void)pp;
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+Register_Class(MacCommand);
+
+MacCommand::MacCommand(const char *name, int kind) : McpsMsg(name,kind)
+{
+    this->commandType_var = 0;
+    commandPayload_arraysize = 0;
+    this->commandPayload_var = 0;
+}
+
+MacCommand::MacCommand(const MacCommand& other) : McpsMsg()
+{
+    setName(other.getName());
+    commandPayload_arraysize = 0;
+    this->commandPayload_var = 0;
+    operator=(other);
+}
+
+MacCommand::~MacCommand()
+{
+    delete [] commandPayload_var;
+}
+
+MacCommand& MacCommand::operator=(const MacCommand& other)
+{
+    if (this==&other) return *this;
+    McpsMsg::operator=(other);
+    this->commandType_var = other.commandType_var;
+    delete [] this->commandPayload_var;
+    this->commandPayload_var = (other.commandPayload_arraysize==0) ? NULL : new unsigned char[other.commandPayload_arraysize];
+    commandPayload_arraysize = other.commandPayload_arraysize;
+    for (unsigned int i=0; i<commandPayload_arraysize; i++)
+        this->commandPayload_var[i] = other.commandPayload_var[i];
+    return *this;
+}
+
+void MacCommand::parsimPack(cCommBuffer *b)
+{
+    McpsMsg::parsimPack(b);
+    doPacking(b,this->commandType_var);
+    b->pack(commandPayload_arraysize);
+    doPacking(b,this->commandPayload_var,commandPayload_arraysize);
+}
+
+void MacCommand::parsimUnpack(cCommBuffer *b)
+{
+    McpsMsg::parsimUnpack(b);
+    doUnpacking(b,this->commandType_var);
+    delete [] this->commandPayload_var;
+    b->unpack(commandPayload_arraysize);
+    if (commandPayload_arraysize==0) {
+        this->commandPayload_var = 0;
+    } else {
+        this->commandPayload_var = new unsigned char[commandPayload_arraysize];
+        doUnpacking(b,this->commandPayload_var,commandPayload_arraysize);
+    }
+}
+
+unsigned char MacCommand::getCommandType() const
+{
+    return commandType_var;
+}
+
+void MacCommand::setCommandType(unsigned char commandType_var)
+{
+    this->commandType_var = commandType_var;
+}
+
+void MacCommand::setCommandPayloadArraySize(unsigned int size)
+{
+    unsigned char *commandPayload_var2 = (size==0) ? NULL : new unsigned char[size];
+    unsigned int sz = commandPayload_arraysize < size ? commandPayload_arraysize : size;
+    for (unsigned int i=0; i<sz; i++)
+        commandPayload_var2[i] = this->commandPayload_var[i];
+    for (unsigned int i=sz; i<size; i++)
+        commandPayload_var2[i] = 0;
+    commandPayload_arraysize = size;
+    delete [] this->commandPayload_var;
+    this->commandPayload_var = commandPayload_var2;
+}
+
+unsigned int MacCommand::getCommandPayloadArraySize() const
+{
+    return commandPayload_arraysize;
+}
+
+unsigned char MacCommand::getCommandPayload(unsigned int k) const
+{
+    if (k>=commandPayload_arraysize) throw cRuntimeError("Array of size %d indexed by %d", commandPayload_arraysize, k);
+    return commandPayload_var[k];
+}
+
+void MacCommand::setCommandPayload(unsigned int k, unsigned char commandPayload_var)
+{
+    if (k>=commandPayload_arraysize) throw cRuntimeError("Array of size %d indexed by %d", commandPayload_arraysize, k);
+    this->commandPayload_var[k]=commandPayload_var;
+}
+
+class MacCommandDescriptor : public cClassDescriptor
+{
+  public:
+    MacCommandDescriptor();
+    virtual ~MacCommandDescriptor();
+
+    virtual bool doesSupport(cObject *obj) const;
+    virtual const char *getProperty(const char *propertyname) const;
+    virtual int getFieldCount(void *object) const;
+    virtual const char *getFieldName(void *object, int field) const;
+    virtual unsigned int getFieldTypeFlags(void *object, int field) const;
+    virtual const char *getFieldTypeString(void *object, int field) const;
+    virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
+    virtual int getArraySize(void *object, int field) const;
+
+    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
+
+    virtual const char *getFieldStructName(void *object, int field) const;
+    virtual void *getFieldStructPointer(void *object, int field, int i) const;
+};
+
+Register_ClassDescriptor(MacCommandDescriptor);
+
+MacCommandDescriptor::MacCommandDescriptor() : cClassDescriptor("MacCommand", "McpsMsg")
+{
+}
+
+MacCommandDescriptor::~MacCommandDescriptor()
+{
+}
+
+bool MacCommandDescriptor::doesSupport(cObject *obj) const
+{
+    return dynamic_cast<MacCommand *>(obj)!=NULL;
+}
+
+const char *MacCommandDescriptor::getProperty(const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->getProperty(propertyname) : NULL;
+}
+
+int MacCommandDescriptor::getFieldCount(void *object) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? 2+basedesc->getFieldCount(object) : 2;
+}
+
+unsigned int MacCommandDescriptor::getFieldTypeFlags(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeFlags(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return FD_ISEDITABLE;
+        case 1: return FD_ISARRAY | FD_ISEDITABLE;
+        default: return 0;
+    }
+}
+
+const char *MacCommandDescriptor::getFieldName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "commandType";
+        case 1: return "commandPayload";
+        default: return NULL;
+    }
+}
+
+const char *MacCommandDescriptor::getFieldTypeString(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeString(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "unsigned char";
+        case 1: return "unsigned char";
+        default: return NULL;
+    }
+}
+
+const char *MacCommandDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldProperty(object, field, propertyname);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+int MacCommandDescriptor::getArraySize(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getArraySize(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    MacCommand *pp = (MacCommand *)object; (void)pp;
+    switch (field) {
+        case 1: return pp->getCommandPayloadArraySize();
+        default: return 0;
+    }
+}
+
+bool MacCommandDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+        field -= basedesc->getFieldCount(object);
+    }
+    MacCommand *pp = (MacCommand *)object; (void)pp;
+    switch (field) {
+        case 0: ulong2string(pp->getCommandType(),resultbuf,bufsize); return true;
+        case 1: ulong2string(pp->getCommandPayload(i),resultbuf,bufsize); return true;
+        default: return false;
+    }
+}
+
+bool MacCommandDescriptor::setFieldAsString(void *object, int field, int i, const char *value) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->setFieldAsString(object,field,i,value);
+        field -= basedesc->getFieldCount(object);
+    }
+    MacCommand *pp = (MacCommand *)object; (void)pp;
+    switch (field) {
+        case 0: pp->setCommandType(string2ulong(value)); return true;
+        case 1: pp->setCommandPayload(i,string2ulong(value)); return true;
+        default: return false;
+    }
+}
+
+const char *MacCommandDescriptor::getFieldStructName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+void *MacCommandDescriptor::getFieldStructPointer(void *object, int field, int i) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructPointer(object, field, i);
+        field -= basedesc->getFieldCount(object);
+    }
+    MacCommand *pp = (MacCommand *)object; (void)pp;
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+Register_Class(MacBeacon);
+
+MacBeacon::MacBeacon(const char *name, int kind) : McpsMsg(name,kind)
+{
+}
+
+MacBeacon::MacBeacon(const MacBeacon& other) : McpsMsg()
+{
+    setName(other.getName());
+    operator=(other);
+}
+
+MacBeacon::~MacBeacon()
+{
+}
+
+MacBeacon& MacBeacon::operator=(const MacBeacon& other)
+{
+    if (this==&other) return *this;
+    McpsMsg::operator=(other);
+    return *this;
+}
+
+void MacBeacon::parsimPack(cCommBuffer *b)
+{
+    McpsMsg::parsimPack(b);
+}
+
+void MacBeacon::parsimUnpack(cCommBuffer *b)
+{
+    McpsMsg::parsimUnpack(b);
+}
+
+class MacBeaconDescriptor : public cClassDescriptor
+{
+  public:
+    MacBeaconDescriptor();
+    virtual ~MacBeaconDescriptor();
+
+    virtual bool doesSupport(cObject *obj) const;
+    virtual const char *getProperty(const char *propertyname) const;
+    virtual int getFieldCount(void *object) const;
+    virtual const char *getFieldName(void *object, int field) const;
+    virtual unsigned int getFieldTypeFlags(void *object, int field) const;
+    virtual const char *getFieldTypeString(void *object, int field) const;
+    virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
+    virtual int getArraySize(void *object, int field) const;
+
+    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
+
+    virtual const char *getFieldStructName(void *object, int field) const;
+    virtual void *getFieldStructPointer(void *object, int field, int i) const;
+};
+
+Register_ClassDescriptor(MacBeaconDescriptor);
+
+MacBeaconDescriptor::MacBeaconDescriptor() : cClassDescriptor("MacBeacon", "McpsMsg")
+{
+}
+
+MacBeaconDescriptor::~MacBeaconDescriptor()
+{
+}
+
+bool MacBeaconDescriptor::doesSupport(cObject *obj) const
+{
+    return dynamic_cast<MacBeacon *>(obj)!=NULL;
+}
+
+const char *MacBeaconDescriptor::getProperty(const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->getProperty(propertyname) : NULL;
+}
+
+int MacBeaconDescriptor::getFieldCount(void *object) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? 0+basedesc->getFieldCount(object) : 0;
+}
+
+unsigned int MacBeaconDescriptor::getFieldTypeFlags(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeFlags(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return 0;
+    }
+}
+
+const char *MacBeaconDescriptor::getFieldName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+const char *MacBeaconDescriptor::getFieldTypeString(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeString(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+const char *MacBeaconDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldProperty(object, field, propertyname);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+int MacBeaconDescriptor::getArraySize(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getArraySize(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    MacBeacon *pp = (MacBeacon *)object; (void)pp;
+    switch (field) {
+        default: return 0;
+    }
+}
+
+bool MacBeaconDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+        field -= basedesc->getFieldCount(object);
+    }
+    MacBeacon *pp = (MacBeacon *)object; (void)pp;
+    switch (field) {
+        default: return false;
+    }
+}
+
+bool MacBeaconDescriptor::setFieldAsString(void *object, int field, int i, const char *value) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->setFieldAsString(object,field,i,value);
+        field -= basedesc->getFieldCount(object);
+    }
+    MacBeacon *pp = (MacBeacon *)object; (void)pp;
+    switch (field) {
+        default: return false;
+    }
+}
+
+const char *MacBeaconDescriptor::getFieldStructName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+void *MacBeaconDescriptor::getFieldStructPointer(void *object, int field, int i) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructPointer(object, field, i);
+        field -= basedesc->getFieldCount(object);
+    }
+    MacBeacon *pp = (MacBeacon *)object; (void)pp;
     switch (field) {
         default: return NULL;
     }
@@ -4082,11 +4885,11 @@ void *PlmeEd_confirmDescriptor::getFieldStructPointer(void *object, int field, i
 
 Register_Class(PdMsg);
 
-PdMsg::PdMsg(const char *name, int kind) : cMessage(name,kind)
+PdMsg::PdMsg(const char *name, int kind) : cPacket(name,kind)
 {
 }
 
-PdMsg::PdMsg(const PdMsg& other) : cMessage()
+PdMsg::PdMsg(const PdMsg& other) : cPacket()
 {
     setName(other.getName());
     operator=(other);
@@ -4099,18 +4902,18 @@ PdMsg::~PdMsg()
 PdMsg& PdMsg::operator=(const PdMsg& other)
 {
     if (this==&other) return *this;
-    cMessage::operator=(other);
+    cPacket::operator=(other);
     return *this;
 }
 
 void PdMsg::parsimPack(cCommBuffer *b)
 {
-    cMessage::parsimPack(b);
+    cPacket::parsimPack(b);
 }
 
 void PdMsg::parsimUnpack(cCommBuffer *b)
 {
-    cMessage::parsimUnpack(b);
+    cPacket::parsimUnpack(b);
 }
 
 class PdMsgDescriptor : public cClassDescriptor
@@ -4137,7 +4940,7 @@ class PdMsgDescriptor : public cClassDescriptor
 
 Register_ClassDescriptor(PdMsgDescriptor);
 
-PdMsgDescriptor::PdMsgDescriptor() : cClassDescriptor("PdMsg", "cMessage")
+PdMsgDescriptor::PdMsgDescriptor() : cClassDescriptor("PdMsg", "cPacket")
 {
 }
 
