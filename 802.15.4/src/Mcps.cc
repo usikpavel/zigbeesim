@@ -45,17 +45,16 @@ void Mcps::handlePdMsg(cMessage *msg) {
 }
 
 void Mcps::handleMcpsMsg(cMessage *msg) {
-	delete (msg);
+	setLastUpperMsg(msg);
 }
 
 void Mcps::handleMlmeMsg(cMessage *msg) {
 	/** @todo maybe here we can just encapsulate the message without distinguishing what kind of msg it is*/
+	/** future will tell */
 	if (msg->getKind() == MAC_COMMAND_FRAME) {
 		MacCommand* command = check_and_cast<MacCommand *> (msg);
 		if (command->getCommandType() == BEACON_REQUEST) {
-			PdData_request *request = static_cast<PdData_request *>(encapsulate(command));
-
-			sendPdDown(request);
+			sendPdDown(encapsulateMcps(command));
 		}
 	}
 }
@@ -75,14 +74,31 @@ void Mcps::sendMlme(cMessage *msg) {
 	sendDelayed(msg, 0.0, mlmeOut);
 }
 
-PdMsg* Mcps::encapsulate(McpsMsg *msg) {
+PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 	if (msg->getKind() == MAC_COMMAND_FRAME) {
 		MacCommand* command = check_and_cast<MacCommand *> (msg);
 		if (command->getCommandType() == BEACON_REQUEST) {
-			PdData_request *request = new PdData_request();
-			request->setName("PD-DATA.request");
-			request->setKind(PD_DATA_REQUEST);
-			request->setByteLength(7);
+			PdData_request *request = new PdData_request("PD-DATA.request",
+					PD_DATA_REQUEST);
+			request->setByteLength(1);
+			/** @comment this should be the same as ByteLength always */
+			request->setPsduLength(1);
+			request->setFrameType(COMMAND);
+			request->setSecurityEnabled(false);
+			request->setFramePending(false);
+			request->setAckRequest(false);
+			request->setPanIdCompression(true);
+			request->setDestinationAddressingMode(SHORT);
+			request->setFrameVersion(0x01);
+			request->setSourceAddressingMode(SHORT);
+			request->setSequenceNumber(getMacPib()->getMacDSN());
+			request->setDestinationPanIdentifier(0xFFFF);
+			request->setDestinationAddress((unsigned long) 0xFFFF);
+			request->setSourceAddress(
+					(unsigned long) (getMacPib()->getMacShortAddress()));
+			request->setAuxiliarySecurityHeaderArraySize(0);
+			/** @todo who wants to calculate the fcs? :) */
+			request->setFcs((unsigned short) (rand() % 65536));
 			request->encapsulate(command);
 			return request;
 		}
@@ -90,7 +106,7 @@ PdMsg* Mcps::encapsulate(McpsMsg *msg) {
 	return NULL;
 }
 
-McpsMsg* Mcps::decapsulate(PdMsg *msg) {
+McpsMsg* Mcps::decapsulatePd(PdMsg *msg) {
 	return NULL;
 }
 /*

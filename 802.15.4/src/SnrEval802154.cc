@@ -36,7 +36,7 @@ Define_Module(SnrEval802154);
  **/
 void SnrEval802154::initialize(int stage)
 {
-    BasicSnrEval::initialize(stage);
+    SnrEval::initialize(stage);
 
     if(stage==0){
 

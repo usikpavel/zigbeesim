@@ -23,7 +23,7 @@
 #ifndef SNR_EVAL802154_H
 #define SNR_EVAL802154_H
 
-#include <BasicSnrEval.h>
+#include <SnrEval.h>
 #include "RadioState.h"
 #include "RSSI.h"
 #include "MediumIndication.h"
@@ -59,8 +59,7 @@
  * @ingroup snrEval
  **/
 
-class SnrEval802154 : public BasicSnrEval
-{
+class SnrEval802154 : public SnrEval {
 
 
 public:

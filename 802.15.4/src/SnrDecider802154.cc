@@ -27,7 +27,7 @@ Define_Module(SnrDecider802154);
 
 void SnrDecider802154::initialize(int stage)
 {
-    BasicDecider::initialize(stage);
+    SnrDecider::initialize(stage);
 
     if (stage == 0) {
         snrThresholdLevel = FWMath::dBm2mW(par("snrThresholdLevel"));

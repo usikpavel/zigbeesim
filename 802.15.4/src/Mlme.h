@@ -47,10 +47,6 @@ protected:
 	virtual void sendMcps(cMessage *);
 	virtual double symbolsToSeconds(int, int, int);
 	virtual void switchRadioToChannel(unsigned int);
-	MacPib* getMacPib() {
-		return ((MacPib *) (this->getParentModule()->getModuleByRelativePath(
-				"macPib")));
-	}
 	virtual void comment(CommentsLevel level, std::string s) {
 		/** @todo align logName substrings for routers and endDevices */
 		if ((level & commentsLevel) > NOTHING) {
@@ -71,6 +67,10 @@ protected:
 		std::stringstream commentStream;
 		commentStream << "ERROR: " << errorMessage;
 		comment(ERROR, commentStream.str());
+	}
+	MacPib* getMacPib() {
+		return ((MacPib *) (this->getParentModule()->getModuleByRelativePath(
+				"macPib")));
 	}
 	virtual void setLastUpperMsg(cMessage* msg) {
 		delete (this->lastUpperMsg);
