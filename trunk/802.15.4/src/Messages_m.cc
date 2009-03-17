@@ -5511,44 +5511,44 @@ void *PdData_confirmDescriptor::getFieldStructPointer(void *object, int field, i
     }
 }
 
-Register_Class(AirFrame802154);
+Register_Class(Frame802154);
 
-AirFrame802154::AirFrame802154(const char *name, int kind) : cPacket(name,kind)
+Frame802154::Frame802154(const char *name, int kind) : cPacket(name,kind)
 {
 }
 
-AirFrame802154::AirFrame802154(const AirFrame802154& other) : cPacket()
+Frame802154::Frame802154(const Frame802154& other) : cPacket()
 {
     setName(other.getName());
     operator=(other);
 }
 
-AirFrame802154::~AirFrame802154()
+Frame802154::~Frame802154()
 {
 }
 
-AirFrame802154& AirFrame802154::operator=(const AirFrame802154& other)
+Frame802154& Frame802154::operator=(const Frame802154& other)
 {
     if (this==&other) return *this;
     cPacket::operator=(other);
     return *this;
 }
 
-void AirFrame802154::parsimPack(cCommBuffer *b)
+void Frame802154::parsimPack(cCommBuffer *b)
 {
     cPacket::parsimPack(b);
 }
 
-void AirFrame802154::parsimUnpack(cCommBuffer *b)
+void Frame802154::parsimUnpack(cCommBuffer *b)
 {
     cPacket::parsimUnpack(b);
 }
 
-class AirFrame802154Descriptor : public cClassDescriptor
+class Frame802154Descriptor : public cClassDescriptor
 {
   public:
-    AirFrame802154Descriptor();
-    virtual ~AirFrame802154Descriptor();
+    Frame802154Descriptor();
+    virtual ~Frame802154Descriptor();
 
     virtual bool doesSupport(cObject *obj) const;
     virtual const char *getProperty(const char *propertyname) const;
@@ -5566,34 +5566,34 @@ class AirFrame802154Descriptor : public cClassDescriptor
     virtual void *getFieldStructPointer(void *object, int field, int i) const;
 };
 
-Register_ClassDescriptor(AirFrame802154Descriptor);
+Register_ClassDescriptor(Frame802154Descriptor);
 
-AirFrame802154Descriptor::AirFrame802154Descriptor() : cClassDescriptor("AirFrame802154", "cPacket")
+Frame802154Descriptor::Frame802154Descriptor() : cClassDescriptor("Frame802154", "cPacket")
 {
 }
 
-AirFrame802154Descriptor::~AirFrame802154Descriptor()
+Frame802154Descriptor::~Frame802154Descriptor()
 {
 }
 
-bool AirFrame802154Descriptor::doesSupport(cObject *obj) const
+bool Frame802154Descriptor::doesSupport(cObject *obj) const
 {
-    return dynamic_cast<AirFrame802154 *>(obj)!=NULL;
+    return dynamic_cast<Frame802154 *>(obj)!=NULL;
 }
 
-const char *AirFrame802154Descriptor::getProperty(const char *propertyname) const
+const char *Frame802154Descriptor::getProperty(const char *propertyname) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     return basedesc ? basedesc->getProperty(propertyname) : NULL;
 }
 
-int AirFrame802154Descriptor::getFieldCount(void *object) const
+int Frame802154Descriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     return basedesc ? 0+basedesc->getFieldCount(object) : 0;
 }
 
-unsigned int AirFrame802154Descriptor::getFieldTypeFlags(void *object, int field) const
+unsigned int Frame802154Descriptor::getFieldTypeFlags(void *object, int field) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -5606,7 +5606,7 @@ unsigned int AirFrame802154Descriptor::getFieldTypeFlags(void *object, int field
     }
 }
 
-const char *AirFrame802154Descriptor::getFieldName(void *object, int field) const
+const char *Frame802154Descriptor::getFieldName(void *object, int field) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -5619,7 +5619,7 @@ const char *AirFrame802154Descriptor::getFieldName(void *object, int field) cons
     }
 }
 
-const char *AirFrame802154Descriptor::getFieldTypeString(void *object, int field) const
+const char *Frame802154Descriptor::getFieldTypeString(void *object, int field) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -5632,7 +5632,7 @@ const char *AirFrame802154Descriptor::getFieldTypeString(void *object, int field
     }
 }
 
-const char *AirFrame802154Descriptor::getFieldProperty(void *object, int field, const char *propertyname) const
+const char *Frame802154Descriptor::getFieldProperty(void *object, int field, const char *propertyname) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -5645,7 +5645,7 @@ const char *AirFrame802154Descriptor::getFieldProperty(void *object, int field, 
     }
 }
 
-int AirFrame802154Descriptor::getArraySize(void *object, int field) const
+int Frame802154Descriptor::getArraySize(void *object, int field) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -5653,13 +5653,13 @@ int AirFrame802154Descriptor::getArraySize(void *object, int field) const
             return basedesc->getArraySize(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    AirFrame802154 *pp = (AirFrame802154 *)object; (void)pp;
+    Frame802154 *pp = (Frame802154 *)object; (void)pp;
     switch (field) {
         default: return 0;
     }
 }
 
-bool AirFrame802154Descriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+bool Frame802154Descriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -5667,13 +5667,13 @@ bool AirFrame802154Descriptor::getFieldAsString(void *object, int field, int i, 
             return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
         field -= basedesc->getFieldCount(object);
     }
-    AirFrame802154 *pp = (AirFrame802154 *)object; (void)pp;
+    Frame802154 *pp = (Frame802154 *)object; (void)pp;
     switch (field) {
         default: return false;
     }
 }
 
-bool AirFrame802154Descriptor::setFieldAsString(void *object, int field, int i, const char *value) const
+bool Frame802154Descriptor::setFieldAsString(void *object, int field, int i, const char *value) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -5681,13 +5681,13 @@ bool AirFrame802154Descriptor::setFieldAsString(void *object, int field, int i, 
             return basedesc->setFieldAsString(object,field,i,value);
         field -= basedesc->getFieldCount(object);
     }
-    AirFrame802154 *pp = (AirFrame802154 *)object; (void)pp;
+    Frame802154 *pp = (Frame802154 *)object; (void)pp;
     switch (field) {
         default: return false;
     }
 }
 
-const char *AirFrame802154Descriptor::getFieldStructName(void *object, int field) const
+const char *Frame802154Descriptor::getFieldStructName(void *object, int field) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -5700,7 +5700,7 @@ const char *AirFrame802154Descriptor::getFieldStructName(void *object, int field
     }
 }
 
-void *AirFrame802154Descriptor::getFieldStructPointer(void *object, int field, int i) const
+void *Frame802154Descriptor::getFieldStructPointer(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -5708,7 +5708,7 @@ void *AirFrame802154Descriptor::getFieldStructPointer(void *object, int field, i
             return basedesc->getFieldStructPointer(object, field, i);
         field -= basedesc->getFieldCount(object);
     }
-    AirFrame802154 *pp = (AirFrame802154 *)object; (void)pp;
+    Frame802154 *pp = (Frame802154 *)object; (void)pp;
     switch (field) {
         default: return NULL;
     }

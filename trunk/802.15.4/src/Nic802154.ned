@@ -81,6 +81,7 @@ module Nic802154
         phy.rfSapOut --> snrEval.uppergateIn;
         phy.rfSapIn <-- decider.uppergateOut;
         snrEval.uppergateOut --> decider.lowergateIn;
+        snrEval.upperControlOut --> phy.rfControlIn;
         
         radioIn --> snrEval.radioIn;
 }

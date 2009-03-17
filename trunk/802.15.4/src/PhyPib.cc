@@ -73,7 +73,7 @@ PhyEnum PhyPib::setPIBAttribute(PhyPibIdentifier attribute, unsigned int* value)
 		setPhyCCAMode(value[0]);
 		break;
 	case PHY_CURRENT_PAGE:
-		if (value[0] < 32) {
+		if (value[0] >= 32) {
 			return PHY_INVALID_PARAMETER;
 		}
 		setPhyCurrentPage(value[0]);

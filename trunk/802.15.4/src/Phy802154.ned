@@ -9,6 +9,8 @@ module Phy802154
 
         output rfSapOut;
         input rfSapIn;
+        
+        input rfControlIn;
     submodules:
         pd: Pd;
         plme: Plme;
@@ -33,4 +35,6 @@ module Phy802154
 		
 		plme.phyPibOut --> phyPib.plmeIn;
 		plme.phyPibIn <-- phyPib.plmeOut;
+		
+		rfControlIn --> pd.rfControlIn;
 }

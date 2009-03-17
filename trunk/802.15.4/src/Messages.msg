@@ -159,6 +159,6 @@ message PdData_request extends PdMsg {
 message PdData_confirm extends PdMsg {
 };
 
-message AirFrame802154 extends cPacket {
+message Frame802154 extends cPacket {
     
 };

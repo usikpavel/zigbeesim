@@ -280,9 +280,12 @@ $O/Mac802154.o: Mac802154.cc \
 	$(RTN_PROJ)/core/blackboard/Blackboard.h \
 	$(RTN_PROJ)/core/utils/FWMath.h
 $O/Pd.o: Pd.cc \
+	$(RTN_PROJ)/core/utils/MacControlInfo.h \
 	typedef.h \
 	$(RTN_PROJ)/core/utils/ActiveChannel.h \
+	$(RTN_PROJ)/core/utils/CoreDebug.h \
 	$(RTN_PROJ)/contrib/utils/Bitrate.h \
+	$(RTN_PROJ)/core/utils/SimpleAddress.h \
 	$(RTN_PROJ)/core/basicModules/BasicModule.h \
 	$(RTN_PROJ)/contrib/nic/radios/SingleChannelRadio.h \
 	$(RTN_PROJ)/core/utils/ModuleAccess.h \
