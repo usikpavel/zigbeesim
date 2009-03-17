@@ -16,6 +16,7 @@ void Pd::initialize(int stage) {
 
 		commentsLevel = ALL;
 
+		/** @todo put the queue length param into omnetpp.ini */
 		queueLength = 10;
 		radioState = RadioState::RECV;
 		RadioState cs;
@@ -52,12 +53,14 @@ void Pd::handleSelfMsg(cMessage *msg) {
 void Pd::handlePdMsg(cMessage *msg) {
 	setLastUpperMsg(msg);
 	assert(static_cast<cPacket*>(msg));
-	Frame802154 *frame = encapsulatePd(static_cast<PdMsg *>(msg));
+	Frame802154 *frame = encapsulatePd(static_cast<PdMsg *>(msg));/*
 	if (frameQueue.size() <= queueLength) {
 		frameQueue.push_back(frame);
 		if((frameQueue.size() == 1) && (phyState == RX))
 		prepareSend();
 	}
+	*/
+	sendRfDown(frame);
 }
 
 void Pd::handleRfMsg(cMessage *msg) {
@@ -144,15 +147,14 @@ cMessage* Pd::decapsMsg(Frame802154* msg) {
 Frame802154* Pd::encapsMsg(cPacket *msg) {
 	Frame802154 *frame = new Frame802154(msg->getName(), msg->getKind());
 	frame->setBitLength(40);
-
 	// copy dest address from the Control Info attached to the network
 	// mesage by the network layer
-	//MacControlInfo* cInfo =
-	//		static_cast<MacControlInfo*> (msg->removeControlInfo());
-	//pkt->setDestAddr(cInfo->getNextHopMac());
+	MacControlInfo* cInfo =
+			static_cast<MacControlInfo*> (msg->removeControlInfo());
+	//frame->setDestAddr(cInfo->getNextHopMac());
 	//delete the control info
-	//delete cInfo;
-	//pkt->setSrcAddr(myMacAddr);
+	delete cInfo;
+	//frame->setSrcAddr(myMacAddr);
 	//encapsulate the network packet
 	frame->encapsulate(msg);
 	return frame;
