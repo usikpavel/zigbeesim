@@ -10,6 +10,15 @@
 #include <sstream>
 #include "PhyPib.h"
 #include "SingleChannelRadio.h"
+#include <cassert>
+
+/** temp */
+#include "MacControlInfo.h"
+#include "SimpleAddress.h"
+#include "CoreDebug.h"
+#include <list>
+#include <ActiveChannel.h>
+/** -temp */
 
 class Pd: public BasicModule {
 public:
@@ -24,8 +33,8 @@ protected:
 	int rfSapIn;
 	int plmeOut;
 	int plmeIn;
+	int rfControlIn;
 	/*@}*/
-	SingleChannelRadio* radio;
 	/** @brief Last message received from upper level */
 	cMessage* lastUpperMsg;
 	cMessage* timer;
@@ -35,11 +44,12 @@ protected:
 	void handlePdMsg(cMessage *);
 	void handleRfMsg(cMessage *);
 	void handlePlmeMsg(cMessage *);
+	void handleRfControl(cMessage *);
 	void sendPdUp(cMessage *);
 	void sendRfDown(cMessage *);
 	void sendPlme(cMessage *);
-	AirFrame802154* encapsulatePd(PdMsg*);
-	PdMsg* decapsulateAirFrame(AirFrame802154*);
+	Frame802154* encapsulatePd(PdMsg*);
+	PdMsg* decapsulateFrame(Frame802154*);
 	void comment(CommentsLevel level, std::string s) {
 		/** @todo align logName substrings for routers and endDevices */
 		if ((level & commentsLevel) > NOTHING) {
@@ -67,6 +77,24 @@ protected:
 	cMessage* getLastUpperMsg() {
 		return this->lastUpperMsg;
 	}
+
+	/** temp */
+	typedef std::list<Frame802154 *> FrameQueue;
+	enum States {
+		RX, TX,
+	};
+	States phyState;
+	RadioState::States radioState;
+	int catRadioState;
+	SingleChannelRadio* radio;
+	FrameQueue frameQueue;
+	int myMacAddr;
+	unsigned int queueLength;
+	void prepareSend();
+	virtual cMessage* decapsMsg(Frame802154*);
+	virtual Frame802154* encapsMsg(cPacket*);
+	virtual void receiveBBItem(int category, const BBItem *details, int scopeModuleId);
+	/** -temp */
 };
 
 #endif

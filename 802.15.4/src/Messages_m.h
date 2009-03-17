@@ -847,32 +847,32 @@ inline void doUnpacking(cCommBuffer *b, PdData_confirm& obj) {obj.parsimUnpack(b
 /**
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
- * message AirFrame802154 extends cPacket {
+ * message Frame802154 extends cPacket {
  *     
  * };
  * </pre>
  */
-class AirFrame802154 : public cPacket
+class Frame802154 : public cPacket
 {
   protected:
 
     // protected and unimplemented operator==(), to prevent accidental usage
-    bool operator==(const AirFrame802154&);
+    bool operator==(const Frame802154&);
 
   public:
-    AirFrame802154(const char *name=NULL, int kind=0);
-    AirFrame802154(const AirFrame802154& other);
-    virtual ~AirFrame802154();
-    AirFrame802154& operator=(const AirFrame802154& other);
-    virtual AirFrame802154 *dup() const {return new AirFrame802154(*this);}
+    Frame802154(const char *name=NULL, int kind=0);
+    Frame802154(const Frame802154& other);
+    virtual ~Frame802154();
+    Frame802154& operator=(const Frame802154& other);
+    virtual Frame802154 *dup() const {return new Frame802154(*this);}
     virtual void parsimPack(cCommBuffer *b);
     virtual void parsimUnpack(cCommBuffer *b);
 
     // field getter/setter methods
 };
 
-inline void doPacking(cCommBuffer *b, AirFrame802154& obj) {obj.parsimPack(b);}
-inline void doUnpacking(cCommBuffer *b, AirFrame802154& obj) {obj.parsimUnpack(b);}
+inline void doPacking(cCommBuffer *b, Frame802154& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, Frame802154& obj) {obj.parsimUnpack(b);}
 
 
 #endif // _MESSAGES_M_H_

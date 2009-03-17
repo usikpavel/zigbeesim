@@ -9,4 +9,6 @@ simple Pd
         
         output plmeOut;
         input plmeIn;
+        
+        input rfControlIn;
 }

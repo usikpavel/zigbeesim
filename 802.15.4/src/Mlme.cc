@@ -83,7 +83,7 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 				}
 			} else if (request->getScanType() == ACTIVE_SCAN) {
 				unsigned int base = 0x00000001;
-				for (int channel = getCurrentChannel(); channel < 27; channel++) {
+				for (int channel = 0; channel < 27; channel++) {
 					/** if there's a scan request for the channel */
 					if ((request->getScanChannels() & (base << channel))
 							!= 0x00000000) {
@@ -99,7 +99,6 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 								<< activeTimer << " seconds on channel "
 								<< channel;
 						setCurrentChannel(channel);
-
 						comment(TIMER, commentStream.str());
 						timer->setName("ACTIVE.timer");
 						scheduleAt(simTime() + activeTimer, timer);
@@ -110,7 +109,6 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 						set->setPIBAttributeValueArraySize(1);
 						set->setPIBAttributeValue(0, request->getChannelPage());
 						setCurrentPage(request->getChannelPage());
-
 						sendPlmeDown(set);
 						break;
 					}
