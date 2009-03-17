@@ -99,6 +99,7 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 								<< activeTimer << " seconds on channel "
 								<< channel;
 						setCurrentChannel(channel);
+
 						comment(TIMER, commentStream.str());
 						timer->setName("ACTIVE.timer");
 						scheduleAt(simTime() + activeTimer, timer);
@@ -107,9 +108,9 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 						set->setKind(PLME_SET_REQUEST);
 						set->setPIBAttribute(PHY_CURRENT_PAGE);
 						set->setPIBAttributeValueArraySize(1);
-						set->setPIBAttributeValue(0,
-								request->getChannelPage());
+						set->setPIBAttributeValue(0, request->getChannelPage());
 						setCurrentPage(request->getChannelPage());
+
 						sendPlmeDown(set);
 						break;
 					}
@@ -135,7 +136,7 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 					beaconRequest->setKind(MAC_COMMAND_FRAME);
 					beaconRequest->setCommandType(BEACON_REQUEST);
 					beaconRequest->setCommandPayloadArraySize(0);
-					beaconRequest->setByteLength(1);
+					beaconRequest->setByteLength(8);
 					sendMcps(beaconRequest);
 				}
 			}

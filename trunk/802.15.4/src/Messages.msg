@@ -15,6 +15,7 @@
 
 cplusplus {{
 #include "typedef.h"
+#include <AirFrame_m.h>
 }}
 
 enum PhyEnum;
@@ -90,24 +91,6 @@ message MlmeScan_confirm extends MlmeMsg {
 };
 
 message McpsMsg extends cPacket {
-    // MHR fields
-    // MHR fields - FrameControl
-    unsigned char frameType;
-    bool securityEnabled;
-    bool framePending;
-    bool ackRequest;
-    bool panIdCompression;
-    char destinationAddressingMode;
-    char frameVersion;
-    char sourceAddressingMode;
-    // MHR fields - end of FrameControl
-    unsigned char sequenceNumber;
-    unsigned short destinationPanIdentifier;
-    unsigned long destinationAddress;
-    unsigned short sourcePanIdentifier;
-    unsigned long sourceAddress;
-    unsigned char auxiliarySecurityHeader[];
-    unsigned short fcs;
 };
 
 message MacCommand extends McpsMsg {
@@ -149,12 +132,33 @@ message PlmeEd_confirm extends PlmeMsg {
 };
 
 message PdMsg extends cPacket {
+    // MHR fields
+    // MHR fields - FrameControl
+    unsigned char frameType;
+    bool securityEnabled;
+    bool framePending;
+    bool ackRequest;
+    bool panIdCompression;
+    char destinationAddressingMode;
+    char frameVersion;
+    char sourceAddressingMode;
+    // MHR fields - end of FrameControl
+    unsigned char sequenceNumber;
+    unsigned short destinationPanIdentifier;
+    unsigned long destinationAddress;
+    unsigned short sourcePanIdentifier;
+    unsigned long sourceAddress;
+    unsigned char auxiliarySecurityHeader[];
+    unsigned short fcs;
 };
 
 message PdData_request extends PdMsg {
     unsigned int psduLength;
-    unsigned char psdu[];
 };
 
 message PdData_confirm extends PdMsg {
+};
+
+message AirFrame802154 extends cPacket {
+    
 };

@@ -16,6 +16,7 @@
 // cplusplus {{ ... }} section:
 
 #include "typedef.h"
+#include <AirFrame_m.h>
 // end cplusplus
 
 
@@ -354,46 +355,12 @@ inline void doUnpacking(cCommBuffer *b, MlmeScan_confirm& obj) {obj.parsimUnpack
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
  * message McpsMsg extends cPacket {
- *     
- *     
- *     unsigned char frameType;
- *     bool securityEnabled;
- *     bool framePending;
- *     bool ackRequest;
- *     bool panIdCompression;
- *     char destinationAddressingMode;
- *     char frameVersion;
- *     char sourceAddressingMode;
- *     
- *     unsigned char sequenceNumber;
- *     unsigned short destinationPanIdentifier;
- *     unsigned long destinationAddress;
- *     unsigned short sourcePanIdentifier;
- *     unsigned long sourceAddress;
- *     unsigned char auxiliarySecurityHeader[];
- *     unsigned short fcs;
  * };
  * </pre>
  */
 class McpsMsg : public cPacket
 {
   protected:
-    unsigned char frameType_var;
-    bool securityEnabled_var;
-    bool framePending_var;
-    bool ackRequest_var;
-    bool panIdCompression_var;
-    char destinationAddressingMode_var;
-    char frameVersion_var;
-    char sourceAddressingMode_var;
-    unsigned char sequenceNumber_var;
-    unsigned short destinationPanIdentifier_var;
-    unsigned long destinationAddress_var;
-    unsigned short sourcePanIdentifier_var;
-    unsigned long sourceAddress_var;
-    unsigned char *auxiliarySecurityHeader_var; // array ptr
-    unsigned int auxiliarySecurityHeader_arraysize;
-    unsigned short fcs_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const McpsMsg&);
@@ -408,38 +375,6 @@ class McpsMsg : public cPacket
     virtual void parsimUnpack(cCommBuffer *b);
 
     // field getter/setter methods
-    virtual unsigned char getFrameType() const;
-    virtual void setFrameType(unsigned char frameType_var);
-    virtual bool getSecurityEnabled() const;
-    virtual void setSecurityEnabled(bool securityEnabled_var);
-    virtual bool getFramePending() const;
-    virtual void setFramePending(bool framePending_var);
-    virtual bool getAckRequest() const;
-    virtual void setAckRequest(bool ackRequest_var);
-    virtual bool getPanIdCompression() const;
-    virtual void setPanIdCompression(bool panIdCompression_var);
-    virtual char getDestinationAddressingMode() const;
-    virtual void setDestinationAddressingMode(char destinationAddressingMode_var);
-    virtual char getFrameVersion() const;
-    virtual void setFrameVersion(char frameVersion_var);
-    virtual char getSourceAddressingMode() const;
-    virtual void setSourceAddressingMode(char sourceAddressingMode_var);
-    virtual unsigned char getSequenceNumber() const;
-    virtual void setSequenceNumber(unsigned char sequenceNumber_var);
-    virtual unsigned short getDestinationPanIdentifier() const;
-    virtual void setDestinationPanIdentifier(unsigned short destinationPanIdentifier_var);
-    virtual unsigned long getDestinationAddress() const;
-    virtual void setDestinationAddress(unsigned long destinationAddress_var);
-    virtual unsigned short getSourcePanIdentifier() const;
-    virtual void setSourcePanIdentifier(unsigned short sourcePanIdentifier_var);
-    virtual unsigned long getSourceAddress() const;
-    virtual void setSourceAddress(unsigned long sourceAddress_var);
-    virtual void setAuxiliarySecurityHeaderArraySize(unsigned int size);
-    virtual unsigned int getAuxiliarySecurityHeaderArraySize() const;
-    virtual unsigned char getAuxiliarySecurityHeader(unsigned int k) const;
-    virtual void setAuxiliarySecurityHeader(unsigned int k, unsigned char auxiliarySecurityHeader_var);
-    virtual unsigned short getFcs() const;
-    virtual void setFcs(unsigned short fcs_var);
 };
 
 inline void doPacking(cCommBuffer *b, McpsMsg& obj) {obj.parsimPack(b);}
@@ -756,12 +691,46 @@ inline void doUnpacking(cCommBuffer *b, PlmeEd_confirm& obj) {obj.parsimUnpack(b
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
  * message PdMsg extends cPacket {
+ *     
+ *     
+ *     unsigned char frameType;
+ *     bool securityEnabled;
+ *     bool framePending;
+ *     bool ackRequest;
+ *     bool panIdCompression;
+ *     char destinationAddressingMode;
+ *     char frameVersion;
+ *     char sourceAddressingMode;
+ *     
+ *     unsigned char sequenceNumber;
+ *     unsigned short destinationPanIdentifier;
+ *     unsigned long destinationAddress;
+ *     unsigned short sourcePanIdentifier;
+ *     unsigned long sourceAddress;
+ *     unsigned char auxiliarySecurityHeader[];
+ *     unsigned short fcs;
  * };
  * </pre>
  */
 class PdMsg : public cPacket
 {
   protected:
+    unsigned char frameType_var;
+    bool securityEnabled_var;
+    bool framePending_var;
+    bool ackRequest_var;
+    bool panIdCompression_var;
+    char destinationAddressingMode_var;
+    char frameVersion_var;
+    char sourceAddressingMode_var;
+    unsigned char sequenceNumber_var;
+    unsigned short destinationPanIdentifier_var;
+    unsigned long destinationAddress_var;
+    unsigned short sourcePanIdentifier_var;
+    unsigned long sourceAddress_var;
+    unsigned char *auxiliarySecurityHeader_var; // array ptr
+    unsigned int auxiliarySecurityHeader_arraysize;
+    unsigned short fcs_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const PdMsg&);
@@ -776,6 +745,38 @@ class PdMsg : public cPacket
     virtual void parsimUnpack(cCommBuffer *b);
 
     // field getter/setter methods
+    virtual unsigned char getFrameType() const;
+    virtual void setFrameType(unsigned char frameType_var);
+    virtual bool getSecurityEnabled() const;
+    virtual void setSecurityEnabled(bool securityEnabled_var);
+    virtual bool getFramePending() const;
+    virtual void setFramePending(bool framePending_var);
+    virtual bool getAckRequest() const;
+    virtual void setAckRequest(bool ackRequest_var);
+    virtual bool getPanIdCompression() const;
+    virtual void setPanIdCompression(bool panIdCompression_var);
+    virtual char getDestinationAddressingMode() const;
+    virtual void setDestinationAddressingMode(char destinationAddressingMode_var);
+    virtual char getFrameVersion() const;
+    virtual void setFrameVersion(char frameVersion_var);
+    virtual char getSourceAddressingMode() const;
+    virtual void setSourceAddressingMode(char sourceAddressingMode_var);
+    virtual unsigned char getSequenceNumber() const;
+    virtual void setSequenceNumber(unsigned char sequenceNumber_var);
+    virtual unsigned short getDestinationPanIdentifier() const;
+    virtual void setDestinationPanIdentifier(unsigned short destinationPanIdentifier_var);
+    virtual unsigned long getDestinationAddress() const;
+    virtual void setDestinationAddress(unsigned long destinationAddress_var);
+    virtual unsigned short getSourcePanIdentifier() const;
+    virtual void setSourcePanIdentifier(unsigned short sourcePanIdentifier_var);
+    virtual unsigned long getSourceAddress() const;
+    virtual void setSourceAddress(unsigned long sourceAddress_var);
+    virtual void setAuxiliarySecurityHeaderArraySize(unsigned int size);
+    virtual unsigned int getAuxiliarySecurityHeaderArraySize() const;
+    virtual unsigned char getAuxiliarySecurityHeader(unsigned int k) const;
+    virtual void setAuxiliarySecurityHeader(unsigned int k, unsigned char auxiliarySecurityHeader_var);
+    virtual unsigned short getFcs() const;
+    virtual void setFcs(unsigned short fcs_var);
 };
 
 inline void doPacking(cCommBuffer *b, PdMsg& obj) {obj.parsimPack(b);}
@@ -786,7 +787,6 @@ inline void doUnpacking(cCommBuffer *b, PdMsg& obj) {obj.parsimUnpack(b);}
  * <pre>
  * message PdData_request extends PdMsg {
  *     unsigned int psduLength;
- *     unsigned char psdu[];
  * };
  * </pre>
  */
@@ -794,8 +794,6 @@ class PdData_request : public PdMsg
 {
   protected:
     unsigned int psduLength_var;
-    unsigned char *psdu_var; // array ptr
-    unsigned int psdu_arraysize;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const PdData_request&);
@@ -812,10 +810,6 @@ class PdData_request : public PdMsg
     // field getter/setter methods
     virtual unsigned int getPsduLength() const;
     virtual void setPsduLength(unsigned int psduLength_var);
-    virtual void setPsduArraySize(unsigned int size);
-    virtual unsigned int getPsduArraySize() const;
-    virtual unsigned char getPsdu(unsigned int k) const;
-    virtual void setPsdu(unsigned int k, unsigned char psdu_var);
 };
 
 inline void doPacking(cCommBuffer *b, PdData_request& obj) {obj.parsimPack(b);}
@@ -849,6 +843,36 @@ class PdData_confirm : public PdMsg
 
 inline void doPacking(cCommBuffer *b, PdData_confirm& obj) {obj.parsimPack(b);}
 inline void doUnpacking(cCommBuffer *b, PdData_confirm& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
+ * message AirFrame802154 extends cPacket {
+ *     
+ * };
+ * </pre>
+ */
+class AirFrame802154 : public cPacket
+{
+  protected:
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const AirFrame802154&);
+
+  public:
+    AirFrame802154(const char *name=NULL, int kind=0);
+    AirFrame802154(const AirFrame802154& other);
+    virtual ~AirFrame802154();
+    AirFrame802154& operator=(const AirFrame802154& other);
+    virtual AirFrame802154 *dup() const {return new AirFrame802154(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+};
+
+inline void doPacking(cCommBuffer *b, AirFrame802154& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, AirFrame802154& obj) {obj.parsimUnpack(b);}
 
 
 #endif // _MESSAGES_M_H_

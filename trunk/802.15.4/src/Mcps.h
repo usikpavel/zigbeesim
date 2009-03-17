@@ -8,6 +8,7 @@
 #include "BBItems.h"
 #include <string>
 #include <sstream>
+#include "MacPib.h"
 
 class Mcps: public BasicModule {
 public:
@@ -35,8 +36,8 @@ protected:
 	void sendPdDown(cMessage *);
 	void sendMcpsUp(cMessage *);
 	void sendMlme(cMessage *);
-	PdMsg* encapsulate(McpsMsg *);
-	McpsMsg* decapsulate(PdMsg *);
+	PdMsg* encapsulateMcps(McpsMsg *);
+	McpsMsg* decapsulatePd(PdMsg *);
 	void comment(CommentsLevel level, std::string s) {
 		/** @todo align logName substrings for routers and endDevices */
 		if ((level & commentsLevel) > NOTHING) {
@@ -61,6 +62,10 @@ protected:
 	void setLastUpperMsg(cMessage* msg) {
 		delete (this->lastUpperMsg);
 		this->lastUpperMsg = msg;
+	}
+	MacPib* getMacPib() {
+		return ((MacPib *) (this->getParentModule()->getModuleByRelativePath(
+				"macPib")));
 	}
 	cMessage* getLastUpperMsg() {
 		return this->lastUpperMsg;

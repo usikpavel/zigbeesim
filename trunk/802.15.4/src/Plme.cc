@@ -101,9 +101,9 @@ void Plme::handlePlmeMsg(cMessage *msg) {
 		} else {
 			timer->setName("ED.timer");
 			/** @todo 960/62500 = 0.01536s - theoretically shortest ED scan*/
-			/** let's give it multiplier x100 */
+			/** let's give it multiplier x1000 */
 			/** how long does it take to make the measurement in real environment? */
-			scheduleAt(simTime() + 1.536, timer);
+			scheduleAt(simTime() + 15.36, timer);
 		}
 	}
 }

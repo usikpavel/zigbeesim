@@ -18,15 +18,12 @@
 // **************************************************************************/
 
 
-//
-// Decider module to be used with SnrEval
-//
-simple SnrDecider802154
+import org.mf2.contrib.nic.phyLayer.SnrDecider;
+
+simple SnrDecider802154 extends SnrDecider
 {
     parameters:
-        bool debug; // debug switch
-        volatile double snrThresholdLevel;
+
     gates:
-        output upperDataOut;
-        input lowerDataIn;
+
 }

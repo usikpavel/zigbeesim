@@ -228,6 +228,19 @@ typedef enum {
 	GTS_REQUEST						= 0x09
 } CommandFrameIdentifier;
 
+typedef enum {
+	BEACON		= 0x00,
+	DATA		= 0x01,
+	ACK			= 0x02,
+	COMMAND		= 0x03
+} FrameType;
+
+typedef enum {
+	NOT_PRESENT	= 0x00,
+	SHORT		= 0x02,
+	LONG		= 0x03
+} AddressingMode;
+
 /** @brief PHY PIB Enumerations */
 typedef enum {
 	PHY_BUSY 					= 0x00,

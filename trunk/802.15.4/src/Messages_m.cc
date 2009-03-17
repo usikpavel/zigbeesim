@@ -2265,279 +2265,33 @@ Register_Class(McpsMsg);
 
 McpsMsg::McpsMsg(const char *name, int kind) : cPacket(name,kind)
 {
-    this->frameType_var = 0;
-    this->securityEnabled_var = 0;
-    this->framePending_var = 0;
-    this->ackRequest_var = 0;
-    this->panIdCompression_var = 0;
-    this->destinationAddressingMode_var = 0;
-    this->frameVersion_var = 0;
-    this->sourceAddressingMode_var = 0;
-    this->sequenceNumber_var = 0;
-    this->destinationPanIdentifier_var = 0;
-    this->destinationAddress_var = 0;
-    this->sourcePanIdentifier_var = 0;
-    this->sourceAddress_var = 0;
-    auxiliarySecurityHeader_arraysize = 0;
-    this->auxiliarySecurityHeader_var = 0;
-    this->fcs_var = 0;
 }
 
 McpsMsg::McpsMsg(const McpsMsg& other) : cPacket()
 {
     setName(other.getName());
-    auxiliarySecurityHeader_arraysize = 0;
-    this->auxiliarySecurityHeader_var = 0;
     operator=(other);
 }
 
 McpsMsg::~McpsMsg()
 {
-    delete [] auxiliarySecurityHeader_var;
 }
 
 McpsMsg& McpsMsg::operator=(const McpsMsg& other)
 {
     if (this==&other) return *this;
     cPacket::operator=(other);
-    this->frameType_var = other.frameType_var;
-    this->securityEnabled_var = other.securityEnabled_var;
-    this->framePending_var = other.framePending_var;
-    this->ackRequest_var = other.ackRequest_var;
-    this->panIdCompression_var = other.panIdCompression_var;
-    this->destinationAddressingMode_var = other.destinationAddressingMode_var;
-    this->frameVersion_var = other.frameVersion_var;
-    this->sourceAddressingMode_var = other.sourceAddressingMode_var;
-    this->sequenceNumber_var = other.sequenceNumber_var;
-    this->destinationPanIdentifier_var = other.destinationPanIdentifier_var;
-    this->destinationAddress_var = other.destinationAddress_var;
-    this->sourcePanIdentifier_var = other.sourcePanIdentifier_var;
-    this->sourceAddress_var = other.sourceAddress_var;
-    delete [] this->auxiliarySecurityHeader_var;
-    this->auxiliarySecurityHeader_var = (other.auxiliarySecurityHeader_arraysize==0) ? NULL : new unsigned char[other.auxiliarySecurityHeader_arraysize];
-    auxiliarySecurityHeader_arraysize = other.auxiliarySecurityHeader_arraysize;
-    for (unsigned int i=0; i<auxiliarySecurityHeader_arraysize; i++)
-        this->auxiliarySecurityHeader_var[i] = other.auxiliarySecurityHeader_var[i];
-    this->fcs_var = other.fcs_var;
     return *this;
 }
 
 void McpsMsg::parsimPack(cCommBuffer *b)
 {
     cPacket::parsimPack(b);
-    doPacking(b,this->frameType_var);
-    doPacking(b,this->securityEnabled_var);
-    doPacking(b,this->framePending_var);
-    doPacking(b,this->ackRequest_var);
-    doPacking(b,this->panIdCompression_var);
-    doPacking(b,this->destinationAddressingMode_var);
-    doPacking(b,this->frameVersion_var);
-    doPacking(b,this->sourceAddressingMode_var);
-    doPacking(b,this->sequenceNumber_var);
-    doPacking(b,this->destinationPanIdentifier_var);
-    doPacking(b,this->destinationAddress_var);
-    doPacking(b,this->sourcePanIdentifier_var);
-    doPacking(b,this->sourceAddress_var);
-    b->pack(auxiliarySecurityHeader_arraysize);
-    doPacking(b,this->auxiliarySecurityHeader_var,auxiliarySecurityHeader_arraysize);
-    doPacking(b,this->fcs_var);
 }
 
 void McpsMsg::parsimUnpack(cCommBuffer *b)
 {
     cPacket::parsimUnpack(b);
-    doUnpacking(b,this->frameType_var);
-    doUnpacking(b,this->securityEnabled_var);
-    doUnpacking(b,this->framePending_var);
-    doUnpacking(b,this->ackRequest_var);
-    doUnpacking(b,this->panIdCompression_var);
-    doUnpacking(b,this->destinationAddressingMode_var);
-    doUnpacking(b,this->frameVersion_var);
-    doUnpacking(b,this->sourceAddressingMode_var);
-    doUnpacking(b,this->sequenceNumber_var);
-    doUnpacking(b,this->destinationPanIdentifier_var);
-    doUnpacking(b,this->destinationAddress_var);
-    doUnpacking(b,this->sourcePanIdentifier_var);
-    doUnpacking(b,this->sourceAddress_var);
-    delete [] this->auxiliarySecurityHeader_var;
-    b->unpack(auxiliarySecurityHeader_arraysize);
-    if (auxiliarySecurityHeader_arraysize==0) {
-        this->auxiliarySecurityHeader_var = 0;
-    } else {
-        this->auxiliarySecurityHeader_var = new unsigned char[auxiliarySecurityHeader_arraysize];
-        doUnpacking(b,this->auxiliarySecurityHeader_var,auxiliarySecurityHeader_arraysize);
-    }
-    doUnpacking(b,this->fcs_var);
-}
-
-unsigned char McpsMsg::getFrameType() const
-{
-    return frameType_var;
-}
-
-void McpsMsg::setFrameType(unsigned char frameType_var)
-{
-    this->frameType_var = frameType_var;
-}
-
-bool McpsMsg::getSecurityEnabled() const
-{
-    return securityEnabled_var;
-}
-
-void McpsMsg::setSecurityEnabled(bool securityEnabled_var)
-{
-    this->securityEnabled_var = securityEnabled_var;
-}
-
-bool McpsMsg::getFramePending() const
-{
-    return framePending_var;
-}
-
-void McpsMsg::setFramePending(bool framePending_var)
-{
-    this->framePending_var = framePending_var;
-}
-
-bool McpsMsg::getAckRequest() const
-{
-    return ackRequest_var;
-}
-
-void McpsMsg::setAckRequest(bool ackRequest_var)
-{
-    this->ackRequest_var = ackRequest_var;
-}
-
-bool McpsMsg::getPanIdCompression() const
-{
-    return panIdCompression_var;
-}
-
-void McpsMsg::setPanIdCompression(bool panIdCompression_var)
-{
-    this->panIdCompression_var = panIdCompression_var;
-}
-
-char McpsMsg::getDestinationAddressingMode() const
-{
-    return destinationAddressingMode_var;
-}
-
-void McpsMsg::setDestinationAddressingMode(char destinationAddressingMode_var)
-{
-    this->destinationAddressingMode_var = destinationAddressingMode_var;
-}
-
-char McpsMsg::getFrameVersion() const
-{
-    return frameVersion_var;
-}
-
-void McpsMsg::setFrameVersion(char frameVersion_var)
-{
-    this->frameVersion_var = frameVersion_var;
-}
-
-char McpsMsg::getSourceAddressingMode() const
-{
-    return sourceAddressingMode_var;
-}
-
-void McpsMsg::setSourceAddressingMode(char sourceAddressingMode_var)
-{
-    this->sourceAddressingMode_var = sourceAddressingMode_var;
-}
-
-unsigned char McpsMsg::getSequenceNumber() const
-{
-    return sequenceNumber_var;
-}
-
-void McpsMsg::setSequenceNumber(unsigned char sequenceNumber_var)
-{
-    this->sequenceNumber_var = sequenceNumber_var;
-}
-
-unsigned short McpsMsg::getDestinationPanIdentifier() const
-{
-    return destinationPanIdentifier_var;
-}
-
-void McpsMsg::setDestinationPanIdentifier(unsigned short destinationPanIdentifier_var)
-{
-    this->destinationPanIdentifier_var = destinationPanIdentifier_var;
-}
-
-unsigned long McpsMsg::getDestinationAddress() const
-{
-    return destinationAddress_var;
-}
-
-void McpsMsg::setDestinationAddress(unsigned long destinationAddress_var)
-{
-    this->destinationAddress_var = destinationAddress_var;
-}
-
-unsigned short McpsMsg::getSourcePanIdentifier() const
-{
-    return sourcePanIdentifier_var;
-}
-
-void McpsMsg::setSourcePanIdentifier(unsigned short sourcePanIdentifier_var)
-{
-    this->sourcePanIdentifier_var = sourcePanIdentifier_var;
-}
-
-unsigned long McpsMsg::getSourceAddress() const
-{
-    return sourceAddress_var;
-}
-
-void McpsMsg::setSourceAddress(unsigned long sourceAddress_var)
-{
-    this->sourceAddress_var = sourceAddress_var;
-}
-
-void McpsMsg::setAuxiliarySecurityHeaderArraySize(unsigned int size)
-{
-    unsigned char *auxiliarySecurityHeader_var2 = (size==0) ? NULL : new unsigned char[size];
-    unsigned int sz = auxiliarySecurityHeader_arraysize < size ? auxiliarySecurityHeader_arraysize : size;
-    for (unsigned int i=0; i<sz; i++)
-        auxiliarySecurityHeader_var2[i] = this->auxiliarySecurityHeader_var[i];
-    for (unsigned int i=sz; i<size; i++)
-        auxiliarySecurityHeader_var2[i] = 0;
-    auxiliarySecurityHeader_arraysize = size;
-    delete [] this->auxiliarySecurityHeader_var;
-    this->auxiliarySecurityHeader_var = auxiliarySecurityHeader_var2;
-}
-
-unsigned int McpsMsg::getAuxiliarySecurityHeaderArraySize() const
-{
-    return auxiliarySecurityHeader_arraysize;
-}
-
-unsigned char McpsMsg::getAuxiliarySecurityHeader(unsigned int k) const
-{
-    if (k>=auxiliarySecurityHeader_arraysize) throw cRuntimeError("Array of size %d indexed by %d", auxiliarySecurityHeader_arraysize, k);
-    return auxiliarySecurityHeader_var[k];
-}
-
-void McpsMsg::setAuxiliarySecurityHeader(unsigned int k, unsigned char auxiliarySecurityHeader_var)
-{
-    if (k>=auxiliarySecurityHeader_arraysize) throw cRuntimeError("Array of size %d indexed by %d", auxiliarySecurityHeader_arraysize, k);
-    this->auxiliarySecurityHeader_var[k]=auxiliarySecurityHeader_var;
-}
-
-unsigned short McpsMsg::getFcs() const
-{
-    return fcs_var;
-}
-
-void McpsMsg::setFcs(unsigned short fcs_var)
-{
-    this->fcs_var = fcs_var;
 }
 
 class McpsMsgDescriptor : public cClassDescriptor
@@ -2586,7 +2340,7 @@ const char *McpsMsgDescriptor::getProperty(const char *propertyname) const
 int McpsMsgDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 15+basedesc->getFieldCount(object) : 15;
+    return basedesc ? 0+basedesc->getFieldCount(object) : 0;
 }
 
 unsigned int McpsMsgDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -2598,21 +2352,6 @@ unsigned int McpsMsgDescriptor::getFieldTypeFlags(void *object, int field) const
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISEDITABLE;
-        case 7: return FD_ISEDITABLE;
-        case 8: return FD_ISEDITABLE;
-        case 9: return FD_ISEDITABLE;
-        case 10: return FD_ISEDITABLE;
-        case 11: return FD_ISEDITABLE;
-        case 12: return FD_ISEDITABLE;
-        case 13: return FD_ISARRAY | FD_ISEDITABLE;
-        case 14: return FD_ISEDITABLE;
         default: return 0;
     }
 }
@@ -2626,21 +2365,6 @@ const char *McpsMsgDescriptor::getFieldName(void *object, int field) const
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
-        case 0: return "frameType";
-        case 1: return "securityEnabled";
-        case 2: return "framePending";
-        case 3: return "ackRequest";
-        case 4: return "panIdCompression";
-        case 5: return "destinationAddressingMode";
-        case 6: return "frameVersion";
-        case 7: return "sourceAddressingMode";
-        case 8: return "sequenceNumber";
-        case 9: return "destinationPanIdentifier";
-        case 10: return "destinationAddress";
-        case 11: return "sourcePanIdentifier";
-        case 12: return "sourceAddress";
-        case 13: return "auxiliarySecurityHeader";
-        case 14: return "fcs";
         default: return NULL;
     }
 }
@@ -2654,21 +2378,6 @@ const char *McpsMsgDescriptor::getFieldTypeString(void *object, int field) const
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
-        case 0: return "unsigned char";
-        case 1: return "bool";
-        case 2: return "bool";
-        case 3: return "bool";
-        case 4: return "bool";
-        case 5: return "char";
-        case 6: return "char";
-        case 7: return "char";
-        case 8: return "unsigned char";
-        case 9: return "unsigned short";
-        case 10: return "unsigned long";
-        case 11: return "unsigned short";
-        case 12: return "unsigned long";
-        case 13: return "unsigned char";
-        case 14: return "unsigned short";
         default: return NULL;
     }
 }
@@ -2696,7 +2405,6 @@ int McpsMsgDescriptor::getArraySize(void *object, int field) const
     }
     McpsMsg *pp = (McpsMsg *)object; (void)pp;
     switch (field) {
-        case 13: return pp->getAuxiliarySecurityHeaderArraySize();
         default: return 0;
     }
 }
@@ -2711,21 +2419,6 @@ bool McpsMsgDescriptor::getFieldAsString(void *object, int field, int i, char *r
     }
     McpsMsg *pp = (McpsMsg *)object; (void)pp;
     switch (field) {
-        case 0: ulong2string(pp->getFrameType(),resultbuf,bufsize); return true;
-        case 1: bool2string(pp->getSecurityEnabled(),resultbuf,bufsize); return true;
-        case 2: bool2string(pp->getFramePending(),resultbuf,bufsize); return true;
-        case 3: bool2string(pp->getAckRequest(),resultbuf,bufsize); return true;
-        case 4: bool2string(pp->getPanIdCompression(),resultbuf,bufsize); return true;
-        case 5: long2string(pp->getDestinationAddressingMode(),resultbuf,bufsize); return true;
-        case 6: long2string(pp->getFrameVersion(),resultbuf,bufsize); return true;
-        case 7: long2string(pp->getSourceAddressingMode(),resultbuf,bufsize); return true;
-        case 8: ulong2string(pp->getSequenceNumber(),resultbuf,bufsize); return true;
-        case 9: ulong2string(pp->getDestinationPanIdentifier(),resultbuf,bufsize); return true;
-        case 10: ulong2string(pp->getDestinationAddress(),resultbuf,bufsize); return true;
-        case 11: ulong2string(pp->getSourcePanIdentifier(),resultbuf,bufsize); return true;
-        case 12: ulong2string(pp->getSourceAddress(),resultbuf,bufsize); return true;
-        case 13: ulong2string(pp->getAuxiliarySecurityHeader(i),resultbuf,bufsize); return true;
-        case 14: ulong2string(pp->getFcs(),resultbuf,bufsize); return true;
         default: return false;
     }
 }
@@ -2740,21 +2433,6 @@ bool McpsMsgDescriptor::setFieldAsString(void *object, int field, int i, const c
     }
     McpsMsg *pp = (McpsMsg *)object; (void)pp;
     switch (field) {
-        case 0: pp->setFrameType(string2ulong(value)); return true;
-        case 1: pp->setSecurityEnabled(string2bool(value)); return true;
-        case 2: pp->setFramePending(string2bool(value)); return true;
-        case 3: pp->setAckRequest(string2bool(value)); return true;
-        case 4: pp->setPanIdCompression(string2bool(value)); return true;
-        case 5: pp->setDestinationAddressingMode(string2long(value)); return true;
-        case 6: pp->setFrameVersion(string2long(value)); return true;
-        case 7: pp->setSourceAddressingMode(string2long(value)); return true;
-        case 8: pp->setSequenceNumber(string2ulong(value)); return true;
-        case 9: pp->setDestinationPanIdentifier(string2ulong(value)); return true;
-        case 10: pp->setDestinationAddress(string2ulong(value)); return true;
-        case 11: pp->setSourcePanIdentifier(string2ulong(value)); return true;
-        case 12: pp->setSourceAddress(string2ulong(value)); return true;
-        case 13: pp->setAuxiliarySecurityHeader(i,string2ulong(value)); return true;
-        case 14: pp->setFcs(string2ulong(value)); return true;
         default: return false;
     }
 }
@@ -4887,33 +4565,279 @@ Register_Class(PdMsg);
 
 PdMsg::PdMsg(const char *name, int kind) : cPacket(name,kind)
 {
+    this->frameType_var = 0;
+    this->securityEnabled_var = 0;
+    this->framePending_var = 0;
+    this->ackRequest_var = 0;
+    this->panIdCompression_var = 0;
+    this->destinationAddressingMode_var = 0;
+    this->frameVersion_var = 0;
+    this->sourceAddressingMode_var = 0;
+    this->sequenceNumber_var = 0;
+    this->destinationPanIdentifier_var = 0;
+    this->destinationAddress_var = 0;
+    this->sourcePanIdentifier_var = 0;
+    this->sourceAddress_var = 0;
+    auxiliarySecurityHeader_arraysize = 0;
+    this->auxiliarySecurityHeader_var = 0;
+    this->fcs_var = 0;
 }
 
 PdMsg::PdMsg(const PdMsg& other) : cPacket()
 {
     setName(other.getName());
+    auxiliarySecurityHeader_arraysize = 0;
+    this->auxiliarySecurityHeader_var = 0;
     operator=(other);
 }
 
 PdMsg::~PdMsg()
 {
+    delete [] auxiliarySecurityHeader_var;
 }
 
 PdMsg& PdMsg::operator=(const PdMsg& other)
 {
     if (this==&other) return *this;
     cPacket::operator=(other);
+    this->frameType_var = other.frameType_var;
+    this->securityEnabled_var = other.securityEnabled_var;
+    this->framePending_var = other.framePending_var;
+    this->ackRequest_var = other.ackRequest_var;
+    this->panIdCompression_var = other.panIdCompression_var;
+    this->destinationAddressingMode_var = other.destinationAddressingMode_var;
+    this->frameVersion_var = other.frameVersion_var;
+    this->sourceAddressingMode_var = other.sourceAddressingMode_var;
+    this->sequenceNumber_var = other.sequenceNumber_var;
+    this->destinationPanIdentifier_var = other.destinationPanIdentifier_var;
+    this->destinationAddress_var = other.destinationAddress_var;
+    this->sourcePanIdentifier_var = other.sourcePanIdentifier_var;
+    this->sourceAddress_var = other.sourceAddress_var;
+    delete [] this->auxiliarySecurityHeader_var;
+    this->auxiliarySecurityHeader_var = (other.auxiliarySecurityHeader_arraysize==0) ? NULL : new unsigned char[other.auxiliarySecurityHeader_arraysize];
+    auxiliarySecurityHeader_arraysize = other.auxiliarySecurityHeader_arraysize;
+    for (unsigned int i=0; i<auxiliarySecurityHeader_arraysize; i++)
+        this->auxiliarySecurityHeader_var[i] = other.auxiliarySecurityHeader_var[i];
+    this->fcs_var = other.fcs_var;
     return *this;
 }
 
 void PdMsg::parsimPack(cCommBuffer *b)
 {
     cPacket::parsimPack(b);
+    doPacking(b,this->frameType_var);
+    doPacking(b,this->securityEnabled_var);
+    doPacking(b,this->framePending_var);
+    doPacking(b,this->ackRequest_var);
+    doPacking(b,this->panIdCompression_var);
+    doPacking(b,this->destinationAddressingMode_var);
+    doPacking(b,this->frameVersion_var);
+    doPacking(b,this->sourceAddressingMode_var);
+    doPacking(b,this->sequenceNumber_var);
+    doPacking(b,this->destinationPanIdentifier_var);
+    doPacking(b,this->destinationAddress_var);
+    doPacking(b,this->sourcePanIdentifier_var);
+    doPacking(b,this->sourceAddress_var);
+    b->pack(auxiliarySecurityHeader_arraysize);
+    doPacking(b,this->auxiliarySecurityHeader_var,auxiliarySecurityHeader_arraysize);
+    doPacking(b,this->fcs_var);
 }
 
 void PdMsg::parsimUnpack(cCommBuffer *b)
 {
     cPacket::parsimUnpack(b);
+    doUnpacking(b,this->frameType_var);
+    doUnpacking(b,this->securityEnabled_var);
+    doUnpacking(b,this->framePending_var);
+    doUnpacking(b,this->ackRequest_var);
+    doUnpacking(b,this->panIdCompression_var);
+    doUnpacking(b,this->destinationAddressingMode_var);
+    doUnpacking(b,this->frameVersion_var);
+    doUnpacking(b,this->sourceAddressingMode_var);
+    doUnpacking(b,this->sequenceNumber_var);
+    doUnpacking(b,this->destinationPanIdentifier_var);
+    doUnpacking(b,this->destinationAddress_var);
+    doUnpacking(b,this->sourcePanIdentifier_var);
+    doUnpacking(b,this->sourceAddress_var);
+    delete [] this->auxiliarySecurityHeader_var;
+    b->unpack(auxiliarySecurityHeader_arraysize);
+    if (auxiliarySecurityHeader_arraysize==0) {
+        this->auxiliarySecurityHeader_var = 0;
+    } else {
+        this->auxiliarySecurityHeader_var = new unsigned char[auxiliarySecurityHeader_arraysize];
+        doUnpacking(b,this->auxiliarySecurityHeader_var,auxiliarySecurityHeader_arraysize);
+    }
+    doUnpacking(b,this->fcs_var);
+}
+
+unsigned char PdMsg::getFrameType() const
+{
+    return frameType_var;
+}
+
+void PdMsg::setFrameType(unsigned char frameType_var)
+{
+    this->frameType_var = frameType_var;
+}
+
+bool PdMsg::getSecurityEnabled() const
+{
+    return securityEnabled_var;
+}
+
+void PdMsg::setSecurityEnabled(bool securityEnabled_var)
+{
+    this->securityEnabled_var = securityEnabled_var;
+}
+
+bool PdMsg::getFramePending() const
+{
+    return framePending_var;
+}
+
+void PdMsg::setFramePending(bool framePending_var)
+{
+    this->framePending_var = framePending_var;
+}
+
+bool PdMsg::getAckRequest() const
+{
+    return ackRequest_var;
+}
+
+void PdMsg::setAckRequest(bool ackRequest_var)
+{
+    this->ackRequest_var = ackRequest_var;
+}
+
+bool PdMsg::getPanIdCompression() const
+{
+    return panIdCompression_var;
+}
+
+void PdMsg::setPanIdCompression(bool panIdCompression_var)
+{
+    this->panIdCompression_var = panIdCompression_var;
+}
+
+char PdMsg::getDestinationAddressingMode() const
+{
+    return destinationAddressingMode_var;
+}
+
+void PdMsg::setDestinationAddressingMode(char destinationAddressingMode_var)
+{
+    this->destinationAddressingMode_var = destinationAddressingMode_var;
+}
+
+char PdMsg::getFrameVersion() const
+{
+    return frameVersion_var;
+}
+
+void PdMsg::setFrameVersion(char frameVersion_var)
+{
+    this->frameVersion_var = frameVersion_var;
+}
+
+char PdMsg::getSourceAddressingMode() const
+{
+    return sourceAddressingMode_var;
+}
+
+void PdMsg::setSourceAddressingMode(char sourceAddressingMode_var)
+{
+    this->sourceAddressingMode_var = sourceAddressingMode_var;
+}
+
+unsigned char PdMsg::getSequenceNumber() const
+{
+    return sequenceNumber_var;
+}
+
+void PdMsg::setSequenceNumber(unsigned char sequenceNumber_var)
+{
+    this->sequenceNumber_var = sequenceNumber_var;
+}
+
+unsigned short PdMsg::getDestinationPanIdentifier() const
+{
+    return destinationPanIdentifier_var;
+}
+
+void PdMsg::setDestinationPanIdentifier(unsigned short destinationPanIdentifier_var)
+{
+    this->destinationPanIdentifier_var = destinationPanIdentifier_var;
+}
+
+unsigned long PdMsg::getDestinationAddress() const
+{
+    return destinationAddress_var;
+}
+
+void PdMsg::setDestinationAddress(unsigned long destinationAddress_var)
+{
+    this->destinationAddress_var = destinationAddress_var;
+}
+
+unsigned short PdMsg::getSourcePanIdentifier() const
+{
+    return sourcePanIdentifier_var;
+}
+
+void PdMsg::setSourcePanIdentifier(unsigned short sourcePanIdentifier_var)
+{
+    this->sourcePanIdentifier_var = sourcePanIdentifier_var;
+}
+
+unsigned long PdMsg::getSourceAddress() const
+{
+    return sourceAddress_var;
+}
+
+void PdMsg::setSourceAddress(unsigned long sourceAddress_var)
+{
+    this->sourceAddress_var = sourceAddress_var;
+}
+
+void PdMsg::setAuxiliarySecurityHeaderArraySize(unsigned int size)
+{
+    unsigned char *auxiliarySecurityHeader_var2 = (size==0) ? NULL : new unsigned char[size];
+    unsigned int sz = auxiliarySecurityHeader_arraysize < size ? auxiliarySecurityHeader_arraysize : size;
+    for (unsigned int i=0; i<sz; i++)
+        auxiliarySecurityHeader_var2[i] = this->auxiliarySecurityHeader_var[i];
+    for (unsigned int i=sz; i<size; i++)
+        auxiliarySecurityHeader_var2[i] = 0;
+    auxiliarySecurityHeader_arraysize = size;
+    delete [] this->auxiliarySecurityHeader_var;
+    this->auxiliarySecurityHeader_var = auxiliarySecurityHeader_var2;
+}
+
+unsigned int PdMsg::getAuxiliarySecurityHeaderArraySize() const
+{
+    return auxiliarySecurityHeader_arraysize;
+}
+
+unsigned char PdMsg::getAuxiliarySecurityHeader(unsigned int k) const
+{
+    if (k>=auxiliarySecurityHeader_arraysize) throw cRuntimeError("Array of size %d indexed by %d", auxiliarySecurityHeader_arraysize, k);
+    return auxiliarySecurityHeader_var[k];
+}
+
+void PdMsg::setAuxiliarySecurityHeader(unsigned int k, unsigned char auxiliarySecurityHeader_var)
+{
+    if (k>=auxiliarySecurityHeader_arraysize) throw cRuntimeError("Array of size %d indexed by %d", auxiliarySecurityHeader_arraysize, k);
+    this->auxiliarySecurityHeader_var[k]=auxiliarySecurityHeader_var;
+}
+
+unsigned short PdMsg::getFcs() const
+{
+    return fcs_var;
+}
+
+void PdMsg::setFcs(unsigned short fcs_var)
+{
+    this->fcs_var = fcs_var;
 }
 
 class PdMsgDescriptor : public cClassDescriptor
@@ -4962,7 +4886,7 @@ const char *PdMsgDescriptor::getProperty(const char *propertyname) const
 int PdMsgDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 0+basedesc->getFieldCount(object) : 0;
+    return basedesc ? 15+basedesc->getFieldCount(object) : 15;
 }
 
 unsigned int PdMsgDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -4974,6 +4898,21 @@ unsigned int PdMsgDescriptor::getFieldTypeFlags(void *object, int field) const
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
+        case 0: return FD_ISEDITABLE;
+        case 1: return FD_ISEDITABLE;
+        case 2: return FD_ISEDITABLE;
+        case 3: return FD_ISEDITABLE;
+        case 4: return FD_ISEDITABLE;
+        case 5: return FD_ISEDITABLE;
+        case 6: return FD_ISEDITABLE;
+        case 7: return FD_ISEDITABLE;
+        case 8: return FD_ISEDITABLE;
+        case 9: return FD_ISEDITABLE;
+        case 10: return FD_ISEDITABLE;
+        case 11: return FD_ISEDITABLE;
+        case 12: return FD_ISEDITABLE;
+        case 13: return FD_ISARRAY | FD_ISEDITABLE;
+        case 14: return FD_ISEDITABLE;
         default: return 0;
     }
 }
@@ -4987,6 +4926,21 @@ const char *PdMsgDescriptor::getFieldName(void *object, int field) const
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
+        case 0: return "frameType";
+        case 1: return "securityEnabled";
+        case 2: return "framePending";
+        case 3: return "ackRequest";
+        case 4: return "panIdCompression";
+        case 5: return "destinationAddressingMode";
+        case 6: return "frameVersion";
+        case 7: return "sourceAddressingMode";
+        case 8: return "sequenceNumber";
+        case 9: return "destinationPanIdentifier";
+        case 10: return "destinationAddress";
+        case 11: return "sourcePanIdentifier";
+        case 12: return "sourceAddress";
+        case 13: return "auxiliarySecurityHeader";
+        case 14: return "fcs";
         default: return NULL;
     }
 }
@@ -5000,6 +4954,21 @@ const char *PdMsgDescriptor::getFieldTypeString(void *object, int field) const
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
+        case 0: return "unsigned char";
+        case 1: return "bool";
+        case 2: return "bool";
+        case 3: return "bool";
+        case 4: return "bool";
+        case 5: return "char";
+        case 6: return "char";
+        case 7: return "char";
+        case 8: return "unsigned char";
+        case 9: return "unsigned short";
+        case 10: return "unsigned long";
+        case 11: return "unsigned short";
+        case 12: return "unsigned long";
+        case 13: return "unsigned char";
+        case 14: return "unsigned short";
         default: return NULL;
     }
 }
@@ -5027,6 +4996,7 @@ int PdMsgDescriptor::getArraySize(void *object, int field) const
     }
     PdMsg *pp = (PdMsg *)object; (void)pp;
     switch (field) {
+        case 13: return pp->getAuxiliarySecurityHeaderArraySize();
         default: return 0;
     }
 }
@@ -5041,6 +5011,21 @@ bool PdMsgDescriptor::getFieldAsString(void *object, int field, int i, char *res
     }
     PdMsg *pp = (PdMsg *)object; (void)pp;
     switch (field) {
+        case 0: ulong2string(pp->getFrameType(),resultbuf,bufsize); return true;
+        case 1: bool2string(pp->getSecurityEnabled(),resultbuf,bufsize); return true;
+        case 2: bool2string(pp->getFramePending(),resultbuf,bufsize); return true;
+        case 3: bool2string(pp->getAckRequest(),resultbuf,bufsize); return true;
+        case 4: bool2string(pp->getPanIdCompression(),resultbuf,bufsize); return true;
+        case 5: long2string(pp->getDestinationAddressingMode(),resultbuf,bufsize); return true;
+        case 6: long2string(pp->getFrameVersion(),resultbuf,bufsize); return true;
+        case 7: long2string(pp->getSourceAddressingMode(),resultbuf,bufsize); return true;
+        case 8: ulong2string(pp->getSequenceNumber(),resultbuf,bufsize); return true;
+        case 9: ulong2string(pp->getDestinationPanIdentifier(),resultbuf,bufsize); return true;
+        case 10: ulong2string(pp->getDestinationAddress(),resultbuf,bufsize); return true;
+        case 11: ulong2string(pp->getSourcePanIdentifier(),resultbuf,bufsize); return true;
+        case 12: ulong2string(pp->getSourceAddress(),resultbuf,bufsize); return true;
+        case 13: ulong2string(pp->getAuxiliarySecurityHeader(i),resultbuf,bufsize); return true;
+        case 14: ulong2string(pp->getFcs(),resultbuf,bufsize); return true;
         default: return false;
     }
 }
@@ -5055,6 +5040,21 @@ bool PdMsgDescriptor::setFieldAsString(void *object, int field, int i, const cha
     }
     PdMsg *pp = (PdMsg *)object; (void)pp;
     switch (field) {
+        case 0: pp->setFrameType(string2ulong(value)); return true;
+        case 1: pp->setSecurityEnabled(string2bool(value)); return true;
+        case 2: pp->setFramePending(string2bool(value)); return true;
+        case 3: pp->setAckRequest(string2bool(value)); return true;
+        case 4: pp->setPanIdCompression(string2bool(value)); return true;
+        case 5: pp->setDestinationAddressingMode(string2long(value)); return true;
+        case 6: pp->setFrameVersion(string2long(value)); return true;
+        case 7: pp->setSourceAddressingMode(string2long(value)); return true;
+        case 8: pp->setSequenceNumber(string2ulong(value)); return true;
+        case 9: pp->setDestinationPanIdentifier(string2ulong(value)); return true;
+        case 10: pp->setDestinationAddress(string2ulong(value)); return true;
+        case 11: pp->setSourcePanIdentifier(string2ulong(value)); return true;
+        case 12: pp->setSourceAddress(string2ulong(value)); return true;
+        case 13: pp->setAuxiliarySecurityHeader(i,string2ulong(value)); return true;
+        case 14: pp->setFcs(string2ulong(value)); return true;
         default: return false;
     }
 }
@@ -5091,21 +5091,16 @@ Register_Class(PdData_request);
 PdData_request::PdData_request(const char *name, int kind) : PdMsg(name,kind)
 {
     this->psduLength_var = 0;
-    psdu_arraysize = 0;
-    this->psdu_var = 0;
 }
 
 PdData_request::PdData_request(const PdData_request& other) : PdMsg()
 {
     setName(other.getName());
-    psdu_arraysize = 0;
-    this->psdu_var = 0;
     operator=(other);
 }
 
 PdData_request::~PdData_request()
 {
-    delete [] psdu_var;
 }
 
 PdData_request& PdData_request::operator=(const PdData_request& other)
@@ -5113,11 +5108,6 @@ PdData_request& PdData_request::operator=(const PdData_request& other)
     if (this==&other) return *this;
     PdMsg::operator=(other);
     this->psduLength_var = other.psduLength_var;
-    delete [] this->psdu_var;
-    this->psdu_var = (other.psdu_arraysize==0) ? NULL : new unsigned char[other.psdu_arraysize];
-    psdu_arraysize = other.psdu_arraysize;
-    for (unsigned int i=0; i<psdu_arraysize; i++)
-        this->psdu_var[i] = other.psdu_var[i];
     return *this;
 }
 
@@ -5125,22 +5115,12 @@ void PdData_request::parsimPack(cCommBuffer *b)
 {
     PdMsg::parsimPack(b);
     doPacking(b,this->psduLength_var);
-    b->pack(psdu_arraysize);
-    doPacking(b,this->psdu_var,psdu_arraysize);
 }
 
 void PdData_request::parsimUnpack(cCommBuffer *b)
 {
     PdMsg::parsimUnpack(b);
     doUnpacking(b,this->psduLength_var);
-    delete [] this->psdu_var;
-    b->unpack(psdu_arraysize);
-    if (psdu_arraysize==0) {
-        this->psdu_var = 0;
-    } else {
-        this->psdu_var = new unsigned char[psdu_arraysize];
-        doUnpacking(b,this->psdu_var,psdu_arraysize);
-    }
 }
 
 unsigned int PdData_request::getPsduLength() const
@@ -5151,36 +5131,6 @@ unsigned int PdData_request::getPsduLength() const
 void PdData_request::setPsduLength(unsigned int psduLength_var)
 {
     this->psduLength_var = psduLength_var;
-}
-
-void PdData_request::setPsduArraySize(unsigned int size)
-{
-    unsigned char *psdu_var2 = (size==0) ? NULL : new unsigned char[size];
-    unsigned int sz = psdu_arraysize < size ? psdu_arraysize : size;
-    for (unsigned int i=0; i<sz; i++)
-        psdu_var2[i] = this->psdu_var[i];
-    for (unsigned int i=sz; i<size; i++)
-        psdu_var2[i] = 0;
-    psdu_arraysize = size;
-    delete [] this->psdu_var;
-    this->psdu_var = psdu_var2;
-}
-
-unsigned int PdData_request::getPsduArraySize() const
-{
-    return psdu_arraysize;
-}
-
-unsigned char PdData_request::getPsdu(unsigned int k) const
-{
-    if (k>=psdu_arraysize) throw cRuntimeError("Array of size %d indexed by %d", psdu_arraysize, k);
-    return psdu_var[k];
-}
-
-void PdData_request::setPsdu(unsigned int k, unsigned char psdu_var)
-{
-    if (k>=psdu_arraysize) throw cRuntimeError("Array of size %d indexed by %d", psdu_arraysize, k);
-    this->psdu_var[k]=psdu_var;
 }
 
 class PdData_requestDescriptor : public cClassDescriptor
@@ -5229,7 +5179,7 @@ const char *PdData_requestDescriptor::getProperty(const char *propertyname) cons
 int PdData_requestDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 2+basedesc->getFieldCount(object) : 2;
+    return basedesc ? 1+basedesc->getFieldCount(object) : 1;
 }
 
 unsigned int PdData_requestDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -5242,7 +5192,6 @@ unsigned int PdData_requestDescriptor::getFieldTypeFlags(void *object, int field
     }
     switch (field) {
         case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISARRAY | FD_ISEDITABLE;
         default: return 0;
     }
 }
@@ -5257,7 +5206,6 @@ const char *PdData_requestDescriptor::getFieldName(void *object, int field) cons
     }
     switch (field) {
         case 0: return "psduLength";
-        case 1: return "psdu";
         default: return NULL;
     }
 }
@@ -5272,7 +5220,6 @@ const char *PdData_requestDescriptor::getFieldTypeString(void *object, int field
     }
     switch (field) {
         case 0: return "unsigned int";
-        case 1: return "unsigned char";
         default: return NULL;
     }
 }
@@ -5300,7 +5247,6 @@ int PdData_requestDescriptor::getArraySize(void *object, int field) const
     }
     PdData_request *pp = (PdData_request *)object; (void)pp;
     switch (field) {
-        case 1: return pp->getPsduArraySize();
         default: return 0;
     }
 }
@@ -5316,7 +5262,6 @@ bool PdData_requestDescriptor::getFieldAsString(void *object, int field, int i, 
     PdData_request *pp = (PdData_request *)object; (void)pp;
     switch (field) {
         case 0: ulong2string(pp->getPsduLength(),resultbuf,bufsize); return true;
-        case 1: ulong2string(pp->getPsdu(i),resultbuf,bufsize); return true;
         default: return false;
     }
 }
@@ -5332,7 +5277,6 @@ bool PdData_requestDescriptor::setFieldAsString(void *object, int field, int i, 
     PdData_request *pp = (PdData_request *)object; (void)pp;
     switch (field) {
         case 0: pp->setPsduLength(string2ulong(value)); return true;
-        case 1: pp->setPsdu(i,string2ulong(value)); return true;
         default: return false;
     }
 }
@@ -5562,6 +5506,209 @@ void *PdData_confirmDescriptor::getFieldStructPointer(void *object, int field, i
         field -= basedesc->getFieldCount(object);
     }
     PdData_confirm *pp = (PdData_confirm *)object; (void)pp;
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+Register_Class(AirFrame802154);
+
+AirFrame802154::AirFrame802154(const char *name, int kind) : cPacket(name,kind)
+{
+}
+
+AirFrame802154::AirFrame802154(const AirFrame802154& other) : cPacket()
+{
+    setName(other.getName());
+    operator=(other);
+}
+
+AirFrame802154::~AirFrame802154()
+{
+}
+
+AirFrame802154& AirFrame802154::operator=(const AirFrame802154& other)
+{
+    if (this==&other) return *this;
+    cPacket::operator=(other);
+    return *this;
+}
+
+void AirFrame802154::parsimPack(cCommBuffer *b)
+{
+    cPacket::parsimPack(b);
+}
+
+void AirFrame802154::parsimUnpack(cCommBuffer *b)
+{
+    cPacket::parsimUnpack(b);
+}
+
+class AirFrame802154Descriptor : public cClassDescriptor
+{
+  public:
+    AirFrame802154Descriptor();
+    virtual ~AirFrame802154Descriptor();
+
+    virtual bool doesSupport(cObject *obj) const;
+    virtual const char *getProperty(const char *propertyname) const;
+    virtual int getFieldCount(void *object) const;
+    virtual const char *getFieldName(void *object, int field) const;
+    virtual unsigned int getFieldTypeFlags(void *object, int field) const;
+    virtual const char *getFieldTypeString(void *object, int field) const;
+    virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
+    virtual int getArraySize(void *object, int field) const;
+
+    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
+
+    virtual const char *getFieldStructName(void *object, int field) const;
+    virtual void *getFieldStructPointer(void *object, int field, int i) const;
+};
+
+Register_ClassDescriptor(AirFrame802154Descriptor);
+
+AirFrame802154Descriptor::AirFrame802154Descriptor() : cClassDescriptor("AirFrame802154", "cPacket")
+{
+}
+
+AirFrame802154Descriptor::~AirFrame802154Descriptor()
+{
+}
+
+bool AirFrame802154Descriptor::doesSupport(cObject *obj) const
+{
+    return dynamic_cast<AirFrame802154 *>(obj)!=NULL;
+}
+
+const char *AirFrame802154Descriptor::getProperty(const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->getProperty(propertyname) : NULL;
+}
+
+int AirFrame802154Descriptor::getFieldCount(void *object) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? 0+basedesc->getFieldCount(object) : 0;
+}
+
+unsigned int AirFrame802154Descriptor::getFieldTypeFlags(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeFlags(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return 0;
+    }
+}
+
+const char *AirFrame802154Descriptor::getFieldName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+const char *AirFrame802154Descriptor::getFieldTypeString(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeString(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+const char *AirFrame802154Descriptor::getFieldProperty(void *object, int field, const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldProperty(object, field, propertyname);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+int AirFrame802154Descriptor::getArraySize(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getArraySize(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    AirFrame802154 *pp = (AirFrame802154 *)object; (void)pp;
+    switch (field) {
+        default: return 0;
+    }
+}
+
+bool AirFrame802154Descriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+        field -= basedesc->getFieldCount(object);
+    }
+    AirFrame802154 *pp = (AirFrame802154 *)object; (void)pp;
+    switch (field) {
+        default: return false;
+    }
+}
+
+bool AirFrame802154Descriptor::setFieldAsString(void *object, int field, int i, const char *value) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->setFieldAsString(object,field,i,value);
+        field -= basedesc->getFieldCount(object);
+    }
+    AirFrame802154 *pp = (AirFrame802154 *)object; (void)pp;
+    switch (field) {
+        default: return false;
+    }
+}
+
+const char *AirFrame802154Descriptor::getFieldStructName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+void *AirFrame802154Descriptor::getFieldStructPointer(void *object, int field, int i) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructPointer(object, field, i);
+        field -= basedesc->getFieldCount(object);
+    }
+    AirFrame802154 *pp = (AirFrame802154 *)object; (void)pp;
     switch (field) {
         default: return NULL;
     }

@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for dip_802.15.4
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep -I/home/bernard/apps/mobility-fw2.0p3-o4/core/utils -I/home/bernard/apps/mobility-fw2.0p3-o4/core/basicModules -I/home/bernard/apps/mobility-fw2.0p3-o4/contrib/messages -I/home/bernard/apps/mobility-fw2.0p3-o4/contrib/utils -I/home/bernard/apps/mobility-fw2.0p3-o4/core/channelControl -I/home/bernard/apps/mobility-fw2.0p3-o4/core/basicMessages -I/home/bernard/apps/mobility-fw2.0p3-o4/contrib/applLayer -I/home/bernard/apps/mobility-fw2.0p3-o4/core/blackboard -I/home/bernard/apps/mobility-fw2.0p3-o4/contrib/nic/radios -L/home/bernard/apps/mobility-fw2.0p3-o4/out/$(CONFIGNAME)/core -L/home/bernard/apps/mobility-fw2.0p3-o4/out/$(CONFIGNAME)/contrib -lmfcore -lmfcontrib -KRTN_PROJ=/home/bernard/apps/mobility-fw2.0p3-o4
+#  opp_makemake -f --deep -I/home/bernard/apps/mobility-fw2.0p3-o4/core/basicModules -I/home/bernard/apps/mobility-fw2.0p3-o4/core/utils -I/home/bernard/apps/mobility-fw2.0p3-o4/contrib/messages -I/home/bernard/apps/mobility-fw2.0p3-o4/contrib/utils -I/home/bernard/apps/mobility-fw2.0p3-o4/core/channelControl -I/home/bernard/apps/mobility-fw2.0p3-o4/contrib/applLayer -I/home/bernard/apps/mobility-fw2.0p3-o4/core/blackboard -I/home/bernard/apps/mobility-fw2.0p3-o4/contrib/nic/macLayer -I/home/bernard/apps/mobility-fw2.0p3-o4/contrib/nic/phyLayer -I/home/bernard/apps/mobility-fw2.0p3-o4/contrib/netwLayer -I/home/bernard/apps/mobility-fw2.0p3-o4/core/basicMessages -I/home/bernard/apps/mobility-fw2.0p3-o4/contrib/nic/radios -L/home/bernard/apps/mobility-fw2.0p3-o4/out/$(CONFIGNAME)/core -L/home/bernard/apps/mobility-fw2.0p3-o4/out/$(CONFIGNAME)/contrib -lmfcore -lmfcontrib -KRTN_PROJ=/home/bernard/apps/mobility-fw2.0p3-o4
 #
 
 # Name of target to be created (-o option)
@@ -15,14 +15,17 @@ USERIF_LIBS = $(ALL_ENV_LIBS) # that is, $(TKENV_LIBS) $(CMDENV_LIBS)
 
 # C++ include paths (with -I)
 INCLUDE_PATH = \
-    -I$(RTN_PROJ)/core/utils \
     -I$(RTN_PROJ)/core/basicModules \
+    -I$(RTN_PROJ)/core/utils \
     -I$(RTN_PROJ)/contrib/messages \
     -I$(RTN_PROJ)/contrib/utils \
     -I$(RTN_PROJ)/core/channelControl \
-    -I$(RTN_PROJ)/core/basicMessages \
     -I$(RTN_PROJ)/contrib/applLayer \
     -I$(RTN_PROJ)/core/blackboard \
+    -I$(RTN_PROJ)/contrib/nic/macLayer \
+    -I$(RTN_PROJ)/contrib/nic/phyLayer \
+    -I$(RTN_PROJ)/contrib/netwLayer \
+    -I$(RTN_PROJ)/core/basicMessages \
     -I$(RTN_PROJ)/contrib/nic/radios \
     -I.
 
@@ -137,43 +140,65 @@ depend:
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 $O/Plme.o: Plme.cc \
 	typedef.h \
+	$(RTN_PROJ)/core/basicModules/BasicModule.h \
+	$(RTN_PROJ)/core/utils/ModuleAccess.h \
+	$(RTN_PROJ)/core/utils/HostMove.h \
+	$(RTN_PROJ)/core/basicMessages/AirFrame_m.h \
 	PhyPib.h \
 	BBItems.h \
+	$(RTN_PROJ)/core/utils/SnrList.h \
+	$(RTN_PROJ)/core/utils/Coord.h \
 	$(RTN_PROJ)/core/blackboard/Blackboard.h \
-	$(RTN_PROJ)/core/basicModules/BasicModule.h \
 	Messages_m.h \
-	$(RTN_PROJ)/core/utils/ModuleAccess.h \
+	$(RTN_PROJ)/core/utils/FWMath.h \
 	Plme.h
 $O/Mcps.o: Mcps.cc \
 	typedef.h \
+	$(RTN_PROJ)/core/basicModules/BasicModule.h \
+	Mcps.h \
+	$(RTN_PROJ)/core/utils/ModuleAccess.h \
+	$(RTN_PROJ)/core/utils/HostMove.h \
+	$(RTN_PROJ)/core/basicMessages/AirFrame_m.h \
+	MacPib.h \
+	$(RTN_PROJ)/core/utils/SnrList.h \
 	BBItems.h \
 	$(RTN_PROJ)/core/blackboard/Blackboard.h \
-	$(RTN_PROJ)/core/basicModules/BasicModule.h \
+	$(RTN_PROJ)/core/utils/Coord.h \
 	Messages_m.h \
-	Mcps.h \
-	$(RTN_PROJ)/core/utils/ModuleAccess.h
+	$(RTN_PROJ)/core/utils/FWMath.h
 $O/Mlme.o: Mlme.cc \
 	typedef.h \
+	$(RTN_PROJ)/core/basicModules/BasicModule.h \
+	Mlme.h \
+	$(RTN_PROJ)/core/utils/ModuleAccess.h \
+	$(RTN_PROJ)/core/utils/HostMove.h \
+	$(RTN_PROJ)/core/basicMessages/AirFrame_m.h \
 	MacPib.h \
 	BBItems.h \
+	$(RTN_PROJ)/core/utils/SnrList.h \
 	$(RTN_PROJ)/core/blackboard/Blackboard.h \
-	$(RTN_PROJ)/core/basicModules/BasicModule.h \
+	$(RTN_PROJ)/core/utils/Coord.h \
 	Messages_m.h \
-	Mlme.h \
-	$(RTN_PROJ)/core/utils/ModuleAccess.h
+	$(RTN_PROJ)/core/utils/FWMath.h
 $O/PhyPib.o: PhyPib.cc \
+	$(RTN_PROJ)/core/basicMessages/AirFrame_m.h \
 	typedef.h \
 	PhyPib.h \
+	$(RTN_PROJ)/core/utils/SnrList.h \
 	BBItems.h \
+	$(RTN_PROJ)/core/utils/Coord.h \
 	$(RTN_PROJ)/core/blackboard/Blackboard.h \
 	$(RTN_PROJ)/core/basicModules/BasicModule.h \
 	Messages_m.h \
-	$(RTN_PROJ)/core/utils/ModuleAccess.h
+	$(RTN_PROJ)/core/utils/FWMath.h \
+	$(RTN_PROJ)/core/utils/ModuleAccess.h \
+	$(RTN_PROJ)/core/utils/HostMove.h
 $O/SnrEval802154.o: SnrEval802154.cc \
 	$(RTN_PROJ)/core/basicModules/BasicSnrEval.h \
 	$(RTN_PROJ)/core/utils/ActiveChannel.h \
 	$(RTN_PROJ)/contrib/utils/Bitrate.h \
 	$(RTN_PROJ)/core/utils/NicControlType.h \
+	$(RTN_PROJ)/contrib/nic/phyLayer/SnrEval.h \
 	$(RTN_PROJ)/contrib/utils/RSSI.h \
 	$(RTN_PROJ)/core/basicModules/BasicModule.h \
 	SnrEval802154.h \
@@ -190,17 +215,29 @@ $O/SnrEval802154.o: SnrEval802154.cc \
 	$(RTN_PROJ)/core/blackboard/Blackboard.h \
 	$(RTN_PROJ)/core/utils/FWMath.h
 $O/FFDAppLayer.o: FFDAppLayer.cc \
-	FFDAppLayer.h \
 	typedef.h \
-	$(RTN_PROJ)/contrib/messages/ApplPkt_m.h \
-	$(RTN_PROJ)/core/blackboard/Blackboard.h \
 	$(RTN_PROJ)/core/basicModules/BasicModule.h \
-	$(RTN_PROJ)/contrib/applLayer/BasicApplLayer.h \
+	$(RTN_PROJ)/core/utils/ModuleAccess.h \
+	$(RTN_PROJ)/core/utils/HostMove.h \
+	FFDAppLayer.h \
+	$(RTN_PROJ)/core/basicMessages/AirFrame_m.h \
+	$(RTN_PROJ)/contrib/messages/ApplPkt_m.h \
+	$(RTN_PROJ)/core/utils/SnrList.h \
+	$(RTN_PROJ)/core/utils/Coord.h \
+	$(RTN_PROJ)/core/blackboard/Blackboard.h \
 	Messages_m.h \
-	$(RTN_PROJ)/core/utils/ModuleAccess.h
+	$(RTN_PROJ)/contrib/applLayer/BasicApplLayer.h \
+	$(RTN_PROJ)/core/utils/FWMath.h
 $O/Messages_m.o: Messages_m.cc \
+	$(RTN_PROJ)/core/basicMessages/AirFrame_m.h \
 	typedef.h \
-	Messages_m.h
+	$(RTN_PROJ)/core/utils/SnrList.h \
+	$(RTN_PROJ)/core/blackboard/Blackboard.h \
+	$(RTN_PROJ)/core/utils/Coord.h \
+	Messages_m.h \
+	$(RTN_PROJ)/core/utils/FWMath.h \
+	$(RTN_PROJ)/core/utils/ModuleAccess.h \
+	$(RTN_PROJ)/core/utils/HostMove.h
 $O/Llc8022.o: Llc8022.cc \
 	Llc8022.h
 $O/Nlde.o: Nlde.cc \
@@ -214,23 +251,28 @@ $O/RFDAppLayer.o: RFDAppLayer.cc \
 	RFDAppLayer.h \
 	$(RTN_PROJ)/core/utils/ModuleAccess.h
 $O/Nlme.o: Nlme.cc \
+	$(RTN_PROJ)/core/basicMessages/AirFrame_m.h \
 	typedef.h \
+	$(RTN_PROJ)/core/utils/SnrList.h \
+	$(RTN_PROJ)/core/utils/Coord.h \
 	$(RTN_PROJ)/core/blackboard/Blackboard.h \
 	$(RTN_PROJ)/core/basicModules/BasicModule.h \
 	Messages_m.h \
+	$(RTN_PROJ)/core/utils/FWMath.h \
 	Nlme.h \
-	$(RTN_PROJ)/core/utils/ModuleAccess.h
+	$(RTN_PROJ)/core/utils/ModuleAccess.h \
+	$(RTN_PROJ)/core/utils/HostMove.h
 $O/Mac802154.o: Mac802154.cc \
-	$(RTN_PROJ)/contrib/utils/Bitrate.h \
 	$(RTN_PROJ)/core/utils/ActiveChannel.h \
+	$(RTN_PROJ)/contrib/utils/Bitrate.h \
 	Mac802154.h \
 	$(RTN_PROJ)/core/utils/NicControlType.h \
-	$(RTN_PROJ)/core/basicModules/BasicLayer.h \
 	$(RTN_PROJ)/core/basicModules/BasicMacLayer.h \
+	$(RTN_PROJ)/core/basicModules/BasicLayer.h \
 	$(RTN_PROJ)/contrib/utils/RSSI.h \
-	$(RTN_PROJ)/core/basicModules/BasicModule.h \
-	$(RTN_PROJ)/core/utils/SimpleAddress.h \
 	$(RTN_PROJ)/core/basicMessages/MacPkt_m.h \
+	$(RTN_PROJ)/core/utils/SimpleAddress.h \
+	$(RTN_PROJ)/core/basicModules/BasicModule.h \
 	$(RTN_PROJ)/contrib/nic/radios/SingleChannelRadio.h \
 	$(RTN_PROJ)/core/utils/ModuleAccess.h \
 	$(RTN_PROJ)/contrib/utils/DroppedPacket.h \
@@ -238,20 +280,42 @@ $O/Mac802154.o: Mac802154.cc \
 	$(RTN_PROJ)/core/blackboard/Blackboard.h \
 	$(RTN_PROJ)/core/utils/FWMath.h
 $O/Pd.o: Pd.cc \
-	Pd.h
+	typedef.h \
+	$(RTN_PROJ)/core/utils/ActiveChannel.h \
+	$(RTN_PROJ)/contrib/utils/Bitrate.h \
+	$(RTN_PROJ)/core/basicModules/BasicModule.h \
+	$(RTN_PROJ)/contrib/nic/radios/SingleChannelRadio.h \
+	$(RTN_PROJ)/core/utils/ModuleAccess.h \
+	$(RTN_PROJ)/core/utils/HostMove.h \
+	$(RTN_PROJ)/core/basicMessages/AirFrame_m.h \
+	$(RTN_PROJ)/contrib/utils/RadioState.h \
+	Pd.h \
+	PhyPib.h \
+	$(RTN_PROJ)/core/utils/SnrList.h \
+	BBItems.h \
+	$(RTN_PROJ)/core/utils/Coord.h \
+	$(RTN_PROJ)/core/blackboard/Blackboard.h \
+	Messages_m.h \
+	$(RTN_PROJ)/core/utils/FWMath.h
 $O/MacPib.o: MacPib.cc \
+	$(RTN_PROJ)/core/basicMessages/AirFrame_m.h \
 	typedef.h \
 	MacPib.h \
+	$(RTN_PROJ)/core/utils/SnrList.h \
 	BBItems.h \
+	$(RTN_PROJ)/core/utils/Coord.h \
 	$(RTN_PROJ)/core/blackboard/Blackboard.h \
 	$(RTN_PROJ)/core/basicModules/BasicModule.h \
 	Messages_m.h \
-	$(RTN_PROJ)/core/utils/ModuleAccess.h
+	$(RTN_PROJ)/core/utils/FWMath.h \
+	$(RTN_PROJ)/core/utils/ModuleAccess.h \
+	$(RTN_PROJ)/core/utils/HostMove.h
 $O/NwkPib.o: NwkPib.cc \
 	NwkPib.h
 $O/SnrDecider802154.o: SnrDecider802154.cc \
 	$(RTN_PROJ)/core/basicMessages/AirFrame_m.h \
 	SnrDecider802154.h \
+	$(RTN_PROJ)/contrib/nic/phyLayer/SnrDecider.h \
 	$(RTN_PROJ)/core/utils/SnrList.h \
 	$(RTN_PROJ)/core/blackboard/Blackboard.h \
 	$(RTN_PROJ)/core/utils/Coord.h \
@@ -265,9 +329,9 @@ $O/RFDNetLayer.o: RFDNetLayer.cc \
 	$(RTN_PROJ)/core/basicModules/BasicLayer.h \
 	$(RTN_PROJ)/core/blackboard/Blackboard.h \
 	$(RTN_PROJ)/contrib/utils/NetwControlInfo.h \
+	$(RTN_PROJ)/core/basicModules/BasicModule.h \
 	$(RTN_PROJ)/contrib/messages/NetwPkt_m.h \
 	$(RTN_PROJ)/core/utils/SimpleAddress.h \
-	$(RTN_PROJ)/core/basicModules/BasicModule.h \
 	RFDNetLayer.h \
 	$(RTN_PROJ)/core/utils/ModuleAccess.h \
 	ZigBeeArp.h

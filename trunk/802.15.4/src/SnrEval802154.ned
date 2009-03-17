@@ -23,22 +23,12 @@
 // *              by:              $Author: koepke $
 // **************************************************************************/
 
+import org.mf2.contrib.nic.phyLayer.SnrEval;
 
-simple SnrEval802154
+simple SnrEval802154 extends SnrEval
 {
     parameters:
-        bool debug; // debug switch
-        // if false, the RSSI will not be published 
-        // during the reception of a frame
-        bool publishRSSIAlways;
-        volatile double transmitterPower;
-        double headerLength;
-        volatile double carrierFrequency;
-        volatile double thermalNoise;
-        volatile double pathLossAlpha;
-        volatile double sensitivity;
+
     gates:
-        input upperDataIn;
-        input radioIn;
-        output upperDataOut;
+
 }

@@ -78,9 +78,9 @@ module Nic802154
         mac.plmeSapOut --> phy.plmeSapIn;
         mac.plmeSapIn <-- phy.plmeSapOut;
         
-        phy.rfSapOut --> snrEval.upperDataIn;
-        phy.rfSapIn <-- decider.upperDataOut;
-        snrEval.upperDataOut --> decider.lowerDataIn;
+        phy.rfSapOut --> snrEval.uppergateIn;
+        phy.rfSapIn <-- decider.uppergateOut;
+        snrEval.uppergateOut --> decider.lowergateIn;
         
         radioIn --> snrEval.radioIn;
 }
