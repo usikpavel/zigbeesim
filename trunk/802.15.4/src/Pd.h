@@ -20,7 +20,7 @@
 #include <ActiveChannel.h>
 /** -temp */
 
-class Pd: public BasicModule {
+class Pd: public BasicMacLayer {
 public:
 	void initialize(int);
 	void handleMessage(cMessage *msg);
