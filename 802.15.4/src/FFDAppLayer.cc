@@ -92,7 +92,7 @@ void FFDAppLayer::handleSelfMsg(cMessage* msg) {
 		request->setName("NLME-NETWORK-FORMATION.request");
 		request->setKind(NLME_NETWORK_FORMATION_REQUEST);
 		request->setScanChannels(0x07FFF800);
-		request->setScanDuration(0x08);
+		request->setScanDuration(0x00);
 		request->setBeaconOrder(0x0E);
 		/** @note 0xFFFF is considered a NULL value in my case */
 		request->setPANId(0xFFFF);
