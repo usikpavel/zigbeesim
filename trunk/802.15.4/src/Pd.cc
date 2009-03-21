@@ -53,14 +53,12 @@ void Pd::handleSelfMsg(cMessage *msg) {
 void Pd::handlePdMsg(cMessage *msg) {
 	setLastUpperMsg(msg);
 	assert(static_cast<cPacket*>(msg));
-	Frame802154 *frame = encapsulatePd(static_cast<PdMsg *>(msg));/*
+	Frame802154 *frame = encapsulatePd(static_cast<PdMsg *>(msg));
 	if (frameQueue.size() <= queueLength) {
 		frameQueue.push_back(frame);
 		if((frameQueue.size() == 1) && (phyState == RX))
 		prepareSend();
 	}
-	*/
-	sendRfDown(frame);
 }
 
 void Pd::handleRfMsg(cMessage *msg) {

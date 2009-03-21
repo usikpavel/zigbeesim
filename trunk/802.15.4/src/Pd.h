@@ -18,6 +18,7 @@
 #include "CoreDebug.h"
 #include <list>
 #include <ActiveChannel.h>
+#include "ChannelControl.h"
 /** -temp */
 
 class Pd: public BasicModule {
@@ -40,6 +41,8 @@ protected:
 	cMessage* timer;
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
+	/** @todo remove this temporary cc */
+	ChannelControl* cc;
 	void handleSelfMsg(cMessage *);
 	void handlePdMsg(cMessage *);
 	void handleRfMsg(cMessage *);

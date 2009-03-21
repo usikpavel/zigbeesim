@@ -285,6 +285,8 @@ $O/Pd.o: Pd.cc \
 	$(MF_OPP4_PROJ)/core/utils/Coord.h \
 	$(MF_OPP4_PROJ)/core/utils/MacControlInfo.h \
 	$(MF_OPP4_PROJ)/core/basicMessages/AirFrame_m.h \
+	$(MF_OPP4_PROJ)/core/channelControl/NicEntry.h \
+	$(MF_OPP4_PROJ)/core/channelControl/ChannelControl.h \
 	$(MF_OPP4_PROJ)/core/utils/FWMath.h \
 	Pd.h \
 	$(MF_OPP4_PROJ)/core/utils/HostMove.h \
