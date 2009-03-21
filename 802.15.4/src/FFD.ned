@@ -22,10 +22,10 @@ module FFD
             parameters:
                 //@display("p=200,75;b=30,25");
         }
-        //mobility: ConstSpeedMobility {
-        //    parameters:
-        //        //@display("p=200,150;b=30,25");
-        //}
+        mobility: ConstSpeedMobility {
+            parameters:
+                //@display("p=200,150;b=30,25");
+        }
         app: FFDAppLayer {
             parameters:
                 //@display("p=90,50;b=100,20,rect");
