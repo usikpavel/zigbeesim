@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for dip_802.15.4
 #
 # This file was generated with the command:
-#  opp_makemake -f --nolink -d src -X. -KRTN_PROJ=/home/bernard/apps/mobility-fw2.0p3-o4
+#  opp_makemake -f --nolink -d src -X. -KMF_OPP4_PROJ=../mf-opp4
 #
 
 # Output directory
@@ -11,7 +11,7 @@ PROJECTRELATIVE_PATH =
 O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Other makefile variables (-K)
-RTN_PROJ=/home/bernard/apps/mobility-fw2.0p3-o4
+MF_OPP4_PROJ=../mf-opp4
 
 #------------------------------------------------------------------------------
 

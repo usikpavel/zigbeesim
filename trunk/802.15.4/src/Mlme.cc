@@ -176,6 +176,7 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 							<< " seconds on channel " << channel;
 					comment(TIMER, commentStream.str());
 					scheduleAt(simTime() + edTimer, timer);
+
 					switchRadioToChannel(channel);
 					delete (msg);
 					return;
@@ -289,7 +290,7 @@ double Mlme::symbolsToSeconds(int symbols, int channel, int page) {
 			commentError("Unsupported channel number with channel page 2");
 		}
 	}
-	seconds = symbols / symbolRate;
+	seconds = (double) symbols / (double) symbolRate;
 	return seconds;
 }
 
