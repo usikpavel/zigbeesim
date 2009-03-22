@@ -20,7 +20,7 @@ void Pd::initialize(int stage) {
 		queueLength = 10;
 		radioState = RadioState::RECV;
 		RadioState cs;
-		catRadioState = bb->subscribe(this, &cs, getParentModule()->getId());
+		catRadioState = bb->subscribe(this, &cs, getParentModule()->getParentModule()->getId());
 		radio = SingleChannelRadioAccess().get();
 		phyState = RX;
 	} else if (stage == 1) {
@@ -52,12 +52,13 @@ void Pd::handleSelfMsg(cMessage *msg) {
 
 void Pd::handlePdMsg(cMessage *msg) {
 	setLastUpperMsg(msg);
-	assert(static_cast<cPacket*>(msg));
-	Frame802154 *frame = encapsulatePd(static_cast<PdMsg *>(msg));
+	assert(static_cast<cPacket*> (msg));
+	Frame802154 *frame = encapsulatePd(static_cast<PdMsg *> (msg));
 	if (frameQueue.size() <= queueLength) {
 		frameQueue.push_back(frame);
-		if((frameQueue.size() == 1) && (phyState == RX))
-		prepareSend();
+		if ((frameQueue.size() == 1) && (phyState == RX)) {
+			prepareSend();
+		}
 	}
 }
 
@@ -160,20 +161,20 @@ Frame802154* Pd::encapsMsg(cPacket *msg) {
 
 void Pd::prepareSend() {
 	if (frameQueue.size() != 0) {
-		if(radio->switchToSend())
-		phyState = TX;
+		if (radio->switchToSend()) {
+			phyState = TX;
+		}
 	}
 }
 
 void Pd::receiveBBItem(int category, const BBItem *details, int scopeModuleId) {
-	std::cout << "here?" << endl;
+	std::cout << "PHY BB change" << endl;
 	if (category == catRadioState) {
 		radioState = static_cast<const RadioState *> (details)->getState();
-		if((phyState == TX) && (radioState == RadioState::SEND)) {
+		if ((phyState == TX) && (radioState == RadioState::SEND)) {
 			sendRfDown(frameQueue.front());
 			frameQueue.pop_front();
-		}
-		else if((phyState == RX) && (radioState == RadioState::RECV)) {
+		} else if ((phyState == RX) && (radioState == RadioState::RECV)) {
 			prepareSend();
 		}
 	}
