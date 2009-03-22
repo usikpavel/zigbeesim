@@ -41,7 +41,15 @@ void Mcps::handleSelfMsg(cMessage *msg) {
 }
 
 void Mcps::handlePdMsg(cMessage *msg) {
-	delete (msg);
+	if (msg->getKind() == PD_DATA_CONFIRM) {
+		PdData_confirm* confirm = check_and_cast<PdData_confirm *> (msg);
+		if (confirm->getStatus() == PHY_SUCCESS) {
+			MacCommand *command = new MacCommand("Beacon Request sent", MAC_COMMAND_FRAME);
+			command->setCommandType(BEACON_REQUEST);
+			sendMlme(command);
+		}
+		delete(msg);
+	}
 }
 
 void Mcps::handleMcpsMsg(cMessage *msg) {
@@ -107,31 +115,7 @@ PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 }
 
 McpsMsg* Mcps::decapsulatePd(PdMsg *msg) {
-	return NULL;
+	McpsMsg* mcpsMsg = static_cast<McpsMsg *> (msg->decapsulate());
+	delete(msg);
+	return mcpsMsg;
 }
-/*
- MacPkt* BasicMacLayer::encapsMsg(cPacket *msg)
- {
- MacPkt *pkt = new MacPkt(msg->getName(), msg->getKind());
- pkt->setBitLength(headerLength);
-
- // copy dest address from the Control Info attached to the network
- // mesage by the network layer
- MacControlInfo* cInfo = static_cast<MacControlInfo*>(msg->removeControlInfo());
-
- coreEV <<"CInfo removed, mac addr="<< cInfo->getNextHopMac()<<endl;
- pkt->setDestAddr(cInfo->getNextHopMac());
-
- //delete the control info
- delete cInfo;
-
- //set the src address to own mac address (nic module getId())
- pkt->setSrcAddr(myMacAddr);
-
- //encapsulate the network packet
- pkt->encapsulate(msg);
- coreEV <<"pkt encapsulated\n";
-
- return pkt;
- }
- */

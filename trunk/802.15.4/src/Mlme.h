@@ -34,6 +34,7 @@ protected:
 	unsigned char currentPage;
 	int scannedChannels;
 	char* energyLevels;
+	int layerStage;
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
 	virtual void handleSelfMsg(cMessage *);
@@ -73,11 +74,18 @@ protected:
 				"macPib")));
 	}
 	virtual void setLastUpperMsg(cMessage* msg) {
+		setLayerStage(0);
 		delete (this->lastUpperMsg);
 		this->lastUpperMsg = msg;
 	}
 	cMessage* getLastUpperMsg() {
 		return this->lastUpperMsg;
+	}
+	void setLayerStage(int stage) {
+		this->layerStage = stage;
+	}
+	int getLayerStage() {
+		return this->layerStage;
 	}
 	void setCurrentChannel(int channel) {
 		this->currentChannel = channel;

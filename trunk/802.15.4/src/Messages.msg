@@ -157,6 +157,7 @@ message PdData_request extends PdMsg {
 };
 
 message PdData_confirm extends PdMsg {
+    unsigned char status enum(PhyEnum);
 };
 
 message Frame802154 extends cPacket {

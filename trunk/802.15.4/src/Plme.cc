@@ -62,7 +62,7 @@ void Plme::handlePlmeMsg(cMessage *msg) {
 		if (request->getState() == getLayerState()) {
 			std::stringstream commentStream;
 			commentStream << "Layer State already in " << std::hex
-					<< request->getState() << std::dec;
+					<< (int) request->getState() << std::dec;
 			comment(STATUS, commentStream.str());
 			response->setStatus(request->getState());
 		} else {

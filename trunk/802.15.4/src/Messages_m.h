@@ -819,12 +819,14 @@ inline void doUnpacking(cCommBuffer *b, PdData_request& obj) {obj.parsimUnpack(b
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
  * message PdData_confirm extends PdMsg {
+ *     unsigned char status enum(PhyEnum);
  * };
  * </pre>
  */
 class PdData_confirm : public PdMsg
 {
   protected:
+    unsigned char status_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const PdData_confirm&);
@@ -839,6 +841,8 @@ class PdData_confirm : public PdMsg
     virtual void parsimUnpack(cCommBuffer *b);
 
     // field getter/setter methods
+    virtual unsigned char getStatus() const;
+    virtual void setStatus(unsigned char status_var);
 };
 
 inline void doPacking(cCommBuffer *b, PdData_confirm& obj) {obj.parsimPack(b);}
