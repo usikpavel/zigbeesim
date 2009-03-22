@@ -91,7 +91,7 @@ void FFDAppLayer::handleSelfMsg(cMessage* msg) {
 		 * more info on this on page 6 in the notepad, or in the 802154 doc */
 		request->setName("NLME-NETWORK-FORMATION.request");
 		request->setKind(NLME_NETWORK_FORMATION_REQUEST);
-		request->setScanChannels(0x07FFF800);
+		request->setScanChannels(0x00003800);
 		request->setScanDuration(0x00);
 		request->setBeaconOrder(0x0E);
 		/** @note 0xFFFF is considered a NULL value in my case */
