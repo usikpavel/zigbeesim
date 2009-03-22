@@ -74,7 +74,6 @@ protected:
 				"phyPib")));
 	}
 	void setLastUpperMsg(cMessage* msg) {
-		delete (this->lastUpperMsg);
 		this->lastUpperMsg = msg;
 	}
 	cMessage* getLastUpperMsg() {

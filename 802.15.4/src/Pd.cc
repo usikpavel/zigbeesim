@@ -20,7 +20,8 @@ void Pd::initialize(int stage) {
 		queueLength = 10;
 		radioState = RadioState::RECV;
 		RadioState cs;
-		catRadioState = bb->subscribe(this, &cs, getParentModule()->getParentModule()->getId());
+		catRadioState = bb->subscribe(this, &cs,
+				getParentModule()->getParentModule()->getId());
 		radio = SingleChannelRadioAccess().get();
 		phyState = RX;
 	} else if (stage == 1) {
@@ -60,6 +61,7 @@ void Pd::handlePdMsg(cMessage *msg) {
 			prepareSend();
 		}
 	}
+	std::cout << endl;
 }
 
 void Pd::handleRfMsg(cMessage *msg) {
@@ -71,7 +73,13 @@ void Pd::handlePlmeMsg(cMessage *msg) {
 }
 
 void Pd::handleRfControl(cMessage *msg) {
-
+	std::string msgName = msg->getName();
+	if (msgName == "TRANSMISSION_OVER") {
+		if (radio->switchToRecv()) {
+			phyState = RX;
+		}
+	}
+	delete(msg);
 }
 
 void Pd::sendPdUp(cMessage *msg) {
@@ -168,12 +176,16 @@ void Pd::prepareSend() {
 }
 
 void Pd::receiveBBItem(int category, const BBItem *details, int scopeModuleId) {
-	std::cout << "PHY BB change" << endl;
+	Enter_Method_Silent();
 	if (category == catRadioState) {
 		radioState = static_cast<const RadioState *> (details)->getState();
 		if ((phyState == TX) && (radioState == RadioState::SEND)) {
 			sendRfDown(frameQueue.front());
 			frameQueue.pop_front();
+			PdData_confirm *confirm = new PdData_confirm("PD-DATA.confirm",
+					PD_DATA_CONFIRM);
+			confirm->setStatus(PHY_SUCCESS);
+			sendPdUp(confirm);
 		} else if ((phyState == RX) && (radioState == RadioState::RECV)) {
 			prepareSend();
 		}

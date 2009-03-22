@@ -5312,6 +5312,7 @@ Register_Class(PdData_confirm);
 
 PdData_confirm::PdData_confirm(const char *name, int kind) : PdMsg(name,kind)
 {
+    this->status_var = 0;
 }
 
 PdData_confirm::PdData_confirm(const PdData_confirm& other) : PdMsg()
@@ -5328,17 +5329,30 @@ PdData_confirm& PdData_confirm::operator=(const PdData_confirm& other)
 {
     if (this==&other) return *this;
     PdMsg::operator=(other);
+    this->status_var = other.status_var;
     return *this;
 }
 
 void PdData_confirm::parsimPack(cCommBuffer *b)
 {
     PdMsg::parsimPack(b);
+    doPacking(b,this->status_var);
 }
 
 void PdData_confirm::parsimUnpack(cCommBuffer *b)
 {
     PdMsg::parsimUnpack(b);
+    doUnpacking(b,this->status_var);
+}
+
+unsigned char PdData_confirm::getStatus() const
+{
+    return status_var;
+}
+
+void PdData_confirm::setStatus(unsigned char status_var)
+{
+    this->status_var = status_var;
 }
 
 class PdData_confirmDescriptor : public cClassDescriptor
@@ -5387,7 +5401,7 @@ const char *PdData_confirmDescriptor::getProperty(const char *propertyname) cons
 int PdData_confirmDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 0+basedesc->getFieldCount(object) : 0;
+    return basedesc ? 1+basedesc->getFieldCount(object) : 1;
 }
 
 unsigned int PdData_confirmDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -5399,6 +5413,7 @@ unsigned int PdData_confirmDescriptor::getFieldTypeFlags(void *object, int field
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
+        case 0: return FD_ISEDITABLE;
         default: return 0;
     }
 }
@@ -5412,6 +5427,7 @@ const char *PdData_confirmDescriptor::getFieldName(void *object, int field) cons
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
+        case 0: return "status";
         default: return NULL;
     }
 }
@@ -5425,6 +5441,7 @@ const char *PdData_confirmDescriptor::getFieldTypeString(void *object, int field
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
+        case 0: return "unsigned char";
         default: return NULL;
     }
 }
@@ -5438,6 +5455,9 @@ const char *PdData_confirmDescriptor::getFieldProperty(void *object, int field, 
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
+        case 0:
+            if (!strcmp(propertyname,"enum")) return "PhyEnum";
+            return NULL;
         default: return NULL;
     }
 }
@@ -5466,6 +5486,7 @@ bool PdData_confirmDescriptor::getFieldAsString(void *object, int field, int i, 
     }
     PdData_confirm *pp = (PdData_confirm *)object; (void)pp;
     switch (field) {
+        case 0: ulong2string(pp->getStatus(),resultbuf,bufsize); return true;
         default: return false;
     }
 }
@@ -5480,6 +5501,7 @@ bool PdData_confirmDescriptor::setFieldAsString(void *object, int field, int i, 
     }
     PdData_confirm *pp = (PdData_confirm *)object; (void)pp;
     switch (field) {
+        case 0: pp->setStatus(string2ulong(value)); return true;
         default: return false;
     }
 }

@@ -1,7 +1,6 @@
 #include "Mlme.h"
 
-Define_Module( Mlme)
-;
+Define_Module( Mlme);
 
 void Mlme::initialize(int stage) {
 	BasicModule::initialize(stage);
@@ -46,8 +45,24 @@ void Mlme::handleSelfMsg(cMessage *msg) {
 	std::string msgName = msg->getName();
 	if (msgName == "ED.timer") {
 		return;
+	} else if (msgName == "ACTIVE.timer") {
+		setCurrentChannel(getCurrentChannel() + 1);
+		MlmeScan_request* request = check_and_cast<MlmeScan_request *> (
+				getLastUpperMsg());
+		PlmeSetTrxState_request* changeState = new PlmeSetTrxState_request();
+		changeState->setName("PLME-SET-TRX-STATE.request");
+		changeState->setKind(PLME_SET_TRX_STATE_REQUEST);
+		if ((request->getScanChannels() >> getCurrentChannel()) > 0x00000000) {
+			/** @comment continue with the active scan */
+			changeState->setState(PHY_TX_ON);
+		} else {
+			/** @comment active scan finished */
+			/** @comment turning radio off */
+			changeState->setState(PHY_TRX_OFF);
+			setLayerStage(2);
+		}
+		sendPlmeDown(changeState);
 	}
-	delete (msg);
 }
 
 void Mlme::handlePlmeMsg(cMessage *msg) {
@@ -82,36 +97,57 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 					}
 				}
 			} else if (request->getScanType() == ACTIVE_SCAN) {
-				unsigned int base = 0x00000001;
-				for (int channel = 0; channel < 27; channel++) {
-					/** if there's a scan request for the channel */
-					if ((request->getScanChannels() & (base << channel))
-							!= 0x00000000) {
-						/** @comment aBaseSuperframeDuration*(2^scanDuration + 1)*/
-						int scanTimeSymbols =
-								(getMacPib()->getBaseSuperFrameDuration())
-										* (((2 << request->getScanDuration())
-												/ 2) + 1);
-						double activeTimer = symbolsToSeconds(scanTimeSymbols,
-								channel, request->getChannelPage());
-						std::stringstream commentStream;
-						commentStream << "Performing Active scan for "
-								<< activeTimer << " seconds on channel "
-								<< channel;
-						setCurrentChannel(channel);
-						comment(TIMER, commentStream.str());
-						timer->setName("ACTIVE.timer");
-						scheduleAt(simTime() + activeTimer, timer);
-						PlmeSet_request* set = new PlmeSet_request();
-						set->setName("PLME-SET.request");
-						set->setKind(PLME_SET_REQUEST);
-						set->setPIBAttribute(PHY_CURRENT_PAGE);
-						set->setPIBAttributeValueArraySize(1);
-						set->setPIBAttributeValue(0, request->getChannelPage());
-						setCurrentPage(request->getChannelPage());
-						sendPlmeDown(set);
-						break;
+				if (getLayerStage() == 0) {
+					setLayerStage(1);
+					unsigned int base = 0x00000001;
+					for (int channel = getCurrentChannel(); channel < 27; channel++) {
+						/** if there's a scan request for the channel */
+						if ((request->getScanChannels() & (base << channel))
+								!= 0x00000000) {
+							/** @comment aBaseSuperframeDuration*(2^scanDuration + 1)*/
+							int
+									scanTimeSymbols =
+											(getMacPib()->getBaseSuperFrameDuration())
+													* (((2
+															<< request->getScanDuration())
+															/ 2) + 1);
+							double activeTimer = symbolsToSeconds(
+									scanTimeSymbols, channel,
+									request->getChannelPage());
+							std::stringstream commentStream;
+							commentStream << "Performing Active scan for "
+									<< activeTimer << " seconds on channel "
+									<< channel;
+							setCurrentChannel(channel);
+							comment(TIMER, commentStream.str());
+							timer->setName("ACTIVE.timer");
+							scheduleAt(simTime() + activeTimer, timer);
+							PlmeSet_request* set = new PlmeSet_request();
+							set->setName("PLME-SET.request");
+							set->setKind(PLME_SET_REQUEST);
+							set->setPIBAttribute(PHY_CURRENT_PAGE);
+							set->setPIBAttributeValueArraySize(1);
+							set->setPIBAttributeValue(0,
+									request->getChannelPage());
+							setCurrentPage(request->getChannelPage());
+							sendPlmeDown(set);
+							setCurrentChannel(channel);
+							break;
+						}
 					}
+				} else if (getLayerStage() == 1) {
+					setLayerStage(0);
+					/** @comment here we're just waiting for the beacons */
+				} else if (getLayerStage() == 2) {
+					/** @comment active scan finished, radio turned off */
+					MlmeScan_confirm *confirm = new MlmeScan_confirm("MLME-SCAN.confirm", MLME_SCAN_CONFIRM);
+					confirm->setStatus(MAC_SUCCESS);
+					confirm->setScanType(ACTIVE_SCAN);
+					confirm->setChannelPage(request->getChannelPage());
+					/** @todo include unscanned channels variable here */
+					/** @todo include result list size variable here */
+					confirm->setEnergyDetectListArraySize(0);
+					//sendMlmeUp(confirm);
 				}
 			}
 		}
@@ -227,6 +263,7 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 				changeState->setKind(PLME_SET_TRX_STATE_REQUEST);
 				changeState->setState(PHY_TX_ON);
 				sendPlmeDown(changeState);
+				setCurrentChannel(0);
 			}
 			setScannedChannels(0);
 		}
@@ -239,7 +276,16 @@ void Mlme::handleMacPibMsg(cMessage *msg) {
 }
 
 void Mlme::handleMcpsMsg(cMessage *msg) {
-	delete (msg);
+	if (msg->getKind() == MAC_COMMAND_FRAME) {
+		MacCommand* command = check_and_cast<MacCommand *> (msg);
+		if (command->getCommandType() == BEACON_REQUEST) {
+			PlmeSetTrxState_request *request = new PlmeSetTrxState_request(
+					"PLME-SET-TRX-STATE.request", PLME_SET_TRX_STATE_REQUEST);
+			request->setState(PHY_RX_ON);
+			sendPlmeDown(request);
+			delete (command);
+		}
+	}
 }
 
 void Mlme::sendPlmeDown(cMessage *msg) {
