@@ -15,7 +15,6 @@
 
 cplusplus {{
 #include "typedef.h"
-#include <AirFrame_m.h>
 }}
 
 enum PhyEnum;
