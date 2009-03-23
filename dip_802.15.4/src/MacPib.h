@@ -96,8 +96,8 @@ protected:
 		comment(ERROR, commentStream.str());
 	}
 public:
-	MacEnum setPIBAttribute(PibIdentifier, unsigned int*);
-	unsigned int* getPIBAttribute(PibIdentifier);
+	MacEnum setPibAttribute(PibIdentifier, unsigned int*);
+	unsigned int* getPibAttribute(PibIdentifier);
 	unsigned char getBaseSlotDuration() const {
 		return aBaseSlotDuration;
 	}

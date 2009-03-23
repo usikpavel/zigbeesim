@@ -85,6 +85,30 @@ message MlmeSet_confirm extends MlmeMsg {
     unsigned char PibAttributeIndex;
 };
 
+message MlmeStart_request extends MlmeMsg {
+    unsigned short PanId;
+    unsigned int logicalChannel;
+    unsigned char channelPage;
+    unsigned int startTime;
+    unsigned char beaconOrder;
+    unsigned char superFrameOrder;
+    bool panCoordinator;
+    bool batteryLifeExtension;
+    bool coordRealignment;
+    unsigned char coordRealignSecurityLevel;
+    unsigned char coordRealignKeyIdMode;
+    unsigned char coordRealignKeySource[];
+    unsigned char coordRealignKeyIndex;
+    unsigned char beaconSecurityLevel;
+    unsigned char beaconKeyIdMode;
+    unsigned char beaconKeySource[];
+    unsigned char beaconKeyIndex; 
+};
+
+message MlmeStart_confirm extends MlmeMsg {
+    unsigned char status enum(MacEnum);
+};
+
 message McpsMsg extends cPacket {
 };
 

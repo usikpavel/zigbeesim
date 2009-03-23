@@ -16,6 +16,7 @@ void Mlme::initialize(int stage) {
 		mcpsIn = findGate("mcpsIn");
 
 		commentsLevel = ALL;
+
 	} else if (stage == 1) {
 		lastUpperMsg = new cMessage();
 		timer = new cMessage();
@@ -165,7 +166,8 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 		if (getLastUpperMsg()->getKind() == MLME_SET_REQUEST) {
 			MlmeSet_request* request = check_and_cast<MlmeSet_request *> (
 					getLastUpperMsg());
-			MlmeSet_confirm* response = new MlmeSet_confirm("MLME-SET.confirm", MLME_SET_CONFIRM);
+			MlmeSet_confirm* response = new MlmeSet_confirm("MLME-SET.confirm",
+					MLME_SET_CONFIRM);
 			response->setStatus(MAC_SUCCESS);
 			response->setPibAttribute(request->getPibAttribute());
 			response->setPibAttributeIndex(request->getPibAttributeIndex());
@@ -305,6 +307,20 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 			sendPlmeDown(setRequest);
 		} else {
 			/** @comment we do have a MAC PIB attribute passed */
+			/** @todo add here the possibility to change indexes in the tables
+			 * through the PIB Attribute Index */
+			unsigned int* value =
+					new unsigned int[request->getPibAttributeValueArraySize()];
+			for (int i = 0; i < request->getPibAttributeValueArraySize(); i++) {
+				value[i] = request->getPibAttributeValue(i);
+			}
+			MlmeSet_confirm* response = new MlmeSet_confirm("MLME-SET.confirm", MLME_SET_CONFIRM);
+			MacEnum status = getMacPib()->setPibAttribute(
+					(PibIdentifier) request->getPibAttribute(), value);
+			response->setStatus(status);
+			response->setPibAttribute(request->getPibAttribute());
+			response->setPibAttributeIndex(request->getPibAttributeIndex());
+			sendMlmeUp(response);
 		}
 	}
 }

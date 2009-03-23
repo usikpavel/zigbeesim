@@ -80,7 +80,7 @@ void MacPib::resetMacPibValues() {
 	setMacTransactionPersistenceTime(0x01F4);
 }
 
-MacEnum MacPib::setPIBAttribute(PibIdentifier attribute, unsigned int* value) {
+MacEnum MacPib::setPibAttribute(PibIdentifier attribute, unsigned int* value) {
 	MacEnum status = MAC_SUCCESS;
 	switch (attribute) {
 	case MAC_ACK_WAIT_DURATION:
@@ -227,7 +227,7 @@ MacEnum MacPib::setPIBAttribute(PibIdentifier attribute, unsigned int* value) {
 	return status;
 }
 
-unsigned int* MacPib::getPIBAttribute(PibIdentifier attribute) {
+unsigned int* MacPib::getPibAttribute(PibIdentifier attribute) {
 	unsigned int* value;
 	switch (attribute) {
 	case MAC_A_BASE_SLOT_DURATION:

@@ -64,20 +64,26 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 					bool idOk = true;
 					do {
 						setPanId((unsigned short) (rand() % 0x00004000));
-						for (int i = 0; i < confirm->getPanDescriptorListArraySize(); i++) {
-							if (getPanId() == confirm->getPanDescriptorList(i).coordPANId) idOk = false;
+						for (int i = 0; i
+								< confirm->getPanDescriptorListArraySize(); i++) {
+							if (getPanId()
+									== confirm->getPanDescriptorList(i).coordPANId)
+								idOk = false;
 						}
 					} while (!idOk);
-					MlmeSet_request* setRequest = new MlmeSet_request("MLME-SET.request", MLME_SET_REQUEST);
+					MlmeSet_request* setRequest = new MlmeSet_request(
+							"MLME-SET.request", MLME_SET_REQUEST);
 					setRequest->setPibAttribute(PHY_CURRENT_CHANNEL);
 					setRequest->setPibAttributeValueArraySize(1);
 					/** @todo here we should select a channel according to some better formula */
-					unsigned char randomChannel;
-					unsigned int goodChannels = confirm->getUnscannedChannels()^request->getScanChannels();
+					unsigned int acceptableChannels =
+							confirm->getUnscannedChannels()
+									^ request->getScanChannels();
 					do {
-						randomChannel = (unsigned char) (rand() % 28);
-					} while (((goodChannels>>randomChannel) & 0x00000001) != 0x00000001);
-					setRequest->setPibAttributeValue(0, randomChannel);
+						setLogicalChannel((unsigned char) (rand() % 28));
+					} while (((acceptableChannels >> getLogicalChannel())
+							& 0x00000001) != 0x00000001);
+					setRequest->setPibAttributeValue(0, getLogicalChannel());
 					sendMlmeDown(setRequest);
 				}
 			}
@@ -85,12 +91,28 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 	} else if (msg->getKind() == MLME_SET_CONFIRM) {
 		MlmeSet_confirm* confirm = check_and_cast<MlmeSet_confirm *> (msg);
 		if (getLastUpperMsg()->getKind() == NLME_NETWORK_FORMATION_REQUEST) {
+			NlmeNetworkFormation_request* request = check_and_cast<
+					NlmeNetworkFormation_request *> (getLastUpperMsg());
 			if (confirm->getPibAttribute() == PHY_CURRENT_CHANNEL) {
-				MlmeSet_request* setRequest = new MlmeSet_request("MLME-SET.request", MLME_SET_REQUEST);
+				MlmeSet_request* setRequest = new MlmeSet_request(
+						"MLME-SET.request", MLME_SET_REQUEST);
 				setRequest->setPibAttribute(MAC_PAN_ID);
 				setRequest->setPibAttributeValueArraySize(1);
 				setRequest->setPibAttributeValue(0, getPanId());
 				sendMlmeDown(setRequest);
+			} else if (confirm->getPibAttribute() == MAC_PAN_ID) {
+				MlmeSet_request* setRequest = new MlmeSet_request(
+						"MLME-SET.request", MLME_SET_REQUEST);
+				setRequest->setPibAttribute(MAC_SHORT_ADDRESS);
+				setRequest->setPibAttributeValueArraySize(1);
+				setRequest->setPibAttributeValue(0, 0x0000);
+				sendMlmeDown(setRequest);
+			} else if (confirm->getPibAttribute() == MAC_SHORT_ADDRESS) {
+				MlmeStart_request* startRequest = new MlmeStart_request(
+						"MLME-START.request", MLME_START_REQUEST);
+				startRequest->setPanId(getPanId());
+				startRequest->setLogicalChannel(getLogicalChannel());
+
 			}
 		}
 	}
@@ -102,7 +124,8 @@ void Nlme::handleNlmeMsg(cMessage *msg) {
 	if (msg->getKind() == NLME_NETWORK_FORMATION_REQUEST) {
 		NlmeNetworkFormation_request* request = check_and_cast<
 				NlmeNetworkFormation_request *> (msg);
-		MlmeScan_request* scan = new MlmeScan_request("MLME-SCAN.request", MLME_SCAN_REQUEST);
+		MlmeScan_request* scan = new MlmeScan_request("MLME-SCAN.request",
+				MLME_SCAN_REQUEST);
 		scan->setScanType(ED_SCAN);
 		scan->setScanChannels(request->getScanChannels());
 		scan->setScanDuration(request->getScanDuration());

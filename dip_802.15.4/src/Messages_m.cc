@@ -2520,6 +2520,831 @@ void *MlmeSet_confirmDescriptor::getFieldStructPointer(void *object, int field, 
     }
 }
 
+Register_Class(MlmeStart_request);
+
+MlmeStart_request::MlmeStart_request(const char *name, int kind) : MlmeMsg(name,kind)
+{
+    this->PanId_var = 0;
+    this->logicalChannel_var = 0;
+    this->channelPage_var = 0;
+    this->startTime_var = 0;
+    this->beaconOrder_var = 0;
+    this->superFrameOrder_var = 0;
+    this->panCoordinator_var = 0;
+    this->batteryLifeExtension_var = 0;
+    this->coordRealignment_var = 0;
+    this->coordRealignSecurityLevel_var = 0;
+    this->coordRealignKeyIdMode_var = 0;
+    coordRealignKeySource_arraysize = 0;
+    this->coordRealignKeySource_var = 0;
+    this->coordRealignKeyIndex_var = 0;
+    this->beaconSecurityLevel_var = 0;
+    this->beaconKeyIdMode_var = 0;
+    beaconKeySource_arraysize = 0;
+    this->beaconKeySource_var = 0;
+    this->beaconKeyIndex_var = 0;
+}
+
+MlmeStart_request::MlmeStart_request(const MlmeStart_request& other) : MlmeMsg()
+{
+    setName(other.getName());
+    coordRealignKeySource_arraysize = 0;
+    this->coordRealignKeySource_var = 0;
+    beaconKeySource_arraysize = 0;
+    this->beaconKeySource_var = 0;
+    operator=(other);
+}
+
+MlmeStart_request::~MlmeStart_request()
+{
+    delete [] coordRealignKeySource_var;
+    delete [] beaconKeySource_var;
+}
+
+MlmeStart_request& MlmeStart_request::operator=(const MlmeStart_request& other)
+{
+    if (this==&other) return *this;
+    MlmeMsg::operator=(other);
+    this->PanId_var = other.PanId_var;
+    this->logicalChannel_var = other.logicalChannel_var;
+    this->channelPage_var = other.channelPage_var;
+    this->startTime_var = other.startTime_var;
+    this->beaconOrder_var = other.beaconOrder_var;
+    this->superFrameOrder_var = other.superFrameOrder_var;
+    this->panCoordinator_var = other.panCoordinator_var;
+    this->batteryLifeExtension_var = other.batteryLifeExtension_var;
+    this->coordRealignment_var = other.coordRealignment_var;
+    this->coordRealignSecurityLevel_var = other.coordRealignSecurityLevel_var;
+    this->coordRealignKeyIdMode_var = other.coordRealignKeyIdMode_var;
+    delete [] this->coordRealignKeySource_var;
+    this->coordRealignKeySource_var = (other.coordRealignKeySource_arraysize==0) ? NULL : new unsigned char[other.coordRealignKeySource_arraysize];
+    coordRealignKeySource_arraysize = other.coordRealignKeySource_arraysize;
+    for (unsigned int i=0; i<coordRealignKeySource_arraysize; i++)
+        this->coordRealignKeySource_var[i] = other.coordRealignKeySource_var[i];
+    this->coordRealignKeyIndex_var = other.coordRealignKeyIndex_var;
+    this->beaconSecurityLevel_var = other.beaconSecurityLevel_var;
+    this->beaconKeyIdMode_var = other.beaconKeyIdMode_var;
+    delete [] this->beaconKeySource_var;
+    this->beaconKeySource_var = (other.beaconKeySource_arraysize==0) ? NULL : new unsigned char[other.beaconKeySource_arraysize];
+    beaconKeySource_arraysize = other.beaconKeySource_arraysize;
+    for (unsigned int i=0; i<beaconKeySource_arraysize; i++)
+        this->beaconKeySource_var[i] = other.beaconKeySource_var[i];
+    this->beaconKeyIndex_var = other.beaconKeyIndex_var;
+    return *this;
+}
+
+void MlmeStart_request::parsimPack(cCommBuffer *b)
+{
+    MlmeMsg::parsimPack(b);
+    doPacking(b,this->PanId_var);
+    doPacking(b,this->logicalChannel_var);
+    doPacking(b,this->channelPage_var);
+    doPacking(b,this->startTime_var);
+    doPacking(b,this->beaconOrder_var);
+    doPacking(b,this->superFrameOrder_var);
+    doPacking(b,this->panCoordinator_var);
+    doPacking(b,this->batteryLifeExtension_var);
+    doPacking(b,this->coordRealignment_var);
+    doPacking(b,this->coordRealignSecurityLevel_var);
+    doPacking(b,this->coordRealignKeyIdMode_var);
+    b->pack(coordRealignKeySource_arraysize);
+    doPacking(b,this->coordRealignKeySource_var,coordRealignKeySource_arraysize);
+    doPacking(b,this->coordRealignKeyIndex_var);
+    doPacking(b,this->beaconSecurityLevel_var);
+    doPacking(b,this->beaconKeyIdMode_var);
+    b->pack(beaconKeySource_arraysize);
+    doPacking(b,this->beaconKeySource_var,beaconKeySource_arraysize);
+    doPacking(b,this->beaconKeyIndex_var);
+}
+
+void MlmeStart_request::parsimUnpack(cCommBuffer *b)
+{
+    MlmeMsg::parsimUnpack(b);
+    doUnpacking(b,this->PanId_var);
+    doUnpacking(b,this->logicalChannel_var);
+    doUnpacking(b,this->channelPage_var);
+    doUnpacking(b,this->startTime_var);
+    doUnpacking(b,this->beaconOrder_var);
+    doUnpacking(b,this->superFrameOrder_var);
+    doUnpacking(b,this->panCoordinator_var);
+    doUnpacking(b,this->batteryLifeExtension_var);
+    doUnpacking(b,this->coordRealignment_var);
+    doUnpacking(b,this->coordRealignSecurityLevel_var);
+    doUnpacking(b,this->coordRealignKeyIdMode_var);
+    delete [] this->coordRealignKeySource_var;
+    b->unpack(coordRealignKeySource_arraysize);
+    if (coordRealignKeySource_arraysize==0) {
+        this->coordRealignKeySource_var = 0;
+    } else {
+        this->coordRealignKeySource_var = new unsigned char[coordRealignKeySource_arraysize];
+        doUnpacking(b,this->coordRealignKeySource_var,coordRealignKeySource_arraysize);
+    }
+    doUnpacking(b,this->coordRealignKeyIndex_var);
+    doUnpacking(b,this->beaconSecurityLevel_var);
+    doUnpacking(b,this->beaconKeyIdMode_var);
+    delete [] this->beaconKeySource_var;
+    b->unpack(beaconKeySource_arraysize);
+    if (beaconKeySource_arraysize==0) {
+        this->beaconKeySource_var = 0;
+    } else {
+        this->beaconKeySource_var = new unsigned char[beaconKeySource_arraysize];
+        doUnpacking(b,this->beaconKeySource_var,beaconKeySource_arraysize);
+    }
+    doUnpacking(b,this->beaconKeyIndex_var);
+}
+
+unsigned short MlmeStart_request::getPanId() const
+{
+    return PanId_var;
+}
+
+void MlmeStart_request::setPanId(unsigned short PanId_var)
+{
+    this->PanId_var = PanId_var;
+}
+
+unsigned int MlmeStart_request::getLogicalChannel() const
+{
+    return logicalChannel_var;
+}
+
+void MlmeStart_request::setLogicalChannel(unsigned int logicalChannel_var)
+{
+    this->logicalChannel_var = logicalChannel_var;
+}
+
+unsigned char MlmeStart_request::getChannelPage() const
+{
+    return channelPage_var;
+}
+
+void MlmeStart_request::setChannelPage(unsigned char channelPage_var)
+{
+    this->channelPage_var = channelPage_var;
+}
+
+unsigned int MlmeStart_request::getStartTime() const
+{
+    return startTime_var;
+}
+
+void MlmeStart_request::setStartTime(unsigned int startTime_var)
+{
+    this->startTime_var = startTime_var;
+}
+
+unsigned char MlmeStart_request::getBeaconOrder() const
+{
+    return beaconOrder_var;
+}
+
+void MlmeStart_request::setBeaconOrder(unsigned char beaconOrder_var)
+{
+    this->beaconOrder_var = beaconOrder_var;
+}
+
+unsigned char MlmeStart_request::getSuperFrameOrder() const
+{
+    return superFrameOrder_var;
+}
+
+void MlmeStart_request::setSuperFrameOrder(unsigned char superFrameOrder_var)
+{
+    this->superFrameOrder_var = superFrameOrder_var;
+}
+
+bool MlmeStart_request::getPanCoordinator() const
+{
+    return panCoordinator_var;
+}
+
+void MlmeStart_request::setPanCoordinator(bool panCoordinator_var)
+{
+    this->panCoordinator_var = panCoordinator_var;
+}
+
+bool MlmeStart_request::getBatteryLifeExtension() const
+{
+    return batteryLifeExtension_var;
+}
+
+void MlmeStart_request::setBatteryLifeExtension(bool batteryLifeExtension_var)
+{
+    this->batteryLifeExtension_var = batteryLifeExtension_var;
+}
+
+bool MlmeStart_request::getCoordRealignment() const
+{
+    return coordRealignment_var;
+}
+
+void MlmeStart_request::setCoordRealignment(bool coordRealignment_var)
+{
+    this->coordRealignment_var = coordRealignment_var;
+}
+
+unsigned char MlmeStart_request::getCoordRealignSecurityLevel() const
+{
+    return coordRealignSecurityLevel_var;
+}
+
+void MlmeStart_request::setCoordRealignSecurityLevel(unsigned char coordRealignSecurityLevel_var)
+{
+    this->coordRealignSecurityLevel_var = coordRealignSecurityLevel_var;
+}
+
+unsigned char MlmeStart_request::getCoordRealignKeyIdMode() const
+{
+    return coordRealignKeyIdMode_var;
+}
+
+void MlmeStart_request::setCoordRealignKeyIdMode(unsigned char coordRealignKeyIdMode_var)
+{
+    this->coordRealignKeyIdMode_var = coordRealignKeyIdMode_var;
+}
+
+void MlmeStart_request::setCoordRealignKeySourceArraySize(unsigned int size)
+{
+    unsigned char *coordRealignKeySource_var2 = (size==0) ? NULL : new unsigned char[size];
+    unsigned int sz = coordRealignKeySource_arraysize < size ? coordRealignKeySource_arraysize : size;
+    for (unsigned int i=0; i<sz; i++)
+        coordRealignKeySource_var2[i] = this->coordRealignKeySource_var[i];
+    for (unsigned int i=sz; i<size; i++)
+        coordRealignKeySource_var2[i] = 0;
+    coordRealignKeySource_arraysize = size;
+    delete [] this->coordRealignKeySource_var;
+    this->coordRealignKeySource_var = coordRealignKeySource_var2;
+}
+
+unsigned int MlmeStart_request::getCoordRealignKeySourceArraySize() const
+{
+    return coordRealignKeySource_arraysize;
+}
+
+unsigned char MlmeStart_request::getCoordRealignKeySource(unsigned int k) const
+{
+    if (k>=coordRealignKeySource_arraysize) throw cRuntimeError("Array of size %d indexed by %d", coordRealignKeySource_arraysize, k);
+    return coordRealignKeySource_var[k];
+}
+
+void MlmeStart_request::setCoordRealignKeySource(unsigned int k, unsigned char coordRealignKeySource_var)
+{
+    if (k>=coordRealignKeySource_arraysize) throw cRuntimeError("Array of size %d indexed by %d", coordRealignKeySource_arraysize, k);
+    this->coordRealignKeySource_var[k]=coordRealignKeySource_var;
+}
+
+unsigned char MlmeStart_request::getCoordRealignKeyIndex() const
+{
+    return coordRealignKeyIndex_var;
+}
+
+void MlmeStart_request::setCoordRealignKeyIndex(unsigned char coordRealignKeyIndex_var)
+{
+    this->coordRealignKeyIndex_var = coordRealignKeyIndex_var;
+}
+
+unsigned char MlmeStart_request::getBeaconSecurityLevel() const
+{
+    return beaconSecurityLevel_var;
+}
+
+void MlmeStart_request::setBeaconSecurityLevel(unsigned char beaconSecurityLevel_var)
+{
+    this->beaconSecurityLevel_var = beaconSecurityLevel_var;
+}
+
+unsigned char MlmeStart_request::getBeaconKeyIdMode() const
+{
+    return beaconKeyIdMode_var;
+}
+
+void MlmeStart_request::setBeaconKeyIdMode(unsigned char beaconKeyIdMode_var)
+{
+    this->beaconKeyIdMode_var = beaconKeyIdMode_var;
+}
+
+void MlmeStart_request::setBeaconKeySourceArraySize(unsigned int size)
+{
+    unsigned char *beaconKeySource_var2 = (size==0) ? NULL : new unsigned char[size];
+    unsigned int sz = beaconKeySource_arraysize < size ? beaconKeySource_arraysize : size;
+    for (unsigned int i=0; i<sz; i++)
+        beaconKeySource_var2[i] = this->beaconKeySource_var[i];
+    for (unsigned int i=sz; i<size; i++)
+        beaconKeySource_var2[i] = 0;
+    beaconKeySource_arraysize = size;
+    delete [] this->beaconKeySource_var;
+    this->beaconKeySource_var = beaconKeySource_var2;
+}
+
+unsigned int MlmeStart_request::getBeaconKeySourceArraySize() const
+{
+    return beaconKeySource_arraysize;
+}
+
+unsigned char MlmeStart_request::getBeaconKeySource(unsigned int k) const
+{
+    if (k>=beaconKeySource_arraysize) throw cRuntimeError("Array of size %d indexed by %d", beaconKeySource_arraysize, k);
+    return beaconKeySource_var[k];
+}
+
+void MlmeStart_request::setBeaconKeySource(unsigned int k, unsigned char beaconKeySource_var)
+{
+    if (k>=beaconKeySource_arraysize) throw cRuntimeError("Array of size %d indexed by %d", beaconKeySource_arraysize, k);
+    this->beaconKeySource_var[k]=beaconKeySource_var;
+}
+
+unsigned char MlmeStart_request::getBeaconKeyIndex() const
+{
+    return beaconKeyIndex_var;
+}
+
+void MlmeStart_request::setBeaconKeyIndex(unsigned char beaconKeyIndex_var)
+{
+    this->beaconKeyIndex_var = beaconKeyIndex_var;
+}
+
+class MlmeStart_requestDescriptor : public cClassDescriptor
+{
+  public:
+    MlmeStart_requestDescriptor();
+    virtual ~MlmeStart_requestDescriptor();
+
+    virtual bool doesSupport(cObject *obj) const;
+    virtual const char *getProperty(const char *propertyname) const;
+    virtual int getFieldCount(void *object) const;
+    virtual const char *getFieldName(void *object, int field) const;
+    virtual unsigned int getFieldTypeFlags(void *object, int field) const;
+    virtual const char *getFieldTypeString(void *object, int field) const;
+    virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
+    virtual int getArraySize(void *object, int field) const;
+
+    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
+
+    virtual const char *getFieldStructName(void *object, int field) const;
+    virtual void *getFieldStructPointer(void *object, int field, int i) const;
+};
+
+Register_ClassDescriptor(MlmeStart_requestDescriptor);
+
+MlmeStart_requestDescriptor::MlmeStart_requestDescriptor() : cClassDescriptor("MlmeStart_request", "MlmeMsg")
+{
+}
+
+MlmeStart_requestDescriptor::~MlmeStart_requestDescriptor()
+{
+}
+
+bool MlmeStart_requestDescriptor::doesSupport(cObject *obj) const
+{
+    return dynamic_cast<MlmeStart_request *>(obj)!=NULL;
+}
+
+const char *MlmeStart_requestDescriptor::getProperty(const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->getProperty(propertyname) : NULL;
+}
+
+int MlmeStart_requestDescriptor::getFieldCount(void *object) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? 17+basedesc->getFieldCount(object) : 17;
+}
+
+unsigned int MlmeStart_requestDescriptor::getFieldTypeFlags(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeFlags(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return FD_ISEDITABLE;
+        case 1: return FD_ISEDITABLE;
+        case 2: return FD_ISEDITABLE;
+        case 3: return FD_ISEDITABLE;
+        case 4: return FD_ISEDITABLE;
+        case 5: return FD_ISEDITABLE;
+        case 6: return FD_ISEDITABLE;
+        case 7: return FD_ISEDITABLE;
+        case 8: return FD_ISEDITABLE;
+        case 9: return FD_ISEDITABLE;
+        case 10: return FD_ISEDITABLE;
+        case 11: return FD_ISARRAY | FD_ISEDITABLE;
+        case 12: return FD_ISEDITABLE;
+        case 13: return FD_ISEDITABLE;
+        case 14: return FD_ISEDITABLE;
+        case 15: return FD_ISARRAY | FD_ISEDITABLE;
+        case 16: return FD_ISEDITABLE;
+        default: return 0;
+    }
+}
+
+const char *MlmeStart_requestDescriptor::getFieldName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "PanId";
+        case 1: return "logicalChannel";
+        case 2: return "channelPage";
+        case 3: return "startTime";
+        case 4: return "beaconOrder";
+        case 5: return "superFrameOrder";
+        case 6: return "panCoordinator";
+        case 7: return "batteryLifeExtension";
+        case 8: return "coordRealignment";
+        case 9: return "coordRealignSecurityLevel";
+        case 10: return "coordRealignKeyIdMode";
+        case 11: return "coordRealignKeySource";
+        case 12: return "coordRealignKeyIndex";
+        case 13: return "beaconSecurityLevel";
+        case 14: return "beaconKeyIdMode";
+        case 15: return "beaconKeySource";
+        case 16: return "beaconKeyIndex";
+        default: return NULL;
+    }
+}
+
+const char *MlmeStart_requestDescriptor::getFieldTypeString(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeString(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "unsigned short";
+        case 1: return "unsigned int";
+        case 2: return "unsigned char";
+        case 3: return "unsigned int";
+        case 4: return "unsigned char";
+        case 5: return "unsigned char";
+        case 6: return "bool";
+        case 7: return "bool";
+        case 8: return "bool";
+        case 9: return "unsigned char";
+        case 10: return "unsigned char";
+        case 11: return "unsigned char";
+        case 12: return "unsigned char";
+        case 13: return "unsigned char";
+        case 14: return "unsigned char";
+        case 15: return "unsigned char";
+        case 16: return "unsigned char";
+        default: return NULL;
+    }
+}
+
+const char *MlmeStart_requestDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldProperty(object, field, propertyname);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+int MlmeStart_requestDescriptor::getArraySize(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getArraySize(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    MlmeStart_request *pp = (MlmeStart_request *)object; (void)pp;
+    switch (field) {
+        case 11: return pp->getCoordRealignKeySourceArraySize();
+        case 15: return pp->getBeaconKeySourceArraySize();
+        default: return 0;
+    }
+}
+
+bool MlmeStart_requestDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+        field -= basedesc->getFieldCount(object);
+    }
+    MlmeStart_request *pp = (MlmeStart_request *)object; (void)pp;
+    switch (field) {
+        case 0: ulong2string(pp->getPanId(),resultbuf,bufsize); return true;
+        case 1: ulong2string(pp->getLogicalChannel(),resultbuf,bufsize); return true;
+        case 2: ulong2string(pp->getChannelPage(),resultbuf,bufsize); return true;
+        case 3: ulong2string(pp->getStartTime(),resultbuf,bufsize); return true;
+        case 4: ulong2string(pp->getBeaconOrder(),resultbuf,bufsize); return true;
+        case 5: ulong2string(pp->getSuperFrameOrder(),resultbuf,bufsize); return true;
+        case 6: bool2string(pp->getPanCoordinator(),resultbuf,bufsize); return true;
+        case 7: bool2string(pp->getBatteryLifeExtension(),resultbuf,bufsize); return true;
+        case 8: bool2string(pp->getCoordRealignment(),resultbuf,bufsize); return true;
+        case 9: ulong2string(pp->getCoordRealignSecurityLevel(),resultbuf,bufsize); return true;
+        case 10: ulong2string(pp->getCoordRealignKeyIdMode(),resultbuf,bufsize); return true;
+        case 11: ulong2string(pp->getCoordRealignKeySource(i),resultbuf,bufsize); return true;
+        case 12: ulong2string(pp->getCoordRealignKeyIndex(),resultbuf,bufsize); return true;
+        case 13: ulong2string(pp->getBeaconSecurityLevel(),resultbuf,bufsize); return true;
+        case 14: ulong2string(pp->getBeaconKeyIdMode(),resultbuf,bufsize); return true;
+        case 15: ulong2string(pp->getBeaconKeySource(i),resultbuf,bufsize); return true;
+        case 16: ulong2string(pp->getBeaconKeyIndex(),resultbuf,bufsize); return true;
+        default: return false;
+    }
+}
+
+bool MlmeStart_requestDescriptor::setFieldAsString(void *object, int field, int i, const char *value) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->setFieldAsString(object,field,i,value);
+        field -= basedesc->getFieldCount(object);
+    }
+    MlmeStart_request *pp = (MlmeStart_request *)object; (void)pp;
+    switch (field) {
+        case 0: pp->setPanId(string2ulong(value)); return true;
+        case 1: pp->setLogicalChannel(string2ulong(value)); return true;
+        case 2: pp->setChannelPage(string2ulong(value)); return true;
+        case 3: pp->setStartTime(string2ulong(value)); return true;
+        case 4: pp->setBeaconOrder(string2ulong(value)); return true;
+        case 5: pp->setSuperFrameOrder(string2ulong(value)); return true;
+        case 6: pp->setPanCoordinator(string2bool(value)); return true;
+        case 7: pp->setBatteryLifeExtension(string2bool(value)); return true;
+        case 8: pp->setCoordRealignment(string2bool(value)); return true;
+        case 9: pp->setCoordRealignSecurityLevel(string2ulong(value)); return true;
+        case 10: pp->setCoordRealignKeyIdMode(string2ulong(value)); return true;
+        case 11: pp->setCoordRealignKeySource(i,string2ulong(value)); return true;
+        case 12: pp->setCoordRealignKeyIndex(string2ulong(value)); return true;
+        case 13: pp->setBeaconSecurityLevel(string2ulong(value)); return true;
+        case 14: pp->setBeaconKeyIdMode(string2ulong(value)); return true;
+        case 15: pp->setBeaconKeySource(i,string2ulong(value)); return true;
+        case 16: pp->setBeaconKeyIndex(string2ulong(value)); return true;
+        default: return false;
+    }
+}
+
+const char *MlmeStart_requestDescriptor::getFieldStructName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+void *MlmeStart_requestDescriptor::getFieldStructPointer(void *object, int field, int i) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructPointer(object, field, i);
+        field -= basedesc->getFieldCount(object);
+    }
+    MlmeStart_request *pp = (MlmeStart_request *)object; (void)pp;
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+Register_Class(MlmeStart_confirm);
+
+MlmeStart_confirm::MlmeStart_confirm(const char *name, int kind) : MlmeMsg(name,kind)
+{
+    this->status_var = 0;
+}
+
+MlmeStart_confirm::MlmeStart_confirm(const MlmeStart_confirm& other) : MlmeMsg()
+{
+    setName(other.getName());
+    operator=(other);
+}
+
+MlmeStart_confirm::~MlmeStart_confirm()
+{
+}
+
+MlmeStart_confirm& MlmeStart_confirm::operator=(const MlmeStart_confirm& other)
+{
+    if (this==&other) return *this;
+    MlmeMsg::operator=(other);
+    this->status_var = other.status_var;
+    return *this;
+}
+
+void MlmeStart_confirm::parsimPack(cCommBuffer *b)
+{
+    MlmeMsg::parsimPack(b);
+    doPacking(b,this->status_var);
+}
+
+void MlmeStart_confirm::parsimUnpack(cCommBuffer *b)
+{
+    MlmeMsg::parsimUnpack(b);
+    doUnpacking(b,this->status_var);
+}
+
+unsigned char MlmeStart_confirm::getStatus() const
+{
+    return status_var;
+}
+
+void MlmeStart_confirm::setStatus(unsigned char status_var)
+{
+    this->status_var = status_var;
+}
+
+class MlmeStart_confirmDescriptor : public cClassDescriptor
+{
+  public:
+    MlmeStart_confirmDescriptor();
+    virtual ~MlmeStart_confirmDescriptor();
+
+    virtual bool doesSupport(cObject *obj) const;
+    virtual const char *getProperty(const char *propertyname) const;
+    virtual int getFieldCount(void *object) const;
+    virtual const char *getFieldName(void *object, int field) const;
+    virtual unsigned int getFieldTypeFlags(void *object, int field) const;
+    virtual const char *getFieldTypeString(void *object, int field) const;
+    virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
+    virtual int getArraySize(void *object, int field) const;
+
+    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
+
+    virtual const char *getFieldStructName(void *object, int field) const;
+    virtual void *getFieldStructPointer(void *object, int field, int i) const;
+};
+
+Register_ClassDescriptor(MlmeStart_confirmDescriptor);
+
+MlmeStart_confirmDescriptor::MlmeStart_confirmDescriptor() : cClassDescriptor("MlmeStart_confirm", "MlmeMsg")
+{
+}
+
+MlmeStart_confirmDescriptor::~MlmeStart_confirmDescriptor()
+{
+}
+
+bool MlmeStart_confirmDescriptor::doesSupport(cObject *obj) const
+{
+    return dynamic_cast<MlmeStart_confirm *>(obj)!=NULL;
+}
+
+const char *MlmeStart_confirmDescriptor::getProperty(const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->getProperty(propertyname) : NULL;
+}
+
+int MlmeStart_confirmDescriptor::getFieldCount(void *object) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? 1+basedesc->getFieldCount(object) : 1;
+}
+
+unsigned int MlmeStart_confirmDescriptor::getFieldTypeFlags(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeFlags(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return FD_ISEDITABLE;
+        default: return 0;
+    }
+}
+
+const char *MlmeStart_confirmDescriptor::getFieldName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "status";
+        default: return NULL;
+    }
+}
+
+const char *MlmeStart_confirmDescriptor::getFieldTypeString(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeString(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "unsigned char";
+        default: return NULL;
+    }
+}
+
+const char *MlmeStart_confirmDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldProperty(object, field, propertyname);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0:
+            if (!strcmp(propertyname,"enum")) return "MacEnum";
+            return NULL;
+        default: return NULL;
+    }
+}
+
+int MlmeStart_confirmDescriptor::getArraySize(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getArraySize(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    MlmeStart_confirm *pp = (MlmeStart_confirm *)object; (void)pp;
+    switch (field) {
+        default: return 0;
+    }
+}
+
+bool MlmeStart_confirmDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+        field -= basedesc->getFieldCount(object);
+    }
+    MlmeStart_confirm *pp = (MlmeStart_confirm *)object; (void)pp;
+    switch (field) {
+        case 0: ulong2string(pp->getStatus(),resultbuf,bufsize); return true;
+        default: return false;
+    }
+}
+
+bool MlmeStart_confirmDescriptor::setFieldAsString(void *object, int field, int i, const char *value) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->setFieldAsString(object,field,i,value);
+        field -= basedesc->getFieldCount(object);
+    }
+    MlmeStart_confirm *pp = (MlmeStart_confirm *)object; (void)pp;
+    switch (field) {
+        case 0: pp->setStatus(string2ulong(value)); return true;
+        default: return false;
+    }
+}
+
+const char *MlmeStart_confirmDescriptor::getFieldStructName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+void *MlmeStart_confirmDescriptor::getFieldStructPointer(void *object, int field, int i) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructPointer(object, field, i);
+        field -= basedesc->getFieldCount(object);
+    }
+    MlmeStart_confirm *pp = (MlmeStart_confirm *)object; (void)pp;
+    switch (field) {
+        default: return NULL;
+    }
+}
+
 Register_Class(McpsMsg);
 
 McpsMsg::McpsMsg(const char *name, int kind) : cPacket(name,kind)
