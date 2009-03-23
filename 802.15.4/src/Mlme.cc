@@ -147,7 +147,7 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 					/** @todo include unscanned channels variable here */
 					/** @todo include result list size variable here */
 					confirm->setEnergyDetectListArraySize(0);
-					//sendMlmeUp(confirm);
+					sendMlmeUp(confirm);
 				}
 			}
 		}

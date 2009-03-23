@@ -216,6 +216,24 @@ typedef enum {
 	MAC_TRANSACTION_PERSISTENCE_TIME = 0x55
 } MacPibIdentifier;
 
+struct PANDescriptor {
+	unsigned char CorrdAddrMode;
+	unsigned short CoordPanId;
+	unsigned long CoordAddress;
+	unsigned char LogicalChannel;
+	unsigned char ChannelPage;
+	unsigned short SuperframeSpec;
+	bool GTSPermit;
+	unsigned char LinkQuality;
+	unsigned int TimeStamp;
+	MacEnum SecurityFailure;
+	unsigned char SecurityLevel;
+	unsigned char KeyIdMode;
+	unsigned long KeySource;
+	unsigned char KeyIndex;
+
+};
+
 typedef enum {
 	ASSOCIATION_REQUEST				= 0x01,
 	ASSOCIATION_REPONSE				= 0x02,
@@ -236,9 +254,9 @@ typedef enum {
 } FrameType;
 
 typedef enum {
-	NOT_PRESENT	= 0x00,
-	SHORT		= 0x02,
-	LONG		= 0x03
+	NOT_PRESENT		= 0x00,
+	SHORT_ADDRESS	= 0x02,
+	LONG_ADDRESS	= 0x03
 } AddressingMode;
 
 /** @brief PHY PIB Enumerations */

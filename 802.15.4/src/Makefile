@@ -141,12 +141,7 @@ depend:
 $O/Plme.o: Plme.cc \
 	typedef.h \
 	$(MF_OPP4_PROJ)/core/utils/ModuleAccess.h \
-	$(MF_OPP4_PROJ)/core/utils/Coord.h \
-	$(MF_OPP4_PROJ)/core/basicMessages/AirFrame_m.h \
-	$(MF_OPP4_PROJ)/core/utils/FWMath.h \
-	$(MF_OPP4_PROJ)/core/utils/HostMove.h \
 	PhyPib.h \
-	$(MF_OPP4_PROJ)/core/utils/SnrList.h \
 	$(MF_OPP4_PROJ)/core/blackboard/Blackboard.h \
 	BBItems.h \
 	Messages_m.h \
@@ -155,43 +150,28 @@ $O/Plme.o: Plme.cc \
 $O/Mcps.o: Mcps.cc \
 	typedef.h \
 	$(MF_OPP4_PROJ)/core/utils/ModuleAccess.h \
-	Mcps.h \
-	$(MF_OPP4_PROJ)/core/utils/Coord.h \
-	$(MF_OPP4_PROJ)/core/basicMessages/AirFrame_m.h \
-	$(MF_OPP4_PROJ)/core/utils/FWMath.h \
-	$(MF_OPP4_PROJ)/core/utils/HostMove.h \
 	MacPib.h \
-	$(MF_OPP4_PROJ)/core/utils/SnrList.h \
 	$(MF_OPP4_PROJ)/core/blackboard/Blackboard.h \
 	BBItems.h \
 	Messages_m.h \
+	Mcps.h \
 	$(MF_OPP4_PROJ)/core/basicModules/BasicModule.h
 $O/Mlme.o: Mlme.cc \
 	typedef.h \
 	$(MF_OPP4_PROJ)/core/utils/ModuleAccess.h \
-	Mlme.h \
-	$(MF_OPP4_PROJ)/core/utils/Coord.h \
-	$(MF_OPP4_PROJ)/core/basicMessages/AirFrame_m.h \
-	$(MF_OPP4_PROJ)/core/utils/FWMath.h \
 	MacPib.h \
-	$(MF_OPP4_PROJ)/core/utils/HostMove.h \
 	$(MF_OPP4_PROJ)/core/blackboard/Blackboard.h \
-	$(MF_OPP4_PROJ)/core/utils/SnrList.h \
 	BBItems.h \
 	Messages_m.h \
+	Mlme.h \
 	$(MF_OPP4_PROJ)/core/basicModules/BasicModule.h
 $O/PhyPib.o: PhyPib.cc \
-	$(MF_OPP4_PROJ)/core/utils/FWMath.h \
 	typedef.h \
 	$(MF_OPP4_PROJ)/core/utils/ModuleAccess.h \
-	$(MF_OPP4_PROJ)/core/utils/HostMove.h \
 	PhyPib.h \
-	$(MF_OPP4_PROJ)/core/utils/SnrList.h \
 	$(MF_OPP4_PROJ)/core/blackboard/Blackboard.h \
 	BBItems.h \
 	Messages_m.h \
-	$(MF_OPP4_PROJ)/core/utils/Coord.h \
-	$(MF_OPP4_PROJ)/core/basicMessages/AirFrame_m.h \
 	$(MF_OPP4_PROJ)/core/basicModules/BasicModule.h
 $O/SnrEval802154.o: SnrEval802154.cc \
 	$(MF_OPP4_PROJ)/core/channelControl/ChannelAccess.h \
@@ -215,29 +195,17 @@ $O/SnrEval802154.o: SnrEval802154.cc \
 	$(MF_OPP4_PROJ)/contrib/utils/Bitrate.h \
 	$(MF_OPP4_PROJ)/core/basicModules/BasicModule.h
 $O/FFDAppLayer.o: FFDAppLayer.cc \
-	typedef.h \
-	$(MF_OPP4_PROJ)/contrib/messages/ApplPkt_m.h \
-	$(MF_OPP4_PROJ)/core/utils/ModuleAccess.h \
-	$(MF_OPP4_PROJ)/core/utils/Coord.h \
-	$(MF_OPP4_PROJ)/core/basicMessages/AirFrame_m.h \
 	FFDAppLayer.h \
-	$(MF_OPP4_PROJ)/core/utils/FWMath.h \
-	$(MF_OPP4_PROJ)/core/utils/HostMove.h \
+	typedef.h \
+	$(MF_OPP4_PROJ)/core/utils/ModuleAccess.h \
+	$(MF_OPP4_PROJ)/contrib/messages/ApplPkt_m.h \
 	$(MF_OPP4_PROJ)/core/blackboard/Blackboard.h \
-	$(MF_OPP4_PROJ)/core/utils/SnrList.h \
-	Messages_m.h \
 	$(MF_OPP4_PROJ)/contrib/applLayer/BasicApplLayer.h \
+	Messages_m.h \
 	$(MF_OPP4_PROJ)/core/basicModules/BasicModule.h
 $O/Messages_m.o: Messages_m.cc \
-	$(MF_OPP4_PROJ)/core/utils/FWMath.h \
 	typedef.h \
-	$(MF_OPP4_PROJ)/core/utils/ModuleAccess.h \
-	$(MF_OPP4_PROJ)/core/utils/HostMove.h \
-	$(MF_OPP4_PROJ)/core/blackboard/Blackboard.h \
-	$(MF_OPP4_PROJ)/core/utils/SnrList.h \
-	Messages_m.h \
-	$(MF_OPP4_PROJ)/core/utils/Coord.h \
-	$(MF_OPP4_PROJ)/core/basicMessages/AirFrame_m.h
+	Messages_m.h
 $O/Llc8022.o: Llc8022.cc \
 	Llc8022.h
 $O/Nlde.o: Nlde.cc \
@@ -251,16 +219,11 @@ $O/RFDAppLayer.o: RFDAppLayer.cc \
 	RFDAppLayer.h \
 	$(MF_OPP4_PROJ)/core/basicModules/BasicModule.h
 $O/Nlme.o: Nlme.cc \
-	$(MF_OPP4_PROJ)/core/utils/FWMath.h \
 	typedef.h \
 	$(MF_OPP4_PROJ)/core/utils/ModuleAccess.h \
-	$(MF_OPP4_PROJ)/core/utils/HostMove.h \
-	$(MF_OPP4_PROJ)/core/utils/SnrList.h \
 	$(MF_OPP4_PROJ)/core/blackboard/Blackboard.h \
 	Messages_m.h \
-	$(MF_OPP4_PROJ)/core/utils/Coord.h \
 	Nlme.h \
-	$(MF_OPP4_PROJ)/core/basicMessages/AirFrame_m.h \
 	$(MF_OPP4_PROJ)/core/basicModules/BasicModule.h
 $O/Mac802154.o: Mac802154.cc \
 	$(MF_OPP4_PROJ)/core/utils/ModuleAccess.h \
@@ -284,12 +247,10 @@ $O/Pd.o: Pd.cc \
 	$(MF_OPP4_PROJ)/core/utils/ModuleAccess.h \
 	$(MF_OPP4_PROJ)/core/utils/Coord.h \
 	$(MF_OPP4_PROJ)/core/utils/MacControlInfo.h \
-	$(MF_OPP4_PROJ)/core/basicMessages/AirFrame_m.h \
 	$(MF_OPP4_PROJ)/core/channelControl/NicEntry.h \
 	$(MF_OPP4_PROJ)/core/channelControl/ChannelControl.h \
 	$(MF_OPP4_PROJ)/core/utils/FWMath.h \
 	Pd.h \
-	$(MF_OPP4_PROJ)/core/utils/HostMove.h \
 	$(MF_OPP4_PROJ)/core/utils/ActiveChannel.h \
 	$(MF_OPP4_PROJ)/core/utils/SimpleAddress.h \
 	$(MF_OPP4_PROJ)/contrib/utils/RadioState.h \
@@ -297,23 +258,17 @@ $O/Pd.o: Pd.cc \
 	$(MF_OPP4_PROJ)/contrib/nic/radios/SingleChannelRadio.h \
 	PhyPib.h \
 	$(MF_OPP4_PROJ)/core/blackboard/Blackboard.h \
-	$(MF_OPP4_PROJ)/core/utils/SnrList.h \
 	BBItems.h \
 	Messages_m.h \
 	$(MF_OPP4_PROJ)/contrib/utils/Bitrate.h \
 	$(MF_OPP4_PROJ)/core/basicModules/BasicModule.h
 $O/MacPib.o: MacPib.cc \
-	$(MF_OPP4_PROJ)/core/utils/FWMath.h \
 	typedef.h \
 	$(MF_OPP4_PROJ)/core/utils/ModuleAccess.h \
-	$(MF_OPP4_PROJ)/core/utils/HostMove.h \
 	MacPib.h \
-	$(MF_OPP4_PROJ)/core/utils/SnrList.h \
 	$(MF_OPP4_PROJ)/core/blackboard/Blackboard.h \
 	BBItems.h \
 	Messages_m.h \
-	$(MF_OPP4_PROJ)/core/utils/Coord.h \
-	$(MF_OPP4_PROJ)/core/basicMessages/AirFrame_m.h \
 	$(MF_OPP4_PROJ)/core/basicModules/BasicModule.h
 $O/NwkPib.o: NwkPib.cc \
 	NwkPib.h

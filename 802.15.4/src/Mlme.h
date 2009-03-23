@@ -35,6 +35,7 @@ protected:
 	int scannedChannels;
 	char* energyLevels;
 	int layerStage;
+	PanDescriptor* scannedPanDescriptors;
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
 	virtual void handleSelfMsg(cMessage *);
@@ -111,6 +112,31 @@ protected:
 	}
 	char* getEnergyLevels() {
 		return this->energyLevels;
+	}
+
+	void setScannedPanDescriptors(PanDescriptor* descriptor) {
+		this->scannedPanDescriptors = descriptor;
+	}
+
+	PanDescriptor* getScannedPanDescriptors() {
+		return this->scannedPanDescriptors;
+	}
+
+	void addScannedPanDescriptor(PanDescriptor descriptor) {
+		int size = sizeof(this->scannedPanDescriptors)/sizeof(PanDescriptor);
+		PanDescriptor newScannedPanDescriptors[];
+		newScanendPanDescriptors = new PanDescriptor[size+1];
+		for (int i = 0; i < size; i++) {
+			newScannedPanDescriptors[i] = this->scannedPanDescriptors[i];
+		}
+		newScannedPanDescriptors[size] = descriptor;
+		delete this->scannedPanDescriptors;
+		this->scannedPanDescriptors = newScannedPanDescriptors;
+	}
+
+	void resetScannedPanDescriptors() {
+		delete scannedPanDescriptors;
+		this->scannedPanDescriptors = new PanDescriptor[0];
 	}
 };
 
