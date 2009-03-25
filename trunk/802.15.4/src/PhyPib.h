@@ -54,7 +54,7 @@ protected:
 		comment(MESSAGE, commentStream.str());
 	}
 public:
-	PhyEnum setPIBAttribute(PhyPibIdentifier, unsigned int*);
+	PhyEnum setPibAttribute(PibIdentifier, unsigned int*);
 	unsigned char getMaxPHYPacketSize() const {
 		return aMaxPHYPacketSize;
 	}

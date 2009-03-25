@@ -16,7 +16,6 @@
 // cplusplus {{ ... }} section:
 
 #include "typedef.h"
-#include <AirFrame_m.h>
 // end cplusplus
 
 
@@ -195,31 +194,6 @@ inline void doPacking(cCommBuffer *b, MlmeMsg& obj) {obj.parsimPack(b);}
 inline void doUnpacking(cCommBuffer *b, MlmeMsg& obj) {obj.parsimUnpack(b);}
 
 /**
- * Struct generated from Messages.msg by opp_msgc.
- */
-struct PANDescriptor
-{
-    PANDescriptor();
-    unsigned char coordAddrMode;
-    unsigned short coordPANId;
-    unsigned long coordAddress;
-    unsigned char logicalChannel;
-    unsigned char channelPage;
-    unsigned short superframeSpec;
-    bool GTSPermit;
-    unsigned char linkQuality;
-    unsigned int timeStamp;
-    unsigned char securityFailure;
-    unsigned char securityLevel;
-    unsigned char keyIdMode;
-    unsigned char keySource[8];
-    unsigned char kedyIndex;
-};
-
-void doPacking(cCommBuffer *b, PANDescriptor& a);
-void doUnpacking(cCommBuffer *b, PANDescriptor& a);
-
-/**
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
  * message MlmeScan_request extends MlmeMsg {
@@ -297,7 +271,7 @@ inline void doUnpacking(cCommBuffer *b, MlmeScan_request& obj) {obj.parsimUnpack
  *     unsigned int unscannedChannels;
  *     unsigned int resultListSize;
  *     unsigned char energyDetectList[];
- *     PANDescriptor panDescriptorList[];
+ *     PanDescriptor panDescriptorList[];
  * };
  * </pre>
  */
@@ -311,7 +285,7 @@ class MlmeScan_confirm : public MlmeMsg
     unsigned int resultListSize_var;
     unsigned char *energyDetectList_var; // array ptr
     unsigned int energyDetectList_arraysize;
-    PANDescriptor *panDescriptorList_var; // array ptr
+    PanDescriptor *panDescriptorList_var; // array ptr
     unsigned int panDescriptorList_arraysize;
 
     // protected and unimplemented operator==(), to prevent accidental usage
@@ -343,13 +317,234 @@ class MlmeScan_confirm : public MlmeMsg
     virtual void setEnergyDetectList(unsigned int k, unsigned char energyDetectList_var);
     virtual void setPanDescriptorListArraySize(unsigned int size);
     virtual unsigned int getPanDescriptorListArraySize() const;
-    virtual PANDescriptor& getPanDescriptorList(unsigned int k);
-    virtual const PANDescriptor& getPanDescriptorList(unsigned int k) const {return const_cast<MlmeScan_confirm*>(this)->getPanDescriptorList(k);}
-    virtual void setPanDescriptorList(unsigned int k, const PANDescriptor& panDescriptorList_var);
+    virtual PanDescriptor& getPanDescriptorList(unsigned int k);
+    virtual const PanDescriptor& getPanDescriptorList(unsigned int k) const {return const_cast<MlmeScan_confirm*>(this)->getPanDescriptorList(k);}
+    virtual void setPanDescriptorList(unsigned int k, const PanDescriptor& panDescriptorList_var);
 };
 
 inline void doPacking(cCommBuffer *b, MlmeScan_confirm& obj) {obj.parsimPack(b);}
 inline void doUnpacking(cCommBuffer *b, MlmeScan_confirm& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
+ * message MlmeSet_request extends MlmeMsg {
+ *     unsigned char PibAttribute;
+ *     unsigned char PibAttributeIndex;
+ *     unsigned int PibAttributeValue[];
+ * };
+ * </pre>
+ */
+class MlmeSet_request : public MlmeMsg
+{
+  protected:
+    unsigned char PibAttribute_var;
+    unsigned char PibAttributeIndex_var;
+    unsigned int *PibAttributeValue_var; // array ptr
+    unsigned int PibAttributeValue_arraysize;
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const MlmeSet_request&);
+
+  public:
+    MlmeSet_request(const char *name=NULL, int kind=0);
+    MlmeSet_request(const MlmeSet_request& other);
+    virtual ~MlmeSet_request();
+    MlmeSet_request& operator=(const MlmeSet_request& other);
+    virtual MlmeSet_request *dup() const {return new MlmeSet_request(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+    virtual unsigned char getPibAttribute() const;
+    virtual void setPibAttribute(unsigned char PibAttribute_var);
+    virtual unsigned char getPibAttributeIndex() const;
+    virtual void setPibAttributeIndex(unsigned char PibAttributeIndex_var);
+    virtual void setPibAttributeValueArraySize(unsigned int size);
+    virtual unsigned int getPibAttributeValueArraySize() const;
+    virtual unsigned int getPibAttributeValue(unsigned int k) const;
+    virtual void setPibAttributeValue(unsigned int k, unsigned int PibAttributeValue_var);
+};
+
+inline void doPacking(cCommBuffer *b, MlmeSet_request& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, MlmeSet_request& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
+ * message MlmeSet_confirm extends MlmeMsg {
+ *     unsigned char status;
+ *     unsigned char PibAttribute;
+ *     unsigned char PibAttributeIndex;
+ * };
+ * </pre>
+ */
+class MlmeSet_confirm : public MlmeMsg
+{
+  protected:
+    unsigned char status_var;
+    unsigned char PibAttribute_var;
+    unsigned char PibAttributeIndex_var;
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const MlmeSet_confirm&);
+
+  public:
+    MlmeSet_confirm(const char *name=NULL, int kind=0);
+    MlmeSet_confirm(const MlmeSet_confirm& other);
+    virtual ~MlmeSet_confirm();
+    MlmeSet_confirm& operator=(const MlmeSet_confirm& other);
+    virtual MlmeSet_confirm *dup() const {return new MlmeSet_confirm(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+    virtual unsigned char getStatus() const;
+    virtual void setStatus(unsigned char status_var);
+    virtual unsigned char getPibAttribute() const;
+    virtual void setPibAttribute(unsigned char PibAttribute_var);
+    virtual unsigned char getPibAttributeIndex() const;
+    virtual void setPibAttributeIndex(unsigned char PibAttributeIndex_var);
+};
+
+inline void doPacking(cCommBuffer *b, MlmeSet_confirm& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, MlmeSet_confirm& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
+ * message MlmeStart_request extends MlmeMsg {
+ *     unsigned short PanId;
+ *     unsigned int logicalChannel;
+ *     unsigned char channelPage;
+ *     unsigned int startTime;
+ *     unsigned char beaconOrder;
+ *     unsigned char superFrameOrder;
+ *     bool panCoordinator;
+ *     bool batteryLifeExtension;
+ *     bool coordRealignment;
+ *     unsigned char coordRealignSecurityLevel;
+ *     unsigned char coordRealignKeyIdMode;
+ *     unsigned char coordRealignKeySource[];
+ *     unsigned char coordRealignKeyIndex;
+ *     unsigned char beaconSecurityLevel;
+ *     unsigned char beaconKeyIdMode;
+ *     unsigned char beaconKeySource[];
+ *     unsigned char beaconKeyIndex; 
+ * };
+ * </pre>
+ */
+class MlmeStart_request : public MlmeMsg
+{
+  protected:
+    unsigned short PanId_var;
+    unsigned int logicalChannel_var;
+    unsigned char channelPage_var;
+    unsigned int startTime_var;
+    unsigned char beaconOrder_var;
+    unsigned char superFrameOrder_var;
+    bool panCoordinator_var;
+    bool batteryLifeExtension_var;
+    bool coordRealignment_var;
+    unsigned char coordRealignSecurityLevel_var;
+    unsigned char coordRealignKeyIdMode_var;
+    unsigned char *coordRealignKeySource_var; // array ptr
+    unsigned int coordRealignKeySource_arraysize;
+    unsigned char coordRealignKeyIndex_var;
+    unsigned char beaconSecurityLevel_var;
+    unsigned char beaconKeyIdMode_var;
+    unsigned char *beaconKeySource_var; // array ptr
+    unsigned int beaconKeySource_arraysize;
+    unsigned char beaconKeyIndex_var;
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const MlmeStart_request&);
+
+  public:
+    MlmeStart_request(const char *name=NULL, int kind=0);
+    MlmeStart_request(const MlmeStart_request& other);
+    virtual ~MlmeStart_request();
+    MlmeStart_request& operator=(const MlmeStart_request& other);
+    virtual MlmeStart_request *dup() const {return new MlmeStart_request(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+    virtual unsigned short getPanId() const;
+    virtual void setPanId(unsigned short PanId_var);
+    virtual unsigned int getLogicalChannel() const;
+    virtual void setLogicalChannel(unsigned int logicalChannel_var);
+    virtual unsigned char getChannelPage() const;
+    virtual void setChannelPage(unsigned char channelPage_var);
+    virtual unsigned int getStartTime() const;
+    virtual void setStartTime(unsigned int startTime_var);
+    virtual unsigned char getBeaconOrder() const;
+    virtual void setBeaconOrder(unsigned char beaconOrder_var);
+    virtual unsigned char getSuperFrameOrder() const;
+    virtual void setSuperFrameOrder(unsigned char superFrameOrder_var);
+    virtual bool getPanCoordinator() const;
+    virtual void setPanCoordinator(bool panCoordinator_var);
+    virtual bool getBatteryLifeExtension() const;
+    virtual void setBatteryLifeExtension(bool batteryLifeExtension_var);
+    virtual bool getCoordRealignment() const;
+    virtual void setCoordRealignment(bool coordRealignment_var);
+    virtual unsigned char getCoordRealignSecurityLevel() const;
+    virtual void setCoordRealignSecurityLevel(unsigned char coordRealignSecurityLevel_var);
+    virtual unsigned char getCoordRealignKeyIdMode() const;
+    virtual void setCoordRealignKeyIdMode(unsigned char coordRealignKeyIdMode_var);
+    virtual void setCoordRealignKeySourceArraySize(unsigned int size);
+    virtual unsigned int getCoordRealignKeySourceArraySize() const;
+    virtual unsigned char getCoordRealignKeySource(unsigned int k) const;
+    virtual void setCoordRealignKeySource(unsigned int k, unsigned char coordRealignKeySource_var);
+    virtual unsigned char getCoordRealignKeyIndex() const;
+    virtual void setCoordRealignKeyIndex(unsigned char coordRealignKeyIndex_var);
+    virtual unsigned char getBeaconSecurityLevel() const;
+    virtual void setBeaconSecurityLevel(unsigned char beaconSecurityLevel_var);
+    virtual unsigned char getBeaconKeyIdMode() const;
+    virtual void setBeaconKeyIdMode(unsigned char beaconKeyIdMode_var);
+    virtual void setBeaconKeySourceArraySize(unsigned int size);
+    virtual unsigned int getBeaconKeySourceArraySize() const;
+    virtual unsigned char getBeaconKeySource(unsigned int k) const;
+    virtual void setBeaconKeySource(unsigned int k, unsigned char beaconKeySource_var);
+    virtual unsigned char getBeaconKeyIndex() const;
+    virtual void setBeaconKeyIndex(unsigned char beaconKeyIndex_var);
+};
+
+inline void doPacking(cCommBuffer *b, MlmeStart_request& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, MlmeStart_request& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
+ * message MlmeStart_confirm extends MlmeMsg {
+ *     unsigned char status enum(MacEnum);
+ * };
+ * </pre>
+ */
+class MlmeStart_confirm : public MlmeMsg
+{
+  protected:
+    unsigned char status_var;
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const MlmeStart_confirm&);
+
+  public:
+    MlmeStart_confirm(const char *name=NULL, int kind=0);
+    MlmeStart_confirm(const MlmeStart_confirm& other);
+    virtual ~MlmeStart_confirm();
+    MlmeStart_confirm& operator=(const MlmeStart_confirm& other);
+    virtual MlmeStart_confirm *dup() const {return new MlmeStart_confirm(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+    virtual unsigned char getStatus() const;
+    virtual void setStatus(unsigned char status_var);
+};
+
+inline void doPacking(cCommBuffer *b, MlmeStart_confirm& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, MlmeStart_confirm& obj) {obj.parsimUnpack(b);}
 
 /**
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
@@ -548,17 +743,17 @@ inline void doUnpacking(cCommBuffer *b, PlmeSetTrxState_confirm& obj) {obj.parsi
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
  * message PlmeSet_request extends PlmeMsg {
- *     unsigned char PIBAttribute;
- *     unsigned int PIBAttributeValue[];
+ *     unsigned char PibAttribute;
+ *     unsigned int PibAttributeValue[];
  * };
  * </pre>
  */
 class PlmeSet_request : public PlmeMsg
 {
   protected:
-    unsigned char PIBAttribute_var;
-    unsigned int *PIBAttributeValue_var; // array ptr
-    unsigned int PIBAttributeValue_arraysize;
+    unsigned char PibAttribute_var;
+    unsigned int *PibAttributeValue_var; // array ptr
+    unsigned int PibAttributeValue_arraysize;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const PlmeSet_request&);
@@ -573,12 +768,12 @@ class PlmeSet_request : public PlmeMsg
     virtual void parsimUnpack(cCommBuffer *b);
 
     // field getter/setter methods
-    virtual unsigned char getPIBAttribute() const;
-    virtual void setPIBAttribute(unsigned char PIBAttribute_var);
-    virtual void setPIBAttributeValueArraySize(unsigned int size);
-    virtual unsigned int getPIBAttributeValueArraySize() const;
-    virtual unsigned int getPIBAttributeValue(unsigned int k) const;
-    virtual void setPIBAttributeValue(unsigned int k, unsigned int PIBAttributeValue_var);
+    virtual unsigned char getPibAttribute() const;
+    virtual void setPibAttribute(unsigned char PibAttribute_var);
+    virtual void setPibAttributeValueArraySize(unsigned int size);
+    virtual unsigned int getPibAttributeValueArraySize() const;
+    virtual unsigned int getPibAttributeValue(unsigned int k) const;
+    virtual void setPibAttributeValue(unsigned int k, unsigned int PibAttributeValue_var);
 };
 
 inline void doPacking(cCommBuffer *b, PlmeSet_request& obj) {obj.parsimPack(b);}
@@ -589,7 +784,7 @@ inline void doUnpacking(cCommBuffer *b, PlmeSet_request& obj) {obj.parsimUnpack(
  * <pre>
  * message PlmeSet_confirm extends PlmeMsg {
  *     unsigned char status;
- *     unsigned char PIBAttribute;
+ *     unsigned char PibAttribute;
  * };
  * </pre>
  */
@@ -597,7 +792,7 @@ class PlmeSet_confirm : public PlmeMsg
 {
   protected:
     unsigned char status_var;
-    unsigned char PIBAttribute_var;
+    unsigned char PibAttribute_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const PlmeSet_confirm&);
@@ -614,8 +809,8 @@ class PlmeSet_confirm : public PlmeMsg
     // field getter/setter methods
     virtual unsigned char getStatus() const;
     virtual void setStatus(unsigned char status_var);
-    virtual unsigned char getPIBAttribute() const;
-    virtual void setPIBAttribute(unsigned char PIBAttribute_var);
+    virtual unsigned char getPibAttribute() const;
+    virtual void setPibAttribute(unsigned char PibAttribute_var);
 };
 
 inline void doPacking(cCommBuffer *b, PlmeSet_confirm& obj) {obj.parsimPack(b);}

@@ -19,6 +19,7 @@ cplusplus {{
 
 enum PhyEnum;
 enum MacEnum;
+struct PanDescriptor;
 
 // Application<-->Network layer interface messages
 message NlmeMsg extends cMessage {
@@ -47,23 +48,6 @@ message NldeMsg extends cMessage {
 message MlmeMsg extends cMessage {
 };
 
-struct PANDescriptor {
-	unsigned char coordAddrMode;
-	unsigned short coordPANId;
-	unsigned long coordAddress;
-	unsigned char logicalChannel;
-	unsigned char channelPage;
-	unsigned short superframeSpec;
-	bool GTSPermit;
-	unsigned char linkQuality;
-	unsigned int timeStamp;
-	unsigned char securityFailure;
-	unsigned char securityLevel;
-	unsigned char keyIdMode;
-	unsigned char keySource[8];
-	unsigned char kedyIndex;
-};
-
 message MlmeScan_request extends MlmeMsg {
     // 0x00 Energy Detection Scan (FFD only)
     // 0x01 Active Scan (FFD only)
@@ -86,7 +70,43 @@ message MlmeScan_confirm extends MlmeMsg {
     unsigned int unscannedChannels;
     unsigned int resultListSize;
     unsigned char energyDetectList[];
-    PANDescriptor panDescriptorList[];
+    PanDescriptor panDescriptorList[];
+};
+
+message MlmeSet_request extends MlmeMsg {
+    unsigned char PibAttribute;
+    unsigned char PibAttributeIndex;
+    unsigned int PibAttributeValue[];
+};
+
+message MlmeSet_confirm extends MlmeMsg {
+    unsigned char status;
+    unsigned char PibAttribute;
+    unsigned char PibAttributeIndex;
+};
+
+message MlmeStart_request extends MlmeMsg {
+    unsigned short PanId;
+    unsigned int logicalChannel;
+    unsigned char channelPage;
+    unsigned int startTime;
+    unsigned char beaconOrder;
+    unsigned char superFrameOrder;
+    bool panCoordinator;
+    bool batteryLifeExtension;
+    bool coordRealignment;
+    unsigned char coordRealignSecurityLevel;
+    unsigned char coordRealignKeyIdMode;
+    unsigned char coordRealignKeySource[];
+    unsigned char coordRealignKeyIndex;
+    unsigned char beaconSecurityLevel;
+    unsigned char beaconKeyIdMode;
+    unsigned char beaconKeySource[];
+    unsigned char beaconKeyIndex; 
+};
+
+message MlmeStart_confirm extends MlmeMsg {
+    unsigned char status enum(MacEnum);
 };
 
 message McpsMsg extends cPacket {
@@ -113,13 +133,13 @@ message PlmeSetTrxState_confirm extends PlmeMsg {
 };
 
 message PlmeSet_request extends PlmeMsg {
-    unsigned char PIBAttribute;
-    unsigned int PIBAttributeValue[];
+    unsigned char PibAttribute;
+    unsigned int PibAttributeValue[];
 };
 
 message PlmeSet_confirm extends PlmeMsg {
     unsigned char status;
-    unsigned char PIBAttribute;
+    unsigned char PibAttribute;
 };
 
 message PlmeEd_request extends PlmeMsg {

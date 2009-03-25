@@ -96,9 +96,9 @@ PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 			request->setFramePending(false);
 			request->setAckRequest(false);
 			request->setPanIdCompression(true);
-			request->setDestinationAddressingMode(SHORT);
+			request->setDestinationAddressingMode(SHORT_ADDRESS);
 			request->setFrameVersion(0x01);
-			request->setSourceAddressingMode(SHORT);
+			request->setSourceAddressingMode(SHORT_ADDRESS);
 			request->setSequenceNumber(getMacPib()->getMacDSN());
 			request->setDestinationPanIdentifier(0xFFFF);
 			request->setDestinationAddress((unsigned long) 0xFFFF);

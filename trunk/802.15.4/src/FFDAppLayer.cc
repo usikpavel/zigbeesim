@@ -47,7 +47,6 @@ void FFDAppLayer::initialize(int stage) {
 			cMessage* msg = new cMessage("NLME-NETWORK-FORMATION.request",	START);
 			scheduleAt(simTime(), msg);
 		}
-		EV << (sizeof(long)/sizeof(int)) << endl;
 	}
 }
 

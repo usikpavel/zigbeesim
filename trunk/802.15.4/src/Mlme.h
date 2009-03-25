@@ -124,8 +124,8 @@ protected:
 
 	void addScannedPanDescriptor(PanDescriptor descriptor) {
 		int size = sizeof(this->scannedPanDescriptors)/sizeof(PanDescriptor);
-		PanDescriptor newScannedPanDescriptors[];
-		newScanendPanDescriptors = new PanDescriptor[size+1];
+		PanDescriptor* newScannedPanDescriptors;
+		newScannedPanDescriptors = new PanDescriptor[size+1];
 		for (int i = 0; i < size; i++) {
 			newScannedPanDescriptors[i] = this->scannedPanDescriptors[i];
 		}

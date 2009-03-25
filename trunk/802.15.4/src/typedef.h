@@ -127,6 +127,24 @@ typedef enum {
 	ORPHAN_ONLY 	= 0x03
 } ScanTypes;
 
+
+struct PanDescriptor {
+	unsigned char coordAddrMode;
+	unsigned short coordPANId;
+	unsigned long coordAddress;
+	unsigned char logicalChannel;
+	unsigned char channelPage;
+	unsigned short superframeSpec;
+	bool GTSPermit;
+	unsigned char linkQuality;
+	unsigned int timeStamp;
+	unsigned char securityFailure;
+	unsigned char securityLevel;
+	unsigned char keyIdMode;
+	unsigned char keySource[8];
+	unsigned char kedyIndex;
+};
+
 /** @brief MAC PIB Enumerations */
 typedef enum {
 	MAC_SUCCESS 					= 0x00,
@@ -167,8 +185,20 @@ typedef enum {
 	MAC_UNSUPPORTED_SECURITY 		= 0xDF
 } MacEnum;
 
-/** @brief MAC PIB identifiers */
+/** @brief PIB identifiers */
 typedef enum {
+	/** PHY PIB Identifiers */
+	PHY_CURRENT_CHANNEL 			= 0x00,
+	PHY_CHANNELS_SUPPORTED 			= 0x01,
+	PHY_TRANSMIT_POWER 				= 0x02,
+	PHY_CCA_MODE 					= 0x03,
+	PHY_CURRENT_PAGE 				= 0x04,
+	PHY_MAX_FRAME_DURATION 			= 0x05,
+	PHY_SHR_DURATION 				= 0x06,
+	PHY_SYMBOLS_PER_OCTET 			= 0x07,
+	PHY_A_MAX_PHY_PACKET_SIZE		= 0x08,
+	PHY_A_TURNAROUND_TIME			= 0x09,
+	/** MAC PIB Identifiers */
 	MAC_A_BASE_SLOT_DURATION,
 	MAC_A_BASE_SUPERFRAME_DURATION,
 	MAC_A_EXTENDED_ADDRESS,
@@ -214,25 +244,7 @@ typedef enum {
 	MAC_SYNC_SYMBOL_OFFSET 			= 0x5B,
 	MAC_TIMESTAMP_SUPPORTED 		= 0x5C,
 	MAC_TRANSACTION_PERSISTENCE_TIME = 0x55
-} MacPibIdentifier;
-
-struct PANDescriptor {
-	unsigned char CorrdAddrMode;
-	unsigned short CoordPanId;
-	unsigned long CoordAddress;
-	unsigned char LogicalChannel;
-	unsigned char ChannelPage;
-	unsigned short SuperframeSpec;
-	bool GTSPermit;
-	unsigned char LinkQuality;
-	unsigned int TimeStamp;
-	MacEnum SecurityFailure;
-	unsigned char SecurityLevel;
-	unsigned char KeyIdMode;
-	unsigned long KeySource;
-	unsigned char KeyIndex;
-
-};
+} PibIdentifier;
 
 typedef enum {
 	ASSOCIATION_REQUEST				= 0x01,
@@ -274,19 +286,5 @@ typedef enum {
 	PHY_UNSUPPORTED_ATTRIBUTE 	= 0x0A,
 	PHY_READ_ONLY 				= 0x0B
 } PhyEnum;
-
-/** @brief PHY PIB identifiers */
-typedef enum {
-	PHY_CURRENT_CHANNEL 		= 0x00,
-	PHY_CHANNELS_SUPPORTED 		= 0x01,
-	PHY_TRANSMIT_POWER 			= 0x02,
-	PHY_CCA_MODE 				= 0x03,
-	PHY_CURRENT_PAGE 			= 0x04,
-	PHY_MAX_FRAME_DURATION 		= 0x05,
-	PHY_SHR_DURATION 			= 0x06,
-	PHY_SYMBOLS_PER_OCTET 		= 0x07,
-	PHY_A_MAX_PHY_PACKET_SIZE	= 0x08,
-	PHY_A_TURNAROUND_TIME		= 0x09
-} PhyPibIdentifier;
 
 #endif /* TYPEDEF_H_ */
