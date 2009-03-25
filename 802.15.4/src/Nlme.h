@@ -26,6 +26,8 @@ protected:
 	/*@}*/
 	/** additional variables */
 	cMessage* lastUpperMsg;
+	unsigned short panId;
+	unsigned char logicalChannel;
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
 
@@ -47,8 +49,10 @@ protected:
 
 	virtual void sendNwkPib(cMessage *);
 
+	unsigned char getChannelPageFromChannels(unsigned int channels);
+
 	virtual void comment(CommentsLevel level, std::string s) {
-		/** @todo allign logName substrings for routers and endDevices */
+		/** @todo align logName substrings for routers and endDevices */
 		if ((level & commentsLevel) > NOTHING) {
 			std::cout << logName() << "." << getName() << "\t" << s << endl;
 		}
@@ -73,6 +77,22 @@ protected:
 
 	cMessage* getLastUpperMsg() {
 		return this->lastUpperMsg;
+	}
+
+	void setPanId(unsigned short id) {
+		this->panId = id;
+	}
+
+	unsigned short getPanId() {
+		return this->panId;
+	}
+
+	void setLogicalChannel(unsigned char channel) {
+		this->logicalChannel = channel;
+	}
+
+	unsigned char getLogicalChannel() {
+		return this->logicalChannel;
 	}
 };
 

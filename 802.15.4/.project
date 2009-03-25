@@ -3,7 +3,7 @@
 	<name>dip_802.15.4</name>
 	<comment></comment>
 	<projects>
-		<project>mf-opp4</project>
+		<project>rtn</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

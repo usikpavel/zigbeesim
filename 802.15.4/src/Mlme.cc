@@ -16,11 +16,13 @@ void Mlme::initialize(int stage) {
 		mcpsIn = findGate("mcpsIn");
 
 		commentsLevel = ALL;
+
 	} else if (stage == 1) {
 		lastUpperMsg = new cMessage();
 		timer = new cMessage();
 		setScannedChannels(0);
 		energyLevels = new char[32];
+		scannedPanDescriptors = new PanDescriptor[0];
 	}
 }
 
@@ -69,7 +71,7 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 	std::string msgName = msg->getName();
 	if (msg->getKind() == PLME_SET_TRX_STATE_CONFIRM) {
 		msgName = getLastUpperMsg()->getName();
-		if (msgName == "MLME-SCAN.request") {
+		if (getLastUpperMsg()->getKind() == MLME_SCAN_REQUEST) {
 			MlmeScan_request* request = check_and_cast<MlmeScan_request *> (
 					getLastUpperMsg());
 			if (request->getScanType() == ED_SCAN) {
@@ -125,9 +127,9 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 							PlmeSet_request* set = new PlmeSet_request();
 							set->setName("PLME-SET.request");
 							set->setKind(PLME_SET_REQUEST);
-							set->setPIBAttribute(PHY_CURRENT_PAGE);
-							set->setPIBAttributeValueArraySize(1);
-							set->setPIBAttributeValue(0,
+							set->setPibAttribute(PHY_CURRENT_PAGE);
+							set->setPibAttributeValueArraySize(1);
+							set->setPibAttributeValue(0,
 									request->getChannelPage());
 							setCurrentPage(request->getChannelPage());
 							sendPlmeDown(set);
@@ -140,12 +142,20 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 					/** @comment here we're just waiting for the beacons */
 				} else if (getLayerStage() == 2) {
 					/** @comment active scan finished, radio turned off */
-					MlmeScan_confirm *confirm = new MlmeScan_confirm("MLME-SCAN.confirm", MLME_SCAN_CONFIRM);
+					MlmeScan_confirm *confirm = new MlmeScan_confirm(
+							"MLME-SCAN.confirm", MLME_SCAN_CONFIRM);
 					confirm->setStatus(MAC_SUCCESS);
 					confirm->setScanType(ACTIVE_SCAN);
 					confirm->setChannelPage(request->getChannelPage());
 					/** @todo include unscanned channels variable here */
 					/** @todo include result list size variable here */
+					int scannedChannelsSize = sizeof(getScannedChannels())
+							/ sizeof(PanDescriptor);
+					confirm->setPanDescriptorListArraySize(scannedChannelsSize);
+					for (int i = 0; i < scannedChannelsSize; i++) {
+						confirm->setPanDescriptorList(i,
+								getScannedPanDescriptors()[i]);
+					}
 					confirm->setEnergyDetectListArraySize(0);
 					sendMlmeUp(confirm);
 				}
@@ -153,10 +163,19 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 		}
 	} else if (msg->getKind() == PLME_SET_CONFIRM) {
 		PlmeSet_confirm* confirm = check_and_cast<PlmeSet_confirm *> (msg);
-		if (confirm->getPIBAttribute() == PHY_CURRENT_CHANNEL) {
-			if (getLastUpperMsg()->getKind() == MLME_SCAN_REQUEST) {
-				MlmeScan_request* request =
-						check_and_cast<MlmeScan_request *> (getLastUpperMsg());
+		if (getLastUpperMsg()->getKind() == MLME_SET_REQUEST) {
+			MlmeSet_request* request = check_and_cast<MlmeSet_request *> (
+					getLastUpperMsg());
+			MlmeSet_confirm* response = new MlmeSet_confirm("MLME-SET.confirm",
+					MLME_SET_CONFIRM);
+			response->setStatus(MAC_SUCCESS);
+			response->setPibAttribute(request->getPibAttribute());
+			response->setPibAttributeIndex(request->getPibAttributeIndex());
+			sendMlmeUp(response);
+		} else if (getLastUpperMsg()->getKind() == MLME_SCAN_REQUEST) {
+			MlmeScan_request* request = check_and_cast<MlmeScan_request *> (
+					getLastUpperMsg());
+			if (confirm->getPibAttribute() == PHY_CURRENT_CHANNEL) {
 				if (request->getScanType() == ED_SCAN) {
 					if (timer->isScheduled()) {
 						PlmeEd_request* ed = new PlmeEd_request();
@@ -173,10 +192,10 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 					beaconRequest->setByteLength(8);
 					sendMcps(beaconRequest);
 				}
-			}
-		} else if (confirm->getPIBAttribute() == PHY_CURRENT_PAGE) {
-			if (getLastUpperMsg()->getKind() == MLME_SCAN_REQUEST) {
-				switchRadioToChannel(getCurrentChannel());
+			} else if (confirm->getPibAttribute() == PHY_CURRENT_PAGE) {
+				if (getLastUpperMsg()->getKind() == MLME_SCAN_REQUEST) {
+					switchRadioToChannel(getCurrentChannel());
+				}
 			}
 		}
 	} else if (msgName == "PLME-ED.confirm") {
@@ -267,6 +286,43 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 			}
 			setScannedChannels(0);
 		}
+	} else if (msg->getKind() == MLME_SET_REQUEST) {
+		MlmeSet_request* request = check_and_cast<MlmeSet_request *> (msg);
+		if (request->getPibAttribute() <= 0x09) {
+			/** @comment we do have a PHY PIB attribute passed */
+			if (request->getPibAttribute() == PHY_CURRENT_CHANNEL) {
+				switchRadioToChannel(request->getPibAttributeValue(0));
+				return;
+			}
+			PlmeSet_request* setRequest = new PlmeSet_request();
+			setRequest->setName("PLME-SET.request");
+			setRequest->setKind(PLME_SET_REQUEST);
+			setRequest->setPibAttribute(request->getPibAttribute());
+			setRequest->setPibAttributeValueArraySize(
+					request->getPibAttributeValueArraySize());
+			for (int i = 0; i < request->getPibAttributeValueArraySize(); i++) {
+				setRequest->setPibAttributeValue(i,
+						request->getPibAttributeValue(i));
+			}
+			sendPlmeDown(setRequest);
+		} else {
+			/** @comment we do have a MAC PIB attribute passed */
+			/** @todo add here the possibility to change indexes in the tables
+			 * through the PIB Attribute Index */
+			unsigned int* value =
+					new unsigned int[request->getPibAttributeValueArraySize()];
+			for (int i = 0; i < request->getPibAttributeValueArraySize(); i++) {
+				value[i] = request->getPibAttributeValue(i);
+			}
+			MlmeSet_confirm* response = new MlmeSet_confirm("MLME-SET.confirm", MLME_SET_CONFIRM);
+			MacEnum status = getMacPib()->setPibAttribute(
+					(PibIdentifier) request->getPibAttribute(), value);
+			response->setStatus(status);
+			response->setPibAttribute(request->getPibAttribute());
+			response->setPibAttributeIndex(request->getPibAttributeIndex());
+			sendMlmeUp(response);
+		}
+	} else if (msg->getKind() == MLME_START_REQUEST) {
 
 	}
 }
@@ -344,9 +400,9 @@ void Mlme::switchRadioToChannel(unsigned int channel) {
 	PlmeSet_request* requestChannel = new PlmeSet_request();
 	requestChannel->setName("PLME-SET.request");
 	requestChannel->setKind(PLME_SET_REQUEST);
-	requestChannel->setPIBAttribute(PHY_CURRENT_CHANNEL);
-	requestChannel->setPIBAttributeValueArraySize(1);
-	requestChannel->setPIBAttributeValue(0, channel);
+	requestChannel->setPibAttribute(PHY_CURRENT_CHANNEL);
+	requestChannel->setPibAttributeValueArraySize(1);
+	requestChannel->setPibAttributeValue(0, channel);
 	std::stringstream commentStream;
 	commentStream << "Switching radio to channel " << channel;
 	comment(CHANNEL, commentStream.str());

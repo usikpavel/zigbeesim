@@ -61,7 +61,6 @@ void Pd::handlePdMsg(cMessage *msg) {
 			prepareSend();
 		}
 	}
-	std::cout << endl;
 }
 
 void Pd::handleRfMsg(cMessage *msg) {

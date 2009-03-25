@@ -90,9 +90,14 @@ protected:
 		commentStream << "Received " << msg->getName();
 		comment(MESSAGE, commentStream.str());
 	}
+	virtual void commentError(char* errorMessage) {
+		std::stringstream commentStream;
+		commentStream << "ERROR: " << errorMessage;
+		comment(ERROR, commentStream.str());
+	}
 public:
-	MacEnum setPIBAttribute(MacPibIdentifier, unsigned int*);
-	unsigned int* getPIBAttribute(MacPibIdentifier);
+	MacEnum setPibAttribute(PibIdentifier, unsigned int*);
+	unsigned int* getPibAttribute(PibIdentifier);
 	unsigned char getBaseSlotDuration() const {
 		return aBaseSlotDuration;
 	}

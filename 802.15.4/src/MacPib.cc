@@ -80,7 +80,7 @@ void MacPib::resetMacPibValues() {
 	setMacTransactionPersistenceTime(0x01F4);
 }
 
-MacEnum MacPib::setPIBAttribute(MacPibIdentifier attribute, unsigned int* value) {
+MacEnum MacPib::setPibAttribute(PibIdentifier attribute, unsigned int* value) {
 	MacEnum status = MAC_SUCCESS;
 	switch (attribute) {
 	case MAC_ACK_WAIT_DURATION:
@@ -227,143 +227,190 @@ MacEnum MacPib::setPIBAttribute(MacPibIdentifier attribute, unsigned int* value)
 	return status;
 }
 
-unsigned int* MacPib::getPIBAttribute(MacPibIdentifier attribute) {
+unsigned int* MacPib::getPibAttribute(PibIdentifier attribute) {
 	unsigned int* value;
 	switch (attribute) {
 	case MAC_A_BASE_SLOT_DURATION:
 		value = new unsigned int[1];
 		value[0] = getBaseSlotDuration();
+		break;
 	case MAC_A_BASE_SUPERFRAME_DURATION:
 		value = new unsigned int[1];
 		value[0] = getBaseSuperFrameDuration();
+		break;
 	case MAC_A_EXTENDED_ADDRESS:
 		value = new unsigned int[1];
 		value[0] = getExtendedAddress();
+		break;
 	case MAC_A_GTS_DESC_PERSISTENCE_TIME:
 		value = new unsigned int[1];
 		value[0] = getGTSDescPersistenceTime();
+		break;
 	case MAC_A_MAX_BEACON_OVERHEAD:
 		value = new unsigned int[1];
 		value[0] = getMaxBeaconOverhead();
+		break;
 	case MAC_A_MAX_BEACON_PAYLOAD_LENGTH:
 		value = new unsigned int[1];
 		value[0] = getMaxBeaconPayloadLength();
+		break;
 	case MAC_A_MAX_LOST_BEACONS:
 		value = new unsigned int[1];
 		value[0] = getMaxLostBeacons();
+		break;
 	case MAC_A_MAX_MAC_SAFE_PAYLOAD_SIZE:
 		value = new unsigned int[1];
 		value[0] = getMaxMACSafePayloadSize();
+		break;
 	case MAC_A_MAX_MAC_PAYLOAD_SIZE:
 		value = new unsigned int[1];
 		value[0] = getMaxMACPayloadSize();
+		break;
 	case MAC_A_MAX_MPDU_UNSECURED_PAYLOAD:
 		value = new unsigned int[1];
 		value[0] = getMaxMPDUUnsecuredOverhead();
+		break;
 	case MAC_A_MAX_SIFS_FRAME_SIZE:
 		value = new unsigned int[1];
 		value[0] = getMaxSIFSFrameSize();
+		break;
 	case MAC_A_MIN_CAP_LENGTH:
 		value = new unsigned int[1];
 		value[0] = getMinCAPLength();
+		break;
 	case MAC_A_MIN_MPDU_OVERHEAD:
 		value = new unsigned int[1];
 		value[0] = getMinMPDUOverhead();
+		break;
 	case MAC_A_NUM_SUPERFRAME_SLOTS:
 		value = new unsigned int[1];
 		value[0] = getNumSuperframeSlots();
+		break;
 	case MAC_A_UNIT_BACKOFF_PERIOD:
 		value = new unsigned int[1];
 		value[0] = getUnitBackoffPeriod();
+		break;
 	case MAC_ACK_WAIT_DURATION:
 		value = new unsigned int[1];
 		value[0] = getMacAckWaitDuration();
+		break;
 	case MAC_ASSOCIATED_PAN_COORD:
 		value = new unsigned int[1];
 		value[0] = getMacAssociatedPANCoord();
+		break;
 	case MAC_ASSOCIATION_PERMIT:
 		value = new unsigned int[1];
 		value[0] = getMacAssociationPermit();
+		break;
 	case MAC_AUTO_REQUEST:
 		value = new unsigned int[1];
 		value[0] = getMacAutoRequest();
+		break;
 	case MAC_BATT_LIFE_EXT:
 		value = new unsigned int[1];
 		value[0] = getMacBattLifeExt();
+		break;
 	case MAC_BATT_LIFE_EXT_PERIODS:
 		value = new unsigned int[1];
 		value[0] = getMacBattLifeExtPeriods();
+		break;
 	case MAC_BEACON_PAYLOAD:
 		value = (unsigned int*)getMacBeaconPayload();
+		break;
 	case MAC_BEACON_PAYLOAD_LENGTH:
 		value = new unsigned int[1];
 		value[0] = getMacBeaconPayloadLength();
+		break;
 	case MAC_BEACON_ORDER:
 		value = new unsigned int[1];
 		value[0] = getMacBeaconOrder();
+		break;
 	case MAC_BEACON_TX_TIME:
 		value = new unsigned int[1];
 		value[0] = getMacBeaconTxTime();
+		break;
 	case MAC_BSN:
 		value = new unsigned int[1];
 		value[0] = getMacBSN();
+		break;
 	case MAC_COORD_EXTENDED_ADDRESS:
 		value = new unsigned int[1];
 		value[0] = getMacCoordExtendedAddress();
+		break;
 	case MAC_COORD_SHORT_ADDRESS:
 		value = new unsigned int[1];
 		value[0] = getMacCoordShortAddress();
+		break;
 	case MAC_DSN:
 		value = new unsigned int[1];
 		value[0] = getMacDSN();
+		break;
 	case MAC_GTS_PERMIT:
 		value = new unsigned int[1];
 		value[0] = getMacGTSPermit();
+		break;
 	case MAC_MAX_BE:
 		value = new unsigned int[1];
 		value[0] = getMacMaxBE();
+		break;
 	case MAC_MAX_CSMA_BACKOFFS:
 		value = new unsigned int[1];
 		value[0] = getMacMaxCSMABackoffs();
+		break;
 	case MAC_MAX_FRAME_TOTAL_WAIT_TIME:
 		value = new unsigned int[1];
 		value[0] = getMacMaxFrameTotalWaitTime();
+		break;
 	case MAC_MAX_FRAME_RETRIES:
 		value = new unsigned int[1];
 		value[0] = getMacMaxFrameRetries();
+		break;
 	case MAC_MIN_BE:
 		value = new unsigned int[1];
 		value[0] = getMacMinBE();
+		break;
 	case MAC_PAN_ID:
 		value = new unsigned int[1];
 		value[0] = getMacPANId();
+		break;
 	case MAC_PROMISCUOUS_MODE:
 		value = new unsigned int[1];
 		value[0] = getMacPromiscuousMode();
+		break;
 	case MAC_RESPONSE_WAIT_TIME:
 		value = new unsigned int[1];
 		value[0] = getMacResponseWaitTime();
+		break;
 	case MAC_RX_ON_WHEN_IDLE:
 		value = new unsigned int[1];
 		value[0] = getMacRxOnWhenIdle();
+		break;
 	case MAC_SECURITY_ENABLED:
 		value = new unsigned int[1];
 		value[0] = getMacSecurityEnabled();
+		break;
 	case MAC_SHORT_ADDRESS:
 		value = new unsigned int[1];
 		value[0] = getMacShortAddress();
+		break;
 	case MAC_SUPERFRAME_ORDER:
 		value = new unsigned int[1];
 		value[0] = getMacSuperframeOrder();
+		break;
 	case MAC_SYNC_SYMBOL_OFFSET:
 		value = new unsigned int[1];
 		value[0] = getMacSyncSymbolOffset();
+		break;
 	case MAC_TIMESTAMP_SUPPORTED:
 		value = new unsigned int[1];
 		value[0] = getMacTimestampSupported();
+		break;
 	case MAC_TRANSACTION_PERSISTENCE_TIME:
 		value = new unsigned int[1];
 		value[0] = getMacTransactionPersistenceTime();
+		break;
+	default:
+		commentError("UNKNOWN PARAMETER IN MacPib::getPIBAttribute()");
 	}
 	return value;
 }

@@ -45,7 +45,7 @@ void PhyPib::resetPhyPibValues() {
 	setTurnAroundTime(12);
 }
 
-PhyEnum PhyPib::setPIBAttribute(PhyPibIdentifier attribute, unsigned int* value) {
+PhyEnum PhyPib::setPibAttribute(PibIdentifier attribute, unsigned int* value) {
 	/** @todo Add condition when the attribute is just read-only */
 	switch (attribute) {
 	case PHY_CURRENT_CHANNEL:

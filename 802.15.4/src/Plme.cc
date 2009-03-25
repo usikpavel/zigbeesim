@@ -53,7 +53,7 @@ void Plme::handleSelfMsg(cMessage *msg) {
 void Plme::handlePlmeMsg(cMessage *msg) {
 	setLastUpperMsg(msg);
 	std::string msgName = msg->getName();
-	if (msgName == "PLME-SET-TRX-STATE.request") {
+	if (msg->getKind() == PLME_SET_TRX_STATE_REQUEST) {
 		PlmeSetTrxState_request* request = check_and_cast<
 				PlmeSetTrxState_request *> (msg);
 		PlmeSetTrxState_confirm* response = new PlmeSetTrxState_confirm();
@@ -75,20 +75,18 @@ void Plme::handlePlmeMsg(cMessage *msg) {
 
 		}
 		sendPlmeUp(response);
-	} else if (msgName == "PLME-SET.request") {
+	} else if (msg->getKind() == PLME_SET_REQUEST) {
 		PlmeSet_request* request = check_and_cast<PlmeSet_request *> (msg);
 		unsigned int* value =
-				new unsigned int[request->getPIBAttributeValueArraySize()];
-		for (int i = 0; i < request->getPIBAttributeValueArraySize(); i++) {
-			value[i] = request->getPIBAttributeValue(i);
+				new unsigned int[request->getPibAttributeValueArraySize()];
+		for (int i = 0; i < request->getPibAttributeValueArraySize(); i++) {
+			value[i] = request->getPibAttributeValue(i);
 		}
-		PlmeSet_confirm* response = new PlmeSet_confirm();
-		response->setName("PLME-SET.confirm");
-		response->setKind(PLME_SET_CONFIRM);
-		PhyEnum status = getPhyPib()->setPIBAttribute(
-				(PhyPibIdentifier) request->getPIBAttribute(), value);
+		PlmeSet_confirm* response = new PlmeSet_confirm("PLME-SET.confirm", PLME_SET_CONFIRM);
+		PhyEnum status = getPhyPib()->setPibAttribute(
+				(PibIdentifier) request->getPibAttribute(), value);
 		response->setStatus(status);
-		response->setPIBAttribute(request->getPIBAttribute());
+		response->setPibAttribute(request->getPibAttribute());
 		sendPlmeUp(response);
 	} else if (msgName == "PLME-ED.request") {
 		if ((getLayerState() == PHY_TRX_OFF) || (getLayerState() == PHY_TX_ON)) {
