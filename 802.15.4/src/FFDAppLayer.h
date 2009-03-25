@@ -68,6 +68,8 @@ protected:
 
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
+	/** @todo add some comment on this one */
+	Role role;
 
 	/**
 	 * @name Handle Messages
@@ -154,7 +156,12 @@ protected:
 		commentStream << "Received " << msg->getName();
 		comment(MESSAGE, commentStream.str());
 	}
-
+	Role getRole() {
+		return this->role;
+	}
+	void setRole(Role role) {
+		this->role = role;
+	}
 };
 
 #endif

@@ -21,8 +21,7 @@
 
 #include "FFDAppLayer.h"
 
-Define_Module(FFDAppLayer)
-;
+Define_Module( FFDAppLayer);
 
 /**
  * First we have to initialize the module from which we derived ours,
@@ -42,9 +41,13 @@ void FFDAppLayer::initialize(int stage) {
 		nlmeSapOut = findGate("nlmeSapOut");
 
 		commentsLevel = ALL;
-	} else if (stage == 1) {
 		if (logName().substr(0, 11) == "coordinator") {
-			cMessage* msg = new cMessage("NLME-NETWORK-FORMATION.request",	START);
+			setRole(COORDINATOR);
+		}
+	} else if (stage == 1) {
+		if (getRole() == COORDINATOR) {
+			cMessage* msg = new cMessage("NLME-NETWORK-FORMATION.request",
+					START);
 			scheduleAt(simTime(), msg);
 		}
 	}
@@ -62,7 +65,9 @@ void FFDAppLayer::initialize(int stage) {
  * @sa handleLowerMsg, handleSelfMsg
  **/
 void FFDAppLayer::handleMessage(cMessage *msg) {
-	std::cout << "B" << endl;
+	if (!msg->isSelfMessage()) {
+		commentMsgReceived(msg);
+	}
 	if (msg->getArrivalGateId() == nlmeSapIn) {
 		handleNlmeMsg(msg);
 	} else if (msg->getArrivalGateId() == nldeSapIn) {
@@ -73,19 +78,21 @@ void FFDAppLayer::handleMessage(cMessage *msg) {
 }
 
 void FFDAppLayer::handleNldeMsg(cMessage* msg) {
-	commentMsgReceived(msg);
-	delete(msg);
+	delete (msg);
 }
 
 void FFDAppLayer::handleNlmeMsg(cMessage* msg) {
-	commentMsgReceived(msg);
-	delete(msg);
+	if (msg->getKind() == NLME_NETWORK_FORMATION_CONFIRM) {
+		/** @comment we can now start sending data probably */
+	}
+	delete (msg);
 }
 
 void FFDAppLayer::handleSelfMsg(cMessage* msg) {
 	switch (msg->getKind()) {
 	case START:
-		NlmeNetworkFormation_request* request = new NlmeNetworkFormation_request();
+		NlmeNetworkFormation_request* request =
+				new NlmeNetworkFormation_request();
 		/** @todo include theese params into omnetpp.ini file
 		 * more info on this on page 6 in the notepad, or in the 802154 doc */
 		request->setName("NLME-NETWORK-FORMATION.request");
@@ -105,7 +112,6 @@ void FFDAppLayer::handleSelfMsg(cMessage* msg) {
  * Send message down to lower layer
  **/
 void FFDAppLayer::sendNldeDown(cMessage *msg) {
-	commentMsgSending(msg);
 	sendDelayed(msg, 0.0, nldeSapOut);
 }
 
@@ -113,6 +119,5 @@ void FFDAppLayer::sendNldeDown(cMessage *msg) {
  * Send message down to lower layer
  **/
 void FFDAppLayer::sendNlmeDown(cMessage *msg) {
-	commentMsgSending(msg);
 	sendDelayed(msg, 0.0, nlmeSapOut);
 }
