@@ -16,10 +16,13 @@ void Mlme::initialize(int stage) {
 		mcpsIn = findGate("mcpsIn");
 
 		commentsLevel = ALL;
-
+		if (logName().substr(0, 11) == "coordinator") {
+			setRole(COORDINATOR);
+		}
 	} else if (stage == 1) {
 		lastUpperMsg = new cMessage();
 		timer = new cMessage();
+		beaconTimer = new cMessage();
 		setScannedChannels(0);
 		energyLevels = new char[32];
 		scannedPanDescriptors = new PanDescriptor[0];
@@ -59,11 +62,15 @@ void Mlme::handleSelfMsg(cMessage *msg) {
 			changeState->setState(PHY_TX_ON);
 		} else {
 			/** @comment active scan finished */
-			/** @comment turning radio off */
+			/** turning radio off */
 			changeState->setState(PHY_TRX_OFF);
 			setLayerStage(2);
 		}
 		sendPlmeDown(changeState);
+	} else if (msgName == "START.timer") {
+
+	} else if (msgName == "BEACON.timer") {
+
 	}
 }
 
@@ -314,7 +321,8 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 			for (int i = 0; i < request->getPibAttributeValueArraySize(); i++) {
 				value[i] = request->getPibAttributeValue(i);
 			}
-			MlmeSet_confirm* response = new MlmeSet_confirm("MLME-SET.confirm", MLME_SET_CONFIRM);
+			MlmeSet_confirm* response = new MlmeSet_confirm("MLME-SET.confirm",
+					MLME_SET_CONFIRM);
 			MacEnum status = getMacPib()->setPibAttribute(
 					(PibIdentifier) request->getPibAttribute(), value);
 			response->setStatus(status);
@@ -323,7 +331,25 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 			sendMlmeUp(response);
 		}
 	} else if (msg->getKind() == MLME_START_REQUEST) {
-
+		MlmeStart_request* request = check_and_cast<MlmeStart_request *> (msg);
+		if (!request->getCoordRealignment()) {
+			/** @note Logical Channel and Channel Page are set within the previous MLME-SET.request command */
+			getMacPib()->setMacPANId(request->getPanId());
+			getMacPib()->setMacBeaconOrder(request->getBeaconOrder());
+			getMacPib()->setMacSuperframeOrder(request->getSuperframeOrder());
+			getMacPib()->setMacBattLifeExt(request->getBatteryLifeExtension());
+			MlmeStart_confirm* response = new MlmeStart_confirm(
+					"MLME-START.confirm", MLME_START_CONFIRM);
+			timer->setName("START.timer");
+			/** @note the value of startTime is ignored while we're coordinator */
+			if (getRole() == COORDINATOR) {
+				scheduleAt(simTime(), timer);
+			}
+			response->setStatus(MAC_SUCCESS);
+			sendMlmeUp(response);
+		} else {
+			/** @todo coord realignment set to true */
+		}
 	}
 }
 

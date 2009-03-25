@@ -115,14 +115,20 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 				startRequest->setChannelPage(getChannelPageFromChannels(request->getScanChannels()));
 				startRequest->setStartTime(rand());
 				startRequest->setBeaconOrder(request->getBeaconOrder());
-				startRequest->setSuperFrameOrder(request->getSuperframeOrder());
+				startRequest->setSuperframeOrder(request->getSuperframeOrder());
 				startRequest->setPanCoordinator((logName().substr(0, 11) == "coordinator"));
 				startRequest->setBatteryLifeExtension(false);
 				startRequest->setCoordRealignment(false);
-				/** @todo for now, omitting the security features of the message*/
+				/** @fixme for now, omitting the security features of the message*/
 				sendMlmeDown(startRequest);
 			}
 		}
+	} else if (msg->getKind() == MLME_START_CONFIRM) {
+		MlmeStart_confirm* confirm = check_and_cast<MlmeStart_confirm *>(msg);
+		NlmeNetworkFormation_confirm* response = new NlmeNetworkFormation_confirm("NLME-NETWORK-FORMATION.confirm", NLME_NETWORK_FORMATION_CONFIRM);
+		/** @note here we play with the MAC status still */
+		response->setStatus(confirm->getStatus());
+		sendNlmeUp(response);
 	}
 	delete (msg);
 }

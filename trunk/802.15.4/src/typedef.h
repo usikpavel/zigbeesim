@@ -15,6 +15,13 @@ typedef enum {
 // 1111 1111
 } CommentsLevel;
 
+/** @brief Role of the node (according to ZigBee spec.) */
+typedef enum {
+	COORDINATOR,
+	ROUTER,
+	END_DEVICE
+} Role;
+
 /** @brief Kinds of messages */
 typedef enum {
 	/** NLME-SAP messages */

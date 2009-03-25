@@ -28,8 +28,10 @@ protected:
 	int mcpsIn;
 	/*@}*/
 	/** additional variables */
+	Role role;
 	cMessage* lastUpperMsg;
 	cMessage* timer;
+	cMessage* beaconTimer;
 	int currentChannel;
 	unsigned char currentPage;
 	int scannedChannels;
@@ -69,6 +71,12 @@ protected:
 		std::stringstream commentStream;
 		commentStream << "ERROR: " << errorMessage;
 		comment(ERROR, commentStream.str());
+	}
+	Role getRole() {
+		return this->role;
+	}
+	void setRole(Role role) {
+		this->role = role;
 	}
 	MacPib* getMacPib() {
 		return ((MacPib *) (this->getParentModule()->getModuleByRelativePath(

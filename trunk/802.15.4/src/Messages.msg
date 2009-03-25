@@ -38,7 +38,7 @@ message NlmeNetworkFormation_request extends NlmeMsg {
 };
 
 message NlmeNetworkFormation_confirm extends NlmeMsg {
-    
+  	unsigned char status;  
 };
 
 message NldeMsg extends cMessage {
@@ -91,7 +91,7 @@ message MlmeStart_request extends MlmeMsg {
     unsigned char channelPage;
     unsigned int startTime;
     unsigned char beaconOrder;
-    unsigned char superFrameOrder;
+    unsigned char superframeOrder;
     bool panCoordinator;
     bool batteryLifeExtension;
     bool coordRealignment;
