@@ -49,6 +49,8 @@ protected:
 
 	virtual void sendNwkPib(cMessage *);
 
+	unsigned char getChannelPageFromChannels(unsigned int channels);
+
 	virtual void comment(CommentsLevel level, std::string s) {
 		/** @todo align logName substrings for routers and endDevices */
 		if ((level & commentsLevel) > NOTHING) {

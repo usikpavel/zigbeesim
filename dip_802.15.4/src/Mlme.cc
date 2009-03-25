@@ -322,6 +322,8 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 			response->setPibAttributeIndex(request->getPibAttributeIndex());
 			sendMlmeUp(response);
 		}
+	} else if (msg->getKind() == MLME_START_REQUEST) {
+
 	}
 }
 

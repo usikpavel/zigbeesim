@@ -112,7 +112,15 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 						"MLME-START.request", MLME_START_REQUEST);
 				startRequest->setPanId(getPanId());
 				startRequest->setLogicalChannel(getLogicalChannel());
-
+				startRequest->setChannelPage(getChannelPageFromChannels(request->getScanChannels()));
+				startRequest->setStartTime(rand());
+				startRequest->setBeaconOrder(request->getBeaconOrder());
+				startRequest->setSuperFrameOrder(request->getSuperframeOrder());
+				startRequest->setPanCoordinator((logName().substr(0, 11) == "coordinator"));
+				startRequest->setBatteryLifeExtension(false);
+				startRequest->setCoordRealignment(false);
+				/** @todo for now, omitting the security features of the message*/
+				sendMlmeDown(startRequest);
 			}
 		}
 	}
@@ -159,4 +167,10 @@ void Nlme::sendNlde(cMessage *msg) {
 void Nlme::sendNwkPib(cMessage *msg) {
 	commentMsgSending(msg);
 	sendDelayed(msg, 0.0, nwkPibOut);
+}
+
+unsigned char Nlme::getChannelPageFromChannels(unsigned int channels) {
+	unsigned char page;
+	page = (unsigned char) (channels >> 26);
+	return page;
 }
