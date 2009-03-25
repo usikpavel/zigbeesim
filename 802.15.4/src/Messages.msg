@@ -112,12 +112,28 @@ message MlmeStart_confirm extends MlmeMsg {
 message McpsMsg extends cPacket {
 };
 
+message MacBeacon extends McpsMsg {
+  	unsigned char beaconOrder;
+  	unsigned char superframeOrder;
+  	unsigned char finalCapSlot;
+  	bool BatteryLifeExtension;
+  	bool panCoordinator;
+  	bool AssociationPermit;
+  	unsigned char gtsDescriptorCount;
+  	bool gtsPermit;
+  	unsigned char directionMask;
+  	unsigned short deviceShortAddress[];
+  	unsigned char gtsStartingSlot[];
+  	unsigned char gtsLength[];
+  	unsigned char numberOfShortAddressesPending;
+  	unsigned char numberOfExtendedAddressesPending;
+  	unsigned long addressList[];
+  	unsigned char macBeaconPayload[];
+};
+
 message MacCommand extends McpsMsg {
     unsigned char commandType;
     unsigned char commandPayload[];
-};
-
-message MacBeacon extends McpsMsg {
 };
 
 // Physical layer messages

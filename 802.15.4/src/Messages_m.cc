@@ -554,6 +554,7 @@ Register_Class(NlmeNetworkFormation_confirm);
 
 NlmeNetworkFormation_confirm::NlmeNetworkFormation_confirm(const char *name, int kind) : NlmeMsg(name,kind)
 {
+    this->status_var = 0;
 }
 
 NlmeNetworkFormation_confirm::NlmeNetworkFormation_confirm(const NlmeNetworkFormation_confirm& other) : NlmeMsg()
@@ -570,17 +571,30 @@ NlmeNetworkFormation_confirm& NlmeNetworkFormation_confirm::operator=(const Nlme
 {
     if (this==&other) return *this;
     NlmeMsg::operator=(other);
+    this->status_var = other.status_var;
     return *this;
 }
 
 void NlmeNetworkFormation_confirm::parsimPack(cCommBuffer *b)
 {
     NlmeMsg::parsimPack(b);
+    doPacking(b,this->status_var);
 }
 
 void NlmeNetworkFormation_confirm::parsimUnpack(cCommBuffer *b)
 {
     NlmeMsg::parsimUnpack(b);
+    doUnpacking(b,this->status_var);
+}
+
+unsigned char NlmeNetworkFormation_confirm::getStatus() const
+{
+    return status_var;
+}
+
+void NlmeNetworkFormation_confirm::setStatus(unsigned char status_var)
+{
+    this->status_var = status_var;
 }
 
 class NlmeNetworkFormation_confirmDescriptor : public cClassDescriptor
@@ -629,7 +643,7 @@ const char *NlmeNetworkFormation_confirmDescriptor::getProperty(const char *prop
 int NlmeNetworkFormation_confirmDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 0+basedesc->getFieldCount(object) : 0;
+    return basedesc ? 1+basedesc->getFieldCount(object) : 1;
 }
 
 unsigned int NlmeNetworkFormation_confirmDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -641,6 +655,7 @@ unsigned int NlmeNetworkFormation_confirmDescriptor::getFieldTypeFlags(void *obj
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
+        case 0: return FD_ISEDITABLE;
         default: return 0;
     }
 }
@@ -654,6 +669,7 @@ const char *NlmeNetworkFormation_confirmDescriptor::getFieldName(void *object, i
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
+        case 0: return "status";
         default: return NULL;
     }
 }
@@ -667,6 +683,7 @@ const char *NlmeNetworkFormation_confirmDescriptor::getFieldTypeString(void *obj
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
+        case 0: return "unsigned char";
         default: return NULL;
     }
 }
@@ -708,6 +725,7 @@ bool NlmeNetworkFormation_confirmDescriptor::getFieldAsString(void *object, int 
     }
     NlmeNetworkFormation_confirm *pp = (NlmeNetworkFormation_confirm *)object; (void)pp;
     switch (field) {
+        case 0: ulong2string(pp->getStatus(),resultbuf,bufsize); return true;
         default: return false;
     }
 }
@@ -722,6 +740,7 @@ bool NlmeNetworkFormation_confirmDescriptor::setFieldAsString(void *object, int 
     }
     NlmeNetworkFormation_confirm *pp = (NlmeNetworkFormation_confirm *)object; (void)pp;
     switch (field) {
+        case 0: pp->setStatus(string2ulong(value)); return true;
         default: return false;
     }
 }
@@ -2529,7 +2548,7 @@ MlmeStart_request::MlmeStart_request(const char *name, int kind) : MlmeMsg(name,
     this->channelPage_var = 0;
     this->startTime_var = 0;
     this->beaconOrder_var = 0;
-    this->superFrameOrder_var = 0;
+    this->superframeOrder_var = 0;
     this->panCoordinator_var = 0;
     this->batteryLifeExtension_var = 0;
     this->coordRealignment_var = 0;
@@ -2570,7 +2589,7 @@ MlmeStart_request& MlmeStart_request::operator=(const MlmeStart_request& other)
     this->channelPage_var = other.channelPage_var;
     this->startTime_var = other.startTime_var;
     this->beaconOrder_var = other.beaconOrder_var;
-    this->superFrameOrder_var = other.superFrameOrder_var;
+    this->superframeOrder_var = other.superframeOrder_var;
     this->panCoordinator_var = other.panCoordinator_var;
     this->batteryLifeExtension_var = other.batteryLifeExtension_var;
     this->coordRealignment_var = other.coordRealignment_var;
@@ -2601,7 +2620,7 @@ void MlmeStart_request::parsimPack(cCommBuffer *b)
     doPacking(b,this->channelPage_var);
     doPacking(b,this->startTime_var);
     doPacking(b,this->beaconOrder_var);
-    doPacking(b,this->superFrameOrder_var);
+    doPacking(b,this->superframeOrder_var);
     doPacking(b,this->panCoordinator_var);
     doPacking(b,this->batteryLifeExtension_var);
     doPacking(b,this->coordRealignment_var);
@@ -2625,7 +2644,7 @@ void MlmeStart_request::parsimUnpack(cCommBuffer *b)
     doUnpacking(b,this->channelPage_var);
     doUnpacking(b,this->startTime_var);
     doUnpacking(b,this->beaconOrder_var);
-    doUnpacking(b,this->superFrameOrder_var);
+    doUnpacking(b,this->superframeOrder_var);
     doUnpacking(b,this->panCoordinator_var);
     doUnpacking(b,this->batteryLifeExtension_var);
     doUnpacking(b,this->coordRealignment_var);
@@ -2703,14 +2722,14 @@ void MlmeStart_request::setBeaconOrder(unsigned char beaconOrder_var)
     this->beaconOrder_var = beaconOrder_var;
 }
 
-unsigned char MlmeStart_request::getSuperFrameOrder() const
+unsigned char MlmeStart_request::getSuperframeOrder() const
 {
-    return superFrameOrder_var;
+    return superframeOrder_var;
 }
 
-void MlmeStart_request::setSuperFrameOrder(unsigned char superFrameOrder_var)
+void MlmeStart_request::setSuperframeOrder(unsigned char superframeOrder_var)
 {
-    this->superFrameOrder_var = superFrameOrder_var;
+    this->superframeOrder_var = superframeOrder_var;
 }
 
 bool MlmeStart_request::getPanCoordinator() const
@@ -2956,7 +2975,7 @@ const char *MlmeStart_requestDescriptor::getFieldName(void *object, int field) c
         case 2: return "channelPage";
         case 3: return "startTime";
         case 4: return "beaconOrder";
-        case 5: return "superFrameOrder";
+        case 5: return "superframeOrder";
         case 6: return "panCoordinator";
         case 7: return "batteryLifeExtension";
         case 8: return "coordRealignment";
@@ -3046,7 +3065,7 @@ bool MlmeStart_requestDescriptor::getFieldAsString(void *object, int field, int 
         case 2: ulong2string(pp->getChannelPage(),resultbuf,bufsize); return true;
         case 3: ulong2string(pp->getStartTime(),resultbuf,bufsize); return true;
         case 4: ulong2string(pp->getBeaconOrder(),resultbuf,bufsize); return true;
-        case 5: ulong2string(pp->getSuperFrameOrder(),resultbuf,bufsize); return true;
+        case 5: ulong2string(pp->getSuperframeOrder(),resultbuf,bufsize); return true;
         case 6: bool2string(pp->getPanCoordinator(),resultbuf,bufsize); return true;
         case 7: bool2string(pp->getBatteryLifeExtension(),resultbuf,bufsize); return true;
         case 8: bool2string(pp->getCoordRealignment(),resultbuf,bufsize); return true;
@@ -3077,7 +3096,7 @@ bool MlmeStart_requestDescriptor::setFieldAsString(void *object, int field, int 
         case 2: pp->setChannelPage(string2ulong(value)); return true;
         case 3: pp->setStartTime(string2ulong(value)); return true;
         case 4: pp->setBeaconOrder(string2ulong(value)); return true;
-        case 5: pp->setSuperFrameOrder(string2ulong(value)); return true;
+        case 5: pp->setSuperframeOrder(string2ulong(value)); return true;
         case 6: pp->setPanCoordinator(string2bool(value)); return true;
         case 7: pp->setBatteryLifeExtension(string2bool(value)); return true;
         case 8: pp->setCoordRealignment(string2bool(value)); return true;
@@ -3548,6 +3567,698 @@ void *McpsMsgDescriptor::getFieldStructPointer(void *object, int field, int i) c
     }
 }
 
+Register_Class(MacBeacon);
+
+MacBeacon::MacBeacon(const char *name, int kind) : McpsMsg(name,kind)
+{
+    this->beaconOrder_var = 0;
+    this->superframeOrder_var = 0;
+    this->finalCapSlot_var = 0;
+    this->BatteryLifeExtension_var = 0;
+    this->panCoordinator_var = 0;
+    this->AssociationPermit_var = 0;
+    this->gtsDescriptorCount_var = 0;
+    this->gtsPermit_var = 0;
+    this->directionMask_var = 0;
+    deviceShortAddress_arraysize = 0;
+    this->deviceShortAddress_var = 0;
+    gtsStartingSlot_arraysize = 0;
+    this->gtsStartingSlot_var = 0;
+    gtsLength_arraysize = 0;
+    this->gtsLength_var = 0;
+    this->numberOfShortAddressesPending_var = 0;
+    this->numberOfExtendedAddressesPending_var = 0;
+    addressList_arraysize = 0;
+    this->addressList_var = 0;
+    macBeaconPayload_arraysize = 0;
+    this->macBeaconPayload_var = 0;
+}
+
+MacBeacon::MacBeacon(const MacBeacon& other) : McpsMsg()
+{
+    setName(other.getName());
+    deviceShortAddress_arraysize = 0;
+    this->deviceShortAddress_var = 0;
+    gtsStartingSlot_arraysize = 0;
+    this->gtsStartingSlot_var = 0;
+    gtsLength_arraysize = 0;
+    this->gtsLength_var = 0;
+    addressList_arraysize = 0;
+    this->addressList_var = 0;
+    macBeaconPayload_arraysize = 0;
+    this->macBeaconPayload_var = 0;
+    operator=(other);
+}
+
+MacBeacon::~MacBeacon()
+{
+    delete [] deviceShortAddress_var;
+    delete [] gtsStartingSlot_var;
+    delete [] gtsLength_var;
+    delete [] addressList_var;
+    delete [] macBeaconPayload_var;
+}
+
+MacBeacon& MacBeacon::operator=(const MacBeacon& other)
+{
+    if (this==&other) return *this;
+    McpsMsg::operator=(other);
+    this->beaconOrder_var = other.beaconOrder_var;
+    this->superframeOrder_var = other.superframeOrder_var;
+    this->finalCapSlot_var = other.finalCapSlot_var;
+    this->BatteryLifeExtension_var = other.BatteryLifeExtension_var;
+    this->panCoordinator_var = other.panCoordinator_var;
+    this->AssociationPermit_var = other.AssociationPermit_var;
+    this->gtsDescriptorCount_var = other.gtsDescriptorCount_var;
+    this->gtsPermit_var = other.gtsPermit_var;
+    this->directionMask_var = other.directionMask_var;
+    delete [] this->deviceShortAddress_var;
+    this->deviceShortAddress_var = (other.deviceShortAddress_arraysize==0) ? NULL : new unsigned short[other.deviceShortAddress_arraysize];
+    deviceShortAddress_arraysize = other.deviceShortAddress_arraysize;
+    for (unsigned int i=0; i<deviceShortAddress_arraysize; i++)
+        this->deviceShortAddress_var[i] = other.deviceShortAddress_var[i];
+    delete [] this->gtsStartingSlot_var;
+    this->gtsStartingSlot_var = (other.gtsStartingSlot_arraysize==0) ? NULL : new unsigned char[other.gtsStartingSlot_arraysize];
+    gtsStartingSlot_arraysize = other.gtsStartingSlot_arraysize;
+    for (unsigned int i=0; i<gtsStartingSlot_arraysize; i++)
+        this->gtsStartingSlot_var[i] = other.gtsStartingSlot_var[i];
+    delete [] this->gtsLength_var;
+    this->gtsLength_var = (other.gtsLength_arraysize==0) ? NULL : new unsigned char[other.gtsLength_arraysize];
+    gtsLength_arraysize = other.gtsLength_arraysize;
+    for (unsigned int i=0; i<gtsLength_arraysize; i++)
+        this->gtsLength_var[i] = other.gtsLength_var[i];
+    this->numberOfShortAddressesPending_var = other.numberOfShortAddressesPending_var;
+    this->numberOfExtendedAddressesPending_var = other.numberOfExtendedAddressesPending_var;
+    delete [] this->addressList_var;
+    this->addressList_var = (other.addressList_arraysize==0) ? NULL : new unsigned long[other.addressList_arraysize];
+    addressList_arraysize = other.addressList_arraysize;
+    for (unsigned int i=0; i<addressList_arraysize; i++)
+        this->addressList_var[i] = other.addressList_var[i];
+    delete [] this->macBeaconPayload_var;
+    this->macBeaconPayload_var = (other.macBeaconPayload_arraysize==0) ? NULL : new unsigned char[other.macBeaconPayload_arraysize];
+    macBeaconPayload_arraysize = other.macBeaconPayload_arraysize;
+    for (unsigned int i=0; i<macBeaconPayload_arraysize; i++)
+        this->macBeaconPayload_var[i] = other.macBeaconPayload_var[i];
+    return *this;
+}
+
+void MacBeacon::parsimPack(cCommBuffer *b)
+{
+    McpsMsg::parsimPack(b);
+    doPacking(b,this->beaconOrder_var);
+    doPacking(b,this->superframeOrder_var);
+    doPacking(b,this->finalCapSlot_var);
+    doPacking(b,this->BatteryLifeExtension_var);
+    doPacking(b,this->panCoordinator_var);
+    doPacking(b,this->AssociationPermit_var);
+    doPacking(b,this->gtsDescriptorCount_var);
+    doPacking(b,this->gtsPermit_var);
+    doPacking(b,this->directionMask_var);
+    b->pack(deviceShortAddress_arraysize);
+    doPacking(b,this->deviceShortAddress_var,deviceShortAddress_arraysize);
+    b->pack(gtsStartingSlot_arraysize);
+    doPacking(b,this->gtsStartingSlot_var,gtsStartingSlot_arraysize);
+    b->pack(gtsLength_arraysize);
+    doPacking(b,this->gtsLength_var,gtsLength_arraysize);
+    doPacking(b,this->numberOfShortAddressesPending_var);
+    doPacking(b,this->numberOfExtendedAddressesPending_var);
+    b->pack(addressList_arraysize);
+    doPacking(b,this->addressList_var,addressList_arraysize);
+    b->pack(macBeaconPayload_arraysize);
+    doPacking(b,this->macBeaconPayload_var,macBeaconPayload_arraysize);
+}
+
+void MacBeacon::parsimUnpack(cCommBuffer *b)
+{
+    McpsMsg::parsimUnpack(b);
+    doUnpacking(b,this->beaconOrder_var);
+    doUnpacking(b,this->superframeOrder_var);
+    doUnpacking(b,this->finalCapSlot_var);
+    doUnpacking(b,this->BatteryLifeExtension_var);
+    doUnpacking(b,this->panCoordinator_var);
+    doUnpacking(b,this->AssociationPermit_var);
+    doUnpacking(b,this->gtsDescriptorCount_var);
+    doUnpacking(b,this->gtsPermit_var);
+    doUnpacking(b,this->directionMask_var);
+    delete [] this->deviceShortAddress_var;
+    b->unpack(deviceShortAddress_arraysize);
+    if (deviceShortAddress_arraysize==0) {
+        this->deviceShortAddress_var = 0;
+    } else {
+        this->deviceShortAddress_var = new unsigned short[deviceShortAddress_arraysize];
+        doUnpacking(b,this->deviceShortAddress_var,deviceShortAddress_arraysize);
+    }
+    delete [] this->gtsStartingSlot_var;
+    b->unpack(gtsStartingSlot_arraysize);
+    if (gtsStartingSlot_arraysize==0) {
+        this->gtsStartingSlot_var = 0;
+    } else {
+        this->gtsStartingSlot_var = new unsigned char[gtsStartingSlot_arraysize];
+        doUnpacking(b,this->gtsStartingSlot_var,gtsStartingSlot_arraysize);
+    }
+    delete [] this->gtsLength_var;
+    b->unpack(gtsLength_arraysize);
+    if (gtsLength_arraysize==0) {
+        this->gtsLength_var = 0;
+    } else {
+        this->gtsLength_var = new unsigned char[gtsLength_arraysize];
+        doUnpacking(b,this->gtsLength_var,gtsLength_arraysize);
+    }
+    doUnpacking(b,this->numberOfShortAddressesPending_var);
+    doUnpacking(b,this->numberOfExtendedAddressesPending_var);
+    delete [] this->addressList_var;
+    b->unpack(addressList_arraysize);
+    if (addressList_arraysize==0) {
+        this->addressList_var = 0;
+    } else {
+        this->addressList_var = new unsigned long[addressList_arraysize];
+        doUnpacking(b,this->addressList_var,addressList_arraysize);
+    }
+    delete [] this->macBeaconPayload_var;
+    b->unpack(macBeaconPayload_arraysize);
+    if (macBeaconPayload_arraysize==0) {
+        this->macBeaconPayload_var = 0;
+    } else {
+        this->macBeaconPayload_var = new unsigned char[macBeaconPayload_arraysize];
+        doUnpacking(b,this->macBeaconPayload_var,macBeaconPayload_arraysize);
+    }
+}
+
+unsigned char MacBeacon::getBeaconOrder() const
+{
+    return beaconOrder_var;
+}
+
+void MacBeacon::setBeaconOrder(unsigned char beaconOrder_var)
+{
+    this->beaconOrder_var = beaconOrder_var;
+}
+
+unsigned char MacBeacon::getSuperframeOrder() const
+{
+    return superframeOrder_var;
+}
+
+void MacBeacon::setSuperframeOrder(unsigned char superframeOrder_var)
+{
+    this->superframeOrder_var = superframeOrder_var;
+}
+
+unsigned char MacBeacon::getFinalCapSlot() const
+{
+    return finalCapSlot_var;
+}
+
+void MacBeacon::setFinalCapSlot(unsigned char finalCapSlot_var)
+{
+    this->finalCapSlot_var = finalCapSlot_var;
+}
+
+bool MacBeacon::getBatteryLifeExtension() const
+{
+    return BatteryLifeExtension_var;
+}
+
+void MacBeacon::setBatteryLifeExtension(bool BatteryLifeExtension_var)
+{
+    this->BatteryLifeExtension_var = BatteryLifeExtension_var;
+}
+
+bool MacBeacon::getPanCoordinator() const
+{
+    return panCoordinator_var;
+}
+
+void MacBeacon::setPanCoordinator(bool panCoordinator_var)
+{
+    this->panCoordinator_var = panCoordinator_var;
+}
+
+bool MacBeacon::getAssociationPermit() const
+{
+    return AssociationPermit_var;
+}
+
+void MacBeacon::setAssociationPermit(bool AssociationPermit_var)
+{
+    this->AssociationPermit_var = AssociationPermit_var;
+}
+
+unsigned char MacBeacon::getGtsDescriptorCount() const
+{
+    return gtsDescriptorCount_var;
+}
+
+void MacBeacon::setGtsDescriptorCount(unsigned char gtsDescriptorCount_var)
+{
+    this->gtsDescriptorCount_var = gtsDescriptorCount_var;
+}
+
+bool MacBeacon::getGtsPermit() const
+{
+    return gtsPermit_var;
+}
+
+void MacBeacon::setGtsPermit(bool gtsPermit_var)
+{
+    this->gtsPermit_var = gtsPermit_var;
+}
+
+unsigned char MacBeacon::getDirectionMask() const
+{
+    return directionMask_var;
+}
+
+void MacBeacon::setDirectionMask(unsigned char directionMask_var)
+{
+    this->directionMask_var = directionMask_var;
+}
+
+void MacBeacon::setDeviceShortAddressArraySize(unsigned int size)
+{
+    unsigned short *deviceShortAddress_var2 = (size==0) ? NULL : new unsigned short[size];
+    unsigned int sz = deviceShortAddress_arraysize < size ? deviceShortAddress_arraysize : size;
+    for (unsigned int i=0; i<sz; i++)
+        deviceShortAddress_var2[i] = this->deviceShortAddress_var[i];
+    for (unsigned int i=sz; i<size; i++)
+        deviceShortAddress_var2[i] = 0;
+    deviceShortAddress_arraysize = size;
+    delete [] this->deviceShortAddress_var;
+    this->deviceShortAddress_var = deviceShortAddress_var2;
+}
+
+unsigned int MacBeacon::getDeviceShortAddressArraySize() const
+{
+    return deviceShortAddress_arraysize;
+}
+
+unsigned short MacBeacon::getDeviceShortAddress(unsigned int k) const
+{
+    if (k>=deviceShortAddress_arraysize) throw cRuntimeError("Array of size %d indexed by %d", deviceShortAddress_arraysize, k);
+    return deviceShortAddress_var[k];
+}
+
+void MacBeacon::setDeviceShortAddress(unsigned int k, unsigned short deviceShortAddress_var)
+{
+    if (k>=deviceShortAddress_arraysize) throw cRuntimeError("Array of size %d indexed by %d", deviceShortAddress_arraysize, k);
+    this->deviceShortAddress_var[k]=deviceShortAddress_var;
+}
+
+void MacBeacon::setGtsStartingSlotArraySize(unsigned int size)
+{
+    unsigned char *gtsStartingSlot_var2 = (size==0) ? NULL : new unsigned char[size];
+    unsigned int sz = gtsStartingSlot_arraysize < size ? gtsStartingSlot_arraysize : size;
+    for (unsigned int i=0; i<sz; i++)
+        gtsStartingSlot_var2[i] = this->gtsStartingSlot_var[i];
+    for (unsigned int i=sz; i<size; i++)
+        gtsStartingSlot_var2[i] = 0;
+    gtsStartingSlot_arraysize = size;
+    delete [] this->gtsStartingSlot_var;
+    this->gtsStartingSlot_var = gtsStartingSlot_var2;
+}
+
+unsigned int MacBeacon::getGtsStartingSlotArraySize() const
+{
+    return gtsStartingSlot_arraysize;
+}
+
+unsigned char MacBeacon::getGtsStartingSlot(unsigned int k) const
+{
+    if (k>=gtsStartingSlot_arraysize) throw cRuntimeError("Array of size %d indexed by %d", gtsStartingSlot_arraysize, k);
+    return gtsStartingSlot_var[k];
+}
+
+void MacBeacon::setGtsStartingSlot(unsigned int k, unsigned char gtsStartingSlot_var)
+{
+    if (k>=gtsStartingSlot_arraysize) throw cRuntimeError("Array of size %d indexed by %d", gtsStartingSlot_arraysize, k);
+    this->gtsStartingSlot_var[k]=gtsStartingSlot_var;
+}
+
+void MacBeacon::setGtsLengthArraySize(unsigned int size)
+{
+    unsigned char *gtsLength_var2 = (size==0) ? NULL : new unsigned char[size];
+    unsigned int sz = gtsLength_arraysize < size ? gtsLength_arraysize : size;
+    for (unsigned int i=0; i<sz; i++)
+        gtsLength_var2[i] = this->gtsLength_var[i];
+    for (unsigned int i=sz; i<size; i++)
+        gtsLength_var2[i] = 0;
+    gtsLength_arraysize = size;
+    delete [] this->gtsLength_var;
+    this->gtsLength_var = gtsLength_var2;
+}
+
+unsigned int MacBeacon::getGtsLengthArraySize() const
+{
+    return gtsLength_arraysize;
+}
+
+unsigned char MacBeacon::getGtsLength(unsigned int k) const
+{
+    if (k>=gtsLength_arraysize) throw cRuntimeError("Array of size %d indexed by %d", gtsLength_arraysize, k);
+    return gtsLength_var[k];
+}
+
+void MacBeacon::setGtsLength(unsigned int k, unsigned char gtsLength_var)
+{
+    if (k>=gtsLength_arraysize) throw cRuntimeError("Array of size %d indexed by %d", gtsLength_arraysize, k);
+    this->gtsLength_var[k]=gtsLength_var;
+}
+
+unsigned char MacBeacon::getNumberOfShortAddressesPending() const
+{
+    return numberOfShortAddressesPending_var;
+}
+
+void MacBeacon::setNumberOfShortAddressesPending(unsigned char numberOfShortAddressesPending_var)
+{
+    this->numberOfShortAddressesPending_var = numberOfShortAddressesPending_var;
+}
+
+unsigned char MacBeacon::getNumberOfExtendedAddressesPending() const
+{
+    return numberOfExtendedAddressesPending_var;
+}
+
+void MacBeacon::setNumberOfExtendedAddressesPending(unsigned char numberOfExtendedAddressesPending_var)
+{
+    this->numberOfExtendedAddressesPending_var = numberOfExtendedAddressesPending_var;
+}
+
+void MacBeacon::setAddressListArraySize(unsigned int size)
+{
+    unsigned long *addressList_var2 = (size==0) ? NULL : new unsigned long[size];
+    unsigned int sz = addressList_arraysize < size ? addressList_arraysize : size;
+    for (unsigned int i=0; i<sz; i++)
+        addressList_var2[i] = this->addressList_var[i];
+    for (unsigned int i=sz; i<size; i++)
+        addressList_var2[i] = 0;
+    addressList_arraysize = size;
+    delete [] this->addressList_var;
+    this->addressList_var = addressList_var2;
+}
+
+unsigned int MacBeacon::getAddressListArraySize() const
+{
+    return addressList_arraysize;
+}
+
+unsigned long MacBeacon::getAddressList(unsigned int k) const
+{
+    if (k>=addressList_arraysize) throw cRuntimeError("Array of size %d indexed by %d", addressList_arraysize, k);
+    return addressList_var[k];
+}
+
+void MacBeacon::setAddressList(unsigned int k, unsigned long addressList_var)
+{
+    if (k>=addressList_arraysize) throw cRuntimeError("Array of size %d indexed by %d", addressList_arraysize, k);
+    this->addressList_var[k]=addressList_var;
+}
+
+void MacBeacon::setMacBeaconPayloadArraySize(unsigned int size)
+{
+    unsigned char *macBeaconPayload_var2 = (size==0) ? NULL : new unsigned char[size];
+    unsigned int sz = macBeaconPayload_arraysize < size ? macBeaconPayload_arraysize : size;
+    for (unsigned int i=0; i<sz; i++)
+        macBeaconPayload_var2[i] = this->macBeaconPayload_var[i];
+    for (unsigned int i=sz; i<size; i++)
+        macBeaconPayload_var2[i] = 0;
+    macBeaconPayload_arraysize = size;
+    delete [] this->macBeaconPayload_var;
+    this->macBeaconPayload_var = macBeaconPayload_var2;
+}
+
+unsigned int MacBeacon::getMacBeaconPayloadArraySize() const
+{
+    return macBeaconPayload_arraysize;
+}
+
+unsigned char MacBeacon::getMacBeaconPayload(unsigned int k) const
+{
+    if (k>=macBeaconPayload_arraysize) throw cRuntimeError("Array of size %d indexed by %d", macBeaconPayload_arraysize, k);
+    return macBeaconPayload_var[k];
+}
+
+void MacBeacon::setMacBeaconPayload(unsigned int k, unsigned char macBeaconPayload_var)
+{
+    if (k>=macBeaconPayload_arraysize) throw cRuntimeError("Array of size %d indexed by %d", macBeaconPayload_arraysize, k);
+    this->macBeaconPayload_var[k]=macBeaconPayload_var;
+}
+
+class MacBeaconDescriptor : public cClassDescriptor
+{
+  public:
+    MacBeaconDescriptor();
+    virtual ~MacBeaconDescriptor();
+
+    virtual bool doesSupport(cObject *obj) const;
+    virtual const char *getProperty(const char *propertyname) const;
+    virtual int getFieldCount(void *object) const;
+    virtual const char *getFieldName(void *object, int field) const;
+    virtual unsigned int getFieldTypeFlags(void *object, int field) const;
+    virtual const char *getFieldTypeString(void *object, int field) const;
+    virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
+    virtual int getArraySize(void *object, int field) const;
+
+    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
+
+    virtual const char *getFieldStructName(void *object, int field) const;
+    virtual void *getFieldStructPointer(void *object, int field, int i) const;
+};
+
+Register_ClassDescriptor(MacBeaconDescriptor);
+
+MacBeaconDescriptor::MacBeaconDescriptor() : cClassDescriptor("MacBeacon", "McpsMsg")
+{
+}
+
+MacBeaconDescriptor::~MacBeaconDescriptor()
+{
+}
+
+bool MacBeaconDescriptor::doesSupport(cObject *obj) const
+{
+    return dynamic_cast<MacBeacon *>(obj)!=NULL;
+}
+
+const char *MacBeaconDescriptor::getProperty(const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->getProperty(propertyname) : NULL;
+}
+
+int MacBeaconDescriptor::getFieldCount(void *object) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? 16+basedesc->getFieldCount(object) : 16;
+}
+
+unsigned int MacBeaconDescriptor::getFieldTypeFlags(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeFlags(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return FD_ISEDITABLE;
+        case 1: return FD_ISEDITABLE;
+        case 2: return FD_ISEDITABLE;
+        case 3: return FD_ISEDITABLE;
+        case 4: return FD_ISEDITABLE;
+        case 5: return FD_ISEDITABLE;
+        case 6: return FD_ISEDITABLE;
+        case 7: return FD_ISEDITABLE;
+        case 8: return FD_ISEDITABLE;
+        case 9: return FD_ISARRAY | FD_ISEDITABLE;
+        case 10: return FD_ISARRAY | FD_ISEDITABLE;
+        case 11: return FD_ISARRAY | FD_ISEDITABLE;
+        case 12: return FD_ISEDITABLE;
+        case 13: return FD_ISEDITABLE;
+        case 14: return FD_ISARRAY | FD_ISEDITABLE;
+        case 15: return FD_ISARRAY | FD_ISEDITABLE;
+        default: return 0;
+    }
+}
+
+const char *MacBeaconDescriptor::getFieldName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "beaconOrder";
+        case 1: return "superframeOrder";
+        case 2: return "finalCapSlot";
+        case 3: return "BatteryLifeExtension";
+        case 4: return "panCoordinator";
+        case 5: return "AssociationPermit";
+        case 6: return "gtsDescriptorCount";
+        case 7: return "gtsPermit";
+        case 8: return "directionMask";
+        case 9: return "deviceShortAddress";
+        case 10: return "gtsStartingSlot";
+        case 11: return "gtsLength";
+        case 12: return "numberOfShortAddressesPending";
+        case 13: return "numberOfExtendedAddressesPending";
+        case 14: return "addressList";
+        case 15: return "macBeaconPayload";
+        default: return NULL;
+    }
+}
+
+const char *MacBeaconDescriptor::getFieldTypeString(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeString(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "unsigned char";
+        case 1: return "unsigned char";
+        case 2: return "unsigned char";
+        case 3: return "bool";
+        case 4: return "bool";
+        case 5: return "bool";
+        case 6: return "unsigned char";
+        case 7: return "bool";
+        case 8: return "unsigned char";
+        case 9: return "unsigned short";
+        case 10: return "unsigned char";
+        case 11: return "unsigned char";
+        case 12: return "unsigned char";
+        case 13: return "unsigned char";
+        case 14: return "unsigned long";
+        case 15: return "unsigned char";
+        default: return NULL;
+    }
+}
+
+const char *MacBeaconDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldProperty(object, field, propertyname);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+int MacBeaconDescriptor::getArraySize(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getArraySize(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    MacBeacon *pp = (MacBeacon *)object; (void)pp;
+    switch (field) {
+        case 9: return pp->getDeviceShortAddressArraySize();
+        case 10: return pp->getGtsStartingSlotArraySize();
+        case 11: return pp->getGtsLengthArraySize();
+        case 14: return pp->getAddressListArraySize();
+        case 15: return pp->getMacBeaconPayloadArraySize();
+        default: return 0;
+    }
+}
+
+bool MacBeaconDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+        field -= basedesc->getFieldCount(object);
+    }
+    MacBeacon *pp = (MacBeacon *)object; (void)pp;
+    switch (field) {
+        case 0: ulong2string(pp->getBeaconOrder(),resultbuf,bufsize); return true;
+        case 1: ulong2string(pp->getSuperframeOrder(),resultbuf,bufsize); return true;
+        case 2: ulong2string(pp->getFinalCapSlot(),resultbuf,bufsize); return true;
+        case 3: bool2string(pp->getBatteryLifeExtension(),resultbuf,bufsize); return true;
+        case 4: bool2string(pp->getPanCoordinator(),resultbuf,bufsize); return true;
+        case 5: bool2string(pp->getAssociationPermit(),resultbuf,bufsize); return true;
+        case 6: ulong2string(pp->getGtsDescriptorCount(),resultbuf,bufsize); return true;
+        case 7: bool2string(pp->getGtsPermit(),resultbuf,bufsize); return true;
+        case 8: ulong2string(pp->getDirectionMask(),resultbuf,bufsize); return true;
+        case 9: ulong2string(pp->getDeviceShortAddress(i),resultbuf,bufsize); return true;
+        case 10: ulong2string(pp->getGtsStartingSlot(i),resultbuf,bufsize); return true;
+        case 11: ulong2string(pp->getGtsLength(i),resultbuf,bufsize); return true;
+        case 12: ulong2string(pp->getNumberOfShortAddressesPending(),resultbuf,bufsize); return true;
+        case 13: ulong2string(pp->getNumberOfExtendedAddressesPending(),resultbuf,bufsize); return true;
+        case 14: ulong2string(pp->getAddressList(i),resultbuf,bufsize); return true;
+        case 15: ulong2string(pp->getMacBeaconPayload(i),resultbuf,bufsize); return true;
+        default: return false;
+    }
+}
+
+bool MacBeaconDescriptor::setFieldAsString(void *object, int field, int i, const char *value) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->setFieldAsString(object,field,i,value);
+        field -= basedesc->getFieldCount(object);
+    }
+    MacBeacon *pp = (MacBeacon *)object; (void)pp;
+    switch (field) {
+        case 0: pp->setBeaconOrder(string2ulong(value)); return true;
+        case 1: pp->setSuperframeOrder(string2ulong(value)); return true;
+        case 2: pp->setFinalCapSlot(string2ulong(value)); return true;
+        case 3: pp->setBatteryLifeExtension(string2bool(value)); return true;
+        case 4: pp->setPanCoordinator(string2bool(value)); return true;
+        case 5: pp->setAssociationPermit(string2bool(value)); return true;
+        case 6: pp->setGtsDescriptorCount(string2ulong(value)); return true;
+        case 7: pp->setGtsPermit(string2bool(value)); return true;
+        case 8: pp->setDirectionMask(string2ulong(value)); return true;
+        case 9: pp->setDeviceShortAddress(i,string2ulong(value)); return true;
+        case 10: pp->setGtsStartingSlot(i,string2ulong(value)); return true;
+        case 11: pp->setGtsLength(i,string2ulong(value)); return true;
+        case 12: pp->setNumberOfShortAddressesPending(string2ulong(value)); return true;
+        case 13: pp->setNumberOfExtendedAddressesPending(string2ulong(value)); return true;
+        case 14: pp->setAddressList(i,string2ulong(value)); return true;
+        case 15: pp->setMacBeaconPayload(i,string2ulong(value)); return true;
+        default: return false;
+    }
+}
+
+const char *MacBeaconDescriptor::getFieldStructName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+void *MacBeaconDescriptor::getFieldStructPointer(void *object, int field, int i) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructPointer(object, field, i);
+        field -= basedesc->getFieldCount(object);
+    }
+    MacBeacon *pp = (MacBeacon *)object; (void)pp;
+    switch (field) {
+        default: return NULL;
+    }
+}
+
 Register_Class(MacCommand);
 
 MacCommand::MacCommand(const char *name, int kind) : McpsMsg(name,kind)
@@ -3821,209 +4532,6 @@ void *MacCommandDescriptor::getFieldStructPointer(void *object, int field, int i
         field -= basedesc->getFieldCount(object);
     }
     MacCommand *pp = (MacCommand *)object; (void)pp;
-    switch (field) {
-        default: return NULL;
-    }
-}
-
-Register_Class(MacBeacon);
-
-MacBeacon::MacBeacon(const char *name, int kind) : McpsMsg(name,kind)
-{
-}
-
-MacBeacon::MacBeacon(const MacBeacon& other) : McpsMsg()
-{
-    setName(other.getName());
-    operator=(other);
-}
-
-MacBeacon::~MacBeacon()
-{
-}
-
-MacBeacon& MacBeacon::operator=(const MacBeacon& other)
-{
-    if (this==&other) return *this;
-    McpsMsg::operator=(other);
-    return *this;
-}
-
-void MacBeacon::parsimPack(cCommBuffer *b)
-{
-    McpsMsg::parsimPack(b);
-}
-
-void MacBeacon::parsimUnpack(cCommBuffer *b)
-{
-    McpsMsg::parsimUnpack(b);
-}
-
-class MacBeaconDescriptor : public cClassDescriptor
-{
-  public:
-    MacBeaconDescriptor();
-    virtual ~MacBeaconDescriptor();
-
-    virtual bool doesSupport(cObject *obj) const;
-    virtual const char *getProperty(const char *propertyname) const;
-    virtual int getFieldCount(void *object) const;
-    virtual const char *getFieldName(void *object, int field) const;
-    virtual unsigned int getFieldTypeFlags(void *object, int field) const;
-    virtual const char *getFieldTypeString(void *object, int field) const;
-    virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
-    virtual int getArraySize(void *object, int field) const;
-
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
-    virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
-
-    virtual const char *getFieldStructName(void *object, int field) const;
-    virtual void *getFieldStructPointer(void *object, int field, int i) const;
-};
-
-Register_ClassDescriptor(MacBeaconDescriptor);
-
-MacBeaconDescriptor::MacBeaconDescriptor() : cClassDescriptor("MacBeacon", "McpsMsg")
-{
-}
-
-MacBeaconDescriptor::~MacBeaconDescriptor()
-{
-}
-
-bool MacBeaconDescriptor::doesSupport(cObject *obj) const
-{
-    return dynamic_cast<MacBeacon *>(obj)!=NULL;
-}
-
-const char *MacBeaconDescriptor::getProperty(const char *propertyname) const
-{
-    cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? basedesc->getProperty(propertyname) : NULL;
-}
-
-int MacBeaconDescriptor::getFieldCount(void *object) const
-{
-    cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 0+basedesc->getFieldCount(object) : 0;
-}
-
-unsigned int MacBeaconDescriptor::getFieldTypeFlags(void *object, int field) const
-{
-    cClassDescriptor *basedesc = getBaseClassDescriptor();
-    if (basedesc) {
-        if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldTypeFlags(object, field);
-        field -= basedesc->getFieldCount(object);
-    }
-    switch (field) {
-        default: return 0;
-    }
-}
-
-const char *MacBeaconDescriptor::getFieldName(void *object, int field) const
-{
-    cClassDescriptor *basedesc = getBaseClassDescriptor();
-    if (basedesc) {
-        if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldName(object, field);
-        field -= basedesc->getFieldCount(object);
-    }
-    switch (field) {
-        default: return NULL;
-    }
-}
-
-const char *MacBeaconDescriptor::getFieldTypeString(void *object, int field) const
-{
-    cClassDescriptor *basedesc = getBaseClassDescriptor();
-    if (basedesc) {
-        if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldTypeString(object, field);
-        field -= basedesc->getFieldCount(object);
-    }
-    switch (field) {
-        default: return NULL;
-    }
-}
-
-const char *MacBeaconDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
-{
-    cClassDescriptor *basedesc = getBaseClassDescriptor();
-    if (basedesc) {
-        if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldProperty(object, field, propertyname);
-        field -= basedesc->getFieldCount(object);
-    }
-    switch (field) {
-        default: return NULL;
-    }
-}
-
-int MacBeaconDescriptor::getArraySize(void *object, int field) const
-{
-    cClassDescriptor *basedesc = getBaseClassDescriptor();
-    if (basedesc) {
-        if (field < basedesc->getFieldCount(object))
-            return basedesc->getArraySize(object, field);
-        field -= basedesc->getFieldCount(object);
-    }
-    MacBeacon *pp = (MacBeacon *)object; (void)pp;
-    switch (field) {
-        default: return 0;
-    }
-}
-
-bool MacBeaconDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
-{
-    cClassDescriptor *basedesc = getBaseClassDescriptor();
-    if (basedesc) {
-        if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
-        field -= basedesc->getFieldCount(object);
-    }
-    MacBeacon *pp = (MacBeacon *)object; (void)pp;
-    switch (field) {
-        default: return false;
-    }
-}
-
-bool MacBeaconDescriptor::setFieldAsString(void *object, int field, int i, const char *value) const
-{
-    cClassDescriptor *basedesc = getBaseClassDescriptor();
-    if (basedesc) {
-        if (field < basedesc->getFieldCount(object))
-            return basedesc->setFieldAsString(object,field,i,value);
-        field -= basedesc->getFieldCount(object);
-    }
-    MacBeacon *pp = (MacBeacon *)object; (void)pp;
-    switch (field) {
-        default: return false;
-    }
-}
-
-const char *MacBeaconDescriptor::getFieldStructName(void *object, int field) const
-{
-    cClassDescriptor *basedesc = getBaseClassDescriptor();
-    if (basedesc) {
-        if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldStructName(object, field);
-        field -= basedesc->getFieldCount(object);
-    }
-    switch (field) {
-        default: return NULL;
-    }
-}
-
-void *MacBeaconDescriptor::getFieldStructPointer(void *object, int field, int i) const
-{
-    cClassDescriptor *basedesc = getBaseClassDescriptor();
-    if (basedesc) {
-        if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldStructPointer(object, field, i);
-        field -= basedesc->getFieldCount(object);
-    }
-    MacBeacon *pp = (MacBeacon *)object; (void)pp;
     switch (field) {
         default: return NULL;
     }

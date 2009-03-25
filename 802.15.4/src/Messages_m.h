@@ -109,13 +109,14 @@ inline void doUnpacking(cCommBuffer *b, NlmeNetworkFormation_request& obj) {obj.
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
  * message NlmeNetworkFormation_confirm extends NlmeMsg {
- *     
+ *   	unsigned char status;  
  * };
  * </pre>
  */
 class NlmeNetworkFormation_confirm : public NlmeMsg
 {
   protected:
+    unsigned char status_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const NlmeNetworkFormation_confirm&);
@@ -130,6 +131,8 @@ class NlmeNetworkFormation_confirm : public NlmeMsg
     virtual void parsimUnpack(cCommBuffer *b);
 
     // field getter/setter methods
+    virtual unsigned char getStatus() const;
+    virtual void setStatus(unsigned char status_var);
 };
 
 inline void doPacking(cCommBuffer *b, NlmeNetworkFormation_confirm& obj) {obj.parsimPack(b);}
@@ -419,7 +422,7 @@ inline void doUnpacking(cCommBuffer *b, MlmeSet_confirm& obj) {obj.parsimUnpack(
  *     unsigned char channelPage;
  *     unsigned int startTime;
  *     unsigned char beaconOrder;
- *     unsigned char superFrameOrder;
+ *     unsigned char superframeOrder;
  *     bool panCoordinator;
  *     bool batteryLifeExtension;
  *     bool coordRealignment;
@@ -442,7 +445,7 @@ class MlmeStart_request : public MlmeMsg
     unsigned char channelPage_var;
     unsigned int startTime_var;
     unsigned char beaconOrder_var;
-    unsigned char superFrameOrder_var;
+    unsigned char superframeOrder_var;
     bool panCoordinator_var;
     bool batteryLifeExtension_var;
     bool coordRealignment_var;
@@ -480,8 +483,8 @@ class MlmeStart_request : public MlmeMsg
     virtual void setStartTime(unsigned int startTime_var);
     virtual unsigned char getBeaconOrder() const;
     virtual void setBeaconOrder(unsigned char beaconOrder_var);
-    virtual unsigned char getSuperFrameOrder() const;
-    virtual void setSuperFrameOrder(unsigned char superFrameOrder_var);
+    virtual unsigned char getSuperframeOrder() const;
+    virtual void setSuperframeOrder(unsigned char superframeOrder_var);
     virtual bool getPanCoordinator() const;
     virtual void setPanCoordinator(bool panCoordinator_var);
     virtual bool getBatteryLifeExtension() const;
@@ -578,6 +581,114 @@ inline void doUnpacking(cCommBuffer *b, McpsMsg& obj) {obj.parsimUnpack(b);}
 /**
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
+ * message MacBeacon extends McpsMsg {
+ *   	unsigned char beaconOrder;
+ *   	unsigned char superframeOrder;
+ *   	unsigned char finalCapSlot;
+ *   	bool BatteryLifeExtension;
+ *   	bool panCoordinator;
+ *   	bool AssociationPermit;
+ *   	unsigned char gtsDescriptorCount;
+ *   	bool gtsPermit;
+ *   	unsigned char directionMask;
+ *   	unsigned short deviceShortAddress[];
+ *   	unsigned char gtsStartingSlot[];
+ *   	unsigned char gtsLength[];
+ *   	unsigned char numberOfShortAddressesPending;
+ *   	unsigned char numberOfExtendedAddressesPending;
+ *   	unsigned long addressList[];
+ *   	unsigned char macBeaconPayload[];
+ * };
+ * </pre>
+ */
+class MacBeacon : public McpsMsg
+{
+  protected:
+    unsigned char beaconOrder_var;
+    unsigned char superframeOrder_var;
+    unsigned char finalCapSlot_var;
+    bool BatteryLifeExtension_var;
+    bool panCoordinator_var;
+    bool AssociationPermit_var;
+    unsigned char gtsDescriptorCount_var;
+    bool gtsPermit_var;
+    unsigned char directionMask_var;
+    unsigned short *deviceShortAddress_var; // array ptr
+    unsigned int deviceShortAddress_arraysize;
+    unsigned char *gtsStartingSlot_var; // array ptr
+    unsigned int gtsStartingSlot_arraysize;
+    unsigned char *gtsLength_var; // array ptr
+    unsigned int gtsLength_arraysize;
+    unsigned char numberOfShortAddressesPending_var;
+    unsigned char numberOfExtendedAddressesPending_var;
+    unsigned long *addressList_var; // array ptr
+    unsigned int addressList_arraysize;
+    unsigned char *macBeaconPayload_var; // array ptr
+    unsigned int macBeaconPayload_arraysize;
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const MacBeacon&);
+
+  public:
+    MacBeacon(const char *name=NULL, int kind=0);
+    MacBeacon(const MacBeacon& other);
+    virtual ~MacBeacon();
+    MacBeacon& operator=(const MacBeacon& other);
+    virtual MacBeacon *dup() const {return new MacBeacon(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+    virtual unsigned char getBeaconOrder() const;
+    virtual void setBeaconOrder(unsigned char beaconOrder_var);
+    virtual unsigned char getSuperframeOrder() const;
+    virtual void setSuperframeOrder(unsigned char superframeOrder_var);
+    virtual unsigned char getFinalCapSlot() const;
+    virtual void setFinalCapSlot(unsigned char finalCapSlot_var);
+    virtual bool getBatteryLifeExtension() const;
+    virtual void setBatteryLifeExtension(bool BatteryLifeExtension_var);
+    virtual bool getPanCoordinator() const;
+    virtual void setPanCoordinator(bool panCoordinator_var);
+    virtual bool getAssociationPermit() const;
+    virtual void setAssociationPermit(bool AssociationPermit_var);
+    virtual unsigned char getGtsDescriptorCount() const;
+    virtual void setGtsDescriptorCount(unsigned char gtsDescriptorCount_var);
+    virtual bool getGtsPermit() const;
+    virtual void setGtsPermit(bool gtsPermit_var);
+    virtual unsigned char getDirectionMask() const;
+    virtual void setDirectionMask(unsigned char directionMask_var);
+    virtual void setDeviceShortAddressArraySize(unsigned int size);
+    virtual unsigned int getDeviceShortAddressArraySize() const;
+    virtual unsigned short getDeviceShortAddress(unsigned int k) const;
+    virtual void setDeviceShortAddress(unsigned int k, unsigned short deviceShortAddress_var);
+    virtual void setGtsStartingSlotArraySize(unsigned int size);
+    virtual unsigned int getGtsStartingSlotArraySize() const;
+    virtual unsigned char getGtsStartingSlot(unsigned int k) const;
+    virtual void setGtsStartingSlot(unsigned int k, unsigned char gtsStartingSlot_var);
+    virtual void setGtsLengthArraySize(unsigned int size);
+    virtual unsigned int getGtsLengthArraySize() const;
+    virtual unsigned char getGtsLength(unsigned int k) const;
+    virtual void setGtsLength(unsigned int k, unsigned char gtsLength_var);
+    virtual unsigned char getNumberOfShortAddressesPending() const;
+    virtual void setNumberOfShortAddressesPending(unsigned char numberOfShortAddressesPending_var);
+    virtual unsigned char getNumberOfExtendedAddressesPending() const;
+    virtual void setNumberOfExtendedAddressesPending(unsigned char numberOfExtendedAddressesPending_var);
+    virtual void setAddressListArraySize(unsigned int size);
+    virtual unsigned int getAddressListArraySize() const;
+    virtual unsigned long getAddressList(unsigned int k) const;
+    virtual void setAddressList(unsigned int k, unsigned long addressList_var);
+    virtual void setMacBeaconPayloadArraySize(unsigned int size);
+    virtual unsigned int getMacBeaconPayloadArraySize() const;
+    virtual unsigned char getMacBeaconPayload(unsigned int k) const;
+    virtual void setMacBeaconPayload(unsigned int k, unsigned char macBeaconPayload_var);
+};
+
+inline void doPacking(cCommBuffer *b, MacBeacon& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, MacBeacon& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
  * message MacCommand extends McpsMsg {
  *     unsigned char commandType;
  *     unsigned char commandPayload[];
@@ -614,35 +725,6 @@ class MacCommand : public McpsMsg
 
 inline void doPacking(cCommBuffer *b, MacCommand& obj) {obj.parsimPack(b);}
 inline void doUnpacking(cCommBuffer *b, MacCommand& obj) {obj.parsimUnpack(b);}
-
-/**
- * Class generated from <tt>Messages.msg</tt> by opp_msgc.
- * <pre>
- * message MacBeacon extends McpsMsg {
- * };
- * </pre>
- */
-class MacBeacon : public McpsMsg
-{
-  protected:
-
-    // protected and unimplemented operator==(), to prevent accidental usage
-    bool operator==(const MacBeacon&);
-
-  public:
-    MacBeacon(const char *name=NULL, int kind=0);
-    MacBeacon(const MacBeacon& other);
-    virtual ~MacBeacon();
-    MacBeacon& operator=(const MacBeacon& other);
-    virtual MacBeacon *dup() const {return new MacBeacon(*this);}
-    virtual void parsimPack(cCommBuffer *b);
-    virtual void parsimUnpack(cCommBuffer *b);
-
-    // field getter/setter methods
-};
-
-inline void doPacking(cCommBuffer *b, MacBeacon& obj) {obj.parsimPack(b);}
-inline void doUnpacking(cCommBuffer *b, MacBeacon& obj) {obj.parsimUnpack(b);}
 
 /**
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
