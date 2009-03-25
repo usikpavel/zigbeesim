@@ -83,6 +83,8 @@ typedef enum {
 	MLME_POLL_CONFIRM,
 	/** MAC internal messages */
 	MAC_BEACON_FRAME,
+	MAC_DATA_FRAME,
+	MAC_ACK_FRAME,
 	MAC_COMMAND_FRAME,
 	/** PLME-SAP messages */
 	PLME_CCA_REQUEST,

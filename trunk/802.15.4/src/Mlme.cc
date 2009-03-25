@@ -67,10 +67,14 @@ void Mlme::handleSelfMsg(cMessage *msg) {
 			setLayerStage(2);
 		}
 		sendPlmeDown(changeState);
-	} else if (msgName == "START.timer") {
-
 	} else if (msgName == "BEACON.timer") {
+		MacBeacon* beacon = new MacBeacon("Beacon Command", MAC_BEACON_FRAME);
+		beacon->setBeaconOrder(getMacPib()->getMacBeaconOrder());
 
+		beacon->setSuperframeOrder(getMacPib()->getMacSuperframeOrder());
+
+		beacon->setByteLength(8);
+		sendMcps(beacon);
 	}
 }
 
@@ -191,9 +195,7 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 						sendPlmeDown(ed);
 					}
 				} else if (request->getScanType() == ACTIVE_SCAN) {
-					MacCommand* beaconRequest = new MacCommand();
-					beaconRequest->setName("Beacon Request Command");
-					beaconRequest->setKind(MAC_COMMAND_FRAME);
+					MacCommand* beaconRequest = new MacCommand("Beacon Request Command", MAC_COMMAND_FRAME);
 					beaconRequest->setCommandType(BEACON_REQUEST);
 					beaconRequest->setCommandPayloadArraySize(0);
 					beaconRequest->setByteLength(8);
@@ -340,10 +342,10 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 			getMacPib()->setMacBattLifeExt(request->getBatteryLifeExtension());
 			MlmeStart_confirm* response = new MlmeStart_confirm(
 					"MLME-START.confirm", MLME_START_CONFIRM);
-			timer->setName("START.timer");
+			beaconTimer->setName("BEACON.timer");
 			/** @note the value of startTime is ignored while we're coordinator */
 			if (getRole() == COORDINATOR) {
-				scheduleAt(simTime(), timer);
+				scheduleAt(simTime(), beaconTimer);
 			}
 			response->setStatus(MAC_SUCCESS);
 			sendMlmeUp(response);

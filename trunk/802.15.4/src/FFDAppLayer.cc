@@ -43,6 +43,10 @@ void FFDAppLayer::initialize(int stage) {
 		commentsLevel = ALL;
 		if (logName().substr(0, 11) == "coordinator") {
 			setRole(COORDINATOR);
+		} else if (logName().substr(0, 6) == "router") {
+			setRole(ROUTER);
+		} else {
+			setRole(END_DEVICE);
 		}
 	} else if (stage == 1) {
 		if (getRole() == COORDINATOR) {
@@ -93,13 +97,14 @@ void FFDAppLayer::handleSelfMsg(cMessage* msg) {
 	case START:
 		NlmeNetworkFormation_request* request =
 				new NlmeNetworkFormation_request();
-		/** @todo include theese params into omnetpp.ini file
+		/** @todo include these params into omnetpp.ini file
 		 * more info on this on page 6 in the notepad, or in the 802154 doc */
 		request->setName("NLME-NETWORK-FORMATION.request");
 		request->setKind(NLME_NETWORK_FORMATION_REQUEST);
 		request->setScanChannels(0x00003800);
 		request->setScanDuration(0x00);
 		request->setBeaconOrder(0x0E);
+		request->setSuperframeOrder(0x0A);
 		/** @note 0xFFFF is considered a NULL value in my case */
 		request->setPANId(0xFFFF);
 		request->setBatteryLifeExtension(false);
