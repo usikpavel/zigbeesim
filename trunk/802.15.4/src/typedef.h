@@ -9,10 +9,8 @@ typedef enum {
 	MESSAGE 			= 0x04, // 0000 0100
 	CHANNEL 			= 0x08, // 0000 1000
 	STATUS 				= 0x10, // 0001 0000
-
-	ERROR				= 0x80, // 1000 0000
+	COMMENT_ERROR		= 0x80, // 1000 0000
 	ALL 				= 0xFF  // 1111 1111
-// 1111 1111
 } CommentsLevel;
 
 /** @brief Role of the node (according to ZigBee spec.) */

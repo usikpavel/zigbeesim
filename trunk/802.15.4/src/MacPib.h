@@ -93,7 +93,7 @@ protected:
 	virtual void commentError(char* errorMessage) {
 		std::stringstream commentStream;
 		commentStream << "ERROR: " << errorMessage;
-		comment(ERROR, commentStream.str());
+		comment(COMMENT_ERROR, commentStream.str());
 	}
 public:
 	MacEnum setPibAttribute(PibIdentifier, unsigned int*);

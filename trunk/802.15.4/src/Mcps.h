@@ -57,7 +57,7 @@ protected:
 	void commentError(char* errorMessage) {
 		std::stringstream commentStream;
 		commentStream << "ERROR: " << errorMessage;
-		comment(ERROR, commentStream.str());
+		comment(COMMENT_ERROR, commentStream.str());
 	}
 	void setLastUpperMsg(cMessage* msg) {
 		delete (this->lastUpperMsg);
