@@ -11,7 +11,7 @@ void PhyPib::initialize(int stage) {
 
 		phyChannelsSupported = new unsigned int[1];
 		resetPhyPibValues();
-		commentsLevel = ALL;
+		commentsLevel = COMMENT_ALL;
 	}
 }
 

@@ -16,7 +16,7 @@ void Nlme::initialize(int stage) {
 		nwkPibIn = findGate("nwkPibIn");
 		nwkPibOut = findGate("nwkPibOut");
 
-		commentsLevel = ALL;
+		commentsLevel = COMMENT_ALL;
 	} else if (stage == 1) {
 		lastUpperMsg = new cMessage();
 	}

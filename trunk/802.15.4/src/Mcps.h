@@ -40,19 +40,19 @@ protected:
 	McpsMsg* decapsulatePd(PdMsg *);
 	void comment(CommentsLevel level, std::string s) {
 		/** @todo align logName substrings for routers and endDevices */
-		if ((level & commentsLevel) > NOTHING) {
+		if ((level & commentsLevel) > COMMENT_NOTHING) {
 			std::cout << logName() << "." << getName() << "\t" << s << endl;
 		}
 	}
 	void commentMsgSending(cMessage *msg) {
 		std::stringstream commentStream;
 		commentStream << "Sending " << msg->getName();
-		comment(MESSAGE, commentStream.str());
+		comment(COMMENT_MESSAGE, commentStream.str());
 	}
 	void commentMsgReceived(cMessage *msg) {
 		std::stringstream commentStream;
 		commentStream << "Received " << msg->getName();
-		comment(MESSAGE, commentStream.str());
+		comment(COMMENT_MESSAGE, commentStream.str());
 	}
 	void commentError(char* errorMessage) {
 		std::stringstream commentStream;

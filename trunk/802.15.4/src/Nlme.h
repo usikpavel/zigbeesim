@@ -53,7 +53,7 @@ protected:
 
 	virtual void comment(CommentsLevel level, std::string s) {
 		/** @todo align logName substrings for routers and endDevices */
-		if ((level & commentsLevel) > NOTHING) {
+		if ((level & commentsLevel) > COMMENT_NOTHING) {
 			std::cout << logName() << "." << getName() << "\t" << s << endl;
 		}
 	}
@@ -61,13 +61,13 @@ protected:
 	virtual void commentMsgSending(cMessage* msg) {
 		std::stringstream commentStream;
 		commentStream << "Sending " << msg->getName();
-		comment(MESSAGE, commentStream.str());
+		comment(COMMENT_MESSAGE, commentStream.str());
 	}
 
 	virtual void commentMsgReceived(cMessage* msg) {
 		std::stringstream commentStream;
 		commentStream << "Received " << msg->getName();
-		comment(MESSAGE, commentStream.str());
+		comment(COMMENT_MESSAGE, commentStream.str());
 	}
 
 	void setLastUpperMsg(cMessage* msg) {

@@ -38,6 +38,7 @@ protected:
 	char* energyLevels;
 	int layerStage;
 	PanDescriptor* scannedPanDescriptors;
+	double beaconPeriod;
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
 	virtual void handleSelfMsg(cMessage *);
@@ -53,19 +54,19 @@ protected:
 	virtual void switchRadioToChannel(unsigned int);
 	virtual void comment(CommentsLevel level, std::string s) {
 		/** @todo align logName substrings for routers and endDevices */
-		if ((level & commentsLevel) > NOTHING) {
+		if ((level & commentsLevel) > COMMENT_NOTHING) {
 			std::cout << logName() << "." << getName() << "\t" << s << endl;
 		}
 	}
 	virtual void commentMsgSending(cMessage *msg) {
 		std::stringstream commentStream;
 		commentStream << "Sending " << msg->getName();
-		comment(MESSAGE, commentStream.str());
+		comment(COMMENT_MESSAGE, commentStream.str());
 	}
 	virtual void commentMsgReceived(cMessage *msg) {
 		std::stringstream commentStream;
 		commentStream << "Received " << msg->getName();
-		comment(MESSAGE, commentStream.str());
+		comment(COMMENT_MESSAGE, commentStream.str());
 	}
 	virtual void commentError(char* errorMessage) {
 		std::stringstream commentStream;
@@ -145,6 +146,14 @@ protected:
 	void resetScannedPanDescriptors() {
 		delete scannedPanDescriptors;
 		this->scannedPanDescriptors = new PanDescriptor[0];
+	}
+
+	void setBeaconPeriod(double period) {
+		this->beaconPeriod = period;
+	}
+
+	double getBeaconPeriod() {
+		return this->beaconPeriod;
 	}
 };
 

@@ -14,7 +14,7 @@ void Pd::initialize(int stage) {
 		plmeIn = findGate("plmeIn");
 		rfControlIn = findGate("rfControlIn");
 
-		commentsLevel = ALL;
+		commentsLevel = COMMENT_ALL;
 
 		/** @todo put the queue length param into omnetpp.ini */
 		queueLength = 10;

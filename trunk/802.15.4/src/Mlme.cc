@@ -15,7 +15,7 @@ void Mlme::initialize(int stage) {
 		mcpsOut = findGate("mcpsOut");
 		mcpsIn = findGate("mcpsIn");
 
-		commentsLevel = ALL;
+		commentsLevel = COMMENT_ALL;
 		if (logName().substr(0, 11) == "coordinator") {
 			setRole(COORDINATOR);
 		}
@@ -70,11 +70,28 @@ void Mlme::handleSelfMsg(cMessage *msg) {
 	} else if (msgName == "BEACON.timer") {
 		MacBeacon* beacon = new MacBeacon("Beacon Command", MAC_BEACON_FRAME);
 		beacon->setBeaconOrder(getMacPib()->getMacBeaconOrder());
-
 		beacon->setSuperframeOrder(getMacPib()->getMacSuperframeOrder());
-
-		beacon->setByteLength(8);
+		/** @todo better to put into some method the beacon creation */
+		/** @todo set FinalCapSlot */
+		//beacon->setFinalCapSlot();
+		beacon->setBatteryLifeExtension(false);
+		beacon->setPanCoordinator(getRole() == COORDINATOR);
+		beacon->setAssociationPermit(true);
+		beacon->setGtsDescriptorCount(0);
+		beacon->setGtsPermit(getMacPib()->getMacGTSPermit());
+		beacon->setNumberOfShortAddressesPending(0);
+		beacon->setNumberOfExtendedAddressesPending(0);
+		/** @todo define all beacon options */
+		beacon->setMacBeaconPayloadArraySize(
+				getMacPib()->getMacBeaconPayloadLength());
+		for (int i = 0; i < getMacPib()->getMacBeaconPayloadLength(); i++) {
+			beacon->setMacBeaconPayload(i,
+					getMacPib()->getMacBeaconPayload()[i]);
+		}
+		/** @todo add the right beacon length */
+		beacon->setByteLength(5);
 		sendMcps(beacon);
+		scheduleAt(simTime() + getBeaconPeriod(), beaconTimer);
 	}
 }
 
@@ -102,7 +119,7 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 						std::stringstream commentStream;
 						commentStream << "Performing ED scan for " << edTimer
 								<< " seconds on channel " << channel;
-						comment(TIMER, commentStream.str());
+						comment(COMMENT_TIMER, commentStream.str());
 						timer->setName("ED.timer");
 						scheduleAt(simTime() + edTimer, timer);
 						switchRadioToChannel(channel);
@@ -132,7 +149,7 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 									<< activeTimer << " seconds on channel "
 									<< channel;
 							setCurrentChannel(channel);
-							comment(TIMER, commentStream.str());
+							comment(COMMENT_TIMER, commentStream.str());
 							timer->setName("ACTIVE.timer");
 							scheduleAt(simTime() + activeTimer, timer);
 							PlmeSet_request* set = new PlmeSet_request();
@@ -195,7 +212,8 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 						sendPlmeDown(ed);
 					}
 				} else if (request->getScanType() == ACTIVE_SCAN) {
-					MacCommand* beaconRequest = new MacCommand("Beacon Request Command", MAC_COMMAND_FRAME);
+					MacCommand* beaconRequest = new MacCommand(
+							"Beacon Request Command", MAC_COMMAND_FRAME);
 					beaconRequest->setCommandType(BEACON_REQUEST);
 					beaconRequest->setCommandPayloadArraySize(0);
 					beaconRequest->setByteLength(8);
@@ -238,7 +256,7 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 					std::stringstream commentStream;
 					commentStream << "Performing ED scan for " << edTimer
 							<< " seconds on channel " << channel;
-					comment(TIMER, commentStream.str());
+					comment(COMMENT_TIMER, commentStream.str());
 					scheduleAt(simTime() + edTimer, timer);
 
 					switchRadioToChannel(channel);
@@ -343,6 +361,14 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 			MlmeStart_confirm* response = new MlmeStart_confirm(
 					"MLME-START.confirm", MLME_START_CONFIRM);
 			beaconTimer->setName("BEACON.timer");
+			int beaconDelaySymbols = getMacPib()->getBaseSuperFrameDuration();
+			beaconDelaySymbols = beaconDelaySymbols
+					<< getMacPib()->getMacBeaconOrder();
+			setBeaconPeriod(symbolsToSeconds(beaconDelaySymbols,
+					getCurrentChannel(), getCurrentPage()));
+			std::stringstream commentStream;
+			commentStream << "The beacon period set to: " << getBeaconPeriod() << " s.";
+			comment(COMMENT_BEACON, commentStream.str());
 			/** @note the value of startTime is ignored while we're coordinator */
 			if (getRole() == COORDINATOR) {
 				scheduleAt(simTime(), beaconTimer);
@@ -433,7 +459,7 @@ void Mlme::switchRadioToChannel(unsigned int channel) {
 	requestChannel->setPibAttributeValue(0, channel);
 	std::stringstream commentStream;
 	commentStream << "Switching radio to channel " << channel;
-	comment(CHANNEL, commentStream.str());
+	comment(COMMENT_CHANNEL, commentStream.str());
 	setCurrentChannel(channel);
 	sendPlmeDown(requestChannel);
 }

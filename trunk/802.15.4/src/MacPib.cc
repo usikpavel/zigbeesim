@@ -10,7 +10,7 @@ void MacPib::initialize(int stage) {
 		mlmeIn = findGate("mlmeIn");
 
 		resetMacPibValues();
-		commentsLevel = ALL;
+		commentsLevel = COMMENT_ALL;
 		macBeaconPayload = new unsigned char[1];
 	}
 }

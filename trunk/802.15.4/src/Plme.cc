@@ -15,7 +15,7 @@ void Plme::initialize(int stage) {
 		phyPibIn = findGate("phyPibIn");
 
 		setLayerState(PHY_TRX_OFF);
-		commentsLevel = ALL;
+		commentsLevel = COMMENT_ALL;
 	} else if (stage == 1) {
 		lastUpperMsg = new cMessage();
 		timer = new cMessage();
@@ -63,13 +63,13 @@ void Plme::handlePlmeMsg(cMessage *msg) {
 			std::stringstream commentStream;
 			commentStream << "Layer State already in " << std::hex
 					<< (int) request->getState() << std::dec;
-			comment(STATUS, commentStream.str());
+			comment(COMMENT_STATUS, commentStream.str());
 			response->setStatus(request->getState());
 		} else {
 			std::stringstream commentStream;
 			commentStream << "Changing Layer State to " << std::hex
 					<< (int) request->getState() << std::dec;
-			comment(STATUS, commentStream.str());
+			comment(COMMENT_STATUS, commentStream.str());
 			setLayerState((PhyEnum) request->getState());
 			response->setStatus(PHY_SUCCESS);
 
