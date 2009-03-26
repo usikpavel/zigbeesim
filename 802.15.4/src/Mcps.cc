@@ -14,7 +14,7 @@ void Mcps::initialize(int stage) {
 		mlmeIn = findGate("mlmeIn");
 		mlmeOut = findGate("mlmeOut");
 
-		commentsLevel = ALL;
+		commentsLevel = COMMENT_ALL;
 	} else if (stage == 1) {
 		lastUpperMsg = new cMessage();
 	}
@@ -64,6 +64,9 @@ void Mcps::handleMlmeMsg(cMessage *msg) {
 		if (command->getCommandType() == BEACON_REQUEST) {
 			sendPdDown(encapsulateMcps(command));
 		}
+	} else if (msg->getKind() == MAC_BEACON_FRAME) {
+		MacBeacon* beacon = check_and_cast<MacBeacon *> (msg);
+		sendPdDown(encapsulateMcps(beacon));
 	}
 }
 

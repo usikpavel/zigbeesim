@@ -40,7 +40,7 @@ void FFDAppLayer::initialize(int stage) {
 		nlmeSapIn = findGate("nlmeSapIn");
 		nlmeSapOut = findGate("nlmeSapOut");
 
-		commentsLevel = ALL;
+		commentsLevel = COMMENT_ALL;
 		if (logName().substr(0, 11) == "coordinator") {
 			setRole(COORDINATOR);
 		} else if (logName().substr(0, 6) == "router") {

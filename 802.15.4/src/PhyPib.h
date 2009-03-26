@@ -38,7 +38,7 @@ protected:
 	virtual void sendPlme(cMessage*);
 	virtual void resetPhyPibValues();
 	virtual void comment(CommentsLevel level, std::string s) {
-		if ((level & commentsLevel) > NOTHING) {
+		if ((level & commentsLevel) > COMMENT_NOTHING) {
 			/** @todo align logName substrings for routers and endDevices */
 			std::cout << logName() << "." << getName() << "\t" << s << endl;
 		}
@@ -46,12 +46,12 @@ protected:
 	virtual void commentMsgSending(cMessage *msg) {
 		std::stringstream commentStream;
 		commentStream << "Sending " << msg->getName();
-		comment(MESSAGE, commentStream.str());
+		comment(COMMENT_MESSAGE, commentStream.str());
 	}
 	virtual void commentMsgReceived(cMessage *msg) {
 		std::stringstream commentStream;
 		commentStream << "Received " << msg->getName();
-		comment(MESSAGE, commentStream.str());
+		comment(COMMENT_MESSAGE, commentStream.str());
 	}
 public:
 	PhyEnum setPibAttribute(PibIdentifier, unsigned int*);
