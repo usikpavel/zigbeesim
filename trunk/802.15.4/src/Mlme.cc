@@ -216,7 +216,7 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 							"Beacon Request Command", MAC_COMMAND_FRAME);
 					beaconRequest->setCommandType(BEACON_REQUEST);
 					beaconRequest->setCommandPayloadArraySize(0);
-					beaconRequest->setByteLength(8);
+					beaconRequest->setByteLength(1);
 					sendMcps(beaconRequest);
 				}
 			} else if (confirm->getPibAttribute() == PHY_CURRENT_PAGE) {

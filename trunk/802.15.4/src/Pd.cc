@@ -97,7 +97,7 @@ void Pd::sendPlme(cMessage *msg) {
 }
 
 Frame802154* Pd::encapsulatePd(PdMsg *msg) {
-	Frame802154 *frame = new Frame802154("AirFrame", msg->getKind());
+	Frame802154 *frame = new Frame802154(msg->getName(), msg->getKind());
 	unsigned char currentChannel = getPhyPib()->getPhyCurrentChannel();
 	unsigned char currentPage = getPhyPib()->getPhyCurrentPage();
 	int preambleLength;
