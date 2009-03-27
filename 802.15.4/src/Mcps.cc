@@ -1,7 +1,6 @@
 #include "Mcps.h"
 
-Define_Module(Mcps)
-;
+Define_Module( Mcps);
 
 void Mcps::initialize(int stage) {
 	BasicModule::initialize(stage);
@@ -44,11 +43,18 @@ void Mcps::handlePdMsg(cMessage *msg) {
 	if (msg->getKind() == PD_DATA_CONFIRM) {
 		PdData_confirm* confirm = check_and_cast<PdData_confirm *> (msg);
 		if (confirm->getStatus() == PHY_SUCCESS) {
-			MacCommand *command = new MacCommand("Beacon Request sent", MAC_COMMAND_FRAME);
-			command->setCommandType(BEACON_REQUEST);
-			sendMlme(command);
+			if (getLastUpperMsg()->getKind() == MAC_COMMAND_FRAME) {
+				MacCommand* command = new MacCommand("Beacon request sent",
+						MAC_COMMAND_FRAME);
+				command->setCommandType(BEACON_REQUEST);
+				sendMlme(command);
+			} else if (getLastUpperMsg()->getKind() == MAC_BEACON_FRAME) {
+				MacBeacon* beacon = new MacBeacon("Beacon sent",
+						MAC_BEACON_FRAME);
+				sendMlme(beacon);
+			}
 		}
-		delete(msg);
+		delete (msg);
 	}
 }
 
@@ -89,11 +95,11 @@ PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 	if (msg->getKind() == MAC_COMMAND_FRAME) {
 		MacCommand* command = check_and_cast<MacCommand *> (msg);
 		if (command->getCommandType() == BEACON_REQUEST) {
-			PdData_request *request = new PdData_request("PD-DATA.request",
+			PdData_request *request = new PdData_request("Beacon request",
 					PD_DATA_REQUEST);
-			request->setByteLength(1);
-			/** @comment this should be the same as ByteLength always */
-			request->setPsduLength(1);
+			request->setByteLength(11);
+			/** @comment this should not be the same as ByteLength */
+			request->setPsduLength(msg->getByteLength());
 			request->setFrameType(COMMAND);
 			request->setSecurityEnabled(false);
 			request->setFramePending(false);
@@ -103,6 +109,7 @@ PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 			request->setFrameVersion(0x01);
 			request->setSourceAddressingMode(SHORT_ADDRESS);
 			request->setSequenceNumber(getMacPib()->getMacDSN());
+			getMacPib()->setMacDSN(getMacPib()->getMacDSN() + 1);
 			request->setDestinationPanIdentifier(0xFFFF);
 			request->setDestinationAddress((unsigned long) 0xFFFF);
 			request->setSourceAddress(
@@ -113,12 +120,37 @@ PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 			request->encapsulate(command);
 			return request;
 		}
+	} else if (msg->getKind() == MAC_BEACON_FRAME) {
+		MacBeacon* beacon = check_and_cast<MacBeacon *> (msg);
+		PdData_request *request = new PdData_request("Beacon", PD_DATA_REQUEST);
+		request->setByteLength(11);
+		/** @comment this should not be the same as ByteLength */
+		request->setPsduLength(msg->getByteLength());
+		request->setFrameType(BEACON);
+		request->setSecurityEnabled(false);
+		request->setFramePending(false);
+		request->setAckRequest(false);
+		request->setPanIdCompression(true);
+		request->setDestinationAddressingMode(SHORT_ADDRESS);
+		request->setFrameVersion(0x01);
+		request->setSourceAddressingMode(SHORT_ADDRESS);
+		request->setSequenceNumber(getMacPib()->getMacBSN());
+		getMacPib()->setMacBSN(getMacPib()->getMacBSN() + 1);
+		request->setDestinationPanIdentifier(0xFFFF);
+		request->setDestinationAddress((unsigned long) 0xFFFF);
+		request->setSourceAddress(
+				(unsigned long) (getMacPib()->getMacShortAddress()));
+		request->setAuxiliarySecurityHeaderArraySize(0);
+		/** @todo who wants to calculate the fcs? :) */
+		request->setFcs((unsigned short) (rand() % 65536));
+		request->encapsulate(beacon);
+		return request;
 	}
 	return NULL;
 }
 
 McpsMsg* Mcps::decapsulatePd(PdMsg *msg) {
 	McpsMsg* mcpsMsg = static_cast<McpsMsg *> (msg->decapsulate());
-	delete(msg);
+	delete (msg);
 	return mcpsMsg;
 }
