@@ -21,8 +21,8 @@ void Mlme::initialize(int stage) {
 		}
 	} else if (stage == 1) {
 		lastUpperMsg = new cMessage();
-		timer = new cMessage();
-		beaconTimer = new cMessage();
+		timer = new cMessage("timer");
+		beaconTimer = new cMessage("Beacon timer", BEACON_TIMER);
 		setScannedChannels(0);
 		energyLevels = new char[32];
 		scannedPanDescriptors = new PanDescriptor[0];
@@ -47,10 +47,9 @@ void Mlme::handleMessage(cMessage *msg) {
 }
 
 void Mlme::handleSelfMsg(cMessage *msg) {
-	std::string msgName = msg->getName();
-	if (msgName == "ED.timer") {
+	if (msg->getKind() == ED_TIMER) {
 		return;
-	} else if (msgName == "ACTIVE.timer") {
+	} else if (msg->getKind() == ACTIVE_TIMER) {
 		setCurrentChannel(getCurrentChannel() + 1);
 		MlmeScan_request* request = check_and_cast<MlmeScan_request *> (
 				getLastUpperMsg());
@@ -67,7 +66,7 @@ void Mlme::handleSelfMsg(cMessage *msg) {
 			setLayerStage(2);
 		}
 		sendPlmeDown(changeState);
-	} else if (msgName == "BEACON.timer") {
+	} else if (msg->getKind() == BEACON_TIMER) {
 		MacBeacon* beacon = new MacBeacon("Beacon Command", MAC_BEACON_FRAME);
 		beacon->setBeaconOrder(getMacPib()->getMacBeaconOrder());
 		beacon->setSuperframeOrder(getMacPib()->getMacSuperframeOrder());
@@ -120,7 +119,7 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 						commentStream << "Performing ED scan for " << edTimer
 								<< " seconds on channel " << channel;
 						comment(COMMENT_TIMER, commentStream.str());
-						timer->setName("ED.timer");
+						timer->setName("ED_TIMER");
 						scheduleAt(simTime() + edTimer, timer);
 						switchRadioToChannel(channel);
 						break;
@@ -150,7 +149,7 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 									<< channel;
 							setCurrentChannel(channel);
 							comment(COMMENT_TIMER, commentStream.str());
-							timer->setName("ACTIVE.timer");
+							timer->setName("ACTIVE_TIMER");
 							scheduleAt(simTime() + activeTimer, timer);
 							PlmeSet_request* set = new PlmeSet_request();
 							set->setName("PLME-SET.request");
@@ -286,9 +285,9 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 	if (msg->getKind() == MLME_SCAN_REQUEST) {
 		MlmeScan_request* request = check_and_cast<MlmeScan_request *> (msg);
 		msgName = timer->getName();
-		if (timer->isScheduled() && (msgName == "ED.timer" || msgName
-				== "ACTIVE.timer" || msgName == "PASSIVE.timer" || msgName
-				== "ORPHAN.timer")) {
+		if (timer->isScheduled() && (msgName == "ED_TIMER" || msgName
+				== "ACTIVE_TIMER" || msgName == "PASSIVE_TIMER" || msgName
+				== "ORPHAN_TIMER")) {
 			MlmeScan_confirm* response = new MlmeScan_confirm();
 			response->setName("MLME-SCAN.confirm");
 			response->setKind(MLME_SCAN_CONFIRM);
@@ -360,14 +359,14 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 			getMacPib()->setMacBattLifeExt(request->getBatteryLifeExtension());
 			MlmeStart_confirm* response = new MlmeStart_confirm(
 					"MLME-START.confirm", MLME_START_CONFIRM);
-			beaconTimer->setName("BEACON.timer");
 			int beaconDelaySymbols = getMacPib()->getBaseSuperFrameDuration();
 			beaconDelaySymbols = beaconDelaySymbols
 					<< getMacPib()->getMacBeaconOrder();
 			setBeaconPeriod(symbolsToSeconds(beaconDelaySymbols,
 					getCurrentChannel(), getCurrentPage()));
 			std::stringstream commentStream;
-			commentStream << "The beacon period set to: " << getBeaconPeriod() << " s.";
+			commentStream << "The beacon period set to: " << getBeaconPeriod()
+					<< " s.";
 			comment(COMMENT_BEACON, commentStream.str());
 			/** @note the value of startTime is ignored while we're coordinator */
 			if (getRole() == COORDINATOR) {
@@ -394,6 +393,17 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 			request->setState(PHY_RX_ON);
 			sendPlmeDown(request);
 			delete (command);
+		}
+	} else if (msg->getKind() == MAC_BEACON_FRAME) {
+		std::string msgName = msg->getName();
+		if (msgName == "Beacon sent") {
+			if (getLastUpperMsg()->getKind() == MLME_SCAN_REQUEST) {
+				MlmeStart_confirm* confirm = new MlmeStart_confirm(
+						"MLME-START.confirm", MLME_START_CONFIRM);
+				confirm->setStatus(MAC_SUCCESS);
+				sendMlmeUp(confirm);
+			}
+			delete(msg);
 		}
 	}
 }

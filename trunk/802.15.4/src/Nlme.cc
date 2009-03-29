@@ -40,6 +40,16 @@ void Nlme::handleMessage(cMessage *msg) {
 }
 
 void Nlme::handleSelfMsg(cMessage *msg) {
+	if (msg->getKind() == JOINING_PERMITTED_TIMER) {
+		NlmePermitJoining_request *request = check_and_cast<
+				NlmePermitJoining_request *> (msg);
+		MlmeSet_request* response = new MlmeSet_request("MLME-SET.request",
+				MLME_SET_REQUEST);
+		response->setPibAttribute(MAC_ASSOCIATION_PERMIT);
+		response->setPibAttributeValueArraySize(1);
+		response->setPibAttributeValue(0, (unsigned int) false);
+		sendMlmeDown(response);
+	}
 	delete (msg);
 }
 
@@ -112,20 +122,29 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 						"MLME-START.request", MLME_START_REQUEST);
 				startRequest->setPanId(getPanId());
 				startRequest->setLogicalChannel(getLogicalChannel());
-				startRequest->setChannelPage(getChannelPageFromChannels(request->getScanChannels()));
+				startRequest->setChannelPage(getChannelPageFromChannels(
+						request->getScanChannels()));
 				startRequest->setStartTime(rand());
 				startRequest->setBeaconOrder(request->getBeaconOrder());
 				startRequest->setSuperframeOrder(request->getSuperframeOrder());
-				startRequest->setPanCoordinator((logName().substr(0, 11) == "coordinator"));
+				startRequest->setPanCoordinator((logName().substr(0, 11)
+						== "coordinator"));
 				startRequest->setBatteryLifeExtension(false);
 				startRequest->setCoordRealignment(false);
 				/** @fixme for now, omitting the security features of the message*/
 				sendMlmeDown(startRequest);
 			}
+		} else if (getLastUpperMsg()->getKind() == NLME_PERMIT_JOINING_REQUEST) {
+			NlmePermitJoining_confirm* response = new NlmePermitJoining_confirm("NLME-PERMIT-JOINING.confirm", NLME_PERMIT_JOINING_CONFIRM);
+			response->setStatus(confirm->getStatus());
+			sendNlmeUp(response);
 		}
 	} else if (msg->getKind() == MLME_START_CONFIRM) {
-		MlmeStart_confirm* confirm = check_and_cast<MlmeStart_confirm *>(msg);
-		NlmeNetworkFormation_confirm* response = new NlmeNetworkFormation_confirm("NLME-NETWORK-FORMATION.confirm", NLME_NETWORK_FORMATION_CONFIRM);
+		MlmeStart_confirm* confirm = check_and_cast<MlmeStart_confirm *> (msg);
+		NlmeNetworkFormation_confirm* response =
+				new NlmeNetworkFormation_confirm(
+						"NLME-NETWORK-FORMATION.confirm",
+						NLME_NETWORK_FORMATION_CONFIRM);
 		/** @note here we play with the MAC status still */
 		response->setStatus(confirm->getStatus());
 		sendNlmeUp(response);
@@ -144,6 +163,25 @@ void Nlme::handleNlmeMsg(cMessage *msg) {
 		scan->setScanChannels(request->getScanChannels());
 		scan->setScanDuration(request->getScanDuration());
 		sendMlmeDown(scan);
+	} else if (msg->getKind() == NLME_PERMIT_JOINING_REQUEST) {
+		NlmePermitJoining_request *request = check_and_cast<
+				NlmePermitJoining_request *> (msg);
+		MlmeSet_request* response = new MlmeSet_request("MLME-SET.request",
+				MLME_SET_REQUEST);
+		response->setPibAttribute(MAC_ASSOCIATION_PERMIT);
+		response->setPibAttributeValueArraySize(1);
+		if (request->getPermitDuration() == 0x00) {
+			response->setPibAttributeValue(0, (unsigned int) false);
+		} else {
+			response->setPibAttributeValue(0, (unsigned int) true);
+			if (request->getPermitDuration() != 0xFF) {
+				cMessage* timer;
+				timer->setName("JOINING_PERMITTED_TIMER",
+						JOINING_PERMITTED);
+				scheduleAt(simTime(), timer);
+			}
+		}
+		sendMlmeDown(response);
 	}
 }
 

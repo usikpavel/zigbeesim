@@ -41,6 +41,14 @@ message NlmeNetworkFormation_confirm extends NlmeMsg {
   	unsigned char status;  
 };
 
+message NlmePermitJoining_request extends NlmeMsg {
+    unsigned char permitDuration;
+};
+
+message NlmePermitJoining_confirm extends NlmeMsg {
+    unsigned char status enum(MacEnum);
+};
+
 message NldeMsg extends cMessage {
 };
 
