@@ -59,10 +59,12 @@ void Mcps::handlePdMsg(cMessage *msg) {
 }
 
 void Mcps::handleMcpsMsg(cMessage *msg) {
-	setLastUpperMsg(msg);
+	setLastUpperMsg(msg->dup());
+	delete(msg);
 }
 
 void Mcps::handleMlmeMsg(cMessage *msg) {
+	setLastUpperMsg(msg->dup());
 	/** @todo maybe here we can just encapsulate the message without distinguishing what kind of msg it is*/
 	/** future will tell */
 	if (msg->getKind() == MAC_COMMAND_FRAME) {

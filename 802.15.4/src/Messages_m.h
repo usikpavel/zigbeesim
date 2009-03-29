@@ -141,6 +141,72 @@ inline void doUnpacking(cCommBuffer *b, NlmeNetworkFormation_confirm& obj) {obj.
 /**
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
+ * message NlmePermitJoining_request extends NlmeMsg {
+ *     unsigned char permitDuration;
+ * };
+ * </pre>
+ */
+class NlmePermitJoining_request : public NlmeMsg
+{
+  protected:
+    unsigned char permitDuration_var;
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const NlmePermitJoining_request&);
+
+  public:
+    NlmePermitJoining_request(const char *name=NULL, int kind=0);
+    NlmePermitJoining_request(const NlmePermitJoining_request& other);
+    virtual ~NlmePermitJoining_request();
+    NlmePermitJoining_request& operator=(const NlmePermitJoining_request& other);
+    virtual NlmePermitJoining_request *dup() const {return new NlmePermitJoining_request(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+    virtual unsigned char getPermitDuration() const;
+    virtual void setPermitDuration(unsigned char permitDuration_var);
+};
+
+inline void doPacking(cCommBuffer *b, NlmePermitJoining_request& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, NlmePermitJoining_request& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
+ * message NlmePermitJoining_confirm extends NlmeMsg {
+ *     unsigned char status enum(MacEnum);
+ * };
+ * </pre>
+ */
+class NlmePermitJoining_confirm : public NlmeMsg
+{
+  protected:
+    unsigned char status_var;
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const NlmePermitJoining_confirm&);
+
+  public:
+    NlmePermitJoining_confirm(const char *name=NULL, int kind=0);
+    NlmePermitJoining_confirm(const NlmePermitJoining_confirm& other);
+    virtual ~NlmePermitJoining_confirm();
+    NlmePermitJoining_confirm& operator=(const NlmePermitJoining_confirm& other);
+    virtual NlmePermitJoining_confirm *dup() const {return new NlmePermitJoining_confirm(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+    virtual unsigned char getStatus() const;
+    virtual void setStatus(unsigned char status_var);
+};
+
+inline void doPacking(cCommBuffer *b, NlmePermitJoining_confirm& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, NlmePermitJoining_confirm& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
  * message NldeMsg extends cMessage {
  * };
  * </pre>

@@ -105,7 +105,13 @@ typedef enum {
 /** @brief Kinds of self messages */
 typedef enum {
 	/** @brief Starting the node */
-	START,
+	START_TIMER,
+	ED_TIMER,
+	ACTIVE_TIMER,
+	PASSIVE_TIMER,
+	ORPHAN_TIMER,
+	BEACON_TIMER,
+	JOINING_PERMITTED_TIMER
 } SelfMessages;
 
 /** @brief NWK PIB Enumerations */

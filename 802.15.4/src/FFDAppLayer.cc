@@ -51,7 +51,7 @@ void FFDAppLayer::initialize(int stage) {
 	} else if (stage == 1) {
 		if (getRole() == COORDINATOR) {
 			cMessage* msg = new cMessage("NLME-NETWORK-FORMATION.request",
-					START);
+					START_TIMER);
 			scheduleAt(simTime(), msg);
 		}
 	}
@@ -87,14 +87,16 @@ void FFDAppLayer::handleNldeMsg(cMessage* msg) {
 
 void FFDAppLayer::handleNlmeMsg(cMessage* msg) {
 	if (msg->getKind() == NLME_NETWORK_FORMATION_CONFIRM) {
-		/** @comment we can now start sending data probably */
+		NlmePermitJoining_request* request = new NlmePermitJoining_request(
+				"NLME-PERMIT-JOINING.request", NLME_PERMIT_JOINING_REQUEST);
+		request->setPermitDuration(0xAF);
+		sendNlmeDown(request);
 	}
 	delete (msg);
 }
 
 void FFDAppLayer::handleSelfMsg(cMessage* msg) {
-	switch (msg->getKind()) {
-	case START:
+	if (msg->getKind() == START_TIMER) {
 		NlmeNetworkFormation_request* request =
 				new NlmeNetworkFormation_request();
 		/** @todo include these params into omnetpp.ini file

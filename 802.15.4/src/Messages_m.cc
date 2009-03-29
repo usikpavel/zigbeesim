@@ -772,6 +772,453 @@ void *NlmeNetworkFormation_confirmDescriptor::getFieldStructPointer(void *object
     }
 }
 
+Register_Class(NlmePermitJoining_request);
+
+NlmePermitJoining_request::NlmePermitJoining_request(const char *name, int kind) : NlmeMsg(name,kind)
+{
+    this->permitDuration_var = 0;
+}
+
+NlmePermitJoining_request::NlmePermitJoining_request(const NlmePermitJoining_request& other) : NlmeMsg()
+{
+    setName(other.getName());
+    operator=(other);
+}
+
+NlmePermitJoining_request::~NlmePermitJoining_request()
+{
+}
+
+NlmePermitJoining_request& NlmePermitJoining_request::operator=(const NlmePermitJoining_request& other)
+{
+    if (this==&other) return *this;
+    NlmeMsg::operator=(other);
+    this->permitDuration_var = other.permitDuration_var;
+    return *this;
+}
+
+void NlmePermitJoining_request::parsimPack(cCommBuffer *b)
+{
+    NlmeMsg::parsimPack(b);
+    doPacking(b,this->permitDuration_var);
+}
+
+void NlmePermitJoining_request::parsimUnpack(cCommBuffer *b)
+{
+    NlmeMsg::parsimUnpack(b);
+    doUnpacking(b,this->permitDuration_var);
+}
+
+unsigned char NlmePermitJoining_request::getPermitDuration() const
+{
+    return permitDuration_var;
+}
+
+void NlmePermitJoining_request::setPermitDuration(unsigned char permitDuration_var)
+{
+    this->permitDuration_var = permitDuration_var;
+}
+
+class NlmePermitJoining_requestDescriptor : public cClassDescriptor
+{
+  public:
+    NlmePermitJoining_requestDescriptor();
+    virtual ~NlmePermitJoining_requestDescriptor();
+
+    virtual bool doesSupport(cObject *obj) const;
+    virtual const char *getProperty(const char *propertyname) const;
+    virtual int getFieldCount(void *object) const;
+    virtual const char *getFieldName(void *object, int field) const;
+    virtual unsigned int getFieldTypeFlags(void *object, int field) const;
+    virtual const char *getFieldTypeString(void *object, int field) const;
+    virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
+    virtual int getArraySize(void *object, int field) const;
+
+    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
+
+    virtual const char *getFieldStructName(void *object, int field) const;
+    virtual void *getFieldStructPointer(void *object, int field, int i) const;
+};
+
+Register_ClassDescriptor(NlmePermitJoining_requestDescriptor);
+
+NlmePermitJoining_requestDescriptor::NlmePermitJoining_requestDescriptor() : cClassDescriptor("NlmePermitJoining_request", "NlmeMsg")
+{
+}
+
+NlmePermitJoining_requestDescriptor::~NlmePermitJoining_requestDescriptor()
+{
+}
+
+bool NlmePermitJoining_requestDescriptor::doesSupport(cObject *obj) const
+{
+    return dynamic_cast<NlmePermitJoining_request *>(obj)!=NULL;
+}
+
+const char *NlmePermitJoining_requestDescriptor::getProperty(const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->getProperty(propertyname) : NULL;
+}
+
+int NlmePermitJoining_requestDescriptor::getFieldCount(void *object) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? 1+basedesc->getFieldCount(object) : 1;
+}
+
+unsigned int NlmePermitJoining_requestDescriptor::getFieldTypeFlags(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeFlags(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return FD_ISEDITABLE;
+        default: return 0;
+    }
+}
+
+const char *NlmePermitJoining_requestDescriptor::getFieldName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "permitDuration";
+        default: return NULL;
+    }
+}
+
+const char *NlmePermitJoining_requestDescriptor::getFieldTypeString(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeString(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "unsigned char";
+        default: return NULL;
+    }
+}
+
+const char *NlmePermitJoining_requestDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldProperty(object, field, propertyname);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+int NlmePermitJoining_requestDescriptor::getArraySize(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getArraySize(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    NlmePermitJoining_request *pp = (NlmePermitJoining_request *)object; (void)pp;
+    switch (field) {
+        default: return 0;
+    }
+}
+
+bool NlmePermitJoining_requestDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+        field -= basedesc->getFieldCount(object);
+    }
+    NlmePermitJoining_request *pp = (NlmePermitJoining_request *)object; (void)pp;
+    switch (field) {
+        case 0: ulong2string(pp->getPermitDuration(),resultbuf,bufsize); return true;
+        default: return false;
+    }
+}
+
+bool NlmePermitJoining_requestDescriptor::setFieldAsString(void *object, int field, int i, const char *value) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->setFieldAsString(object,field,i,value);
+        field -= basedesc->getFieldCount(object);
+    }
+    NlmePermitJoining_request *pp = (NlmePermitJoining_request *)object; (void)pp;
+    switch (field) {
+        case 0: pp->setPermitDuration(string2ulong(value)); return true;
+        default: return false;
+    }
+}
+
+const char *NlmePermitJoining_requestDescriptor::getFieldStructName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+void *NlmePermitJoining_requestDescriptor::getFieldStructPointer(void *object, int field, int i) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructPointer(object, field, i);
+        field -= basedesc->getFieldCount(object);
+    }
+    NlmePermitJoining_request *pp = (NlmePermitJoining_request *)object; (void)pp;
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+Register_Class(NlmePermitJoining_confirm);
+
+NlmePermitJoining_confirm::NlmePermitJoining_confirm(const char *name, int kind) : NlmeMsg(name,kind)
+{
+    this->status_var = 0;
+}
+
+NlmePermitJoining_confirm::NlmePermitJoining_confirm(const NlmePermitJoining_confirm& other) : NlmeMsg()
+{
+    setName(other.getName());
+    operator=(other);
+}
+
+NlmePermitJoining_confirm::~NlmePermitJoining_confirm()
+{
+}
+
+NlmePermitJoining_confirm& NlmePermitJoining_confirm::operator=(const NlmePermitJoining_confirm& other)
+{
+    if (this==&other) return *this;
+    NlmeMsg::operator=(other);
+    this->status_var = other.status_var;
+    return *this;
+}
+
+void NlmePermitJoining_confirm::parsimPack(cCommBuffer *b)
+{
+    NlmeMsg::parsimPack(b);
+    doPacking(b,this->status_var);
+}
+
+void NlmePermitJoining_confirm::parsimUnpack(cCommBuffer *b)
+{
+    NlmeMsg::parsimUnpack(b);
+    doUnpacking(b,this->status_var);
+}
+
+unsigned char NlmePermitJoining_confirm::getStatus() const
+{
+    return status_var;
+}
+
+void NlmePermitJoining_confirm::setStatus(unsigned char status_var)
+{
+    this->status_var = status_var;
+}
+
+class NlmePermitJoining_confirmDescriptor : public cClassDescriptor
+{
+  public:
+    NlmePermitJoining_confirmDescriptor();
+    virtual ~NlmePermitJoining_confirmDescriptor();
+
+    virtual bool doesSupport(cObject *obj) const;
+    virtual const char *getProperty(const char *propertyname) const;
+    virtual int getFieldCount(void *object) const;
+    virtual const char *getFieldName(void *object, int field) const;
+    virtual unsigned int getFieldTypeFlags(void *object, int field) const;
+    virtual const char *getFieldTypeString(void *object, int field) const;
+    virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
+    virtual int getArraySize(void *object, int field) const;
+
+    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
+
+    virtual const char *getFieldStructName(void *object, int field) const;
+    virtual void *getFieldStructPointer(void *object, int field, int i) const;
+};
+
+Register_ClassDescriptor(NlmePermitJoining_confirmDescriptor);
+
+NlmePermitJoining_confirmDescriptor::NlmePermitJoining_confirmDescriptor() : cClassDescriptor("NlmePermitJoining_confirm", "NlmeMsg")
+{
+}
+
+NlmePermitJoining_confirmDescriptor::~NlmePermitJoining_confirmDescriptor()
+{
+}
+
+bool NlmePermitJoining_confirmDescriptor::doesSupport(cObject *obj) const
+{
+    return dynamic_cast<NlmePermitJoining_confirm *>(obj)!=NULL;
+}
+
+const char *NlmePermitJoining_confirmDescriptor::getProperty(const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->getProperty(propertyname) : NULL;
+}
+
+int NlmePermitJoining_confirmDescriptor::getFieldCount(void *object) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? 1+basedesc->getFieldCount(object) : 1;
+}
+
+unsigned int NlmePermitJoining_confirmDescriptor::getFieldTypeFlags(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeFlags(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return FD_ISEDITABLE;
+        default: return 0;
+    }
+}
+
+const char *NlmePermitJoining_confirmDescriptor::getFieldName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "status";
+        default: return NULL;
+    }
+}
+
+const char *NlmePermitJoining_confirmDescriptor::getFieldTypeString(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeString(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "unsigned char";
+        default: return NULL;
+    }
+}
+
+const char *NlmePermitJoining_confirmDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldProperty(object, field, propertyname);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0:
+            if (!strcmp(propertyname,"enum")) return "MacEnum";
+            return NULL;
+        default: return NULL;
+    }
+}
+
+int NlmePermitJoining_confirmDescriptor::getArraySize(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getArraySize(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    NlmePermitJoining_confirm *pp = (NlmePermitJoining_confirm *)object; (void)pp;
+    switch (field) {
+        default: return 0;
+    }
+}
+
+bool NlmePermitJoining_confirmDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+        field -= basedesc->getFieldCount(object);
+    }
+    NlmePermitJoining_confirm *pp = (NlmePermitJoining_confirm *)object; (void)pp;
+    switch (field) {
+        case 0: ulong2string(pp->getStatus(),resultbuf,bufsize); return true;
+        default: return false;
+    }
+}
+
+bool NlmePermitJoining_confirmDescriptor::setFieldAsString(void *object, int field, int i, const char *value) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->setFieldAsString(object,field,i,value);
+        field -= basedesc->getFieldCount(object);
+    }
+    NlmePermitJoining_confirm *pp = (NlmePermitJoining_confirm *)object; (void)pp;
+    switch (field) {
+        case 0: pp->setStatus(string2ulong(value)); return true;
+        default: return false;
+    }
+}
+
+const char *NlmePermitJoining_confirmDescriptor::getFieldStructName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+void *NlmePermitJoining_confirmDescriptor::getFieldStructPointer(void *object, int field, int i) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructPointer(object, field, i);
+        field -= basedesc->getFieldCount(object);
+    }
+    NlmePermitJoining_confirm *pp = (NlmePermitJoining_confirm *)object; (void)pp;
+    switch (field) {
+        default: return NULL;
+    }
+}
+
 Register_Class(NldeMsg);
 
 NldeMsg::NldeMsg(const char *name, int kind) : cMessage(name,kind)

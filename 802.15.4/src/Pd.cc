@@ -64,7 +64,7 @@ void Pd::handlePdMsg(cMessage *msg) {
 }
 
 void Pd::handleRfMsg(cMessage *msg) {
-
+	delete(msg);
 }
 
 void Pd::handlePlmeMsg(cMessage *msg) {
