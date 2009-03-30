@@ -41,8 +41,7 @@ void Nlme::handleMessage(cMessage *msg) {
 
 void Nlme::handleSelfMsg(cMessage *msg) {
 	if (msg->getKind() == JOINING_PERMITTED_TIMER) {
-		NlmePermitJoining_request *request = check_and_cast<
-				NlmePermitJoining_request *> (msg);
+		setLastUpperMsg(msg);
 		MlmeSet_request* response = new MlmeSet_request("MLME-SET.request",
 				MLME_SET_REQUEST);
 		response->setPibAttribute(MAC_ASSOCIATION_PERMIT);
@@ -50,7 +49,6 @@ void Nlme::handleSelfMsg(cMessage *msg) {
 		response->setPibAttributeValue(0, (unsigned int) false);
 		sendMlmeDown(response);
 	}
-	delete (msg);
 }
 
 void Nlme::handleMlmeMsg(cMessage *msg) {
@@ -97,6 +95,8 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 					sendMlmeDown(setRequest);
 				}
 			}
+		} else if (getLastUpperMsg()->getKind() == NLME_NETWORK_DISCOVERY__REQUEST) {
+
 		}
 	} else if (msg->getKind() == MLME_SET_CONFIRM) {
 		MlmeSet_confirm* confirm = check_and_cast<MlmeSet_confirm *> (msg);
@@ -135,7 +135,10 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 				sendMlmeDown(startRequest);
 			}
 		} else if (getLastUpperMsg()->getKind() == NLME_PERMIT_JOINING_REQUEST) {
-			NlmePermitJoining_confirm* response = new NlmePermitJoining_confirm("NLME-PERMIT-JOINING.confirm", NLME_PERMIT_JOINING_CONFIRM);
+			NlmePermitJoining_confirm* response =
+					new NlmePermitJoining_confirm(
+							"NLME-PERMIT-JOINING.confirm",
+							NLME_PERMIT_JOINING_CONFIRM);
 			response->setStatus(confirm->getStatus());
 			sendNlmeUp(response);
 		}
@@ -148,6 +151,8 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 		/** @note here we play with the MAC status still */
 		response->setStatus(confirm->getStatus());
 		sendNlmeUp(response);
+	} else if (msg->getKind() == JOINING_PERMITTED_TIMER) {
+		/** @comment no notification to upper layer required */
 	}
 	delete (msg);
 }
@@ -175,13 +180,26 @@ void Nlme::handleNlmeMsg(cMessage *msg) {
 		} else {
 			response->setPibAttributeValue(0, (unsigned int) true);
 			if (request->getPermitDuration() != 0xFF) {
-				cMessage* timer;
-				timer->setName("JOINING_PERMITTED_TIMER",
-						JOINING_PERMITTED);
-				scheduleAt(simTime(), timer);
+				cMessage* timer = new cMessage("JOINING_PERMITTED_TIMER", JOINING_PERMITTED_TIMER);
+				scheduleAt(simTime() + (double) (request->getPermitDuration()),
+						timer);
 			}
 		}
 		sendMlmeDown(response);
+	} else if (msg->getKind() == NLME_NETWORK_DISCOVERY__REQUEST) {
+		NlmeNetworkDiscovery_request* request = check_and_cast<NlmeNetworkDiscovery_request *>(msg);
+		MlmeScan_request* scan = new MlmeScan_request("MLME-SCAN.request", MLME_SCAN_REQUEST);
+		FFDAppLayer *appLayer = (FFDAppLayer *) (getParentModule()->getParentModule()->getModuleByRelativePath("app"));
+		if (appLayer->getRole() == ROUTER) {
+			scan->setScanType(ACTIVE_SCAN);
+		} else {
+			/** @todo implement passive scan at the mlme layer */
+			scan->setScanType(PASSIVE_SCAN);
+		}
+		scan->setScanChannels(request->getScanChannels());
+		scan->setScanDuration(request->getScanDuration());
+		scan->setChannelPage(request->getScanChannels() >> 28);
+		sendMlmeDown(scan);
 	}
 }
 

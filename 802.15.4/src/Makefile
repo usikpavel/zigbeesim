@@ -219,10 +219,13 @@ $O/RFDAppLayer.o: RFDAppLayer.cc \
 	RFDAppLayer.h \
 	$(RTN_PROJ)/core/utils/ModuleAccess.h
 $O/Nlme.o: Nlme.cc \
+	FFDAppLayer.h \
+	$(RTN_PROJ)/contrib/messages/ApplPkt_m.h \
 	typedef.h \
 	$(RTN_PROJ)/core/blackboard/Blackboard.h \
 	$(RTN_PROJ)/core/basicModules/BasicModule.h \
 	Messages_m.h \
+	$(RTN_PROJ)/contrib/applLayer/BasicApplLayer.h \
 	Nlme.h \
 	$(RTN_PROJ)/core/utils/ModuleAccess.h
 $O/Mac802154.o: Mac802154.cc \

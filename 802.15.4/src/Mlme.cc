@@ -53,9 +53,8 @@ void Mlme::handleSelfMsg(cMessage *msg) {
 		setCurrentChannel(getCurrentChannel() + 1);
 		MlmeScan_request* request = check_and_cast<MlmeScan_request *> (
 				getLastUpperMsg());
-		PlmeSetTrxState_request* changeState = new PlmeSetTrxState_request();
-		changeState->setName("PLME-SET-TRX-STATE.request");
-		changeState->setKind(PLME_SET_TRX_STATE_REQUEST);
+		PlmeSetTrxState_request* changeState = new PlmeSetTrxState_request(
+				"PLME-SET-TRX-STATE.request", PLME_SET_TRX_STATE_REQUEST);
 		if ((request->getScanChannels() >> getCurrentChannel()) > 0x00000000) {
 			/** @comment continue with the active scan */
 			changeState->setState(PHY_TX_ON);
@@ -119,7 +118,7 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 						commentStream << "Performing ED scan for " << edTimer
 								<< " seconds on channel " << channel;
 						comment(COMMENT_TIMER, commentStream.str());
-						timer->setName("ED_TIMER");
+						timer->setKind(ED_TIMER);
 						scheduleAt(simTime() + edTimer, timer);
 						switchRadioToChannel(channel);
 						break;
@@ -149,11 +148,10 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 									<< channel;
 							setCurrentChannel(channel);
 							comment(COMMENT_TIMER, commentStream.str());
-							timer->setName("ACTIVE_TIMER");
+							timer->setKind(ACTIVE_TIMER);
 							scheduleAt(simTime() + activeTimer, timer);
-							PlmeSet_request* set = new PlmeSet_request();
-							set->setName("PLME-SET.request");
-							set->setKind(PLME_SET_REQUEST);
+							PlmeSet_request* set = new PlmeSet_request(
+									"PLME-SET.request", PLME_SET_REQUEST);
 							set->setPibAttribute(PHY_CURRENT_PAGE);
 							set->setPibAttributeValueArraySize(1);
 							set->setPibAttributeValue(0,
@@ -205,9 +203,8 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 			if (confirm->getPibAttribute() == PHY_CURRENT_CHANNEL) {
 				if (request->getScanType() == ED_SCAN) {
 					if (timer->isScheduled()) {
-						PlmeEd_request* ed = new PlmeEd_request();
-						ed->setName("PLME-ED.request");
-						ed->setKind(PLME_ED_REQUEST);
+						PlmeEd_request* ed = new PlmeEd_request(
+								"PLME-ED.request", PLME_ED_REQUEST);
 						sendPlmeDown(ed);
 					}
 				} else if (request->getScanType() == ACTIVE_SCAN) {
@@ -235,9 +232,8 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 		}
 		/** If the ED scan is still going on...*/
 		if (timer->isScheduled()) {
-			PlmeEd_request* ed = new PlmeEd_request();
-			ed->setName("PLME-ED.request");
-			ed->setKind(PLME_ED_REQUEST);
+			PlmeEd_request* ed = new PlmeEd_request("PLME-ED.request",
+					PLME_ED_REQUEST);
 			sendPlmeDown(ed);
 		} else {
 			unsigned int base = 0x00000001;
@@ -263,9 +259,8 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 					return;
 				}
 			}
-			MlmeScan_confirm* response = new MlmeScan_confirm();
-			response->setName("MLME-SCAN.confirm");
-			response->setKind(MLME_SCAN_CONFIRM);
+			MlmeScan_confirm* response = new MlmeScan_confirm(
+					"MLME-SCAN.confirm", MLME_SCAN_CONFIRM);
 			response->setStatus(MAC_SUCCESS);
 			response->setScanType(ED_SCAN);
 			response->setResultListSize(request->getScanChannels());
@@ -284,32 +279,23 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 	std::string msgName = msg->getName();
 	if (msg->getKind() == MLME_SCAN_REQUEST) {
 		MlmeScan_request* request = check_and_cast<MlmeScan_request *> (msg);
-		msgName = timer->getName();
-		if (timer->isScheduled() && (msgName == "ED_TIMER" || msgName
-				== "ACTIVE_TIMER" || msgName == "PASSIVE_TIMER" || msgName
-				== "ORPHAN_TIMER")) {
-			MlmeScan_confirm* response = new MlmeScan_confirm();
-			response->setName("MLME-SCAN.confirm");
-			response->setKind(MLME_SCAN_CONFIRM);
+		if (timer->isScheduled() && (timer->getKind() == ED_TIMER
+				|| timer->getKind() == ACTIVE_TIMER || timer->getKind()
+				== PASSIVE_TIMER || timer->getKind() == ORPHAN_TIMER)) {
+			MlmeScan_confirm* response = new MlmeScan_confirm(
+					"MLME-SCAN.confirm", MLME_SCAN_CONFIRM);
 			response->setStatus(MAC_SCAN_IN_PROGRESS);
 			sendMlmeUp(response);
 		} else {
+			PlmeSetTrxState_request* changeState = new PlmeSetTrxState_request(
+					"PLME-SET-TRX-STATE.request", PLME_SET_TRX_STATE_REQUEST);
 			if (request->getScanType() == ED_SCAN) {
-				PlmeSetTrxState_request* changeState =
-						new PlmeSetTrxState_request();
-				changeState->setName("PLME-SET-TRX-STATE.request");
-				changeState->setKind(PLME_SET_TRX_STATE_REQUEST);
 				changeState->setState(PHY_RX_ON);
-				sendPlmeDown(changeState);
 			} else if (request->getScanType() == ACTIVE_SCAN) {
-				PlmeSetTrxState_request* changeState =
-						new PlmeSetTrxState_request();
-				changeState->setName("PLME-SET-TRX-STATE.request");
-				changeState->setKind(PLME_SET_TRX_STATE_REQUEST);
 				changeState->setState(PHY_TX_ON);
-				sendPlmeDown(changeState);
 				setCurrentChannel(0);
 			}
+			sendPlmeDown(changeState);
 			setScannedChannels(0);
 		}
 	} else if (msg->getKind() == MLME_SET_REQUEST) {
@@ -320,9 +306,8 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 				switchRadioToChannel(request->getPibAttributeValue(0));
 				return;
 			}
-			PlmeSet_request* setRequest = new PlmeSet_request();
-			setRequest->setName("PLME-SET.request");
-			setRequest->setKind(PLME_SET_REQUEST);
+			PlmeSet_request* setRequest = new PlmeSet_request(
+					"PLME-SET.request", PLME_SET_REQUEST);
 			setRequest->setPibAttribute(request->getPibAttribute());
 			setRequest->setPibAttributeValueArraySize(
 					request->getPibAttributeValueArraySize());
@@ -403,7 +388,7 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 				confirm->setStatus(MAC_SUCCESS);
 				sendMlmeUp(confirm);
 			}
-			delete(msg);
+			delete (msg);
 		}
 	}
 }
@@ -461,9 +446,8 @@ double Mlme::symbolsToSeconds(int symbols, int channel, int page) {
 }
 
 void Mlme::switchRadioToChannel(unsigned int channel) {
-	PlmeSet_request* requestChannel = new PlmeSet_request();
-	requestChannel->setName("PLME-SET.request");
-	requestChannel->setKind(PLME_SET_REQUEST);
+	PlmeSet_request* requestChannel = new PlmeSet_request("PLME-SET.request",
+			PLME_SET_REQUEST);
 	requestChannel->setPibAttribute(PHY_CURRENT_CHANNEL);
 	requestChannel->setPibAttributeValueArraySize(1);
 	requestChannel->setPibAttributeValue(0, channel);

@@ -64,7 +64,8 @@ void Pd::handlePdMsg(cMessage *msg) {
 }
 
 void Pd::handleRfMsg(cMessage *msg) {
-	delete(msg);
+	Frame802154* frame = check_and_cast<Frame802154 *>(msg);
+	sendPdUp(decapsulateFrame(frame));
 }
 
 void Pd::handlePlmeMsg(cMessage *msg) {
@@ -140,7 +141,10 @@ Frame802154* Pd::encapsulatePd(PdMsg *msg) {
 }
 
 PdMsg* Pd::decapsulateFrame(Frame802154 *msg) {
-	return check_and_cast<PdMsg *> (msg->decapsulate());
+	PdMsg* pdMsg = check_and_cast<PdMsg *> (msg->decapsulate());
+	pdMsg->setName("PD-DATA.indication");
+	pdMsg->setKind(PD_DATA_INDICATION);
+	return pdMsg;
 }
 
 /**********************************************************************/
@@ -179,6 +183,7 @@ void Pd::receiveBBItem(int category, const BBItem *details, int scopeModuleId) {
 	if (category == catRadioState) {
 		radioState = static_cast<const RadioState *> (details)->getState();
 		if ((phyState == TX) && (radioState == RadioState::SEND)) {
+			commentMsgSending(frameQueue.front());
 			sendRfDown(frameQueue.front());
 			frameQueue.pop_front();
 			PdData_confirm *confirm = new PdData_confirm("PD-DATA.confirm",

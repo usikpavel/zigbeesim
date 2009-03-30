@@ -53,6 +53,10 @@ void FFDAppLayer::initialize(int stage) {
 			cMessage* msg = new cMessage("NLME-NETWORK-FORMATION.request",
 					START_TIMER);
 			scheduleAt(simTime(), msg);
+		} else if (getRole() == ROUTER) {
+			cMessage* msg = new cMessage("NLME-NETWORK-DISCOVERY.request",
+					START_TIMER);
+			scheduleAt(simTime() + uniform(0, 0.5), msg);
 		}
 	}
 }
@@ -89,28 +93,38 @@ void FFDAppLayer::handleNlmeMsg(cMessage* msg) {
 	if (msg->getKind() == NLME_NETWORK_FORMATION_CONFIRM) {
 		NlmePermitJoining_request* request = new NlmePermitJoining_request(
 				"NLME-PERMIT-JOINING.request", NLME_PERMIT_JOINING_REQUEST);
+		/** @todo include the param into the omnetpp.ini */
 		request->setPermitDuration(0xAF);
 		sendNlmeDown(request);
+	} else if (msg->getKind() == NLME_PERMIT_JOINING_CONFIRM) {
 	}
 	delete (msg);
 }
 
 void FFDAppLayer::handleSelfMsg(cMessage* msg) {
 	if (msg->getKind() == START_TIMER) {
-		NlmeNetworkFormation_request* request =
-				new NlmeNetworkFormation_request();
-		/** @todo include these params into omnetpp.ini file
-		 * more info on this on page 6 in the notepad, or in the 802154 doc */
-		request->setName("NLME-NETWORK-FORMATION.request");
-		request->setKind(NLME_NETWORK_FORMATION_REQUEST);
-		request->setScanChannels(0x00003800);
-		request->setScanDuration(0x00);
-		request->setBeaconOrder(0x0E);
-		request->setSuperframeOrder(0x0A);
-		/** @note 0xFFFF is considered a NULL value in my case */
-		request->setPANId(0xFFFF);
-		request->setBatteryLifeExtension(false);
-		sendNlmeDown(request);
+		std::string msgName = msg->getName();
+		if (msgName == "NLME-NETWORK-FORMATION.request") {
+			NlmeNetworkFormation_request* request =
+					new NlmeNetworkFormation_request();
+			/** @todo include these params into omnetpp.ini file
+			 * more info on this on page 6 in the notepad, or in the 802154 doc */
+			request->setName("NLME-NETWORK-FORMATION.request");
+			request->setKind(NLME_NETWORK_FORMATION_REQUEST);
+			request->setScanChannels(0x00003800);
+			request->setScanDuration(0x00);
+			request->setBeaconOrder(0x0E);
+			request->setSuperframeOrder(0x0A);
+			/** @note 0xFFFF is considered a NULL value in my case */
+			request->setPANId(0xFFFF);
+			request->setBatteryLifeExtension(false);
+			sendNlmeDown(request);
+		} else if (msgName == "NLME-NETWORK-DISCOVERY.request") {
+			NlmeNetworkDiscovery_request* request = new NlmeNetworkDiscovery_request("NLME-NETWORK-DISCOVERY.request", NLME_NETWORK_DISCOVERY__REQUEST);
+			request->setScanChannels(0x00013F00);
+			request->setScanDuration(0xCF);
+			sendNlmeDown(request);
+		}
 	}
 	delete (msg);
 }

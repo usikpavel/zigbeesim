@@ -772,6 +772,450 @@ void *NlmeNetworkFormation_confirmDescriptor::getFieldStructPointer(void *object
     }
 }
 
+Register_Class(NlmeNetworkDiscovery_request);
+
+NlmeNetworkDiscovery_request::NlmeNetworkDiscovery_request(const char *name, int kind) : NlmeMsg(name,kind)
+{
+    this->ScanChannels_var = 0;
+    this->ScanDuration_var = 0;
+}
+
+NlmeNetworkDiscovery_request::NlmeNetworkDiscovery_request(const NlmeNetworkDiscovery_request& other) : NlmeMsg()
+{
+    setName(other.getName());
+    operator=(other);
+}
+
+NlmeNetworkDiscovery_request::~NlmeNetworkDiscovery_request()
+{
+}
+
+NlmeNetworkDiscovery_request& NlmeNetworkDiscovery_request::operator=(const NlmeNetworkDiscovery_request& other)
+{
+    if (this==&other) return *this;
+    NlmeMsg::operator=(other);
+    this->ScanChannels_var = other.ScanChannels_var;
+    this->ScanDuration_var = other.ScanDuration_var;
+    return *this;
+}
+
+void NlmeNetworkDiscovery_request::parsimPack(cCommBuffer *b)
+{
+    NlmeMsg::parsimPack(b);
+    doPacking(b,this->ScanChannels_var);
+    doPacking(b,this->ScanDuration_var);
+}
+
+void NlmeNetworkDiscovery_request::parsimUnpack(cCommBuffer *b)
+{
+    NlmeMsg::parsimUnpack(b);
+    doUnpacking(b,this->ScanChannels_var);
+    doUnpacking(b,this->ScanDuration_var);
+}
+
+unsigned int NlmeNetworkDiscovery_request::getScanChannels() const
+{
+    return ScanChannels_var;
+}
+
+void NlmeNetworkDiscovery_request::setScanChannels(unsigned int ScanChannels_var)
+{
+    this->ScanChannels_var = ScanChannels_var;
+}
+
+unsigned char NlmeNetworkDiscovery_request::getScanDuration() const
+{
+    return ScanDuration_var;
+}
+
+void NlmeNetworkDiscovery_request::setScanDuration(unsigned char ScanDuration_var)
+{
+    this->ScanDuration_var = ScanDuration_var;
+}
+
+class NlmeNetworkDiscovery_requestDescriptor : public cClassDescriptor
+{
+  public:
+    NlmeNetworkDiscovery_requestDescriptor();
+    virtual ~NlmeNetworkDiscovery_requestDescriptor();
+
+    virtual bool doesSupport(cObject *obj) const;
+    virtual const char *getProperty(const char *propertyname) const;
+    virtual int getFieldCount(void *object) const;
+    virtual const char *getFieldName(void *object, int field) const;
+    virtual unsigned int getFieldTypeFlags(void *object, int field) const;
+    virtual const char *getFieldTypeString(void *object, int field) const;
+    virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
+    virtual int getArraySize(void *object, int field) const;
+
+    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
+
+    virtual const char *getFieldStructName(void *object, int field) const;
+    virtual void *getFieldStructPointer(void *object, int field, int i) const;
+};
+
+Register_ClassDescriptor(NlmeNetworkDiscovery_requestDescriptor);
+
+NlmeNetworkDiscovery_requestDescriptor::NlmeNetworkDiscovery_requestDescriptor() : cClassDescriptor("NlmeNetworkDiscovery_request", "NlmeMsg")
+{
+}
+
+NlmeNetworkDiscovery_requestDescriptor::~NlmeNetworkDiscovery_requestDescriptor()
+{
+}
+
+bool NlmeNetworkDiscovery_requestDescriptor::doesSupport(cObject *obj) const
+{
+    return dynamic_cast<NlmeNetworkDiscovery_request *>(obj)!=NULL;
+}
+
+const char *NlmeNetworkDiscovery_requestDescriptor::getProperty(const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->getProperty(propertyname) : NULL;
+}
+
+int NlmeNetworkDiscovery_requestDescriptor::getFieldCount(void *object) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? 2+basedesc->getFieldCount(object) : 2;
+}
+
+unsigned int NlmeNetworkDiscovery_requestDescriptor::getFieldTypeFlags(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeFlags(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return FD_ISEDITABLE;
+        case 1: return FD_ISEDITABLE;
+        default: return 0;
+    }
+}
+
+const char *NlmeNetworkDiscovery_requestDescriptor::getFieldName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "ScanChannels";
+        case 1: return "ScanDuration";
+        default: return NULL;
+    }
+}
+
+const char *NlmeNetworkDiscovery_requestDescriptor::getFieldTypeString(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeString(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "unsigned int";
+        case 1: return "unsigned char";
+        default: return NULL;
+    }
+}
+
+const char *NlmeNetworkDiscovery_requestDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldProperty(object, field, propertyname);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+int NlmeNetworkDiscovery_requestDescriptor::getArraySize(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getArraySize(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    NlmeNetworkDiscovery_request *pp = (NlmeNetworkDiscovery_request *)object; (void)pp;
+    switch (field) {
+        default: return 0;
+    }
+}
+
+bool NlmeNetworkDiscovery_requestDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+        field -= basedesc->getFieldCount(object);
+    }
+    NlmeNetworkDiscovery_request *pp = (NlmeNetworkDiscovery_request *)object; (void)pp;
+    switch (field) {
+        case 0: ulong2string(pp->getScanChannels(),resultbuf,bufsize); return true;
+        case 1: ulong2string(pp->getScanDuration(),resultbuf,bufsize); return true;
+        default: return false;
+    }
+}
+
+bool NlmeNetworkDiscovery_requestDescriptor::setFieldAsString(void *object, int field, int i, const char *value) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->setFieldAsString(object,field,i,value);
+        field -= basedesc->getFieldCount(object);
+    }
+    NlmeNetworkDiscovery_request *pp = (NlmeNetworkDiscovery_request *)object; (void)pp;
+    switch (field) {
+        case 0: pp->setScanChannels(string2ulong(value)); return true;
+        case 1: pp->setScanDuration(string2ulong(value)); return true;
+        default: return false;
+    }
+}
+
+const char *NlmeNetworkDiscovery_requestDescriptor::getFieldStructName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+void *NlmeNetworkDiscovery_requestDescriptor::getFieldStructPointer(void *object, int field, int i) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructPointer(object, field, i);
+        field -= basedesc->getFieldCount(object);
+    }
+    NlmeNetworkDiscovery_request *pp = (NlmeNetworkDiscovery_request *)object; (void)pp;
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+Register_Class(NlmeNetworkDiscovery_confirm);
+
+NlmeNetworkDiscovery_confirm::NlmeNetworkDiscovery_confirm(const char *name, int kind) : NlmeMsg(name,kind)
+{
+}
+
+NlmeNetworkDiscovery_confirm::NlmeNetworkDiscovery_confirm(const NlmeNetworkDiscovery_confirm& other) : NlmeMsg()
+{
+    setName(other.getName());
+    operator=(other);
+}
+
+NlmeNetworkDiscovery_confirm::~NlmeNetworkDiscovery_confirm()
+{
+}
+
+NlmeNetworkDiscovery_confirm& NlmeNetworkDiscovery_confirm::operator=(const NlmeNetworkDiscovery_confirm& other)
+{
+    if (this==&other) return *this;
+    NlmeMsg::operator=(other);
+    return *this;
+}
+
+void NlmeNetworkDiscovery_confirm::parsimPack(cCommBuffer *b)
+{
+    NlmeMsg::parsimPack(b);
+}
+
+void NlmeNetworkDiscovery_confirm::parsimUnpack(cCommBuffer *b)
+{
+    NlmeMsg::parsimUnpack(b);
+}
+
+class NlmeNetworkDiscovery_confirmDescriptor : public cClassDescriptor
+{
+  public:
+    NlmeNetworkDiscovery_confirmDescriptor();
+    virtual ~NlmeNetworkDiscovery_confirmDescriptor();
+
+    virtual bool doesSupport(cObject *obj) const;
+    virtual const char *getProperty(const char *propertyname) const;
+    virtual int getFieldCount(void *object) const;
+    virtual const char *getFieldName(void *object, int field) const;
+    virtual unsigned int getFieldTypeFlags(void *object, int field) const;
+    virtual const char *getFieldTypeString(void *object, int field) const;
+    virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
+    virtual int getArraySize(void *object, int field) const;
+
+    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
+
+    virtual const char *getFieldStructName(void *object, int field) const;
+    virtual void *getFieldStructPointer(void *object, int field, int i) const;
+};
+
+Register_ClassDescriptor(NlmeNetworkDiscovery_confirmDescriptor);
+
+NlmeNetworkDiscovery_confirmDescriptor::NlmeNetworkDiscovery_confirmDescriptor() : cClassDescriptor("NlmeNetworkDiscovery_confirm", "NlmeMsg")
+{
+}
+
+NlmeNetworkDiscovery_confirmDescriptor::~NlmeNetworkDiscovery_confirmDescriptor()
+{
+}
+
+bool NlmeNetworkDiscovery_confirmDescriptor::doesSupport(cObject *obj) const
+{
+    return dynamic_cast<NlmeNetworkDiscovery_confirm *>(obj)!=NULL;
+}
+
+const char *NlmeNetworkDiscovery_confirmDescriptor::getProperty(const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->getProperty(propertyname) : NULL;
+}
+
+int NlmeNetworkDiscovery_confirmDescriptor::getFieldCount(void *object) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? 0+basedesc->getFieldCount(object) : 0;
+}
+
+unsigned int NlmeNetworkDiscovery_confirmDescriptor::getFieldTypeFlags(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeFlags(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return 0;
+    }
+}
+
+const char *NlmeNetworkDiscovery_confirmDescriptor::getFieldName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+const char *NlmeNetworkDiscovery_confirmDescriptor::getFieldTypeString(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeString(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+const char *NlmeNetworkDiscovery_confirmDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldProperty(object, field, propertyname);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+int NlmeNetworkDiscovery_confirmDescriptor::getArraySize(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getArraySize(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    NlmeNetworkDiscovery_confirm *pp = (NlmeNetworkDiscovery_confirm *)object; (void)pp;
+    switch (field) {
+        default: return 0;
+    }
+}
+
+bool NlmeNetworkDiscovery_confirmDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+        field -= basedesc->getFieldCount(object);
+    }
+    NlmeNetworkDiscovery_confirm *pp = (NlmeNetworkDiscovery_confirm *)object; (void)pp;
+    switch (field) {
+        default: return false;
+    }
+}
+
+bool NlmeNetworkDiscovery_confirmDescriptor::setFieldAsString(void *object, int field, int i, const char *value) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->setFieldAsString(object,field,i,value);
+        field -= basedesc->getFieldCount(object);
+    }
+    NlmeNetworkDiscovery_confirm *pp = (NlmeNetworkDiscovery_confirm *)object; (void)pp;
+    switch (field) {
+        default: return false;
+    }
+}
+
+const char *NlmeNetworkDiscovery_confirmDescriptor::getFieldStructName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+void *NlmeNetworkDiscovery_confirmDescriptor::getFieldStructPointer(void *object, int field, int i) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructPointer(object, field, i);
+        field -= basedesc->getFieldCount(object);
+    }
+    NlmeNetworkDiscovery_confirm *pp = (NlmeNetworkDiscovery_confirm *)object; (void)pp;
+    switch (field) {
+        default: return NULL;
+    }
+}
+
 Register_Class(NlmePermitJoining_request);
 
 NlmePermitJoining_request::NlmePermitJoining_request(const char *name, int kind) : NlmeMsg(name,kind)
