@@ -156,6 +156,7 @@ protected:
 		commentStream << "Received " << msg->getName();
 		comment(COMMENT_MESSAGE, commentStream.str());
 	}
+public:
 	Role getRole() {
 		return this->role;
 	}

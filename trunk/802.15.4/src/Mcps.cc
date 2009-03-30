@@ -35,7 +35,6 @@ void Mcps::handleMessage(cMessage *msg) {
 }
 
 void Mcps::handleSelfMsg(cMessage *msg) {
-	std::string msgName = msg->getName();
 	delete (msg);
 }
 
@@ -55,6 +54,8 @@ void Mcps::handlePdMsg(cMessage *msg) {
 			}
 		}
 		delete (msg);
+	} else if (msg->getKind() == PD_DATA_INDICATION) {
+		std::cout << "BEACON!!!!!!!!!!!!!!!!!!!!!!" << endl;
 	}
 }
 

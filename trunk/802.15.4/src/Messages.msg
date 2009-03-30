@@ -41,6 +41,14 @@ message NlmeNetworkFormation_confirm extends NlmeMsg {
   	unsigned char status;  
 };
 
+message NlmeNetworkDiscovery_request extends NlmeMsg {
+    unsigned int ScanChannels;
+    unsigned char ScanDuration;
+};
+
+message NlmeNetworkDiscovery_confirm extends NlmeMsg {
+};
+
 message NlmePermitJoining_request extends NlmeMsg {
     unsigned char permitDuration;
 };

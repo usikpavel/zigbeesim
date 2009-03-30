@@ -6,6 +6,7 @@
 #include "BasicModule.h"
 #include "typedef.h"
 #include "Messages_m.h"
+#include "FFDAppLayer.h"
 
 class Nlme: public BasicModule {
 public:

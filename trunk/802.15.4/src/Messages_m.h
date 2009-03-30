@@ -141,6 +141,72 @@ inline void doUnpacking(cCommBuffer *b, NlmeNetworkFormation_confirm& obj) {obj.
 /**
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
+ * message NlmeNetworkDiscovery_request extends NlmeMsg {
+ *     unsigned int ScanChannels;
+ *     unsigned char ScanDuration;
+ * };
+ * </pre>
+ */
+class NlmeNetworkDiscovery_request : public NlmeMsg
+{
+  protected:
+    unsigned int ScanChannels_var;
+    unsigned char ScanDuration_var;
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const NlmeNetworkDiscovery_request&);
+
+  public:
+    NlmeNetworkDiscovery_request(const char *name=NULL, int kind=0);
+    NlmeNetworkDiscovery_request(const NlmeNetworkDiscovery_request& other);
+    virtual ~NlmeNetworkDiscovery_request();
+    NlmeNetworkDiscovery_request& operator=(const NlmeNetworkDiscovery_request& other);
+    virtual NlmeNetworkDiscovery_request *dup() const {return new NlmeNetworkDiscovery_request(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+    virtual unsigned int getScanChannels() const;
+    virtual void setScanChannels(unsigned int ScanChannels_var);
+    virtual unsigned char getScanDuration() const;
+    virtual void setScanDuration(unsigned char ScanDuration_var);
+};
+
+inline void doPacking(cCommBuffer *b, NlmeNetworkDiscovery_request& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, NlmeNetworkDiscovery_request& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
+ * message NlmeNetworkDiscovery_confirm extends NlmeMsg {
+ * };
+ * </pre>
+ */
+class NlmeNetworkDiscovery_confirm : public NlmeMsg
+{
+  protected:
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const NlmeNetworkDiscovery_confirm&);
+
+  public:
+    NlmeNetworkDiscovery_confirm(const char *name=NULL, int kind=0);
+    NlmeNetworkDiscovery_confirm(const NlmeNetworkDiscovery_confirm& other);
+    virtual ~NlmeNetworkDiscovery_confirm();
+    NlmeNetworkDiscovery_confirm& operator=(const NlmeNetworkDiscovery_confirm& other);
+    virtual NlmeNetworkDiscovery_confirm *dup() const {return new NlmeNetworkDiscovery_confirm(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+};
+
+inline void doPacking(cCommBuffer *b, NlmeNetworkDiscovery_confirm& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, NlmeNetworkDiscovery_confirm& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
  * message NlmePermitJoining_request extends NlmeMsg {
  *     unsigned char permitDuration;
  * };
