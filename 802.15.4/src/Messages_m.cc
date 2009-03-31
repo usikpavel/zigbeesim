@@ -7465,6 +7465,9 @@ const char *PdMsgDescriptor::getFieldProperty(void *object, int field, const cha
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
+        case 0:
+            if (!strcmp(propertyname,"enum")) return "FrameType";
+            return NULL;
         default: return NULL;
     }
 }

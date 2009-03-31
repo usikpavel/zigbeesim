@@ -1102,7 +1102,7 @@ inline void doUnpacking(cCommBuffer *b, PlmeEd_confirm& obj) {obj.parsimUnpack(b
  * message PdMsg extends cPacket {
  *     
  *     
- *     unsigned char frameType;
+ *     unsigned char frameType enum(FrameType);
  *     bool securityEnabled;
  *     bool framePending;
  *     bool ackRequest;

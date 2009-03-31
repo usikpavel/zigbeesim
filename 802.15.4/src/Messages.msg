@@ -19,6 +19,7 @@ cplusplus {{
 
 enum PhyEnum;
 enum MacEnum;
+enum FrameType;
 struct PanDescriptor;
 
 // Application<-->Network layer interface messages
@@ -185,7 +186,7 @@ message PlmeEd_confirm extends PlmeMsg {
 message PdMsg extends cPacket {
     // MHR fields
     // MHR fields - FrameControl
-    unsigned char frameType;
+    unsigned char frameType enum(FrameType);
     bool securityEnabled;
     bool framePending;
     bool ackRequest;

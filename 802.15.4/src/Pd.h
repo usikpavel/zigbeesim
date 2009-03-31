@@ -93,8 +93,6 @@ protected:
 	int myMacAddr;
 	unsigned int queueLength;
 	void prepareSend();
-	virtual cMessage* decapsMsg(Frame802154*);
-	virtual Frame802154* encapsMsg(cPacket*);
 	virtual void receiveBBItem(int category, const BBItem *details, int scopeModuleId);
 	/** -temp */
 };

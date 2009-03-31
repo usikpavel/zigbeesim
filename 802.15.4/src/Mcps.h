@@ -27,6 +27,7 @@ protected:
 	/** additional variables */
 	cMessage* lastUpperMsg;
 	cMessage* timer;
+	PdMsg* lastBeacon;
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
 	void handleSelfMsg(cMessage *);
@@ -63,12 +64,19 @@ protected:
 		delete (this->lastUpperMsg);
 		this->lastUpperMsg = msg;
 	}
-	MacPib* getMacPib() {
-		return ((MacPib *) (this->getParentModule()->getModuleByRelativePath(
-				"macPib")));
-	}
 	cMessage* getLastUpperMsg() {
 		return this->lastUpperMsg;
+	}
+	MacPib* getMacPib() {
+			return ((MacPib *) (this->getParentModule()->getModuleByRelativePath(
+					"macPib")));
+		}
+	void setLastBeacon(PdMsg* lastBeacon) {
+		delete(this->lastBeacon);
+		this->lastBeacon = lastBeacon;
+	}
+	PdMsg* getLastBeacon() {
+		return this->lastBeacon;
 	}
 };
 
