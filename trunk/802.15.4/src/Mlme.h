@@ -9,6 +9,7 @@
 #include <string>
 #include <sstream>
 #include "MacPib.h"
+#include "Mcps.h"
 
 class Mlme: public BasicModule {
 public:
@@ -83,6 +84,10 @@ protected:
 		return ((MacPib *) (this->getParentModule()->getModuleByRelativePath(
 				"macPib")));
 	}
+	Mcps* getMcps() {
+		return ((Mcps *) (this->getParentModule()->getModuleByRelativePath(
+				"mcps")));
+	}
 	virtual void setLastUpperMsg(cMessage* msg) {
 		setLayerStage(0);
 		delete (this->lastUpperMsg);
@@ -132,9 +137,9 @@ protected:
 	}
 
 	void addScannedPanDescriptor(PanDescriptor descriptor) {
-		int size = sizeof(this->scannedPanDescriptors)/sizeof(PanDescriptor);
+		int size = sizeof(this->scannedPanDescriptors) / sizeof(PanDescriptor);
 		PanDescriptor* newScannedPanDescriptors;
-		newScannedPanDescriptors = new PanDescriptor[size+1];
+		newScannedPanDescriptors = new PanDescriptor[size + 1];
 		for (int i = 0; i < size; i++) {
 			newScannedPanDescriptors[i] = this->scannedPanDescriptors[i];
 		}

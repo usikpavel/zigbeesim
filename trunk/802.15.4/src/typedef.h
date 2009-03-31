@@ -144,11 +144,16 @@ typedef enum {
 
 struct PanDescriptor {
 	unsigned char coordAddrMode;
-	unsigned short coordPANId;
+	unsigned short coordPanId;
 	unsigned long coordAddress;
 	unsigned char logicalChannel;
 	unsigned char channelPage;
-	unsigned short superframeSpec;
+	unsigned char beaconOrder;
+	unsigned char superframeOrder;
+	unsigned char finalCapSlot;
+	bool batteryLifeExtension;
+	bool panCoordinator;
+	bool associationPermit;
 	bool GTSPermit;
 	unsigned char linkQuality;
 	unsigned int timeStamp;

@@ -142,32 +142,10 @@ Frame802154* Pd::encapsulatePd(PdMsg *msg) {
 
 PdMsg* Pd::decapsulateFrame(Frame802154 *msg) {
 	PdMsg* pdMsg = check_and_cast<PdMsg *> (msg->decapsulate());
+	delete(msg);
 	pdMsg->setName("PD-DATA.indication");
 	pdMsg->setKind(PD_DATA_INDICATION);
 	return pdMsg;
-}
-
-/**********************************************************************/
-cMessage* Pd::decapsMsg(Frame802154* msg) {
-	cPacket *m = msg->decapsulate();
-	//m->setControlInfo(new MacControlInfo(msg->getSrcAddr()));
-	delete msg;
-	return m;
-}
-Frame802154* Pd::encapsMsg(cPacket *msg) {
-	Frame802154 *frame = new Frame802154(msg->getName(), msg->getKind());
-	frame->setBitLength(40);
-	// copy dest address from the Control Info attached to the network
-	// mesage by the network layer
-	MacControlInfo* cInfo =
-			static_cast<MacControlInfo*> (msg->removeControlInfo());
-	//frame->setDestAddr(cInfo->getNextHopMac());
-	//delete the control info
-	delete cInfo;
-	//frame->setSrcAddr(myMacAddr);
-	//encapsulate the network packet
-	frame->encapsulate(msg);
-	return frame;
 }
 
 void Pd::prepareSend() {

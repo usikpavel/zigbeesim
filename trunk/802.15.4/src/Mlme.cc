@@ -389,6 +389,25 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 				sendMlmeUp(confirm);
 			}
 			delete (msg);
+		} else if (msgName == "Beacon command") {
+			MacBeacon* macBeacon = check_and_cast<MacBeacon *>(msg);
+			/** @todo let's get rid of this one */
+			PdMsg* pdBeacon = getMcps()->getLastBeacon()->dup();
+			if (getLastUpperMsg()->getKind() == MLME_SCAN_REQUEST) {
+				PanDescriptor panDescriptor;
+				/** @todo make an option to use also long addresses */
+				panDescriptor.coordAddrMode = SHORT_ADDRESS;
+				panDescriptor.coordPanId = pdBeacon->getSourcePanIdentifier();
+				panDescriptor.logicalChannel = getCurrentChannel();
+				panDescriptor.channelPage = getCurrentPage();
+				panDescriptor.beaconOrder = macBeacon->getBeaconOrder();
+				panDescriptor
+				/*
+				if (not scanned pan descriptor) {
+					addScannedPanDescriptor();
+				}*/
+			}
+			delete(msg);
 		}
 	}
 }
