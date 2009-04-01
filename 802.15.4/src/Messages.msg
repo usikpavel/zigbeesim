@@ -17,9 +17,10 @@ cplusplus {{
 #include "typedef.h"
 }}
 
-enum PhyEnum;
 enum MacEnum;
+enum PhyEnum;
 enum FrameType;
+struct NetworkDescriptor;
 struct PanDescriptor;
 
 // Application<-->Network layer interface messages
@@ -48,6 +49,9 @@ message NlmeNetworkDiscovery_request extends NlmeMsg {
 };
 
 message NlmeNetworkDiscovery_confirm extends NlmeMsg {
+    unsigned char networkCount;
+    NetworkDescriptor NetworkDescriptorList[];
+    unsigned char status enum(MacEnum);
 };
 
 message NlmePermitJoining_request extends NlmeMsg {
@@ -56,6 +60,33 @@ message NlmePermitJoining_request extends NlmeMsg {
 
 message NlmePermitJoining_confirm extends NlmeMsg {
     unsigned char status enum(MacEnum);
+};
+
+message NlmeStartRouter_request extends NlmeMsg {
+    unsigned char beaconOrder;
+    unsigned char superframeOrder;
+    bool batteryLifeExtension;
+};
+
+message NlmeStartRouter_confirm extends NlmeMsg {
+    unsigned char status enum(MacEnum); 
+};
+
+message NlmeJoin_request extends NlmeMsg {
+    unsigned short panId;
+    bool joinAsRouter;
+    bool rejoinNetwork;
+    unsigned int scanChannels;
+    unsigned char scanDuration;
+    bool powerSource;
+    bool rxOnWhenIdle;
+    bool macSecurity;
+};
+
+message NlmeJoin_indication extends NlmeMsg {
+};
+
+message NlmeJoin_confirm extends NlmeMsg {
 };
 
 message NldeMsg extends cMessage {
@@ -210,6 +241,11 @@ message PdData_request extends PdMsg {
 
 message PdData_confirm extends PdMsg {
     unsigned char status enum(PhyEnum);
+};
+
+message PdData_indication extends PdMsg {
+    unsigned char psduLength;
+    unsigned char ppduLinkQuality;
 };
 
 message Frame802154 extends cPacket {

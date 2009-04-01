@@ -179,12 +179,19 @@ inline void doUnpacking(cCommBuffer *b, NlmeNetworkDiscovery_request& obj) {obj.
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
  * message NlmeNetworkDiscovery_confirm extends NlmeMsg {
+ *     unsigned char networkCount;
+ *     NetworkDescriptor NetworkDescriptorList[];
+ *     unsigned char status enum(MacEnum);
  * };
  * </pre>
  */
 class NlmeNetworkDiscovery_confirm : public NlmeMsg
 {
   protected:
+    unsigned char networkCount_var;
+    NetworkDescriptor *NetworkDescriptorList_var; // array ptr
+    unsigned int NetworkDescriptorList_arraysize;
+    unsigned char status_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const NlmeNetworkDiscovery_confirm&);
@@ -199,6 +206,15 @@ class NlmeNetworkDiscovery_confirm : public NlmeMsg
     virtual void parsimUnpack(cCommBuffer *b);
 
     // field getter/setter methods
+    virtual unsigned char getNetworkCount() const;
+    virtual void setNetworkCount(unsigned char networkCount_var);
+    virtual void setNetworkDescriptorListArraySize(unsigned int size);
+    virtual unsigned int getNetworkDescriptorListArraySize() const;
+    virtual NetworkDescriptor& getNetworkDescriptorList(unsigned int k);
+    virtual const NetworkDescriptor& getNetworkDescriptorList(unsigned int k) const {return const_cast<NlmeNetworkDiscovery_confirm*>(this)->getNetworkDescriptorList(k);}
+    virtual void setNetworkDescriptorList(unsigned int k, const NetworkDescriptor& NetworkDescriptorList_var);
+    virtual unsigned char getStatus() const;
+    virtual void setStatus(unsigned char status_var);
 };
 
 inline void doPacking(cCommBuffer *b, NlmeNetworkDiscovery_confirm& obj) {obj.parsimPack(b);}
@@ -269,6 +285,199 @@ class NlmePermitJoining_confirm : public NlmeMsg
 
 inline void doPacking(cCommBuffer *b, NlmePermitJoining_confirm& obj) {obj.parsimPack(b);}
 inline void doUnpacking(cCommBuffer *b, NlmePermitJoining_confirm& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
+ * message NlmeStartRouter_request extends NlmeMsg {
+ *     unsigned char beaconOrder;
+ *     unsigned char superframeOrder;
+ *     bool batteryLifeExtension;
+ * };
+ * </pre>
+ */
+class NlmeStartRouter_request : public NlmeMsg
+{
+  protected:
+    unsigned char beaconOrder_var;
+    unsigned char superframeOrder_var;
+    bool batteryLifeExtension_var;
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const NlmeStartRouter_request&);
+
+  public:
+    NlmeStartRouter_request(const char *name=NULL, int kind=0);
+    NlmeStartRouter_request(const NlmeStartRouter_request& other);
+    virtual ~NlmeStartRouter_request();
+    NlmeStartRouter_request& operator=(const NlmeStartRouter_request& other);
+    virtual NlmeStartRouter_request *dup() const {return new NlmeStartRouter_request(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+    virtual unsigned char getBeaconOrder() const;
+    virtual void setBeaconOrder(unsigned char beaconOrder_var);
+    virtual unsigned char getSuperframeOrder() const;
+    virtual void setSuperframeOrder(unsigned char superframeOrder_var);
+    virtual bool getBatteryLifeExtension() const;
+    virtual void setBatteryLifeExtension(bool batteryLifeExtension_var);
+};
+
+inline void doPacking(cCommBuffer *b, NlmeStartRouter_request& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, NlmeStartRouter_request& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
+ * message NlmeStartRouter_confirm extends NlmeMsg {
+ *     unsigned char status enum(MacEnum); 
+ * };
+ * </pre>
+ */
+class NlmeStartRouter_confirm : public NlmeMsg
+{
+  protected:
+    unsigned char status_var;
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const NlmeStartRouter_confirm&);
+
+  public:
+    NlmeStartRouter_confirm(const char *name=NULL, int kind=0);
+    NlmeStartRouter_confirm(const NlmeStartRouter_confirm& other);
+    virtual ~NlmeStartRouter_confirm();
+    NlmeStartRouter_confirm& operator=(const NlmeStartRouter_confirm& other);
+    virtual NlmeStartRouter_confirm *dup() const {return new NlmeStartRouter_confirm(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+    virtual unsigned char getStatus() const;
+    virtual void setStatus(unsigned char status_var);
+};
+
+inline void doPacking(cCommBuffer *b, NlmeStartRouter_confirm& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, NlmeStartRouter_confirm& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
+ * message NlmeJoin_request extends NlmeMsg {
+ *     unsigned short panId;
+ *     bool joinAsRouter;
+ *     bool rejoinNetwork;
+ *     unsigned int scanChannels;
+ *     unsigned char scanDuration;
+ *     bool powerSource;
+ *     bool rxOnWhenIdle;
+ *     bool macSecurity;
+ * };
+ * </pre>
+ */
+class NlmeJoin_request : public NlmeMsg
+{
+  protected:
+    unsigned short panId_var;
+    bool joinAsRouter_var;
+    bool rejoinNetwork_var;
+    unsigned int scanChannels_var;
+    unsigned char scanDuration_var;
+    bool powerSource_var;
+    bool rxOnWhenIdle_var;
+    bool macSecurity_var;
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const NlmeJoin_request&);
+
+  public:
+    NlmeJoin_request(const char *name=NULL, int kind=0);
+    NlmeJoin_request(const NlmeJoin_request& other);
+    virtual ~NlmeJoin_request();
+    NlmeJoin_request& operator=(const NlmeJoin_request& other);
+    virtual NlmeJoin_request *dup() const {return new NlmeJoin_request(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+    virtual unsigned short getPanId() const;
+    virtual void setPanId(unsigned short panId_var);
+    virtual bool getJoinAsRouter() const;
+    virtual void setJoinAsRouter(bool joinAsRouter_var);
+    virtual bool getRejoinNetwork() const;
+    virtual void setRejoinNetwork(bool rejoinNetwork_var);
+    virtual unsigned int getScanChannels() const;
+    virtual void setScanChannels(unsigned int scanChannels_var);
+    virtual unsigned char getScanDuration() const;
+    virtual void setScanDuration(unsigned char scanDuration_var);
+    virtual bool getPowerSource() const;
+    virtual void setPowerSource(bool powerSource_var);
+    virtual bool getRxOnWhenIdle() const;
+    virtual void setRxOnWhenIdle(bool rxOnWhenIdle_var);
+    virtual bool getMacSecurity() const;
+    virtual void setMacSecurity(bool macSecurity_var);
+};
+
+inline void doPacking(cCommBuffer *b, NlmeJoin_request& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, NlmeJoin_request& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
+ * message NlmeJoin_indication extends NlmeMsg {
+ * };
+ * </pre>
+ */
+class NlmeJoin_indication : public NlmeMsg
+{
+  protected:
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const NlmeJoin_indication&);
+
+  public:
+    NlmeJoin_indication(const char *name=NULL, int kind=0);
+    NlmeJoin_indication(const NlmeJoin_indication& other);
+    virtual ~NlmeJoin_indication();
+    NlmeJoin_indication& operator=(const NlmeJoin_indication& other);
+    virtual NlmeJoin_indication *dup() const {return new NlmeJoin_indication(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+};
+
+inline void doPacking(cCommBuffer *b, NlmeJoin_indication& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, NlmeJoin_indication& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
+ * message NlmeJoin_confirm extends NlmeMsg {
+ * };
+ * </pre>
+ */
+class NlmeJoin_confirm : public NlmeMsg
+{
+  protected:
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const NlmeJoin_confirm&);
+
+  public:
+    NlmeJoin_confirm(const char *name=NULL, int kind=0);
+    NlmeJoin_confirm(const NlmeJoin_confirm& other);
+    virtual ~NlmeJoin_confirm();
+    NlmeJoin_confirm& operator=(const NlmeJoin_confirm& other);
+    virtual NlmeJoin_confirm *dup() const {return new NlmeJoin_confirm(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+};
+
+inline void doPacking(cCommBuffer *b, NlmeJoin_confirm& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, NlmeJoin_confirm& obj) {obj.parsimUnpack(b);}
 
 /**
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
@@ -1256,6 +1465,43 @@ class PdData_confirm : public PdMsg
 
 inline void doPacking(cCommBuffer *b, PdData_confirm& obj) {obj.parsimPack(b);}
 inline void doUnpacking(cCommBuffer *b, PdData_confirm& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
+ * message PdData_indication extends PdMsg {
+ *     unsigned char psduLength;
+ *     unsigned char ppduLinkQuality;
+ * };
+ * </pre>
+ */
+class PdData_indication : public PdMsg
+{
+  protected:
+    unsigned char psduLength_var;
+    unsigned char ppduLinkQuality_var;
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const PdData_indication&);
+
+  public:
+    PdData_indication(const char *name=NULL, int kind=0);
+    PdData_indication(const PdData_indication& other);
+    virtual ~PdData_indication();
+    PdData_indication& operator=(const PdData_indication& other);
+    virtual PdData_indication *dup() const {return new PdData_indication(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+    virtual unsigned char getPsduLength() const;
+    virtual void setPsduLength(unsigned char psduLength_var);
+    virtual unsigned char getPpduLinkQuality() const;
+    virtual void setPpduLinkQuality(unsigned char ppduLinkQuality_var);
+};
+
+inline void doPacking(cCommBuffer *b, PdData_indication& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, PdData_indication& obj) {obj.parsimUnpack(b);}
 
 /**
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.

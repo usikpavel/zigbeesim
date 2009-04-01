@@ -60,6 +60,7 @@ protected:
 		commentStream << "ERROR: " << errorMessage;
 		comment(COMMENT_ERROR, commentStream.str());
 	}
+public:
 	void setLastUpperMsg(cMessage* msg) {
 		delete (this->lastUpperMsg);
 		this->lastUpperMsg = msg;

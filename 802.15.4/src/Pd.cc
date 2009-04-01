@@ -1,7 +1,6 @@
 #include "Pd.h"
 
-Define_Module(Pd)
-;
+Define_Module( Pd);
 
 void Pd::initialize(int stage) {
 	BasicModule::initialize(stage);
@@ -64,7 +63,7 @@ void Pd::handlePdMsg(cMessage *msg) {
 }
 
 void Pd::handleRfMsg(cMessage *msg) {
-	Frame802154* frame = check_and_cast<Frame802154 *>(msg);
+	Frame802154* frame = check_and_cast<Frame802154 *> (msg);
 	sendPdUp(decapsulateFrame(frame));
 }
 
@@ -78,8 +77,12 @@ void Pd::handleRfControl(cMessage *msg) {
 		if (radio->switchToRecv()) {
 			phyState = RX;
 		}
+		PdData_confirm *confirm = new PdData_confirm("PD-DATA.confirm",
+				PD_DATA_CONFIRM);
+		confirm->setStatus(PHY_SUCCESS);
+		sendPdUp(confirm);
 	}
-	delete(msg);
+	delete (msg);
 }
 
 void Pd::sendPdUp(cMessage *msg) {
@@ -142,7 +145,7 @@ Frame802154* Pd::encapsulatePd(PdMsg *msg) {
 
 PdMsg* Pd::decapsulateFrame(Frame802154 *msg) {
 	PdMsg* pdMsg = check_and_cast<PdMsg *> (msg->decapsulate());
-	delete(msg);
+	delete (msg);
 	pdMsg->setName("PD-DATA.indication");
 	pdMsg->setKind(PD_DATA_INDICATION);
 	return pdMsg;
@@ -161,13 +164,8 @@ void Pd::receiveBBItem(int category, const BBItem *details, int scopeModuleId) {
 	if (category == catRadioState) {
 		radioState = static_cast<const RadioState *> (details)->getState();
 		if ((phyState == TX) && (radioState == RadioState::SEND)) {
-			commentMsgSending(frameQueue.front());
 			sendRfDown(frameQueue.front());
 			frameQueue.pop_front();
-			PdData_confirm *confirm = new PdData_confirm("PD-DATA.confirm",
-					PD_DATA_CONFIRM);
-			confirm->setStatus(PHY_SUCCESS);
-			sendPdUp(confirm);
 		} else if ((phyState == RX) && (radioState == RadioState::RECV)) {
 			prepareSend();
 		}

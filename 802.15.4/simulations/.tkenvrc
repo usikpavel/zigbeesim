@@ -1,4 +1,4 @@
 # Partial Tkenv config file -- see $HOME/.tkenvrc as well
-inspector "ZigBee" "ZigBee" "2" "565x401+66+99"
+inspector "ZigBee" "ZigBee" "2" "607x397+5+25"
 inspector "zigbee" "zigbee" "2" "579x156+10+50"
 
