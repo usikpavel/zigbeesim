@@ -5597,6 +5597,1144 @@ void *MlmeStart_confirmDescriptor::getFieldStructPointer(void *object, int field
     }
 }
 
+Register_Class(MlmeAssociate_request);
+
+MlmeAssociate_request::MlmeAssociate_request(const char *name, int kind) : MlmeMsg(name,kind)
+{
+    this->logicalChannel_var = 0;
+    this->channelPage_var = 0;
+    this->coordAddrMode_var = 0;
+    this->coordPanId_var = 0;
+    this->coordAddress_var = 0;
+    this->alternatePanCoordinator_var = 0;
+    this->deviceType_var = 0;
+    this->powerSource_var = 0;
+    this->receiverOnWhenIdle_var = 0;
+    this->secureCapability_var = 0;
+    this->allocateAddress_var = 0;
+    this->securityLevel_var = 0;
+    this->keyIdMode_var = 0;
+    keySource_arraysize = 0;
+    this->keySource_var = 0;
+    this->keyIndex_var = 0;
+}
+
+MlmeAssociate_request::MlmeAssociate_request(const MlmeAssociate_request& other) : MlmeMsg()
+{
+    setName(other.getName());
+    keySource_arraysize = 0;
+    this->keySource_var = 0;
+    operator=(other);
+}
+
+MlmeAssociate_request::~MlmeAssociate_request()
+{
+    delete [] keySource_var;
+}
+
+MlmeAssociate_request& MlmeAssociate_request::operator=(const MlmeAssociate_request& other)
+{
+    if (this==&other) return *this;
+    MlmeMsg::operator=(other);
+    this->logicalChannel_var = other.logicalChannel_var;
+    this->channelPage_var = other.channelPage_var;
+    this->coordAddrMode_var = other.coordAddrMode_var;
+    this->coordPanId_var = other.coordPanId_var;
+    this->coordAddress_var = other.coordAddress_var;
+    this->alternatePanCoordinator_var = other.alternatePanCoordinator_var;
+    this->deviceType_var = other.deviceType_var;
+    this->powerSource_var = other.powerSource_var;
+    this->receiverOnWhenIdle_var = other.receiverOnWhenIdle_var;
+    this->secureCapability_var = other.secureCapability_var;
+    this->allocateAddress_var = other.allocateAddress_var;
+    this->securityLevel_var = other.securityLevel_var;
+    this->keyIdMode_var = other.keyIdMode_var;
+    delete [] this->keySource_var;
+    this->keySource_var = (other.keySource_arraysize==0) ? NULL : new unsigned char[other.keySource_arraysize];
+    keySource_arraysize = other.keySource_arraysize;
+    for (unsigned int i=0; i<keySource_arraysize; i++)
+        this->keySource_var[i] = other.keySource_var[i];
+    this->keyIndex_var = other.keyIndex_var;
+    return *this;
+}
+
+void MlmeAssociate_request::parsimPack(cCommBuffer *b)
+{
+    MlmeMsg::parsimPack(b);
+    doPacking(b,this->logicalChannel_var);
+    doPacking(b,this->channelPage_var);
+    doPacking(b,this->coordAddrMode_var);
+    doPacking(b,this->coordPanId_var);
+    doPacking(b,this->coordAddress_var);
+    doPacking(b,this->alternatePanCoordinator_var);
+    doPacking(b,this->deviceType_var);
+    doPacking(b,this->powerSource_var);
+    doPacking(b,this->receiverOnWhenIdle_var);
+    doPacking(b,this->secureCapability_var);
+    doPacking(b,this->allocateAddress_var);
+    doPacking(b,this->securityLevel_var);
+    doPacking(b,this->keyIdMode_var);
+    b->pack(keySource_arraysize);
+    doPacking(b,this->keySource_var,keySource_arraysize);
+    doPacking(b,this->keyIndex_var);
+}
+
+void MlmeAssociate_request::parsimUnpack(cCommBuffer *b)
+{
+    MlmeMsg::parsimUnpack(b);
+    doUnpacking(b,this->logicalChannel_var);
+    doUnpacking(b,this->channelPage_var);
+    doUnpacking(b,this->coordAddrMode_var);
+    doUnpacking(b,this->coordPanId_var);
+    doUnpacking(b,this->coordAddress_var);
+    doUnpacking(b,this->alternatePanCoordinator_var);
+    doUnpacking(b,this->deviceType_var);
+    doUnpacking(b,this->powerSource_var);
+    doUnpacking(b,this->receiverOnWhenIdle_var);
+    doUnpacking(b,this->secureCapability_var);
+    doUnpacking(b,this->allocateAddress_var);
+    doUnpacking(b,this->securityLevel_var);
+    doUnpacking(b,this->keyIdMode_var);
+    delete [] this->keySource_var;
+    b->unpack(keySource_arraysize);
+    if (keySource_arraysize==0) {
+        this->keySource_var = 0;
+    } else {
+        this->keySource_var = new unsigned char[keySource_arraysize];
+        doUnpacking(b,this->keySource_var,keySource_arraysize);
+    }
+    doUnpacking(b,this->keyIndex_var);
+}
+
+unsigned int MlmeAssociate_request::getLogicalChannel() const
+{
+    return logicalChannel_var;
+}
+
+void MlmeAssociate_request::setLogicalChannel(unsigned int logicalChannel_var)
+{
+    this->logicalChannel_var = logicalChannel_var;
+}
+
+unsigned char MlmeAssociate_request::getChannelPage() const
+{
+    return channelPage_var;
+}
+
+void MlmeAssociate_request::setChannelPage(unsigned char channelPage_var)
+{
+    this->channelPage_var = channelPage_var;
+}
+
+unsigned char MlmeAssociate_request::getCoordAddrMode() const
+{
+    return coordAddrMode_var;
+}
+
+void MlmeAssociate_request::setCoordAddrMode(unsigned char coordAddrMode_var)
+{
+    this->coordAddrMode_var = coordAddrMode_var;
+}
+
+unsigned short MlmeAssociate_request::getCoordPanId() const
+{
+    return coordPanId_var;
+}
+
+void MlmeAssociate_request::setCoordPanId(unsigned short coordPanId_var)
+{
+    this->coordPanId_var = coordPanId_var;
+}
+
+unsigned long MlmeAssociate_request::getCoordAddress() const
+{
+    return coordAddress_var;
+}
+
+void MlmeAssociate_request::setCoordAddress(unsigned long coordAddress_var)
+{
+    this->coordAddress_var = coordAddress_var;
+}
+
+bool MlmeAssociate_request::getAlternatePanCoordinator() const
+{
+    return alternatePanCoordinator_var;
+}
+
+void MlmeAssociate_request::setAlternatePanCoordinator(bool alternatePanCoordinator_var)
+{
+    this->alternatePanCoordinator_var = alternatePanCoordinator_var;
+}
+
+bool MlmeAssociate_request::getDeviceType() const
+{
+    return deviceType_var;
+}
+
+void MlmeAssociate_request::setDeviceType(bool deviceType_var)
+{
+    this->deviceType_var = deviceType_var;
+}
+
+bool MlmeAssociate_request::getPowerSource() const
+{
+    return powerSource_var;
+}
+
+void MlmeAssociate_request::setPowerSource(bool powerSource_var)
+{
+    this->powerSource_var = powerSource_var;
+}
+
+bool MlmeAssociate_request::getReceiverOnWhenIdle() const
+{
+    return receiverOnWhenIdle_var;
+}
+
+void MlmeAssociate_request::setReceiverOnWhenIdle(bool receiverOnWhenIdle_var)
+{
+    this->receiverOnWhenIdle_var = receiverOnWhenIdle_var;
+}
+
+bool MlmeAssociate_request::getSecureCapability() const
+{
+    return secureCapability_var;
+}
+
+void MlmeAssociate_request::setSecureCapability(bool secureCapability_var)
+{
+    this->secureCapability_var = secureCapability_var;
+}
+
+bool MlmeAssociate_request::getAllocateAddress() const
+{
+    return allocateAddress_var;
+}
+
+void MlmeAssociate_request::setAllocateAddress(bool allocateAddress_var)
+{
+    this->allocateAddress_var = allocateAddress_var;
+}
+
+unsigned char MlmeAssociate_request::getSecurityLevel() const
+{
+    return securityLevel_var;
+}
+
+void MlmeAssociate_request::setSecurityLevel(unsigned char securityLevel_var)
+{
+    this->securityLevel_var = securityLevel_var;
+}
+
+unsigned char MlmeAssociate_request::getKeyIdMode() const
+{
+    return keyIdMode_var;
+}
+
+void MlmeAssociate_request::setKeyIdMode(unsigned char keyIdMode_var)
+{
+    this->keyIdMode_var = keyIdMode_var;
+}
+
+void MlmeAssociate_request::setKeySourceArraySize(unsigned int size)
+{
+    unsigned char *keySource_var2 = (size==0) ? NULL : new unsigned char[size];
+    unsigned int sz = keySource_arraysize < size ? keySource_arraysize : size;
+    for (unsigned int i=0; i<sz; i++)
+        keySource_var2[i] = this->keySource_var[i];
+    for (unsigned int i=sz; i<size; i++)
+        keySource_var2[i] = 0;
+    keySource_arraysize = size;
+    delete [] this->keySource_var;
+    this->keySource_var = keySource_var2;
+}
+
+unsigned int MlmeAssociate_request::getKeySourceArraySize() const
+{
+    return keySource_arraysize;
+}
+
+unsigned char MlmeAssociate_request::getKeySource(unsigned int k) const
+{
+    if (k>=keySource_arraysize) throw cRuntimeError("Array of size %d indexed by %d", keySource_arraysize, k);
+    return keySource_var[k];
+}
+
+void MlmeAssociate_request::setKeySource(unsigned int k, unsigned char keySource_var)
+{
+    if (k>=keySource_arraysize) throw cRuntimeError("Array of size %d indexed by %d", keySource_arraysize, k);
+    this->keySource_var[k]=keySource_var;
+}
+
+unsigned char MlmeAssociate_request::getKeyIndex() const
+{
+    return keyIndex_var;
+}
+
+void MlmeAssociate_request::setKeyIndex(unsigned char keyIndex_var)
+{
+    this->keyIndex_var = keyIndex_var;
+}
+
+class MlmeAssociate_requestDescriptor : public cClassDescriptor
+{
+  public:
+    MlmeAssociate_requestDescriptor();
+    virtual ~MlmeAssociate_requestDescriptor();
+
+    virtual bool doesSupport(cObject *obj) const;
+    virtual const char *getProperty(const char *propertyname) const;
+    virtual int getFieldCount(void *object) const;
+    virtual const char *getFieldName(void *object, int field) const;
+    virtual unsigned int getFieldTypeFlags(void *object, int field) const;
+    virtual const char *getFieldTypeString(void *object, int field) const;
+    virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
+    virtual int getArraySize(void *object, int field) const;
+
+    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
+
+    virtual const char *getFieldStructName(void *object, int field) const;
+    virtual void *getFieldStructPointer(void *object, int field, int i) const;
+};
+
+Register_ClassDescriptor(MlmeAssociate_requestDescriptor);
+
+MlmeAssociate_requestDescriptor::MlmeAssociate_requestDescriptor() : cClassDescriptor("MlmeAssociate_request", "MlmeMsg")
+{
+}
+
+MlmeAssociate_requestDescriptor::~MlmeAssociate_requestDescriptor()
+{
+}
+
+bool MlmeAssociate_requestDescriptor::doesSupport(cObject *obj) const
+{
+    return dynamic_cast<MlmeAssociate_request *>(obj)!=NULL;
+}
+
+const char *MlmeAssociate_requestDescriptor::getProperty(const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->getProperty(propertyname) : NULL;
+}
+
+int MlmeAssociate_requestDescriptor::getFieldCount(void *object) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? 15+basedesc->getFieldCount(object) : 15;
+}
+
+unsigned int MlmeAssociate_requestDescriptor::getFieldTypeFlags(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeFlags(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return FD_ISEDITABLE;
+        case 1: return FD_ISEDITABLE;
+        case 2: return FD_ISEDITABLE;
+        case 3: return FD_ISEDITABLE;
+        case 4: return FD_ISEDITABLE;
+        case 5: return FD_ISEDITABLE;
+        case 6: return FD_ISEDITABLE;
+        case 7: return FD_ISEDITABLE;
+        case 8: return FD_ISEDITABLE;
+        case 9: return FD_ISEDITABLE;
+        case 10: return FD_ISEDITABLE;
+        case 11: return FD_ISEDITABLE;
+        case 12: return FD_ISEDITABLE;
+        case 13: return FD_ISARRAY | FD_ISEDITABLE;
+        case 14: return FD_ISEDITABLE;
+        default: return 0;
+    }
+}
+
+const char *MlmeAssociate_requestDescriptor::getFieldName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "logicalChannel";
+        case 1: return "channelPage";
+        case 2: return "coordAddrMode";
+        case 3: return "coordPanId";
+        case 4: return "coordAddress";
+        case 5: return "alternatePanCoordinator";
+        case 6: return "deviceType";
+        case 7: return "powerSource";
+        case 8: return "receiverOnWhenIdle";
+        case 9: return "secureCapability";
+        case 10: return "allocateAddress";
+        case 11: return "securityLevel";
+        case 12: return "keyIdMode";
+        case 13: return "keySource";
+        case 14: return "keyIndex";
+        default: return NULL;
+    }
+}
+
+const char *MlmeAssociate_requestDescriptor::getFieldTypeString(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeString(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "unsigned int";
+        case 1: return "unsigned char";
+        case 2: return "unsigned char";
+        case 3: return "unsigned short";
+        case 4: return "unsigned long";
+        case 5: return "bool";
+        case 6: return "bool";
+        case 7: return "bool";
+        case 8: return "bool";
+        case 9: return "bool";
+        case 10: return "bool";
+        case 11: return "unsigned char";
+        case 12: return "unsigned char";
+        case 13: return "unsigned char";
+        case 14: return "unsigned char";
+        default: return NULL;
+    }
+}
+
+const char *MlmeAssociate_requestDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldProperty(object, field, propertyname);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+int MlmeAssociate_requestDescriptor::getArraySize(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getArraySize(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    MlmeAssociate_request *pp = (MlmeAssociate_request *)object; (void)pp;
+    switch (field) {
+        case 13: return pp->getKeySourceArraySize();
+        default: return 0;
+    }
+}
+
+bool MlmeAssociate_requestDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+        field -= basedesc->getFieldCount(object);
+    }
+    MlmeAssociate_request *pp = (MlmeAssociate_request *)object; (void)pp;
+    switch (field) {
+        case 0: ulong2string(pp->getLogicalChannel(),resultbuf,bufsize); return true;
+        case 1: ulong2string(pp->getChannelPage(),resultbuf,bufsize); return true;
+        case 2: ulong2string(pp->getCoordAddrMode(),resultbuf,bufsize); return true;
+        case 3: ulong2string(pp->getCoordPanId(),resultbuf,bufsize); return true;
+        case 4: ulong2string(pp->getCoordAddress(),resultbuf,bufsize); return true;
+        case 5: bool2string(pp->getAlternatePanCoordinator(),resultbuf,bufsize); return true;
+        case 6: bool2string(pp->getDeviceType(),resultbuf,bufsize); return true;
+        case 7: bool2string(pp->getPowerSource(),resultbuf,bufsize); return true;
+        case 8: bool2string(pp->getReceiverOnWhenIdle(),resultbuf,bufsize); return true;
+        case 9: bool2string(pp->getSecureCapability(),resultbuf,bufsize); return true;
+        case 10: bool2string(pp->getAllocateAddress(),resultbuf,bufsize); return true;
+        case 11: ulong2string(pp->getSecurityLevel(),resultbuf,bufsize); return true;
+        case 12: ulong2string(pp->getKeyIdMode(),resultbuf,bufsize); return true;
+        case 13: ulong2string(pp->getKeySource(i),resultbuf,bufsize); return true;
+        case 14: ulong2string(pp->getKeyIndex(),resultbuf,bufsize); return true;
+        default: return false;
+    }
+}
+
+bool MlmeAssociate_requestDescriptor::setFieldAsString(void *object, int field, int i, const char *value) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->setFieldAsString(object,field,i,value);
+        field -= basedesc->getFieldCount(object);
+    }
+    MlmeAssociate_request *pp = (MlmeAssociate_request *)object; (void)pp;
+    switch (field) {
+        case 0: pp->setLogicalChannel(string2ulong(value)); return true;
+        case 1: pp->setChannelPage(string2ulong(value)); return true;
+        case 2: pp->setCoordAddrMode(string2ulong(value)); return true;
+        case 3: pp->setCoordPanId(string2ulong(value)); return true;
+        case 4: pp->setCoordAddress(string2ulong(value)); return true;
+        case 5: pp->setAlternatePanCoordinator(string2bool(value)); return true;
+        case 6: pp->setDeviceType(string2bool(value)); return true;
+        case 7: pp->setPowerSource(string2bool(value)); return true;
+        case 8: pp->setReceiverOnWhenIdle(string2bool(value)); return true;
+        case 9: pp->setSecureCapability(string2bool(value)); return true;
+        case 10: pp->setAllocateAddress(string2bool(value)); return true;
+        case 11: pp->setSecurityLevel(string2ulong(value)); return true;
+        case 12: pp->setKeyIdMode(string2ulong(value)); return true;
+        case 13: pp->setKeySource(i,string2ulong(value)); return true;
+        case 14: pp->setKeyIndex(string2ulong(value)); return true;
+        default: return false;
+    }
+}
+
+const char *MlmeAssociate_requestDescriptor::getFieldStructName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+void *MlmeAssociate_requestDescriptor::getFieldStructPointer(void *object, int field, int i) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructPointer(object, field, i);
+        field -= basedesc->getFieldCount(object);
+    }
+    MlmeAssociate_request *pp = (MlmeAssociate_request *)object; (void)pp;
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+Register_Class(MlmeAssociate_confirm);
+
+MlmeAssociate_confirm::MlmeAssociate_confirm(const char *name, int kind) : MlmeMsg(name,kind)
+{
+}
+
+MlmeAssociate_confirm::MlmeAssociate_confirm(const MlmeAssociate_confirm& other) : MlmeMsg()
+{
+    setName(other.getName());
+    operator=(other);
+}
+
+MlmeAssociate_confirm::~MlmeAssociate_confirm()
+{
+}
+
+MlmeAssociate_confirm& MlmeAssociate_confirm::operator=(const MlmeAssociate_confirm& other)
+{
+    if (this==&other) return *this;
+    MlmeMsg::operator=(other);
+    return *this;
+}
+
+void MlmeAssociate_confirm::parsimPack(cCommBuffer *b)
+{
+    MlmeMsg::parsimPack(b);
+}
+
+void MlmeAssociate_confirm::parsimUnpack(cCommBuffer *b)
+{
+    MlmeMsg::parsimUnpack(b);
+}
+
+class MlmeAssociate_confirmDescriptor : public cClassDescriptor
+{
+  public:
+    MlmeAssociate_confirmDescriptor();
+    virtual ~MlmeAssociate_confirmDescriptor();
+
+    virtual bool doesSupport(cObject *obj) const;
+    virtual const char *getProperty(const char *propertyname) const;
+    virtual int getFieldCount(void *object) const;
+    virtual const char *getFieldName(void *object, int field) const;
+    virtual unsigned int getFieldTypeFlags(void *object, int field) const;
+    virtual const char *getFieldTypeString(void *object, int field) const;
+    virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
+    virtual int getArraySize(void *object, int field) const;
+
+    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
+
+    virtual const char *getFieldStructName(void *object, int field) const;
+    virtual void *getFieldStructPointer(void *object, int field, int i) const;
+};
+
+Register_ClassDescriptor(MlmeAssociate_confirmDescriptor);
+
+MlmeAssociate_confirmDescriptor::MlmeAssociate_confirmDescriptor() : cClassDescriptor("MlmeAssociate_confirm", "MlmeMsg")
+{
+}
+
+MlmeAssociate_confirmDescriptor::~MlmeAssociate_confirmDescriptor()
+{
+}
+
+bool MlmeAssociate_confirmDescriptor::doesSupport(cObject *obj) const
+{
+    return dynamic_cast<MlmeAssociate_confirm *>(obj)!=NULL;
+}
+
+const char *MlmeAssociate_confirmDescriptor::getProperty(const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->getProperty(propertyname) : NULL;
+}
+
+int MlmeAssociate_confirmDescriptor::getFieldCount(void *object) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? 0+basedesc->getFieldCount(object) : 0;
+}
+
+unsigned int MlmeAssociate_confirmDescriptor::getFieldTypeFlags(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeFlags(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return 0;
+    }
+}
+
+const char *MlmeAssociate_confirmDescriptor::getFieldName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+const char *MlmeAssociate_confirmDescriptor::getFieldTypeString(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeString(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+const char *MlmeAssociate_confirmDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldProperty(object, field, propertyname);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+int MlmeAssociate_confirmDescriptor::getArraySize(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getArraySize(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    MlmeAssociate_confirm *pp = (MlmeAssociate_confirm *)object; (void)pp;
+    switch (field) {
+        default: return 0;
+    }
+}
+
+bool MlmeAssociate_confirmDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+        field -= basedesc->getFieldCount(object);
+    }
+    MlmeAssociate_confirm *pp = (MlmeAssociate_confirm *)object; (void)pp;
+    switch (field) {
+        default: return false;
+    }
+}
+
+bool MlmeAssociate_confirmDescriptor::setFieldAsString(void *object, int field, int i, const char *value) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->setFieldAsString(object,field,i,value);
+        field -= basedesc->getFieldCount(object);
+    }
+    MlmeAssociate_confirm *pp = (MlmeAssociate_confirm *)object; (void)pp;
+    switch (field) {
+        default: return false;
+    }
+}
+
+const char *MlmeAssociate_confirmDescriptor::getFieldStructName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+void *MlmeAssociate_confirmDescriptor::getFieldStructPointer(void *object, int field, int i) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructPointer(object, field, i);
+        field -= basedesc->getFieldCount(object);
+    }
+    MlmeAssociate_confirm *pp = (MlmeAssociate_confirm *)object; (void)pp;
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+Register_Class(MlmeBeaconNotify_indication);
+
+MlmeBeaconNotify_indication::MlmeBeaconNotify_indication(const char *name, int kind) : MlmeMsg(name,kind)
+{
+    this->bsn_var = 0;
+    this->numberOfShortAddressesPending_var = 0;
+    this->numberOfExtendedAddressesPending_var = 0;
+    addressList_arraysize = 0;
+    this->addressList_var = 0;
+    this->sduLength_var = 0;
+    sdu_arraysize = 0;
+    this->sdu_var = 0;
+}
+
+MlmeBeaconNotify_indication::MlmeBeaconNotify_indication(const MlmeBeaconNotify_indication& other) : MlmeMsg()
+{
+    setName(other.getName());
+    addressList_arraysize = 0;
+    this->addressList_var = 0;
+    sdu_arraysize = 0;
+    this->sdu_var = 0;
+    operator=(other);
+}
+
+MlmeBeaconNotify_indication::~MlmeBeaconNotify_indication()
+{
+    delete [] addressList_var;
+    delete [] sdu_var;
+}
+
+MlmeBeaconNotify_indication& MlmeBeaconNotify_indication::operator=(const MlmeBeaconNotify_indication& other)
+{
+    if (this==&other) return *this;
+    MlmeMsg::operator=(other);
+    this->bsn_var = other.bsn_var;
+    this->panDescriptor_var = other.panDescriptor_var;
+    this->numberOfShortAddressesPending_var = other.numberOfShortAddressesPending_var;
+    this->numberOfExtendedAddressesPending_var = other.numberOfExtendedAddressesPending_var;
+    delete [] this->addressList_var;
+    this->addressList_var = (other.addressList_arraysize==0) ? NULL : new unsigned long[other.addressList_arraysize];
+    addressList_arraysize = other.addressList_arraysize;
+    for (unsigned int i=0; i<addressList_arraysize; i++)
+        this->addressList_var[i] = other.addressList_var[i];
+    this->sduLength_var = other.sduLength_var;
+    delete [] this->sdu_var;
+    this->sdu_var = (other.sdu_arraysize==0) ? NULL : new unsigned char[other.sdu_arraysize];
+    sdu_arraysize = other.sdu_arraysize;
+    for (unsigned int i=0; i<sdu_arraysize; i++)
+        this->sdu_var[i] = other.sdu_var[i];
+    return *this;
+}
+
+void MlmeBeaconNotify_indication::parsimPack(cCommBuffer *b)
+{
+    MlmeMsg::parsimPack(b);
+    doPacking(b,this->bsn_var);
+    doPacking(b,this->panDescriptor_var);
+    doPacking(b,this->numberOfShortAddressesPending_var);
+    doPacking(b,this->numberOfExtendedAddressesPending_var);
+    b->pack(addressList_arraysize);
+    doPacking(b,this->addressList_var,addressList_arraysize);
+    doPacking(b,this->sduLength_var);
+    b->pack(sdu_arraysize);
+    doPacking(b,this->sdu_var,sdu_arraysize);
+}
+
+void MlmeBeaconNotify_indication::parsimUnpack(cCommBuffer *b)
+{
+    MlmeMsg::parsimUnpack(b);
+    doUnpacking(b,this->bsn_var);
+    doUnpacking(b,this->panDescriptor_var);
+    doUnpacking(b,this->numberOfShortAddressesPending_var);
+    doUnpacking(b,this->numberOfExtendedAddressesPending_var);
+    delete [] this->addressList_var;
+    b->unpack(addressList_arraysize);
+    if (addressList_arraysize==0) {
+        this->addressList_var = 0;
+    } else {
+        this->addressList_var = new unsigned long[addressList_arraysize];
+        doUnpacking(b,this->addressList_var,addressList_arraysize);
+    }
+    doUnpacking(b,this->sduLength_var);
+    delete [] this->sdu_var;
+    b->unpack(sdu_arraysize);
+    if (sdu_arraysize==0) {
+        this->sdu_var = 0;
+    } else {
+        this->sdu_var = new unsigned char[sdu_arraysize];
+        doUnpacking(b,this->sdu_var,sdu_arraysize);
+    }
+}
+
+unsigned char MlmeBeaconNotify_indication::getBsn() const
+{
+    return bsn_var;
+}
+
+void MlmeBeaconNotify_indication::setBsn(unsigned char bsn_var)
+{
+    this->bsn_var = bsn_var;
+}
+
+PanDescriptor& MlmeBeaconNotify_indication::getPanDescriptor()
+{
+    return panDescriptor_var;
+}
+
+void MlmeBeaconNotify_indication::setPanDescriptor(const PanDescriptor& panDescriptor_var)
+{
+    this->panDescriptor_var = panDescriptor_var;
+}
+
+unsigned char MlmeBeaconNotify_indication::getNumberOfShortAddressesPending() const
+{
+    return numberOfShortAddressesPending_var;
+}
+
+void MlmeBeaconNotify_indication::setNumberOfShortAddressesPending(unsigned char numberOfShortAddressesPending_var)
+{
+    this->numberOfShortAddressesPending_var = numberOfShortAddressesPending_var;
+}
+
+unsigned char MlmeBeaconNotify_indication::getNumberOfExtendedAddressesPending() const
+{
+    return numberOfExtendedAddressesPending_var;
+}
+
+void MlmeBeaconNotify_indication::setNumberOfExtendedAddressesPending(unsigned char numberOfExtendedAddressesPending_var)
+{
+    this->numberOfExtendedAddressesPending_var = numberOfExtendedAddressesPending_var;
+}
+
+void MlmeBeaconNotify_indication::setAddressListArraySize(unsigned int size)
+{
+    unsigned long *addressList_var2 = (size==0) ? NULL : new unsigned long[size];
+    unsigned int sz = addressList_arraysize < size ? addressList_arraysize : size;
+    for (unsigned int i=0; i<sz; i++)
+        addressList_var2[i] = this->addressList_var[i];
+    for (unsigned int i=sz; i<size; i++)
+        addressList_var2[i] = 0;
+    addressList_arraysize = size;
+    delete [] this->addressList_var;
+    this->addressList_var = addressList_var2;
+}
+
+unsigned int MlmeBeaconNotify_indication::getAddressListArraySize() const
+{
+    return addressList_arraysize;
+}
+
+unsigned long MlmeBeaconNotify_indication::getAddressList(unsigned int k) const
+{
+    if (k>=addressList_arraysize) throw cRuntimeError("Array of size %d indexed by %d", addressList_arraysize, k);
+    return addressList_var[k];
+}
+
+void MlmeBeaconNotify_indication::setAddressList(unsigned int k, unsigned long addressList_var)
+{
+    if (k>=addressList_arraysize) throw cRuntimeError("Array of size %d indexed by %d", addressList_arraysize, k);
+    this->addressList_var[k]=addressList_var;
+}
+
+unsigned int MlmeBeaconNotify_indication::getSduLength() const
+{
+    return sduLength_var;
+}
+
+void MlmeBeaconNotify_indication::setSduLength(unsigned int sduLength_var)
+{
+    this->sduLength_var = sduLength_var;
+}
+
+void MlmeBeaconNotify_indication::setSduArraySize(unsigned int size)
+{
+    unsigned char *sdu_var2 = (size==0) ? NULL : new unsigned char[size];
+    unsigned int sz = sdu_arraysize < size ? sdu_arraysize : size;
+    for (unsigned int i=0; i<sz; i++)
+        sdu_var2[i] = this->sdu_var[i];
+    for (unsigned int i=sz; i<size; i++)
+        sdu_var2[i] = 0;
+    sdu_arraysize = size;
+    delete [] this->sdu_var;
+    this->sdu_var = sdu_var2;
+}
+
+unsigned int MlmeBeaconNotify_indication::getSduArraySize() const
+{
+    return sdu_arraysize;
+}
+
+unsigned char MlmeBeaconNotify_indication::getSdu(unsigned int k) const
+{
+    if (k>=sdu_arraysize) throw cRuntimeError("Array of size %d indexed by %d", sdu_arraysize, k);
+    return sdu_var[k];
+}
+
+void MlmeBeaconNotify_indication::setSdu(unsigned int k, unsigned char sdu_var)
+{
+    if (k>=sdu_arraysize) throw cRuntimeError("Array of size %d indexed by %d", sdu_arraysize, k);
+    this->sdu_var[k]=sdu_var;
+}
+
+class MlmeBeaconNotify_indicationDescriptor : public cClassDescriptor
+{
+  public:
+    MlmeBeaconNotify_indicationDescriptor();
+    virtual ~MlmeBeaconNotify_indicationDescriptor();
+
+    virtual bool doesSupport(cObject *obj) const;
+    virtual const char *getProperty(const char *propertyname) const;
+    virtual int getFieldCount(void *object) const;
+    virtual const char *getFieldName(void *object, int field) const;
+    virtual unsigned int getFieldTypeFlags(void *object, int field) const;
+    virtual const char *getFieldTypeString(void *object, int field) const;
+    virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
+    virtual int getArraySize(void *object, int field) const;
+
+    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
+
+    virtual const char *getFieldStructName(void *object, int field) const;
+    virtual void *getFieldStructPointer(void *object, int field, int i) const;
+};
+
+Register_ClassDescriptor(MlmeBeaconNotify_indicationDescriptor);
+
+MlmeBeaconNotify_indicationDescriptor::MlmeBeaconNotify_indicationDescriptor() : cClassDescriptor("MlmeBeaconNotify_indication", "MlmeMsg")
+{
+}
+
+MlmeBeaconNotify_indicationDescriptor::~MlmeBeaconNotify_indicationDescriptor()
+{
+}
+
+bool MlmeBeaconNotify_indicationDescriptor::doesSupport(cObject *obj) const
+{
+    return dynamic_cast<MlmeBeaconNotify_indication *>(obj)!=NULL;
+}
+
+const char *MlmeBeaconNotify_indicationDescriptor::getProperty(const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->getProperty(propertyname) : NULL;
+}
+
+int MlmeBeaconNotify_indicationDescriptor::getFieldCount(void *object) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? 7+basedesc->getFieldCount(object) : 7;
+}
+
+unsigned int MlmeBeaconNotify_indicationDescriptor::getFieldTypeFlags(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeFlags(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return FD_ISEDITABLE;
+        case 1: return FD_ISCOMPOUND;
+        case 2: return FD_ISEDITABLE;
+        case 3: return FD_ISEDITABLE;
+        case 4: return FD_ISARRAY | FD_ISEDITABLE;
+        case 5: return FD_ISEDITABLE;
+        case 6: return FD_ISARRAY | FD_ISEDITABLE;
+        default: return 0;
+    }
+}
+
+const char *MlmeBeaconNotify_indicationDescriptor::getFieldName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "bsn";
+        case 1: return "panDescriptor";
+        case 2: return "numberOfShortAddressesPending";
+        case 3: return "numberOfExtendedAddressesPending";
+        case 4: return "addressList";
+        case 5: return "sduLength";
+        case 6: return "sdu";
+        default: return NULL;
+    }
+}
+
+const char *MlmeBeaconNotify_indicationDescriptor::getFieldTypeString(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeString(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "unsigned char";
+        case 1: return "PanDescriptor";
+        case 2: return "unsigned char";
+        case 3: return "unsigned char";
+        case 4: return "unsigned long";
+        case 5: return "unsigned int";
+        case 6: return "unsigned char";
+        default: return NULL;
+    }
+}
+
+const char *MlmeBeaconNotify_indicationDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldProperty(object, field, propertyname);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+int MlmeBeaconNotify_indicationDescriptor::getArraySize(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getArraySize(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    MlmeBeaconNotify_indication *pp = (MlmeBeaconNotify_indication *)object; (void)pp;
+    switch (field) {
+        case 4: return pp->getAddressListArraySize();
+        case 6: return pp->getSduArraySize();
+        default: return 0;
+    }
+}
+
+bool MlmeBeaconNotify_indicationDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+        field -= basedesc->getFieldCount(object);
+    }
+    MlmeBeaconNotify_indication *pp = (MlmeBeaconNotify_indication *)object; (void)pp;
+    switch (field) {
+        case 0: ulong2string(pp->getBsn(),resultbuf,bufsize); return true;
+        case 1: {std::stringstream out; out << pp->getPanDescriptor(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
+        case 2: ulong2string(pp->getNumberOfShortAddressesPending(),resultbuf,bufsize); return true;
+        case 3: ulong2string(pp->getNumberOfExtendedAddressesPending(),resultbuf,bufsize); return true;
+        case 4: ulong2string(pp->getAddressList(i),resultbuf,bufsize); return true;
+        case 5: ulong2string(pp->getSduLength(),resultbuf,bufsize); return true;
+        case 6: ulong2string(pp->getSdu(i),resultbuf,bufsize); return true;
+        default: return false;
+    }
+}
+
+bool MlmeBeaconNotify_indicationDescriptor::setFieldAsString(void *object, int field, int i, const char *value) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->setFieldAsString(object,field,i,value);
+        field -= basedesc->getFieldCount(object);
+    }
+    MlmeBeaconNotify_indication *pp = (MlmeBeaconNotify_indication *)object; (void)pp;
+    switch (field) {
+        case 0: pp->setBsn(string2ulong(value)); return true;
+        case 2: pp->setNumberOfShortAddressesPending(string2ulong(value)); return true;
+        case 3: pp->setNumberOfExtendedAddressesPending(string2ulong(value)); return true;
+        case 4: pp->setAddressList(i,string2ulong(value)); return true;
+        case 5: pp->setSduLength(string2ulong(value)); return true;
+        case 6: pp->setSdu(i,string2ulong(value)); return true;
+        default: return false;
+    }
+}
+
+const char *MlmeBeaconNotify_indicationDescriptor::getFieldStructName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 1: return "PanDescriptor"; break;
+        default: return NULL;
+    }
+}
+
+void *MlmeBeaconNotify_indicationDescriptor::getFieldStructPointer(void *object, int field, int i) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructPointer(object, field, i);
+        field -= basedesc->getFieldCount(object);
+    }
+    MlmeBeaconNotify_indication *pp = (MlmeBeaconNotify_indication *)object; (void)pp;
+    switch (field) {
+        case 1: return (void *)(&pp->getPanDescriptor()); break;
+        default: return NULL;
+    }
+}
+
 Register_Class(McpsMsg);
 
 McpsMsg::McpsMsg(const char *name, int kind) : cPacket(name,kind)

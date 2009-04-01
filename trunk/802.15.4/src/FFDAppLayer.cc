@@ -94,14 +94,27 @@ void FFDAppLayer::handleNlmeMsg(cMessage* msg) {
 		NlmePermitJoining_request* request = new NlmePermitJoining_request(
 				"NLME-PERMIT-JOINING.request", NLME_PERMIT_JOINING_REQUEST);
 		/** @todo include the param into the omnetpp.ini */
-		request->setPermitDuration(0xAF);
+		request->setPermitDuration(0xFF);
 		sendNlmeDown(request);
 	} else if (msg->getKind() == NLME_PERMIT_JOINING_CONFIRM) {
 	} else if (msg->getKind() == NLME_NETWORK_DISCOVERY_CONFIRM) {
-		NlmeNetworkDiscovery_confirm* confirm = check_and_cast<NlmeNetworkDiscovery_confirm *>(msg);
-		NlmeJoin_request* request = new NlmeJoin_request("NLME-JOIN.request", NLME_JOIN_REQUEST);
+		NlmeNetworkDiscovery_confirm* confirm = check_and_cast<
+				NlmeNetworkDiscovery_confirm *> (msg);
+		NlmeJoin_request* request = new NlmeJoin_request("NLME-JOIN.request",
+				NLME_JOIN_REQUEST);
+		/** @comment if no network was found, let's try again later */
+		if (confirm->getNetworkCount() == 0) {
+			delete (msg);
+			cMessage* msg = new cMessage("NLME-NETWORK-DISCOVERY.request",
+					START_TIMER);
+			comment(COMMENT_PAN, "No networks detected, trying again in 60s");
+			/** @todo add this param into the omnetpp.ini */
+			scheduleAt(simTime() + 60.0, msg);
+			return;
+		}
 		/** @comment let's pick one random scanned network */
-		request->setPanId(confirm->getNetworkDescriptorList(rand()%(confirm->getNetworkCount())).panId);
+		request->setPanId(confirm->getNetworkDescriptorList(rand()
+				% (confirm->getNetworkCount())).panId);
 		request->setJoinAsRouter(getRole() == ROUTER);
 		request->setRejoinNetwork(false);
 		request->setPowerSource(false);
@@ -127,11 +140,15 @@ void FFDAppLayer::handleSelfMsg(cMessage* msg) {
 			request->setBeaconOrder(0x0E);
 			request->setSuperframeOrder(0x0A);
 			/** @note 0xFFFF is considered a NULL value in my case */
-			request->setPANId(0xFFFF);
+			/** @todo ad this param into the omnetpp.ini as well */
+			request->setPANId(0x0005);
 			request->setBatteryLifeExtension(false);
 			sendNlmeDown(request);
 		} else if (msgName == "NLME-NETWORK-DISCOVERY.request") {
-			NlmeNetworkDiscovery_request* request = new NlmeNetworkDiscovery_request("NLME-NETWORK-DISCOVERY.request", NLME_NETWORK_DISCOVERY__REQUEST);
+			NlmeNetworkDiscovery_request* request =
+					new NlmeNetworkDiscovery_request(
+							"NLME-NETWORK-DISCOVERY.request",
+							NLME_NETWORK_DISCOVERY__REQUEST);
 			request->setScanChannels(0x00003000);
 			request->setScanDuration(0xCF);
 			sendNlmeDown(request);

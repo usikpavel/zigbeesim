@@ -143,6 +143,10 @@ protected:
 		setNetworkDescriptorsArraySize(0);
 		this->networkDescriptors = new NetworkDescriptor[0];
 	}
+
+	FFDAppLayer* getFFDAppLayer() {
+		return (FFDAppLayer *) (getParentModule()->getParentModule()->getModuleByRelativePath("app"));
+	}
 };
 
 #endif

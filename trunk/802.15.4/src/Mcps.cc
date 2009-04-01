@@ -141,7 +141,7 @@ PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 		request->setSecurityEnabled(false);
 		request->setFramePending(false);
 		request->setAckRequest(false);
-		request->setPanIdCompression(true);
+		request->setPanIdCompression(false);
 		request->setDestinationAddressingMode(SHORT_ADDRESS);
 		request->setFrameVersion(0x01);
 		request->setSourceAddressingMode(SHORT_ADDRESS);
@@ -149,6 +149,7 @@ PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 		getMacPib()->setMacBSN(getMacPib()->getMacBSN() + 1);
 		request->setDestinationPanIdentifier(0xFFFF);
 		request->setDestinationAddress((unsigned long) 0xFFFF);
+		request->setSourcePanIdentifier(getMacPib()->getPibAttribute(MAC_PAN_ID)[0]);
 		request->setSourceAddress(
 				(unsigned long) (getMacPib()->getMacShortAddress()));
 		request->setAuxiliarySecurityHeaderArraySize(0);
