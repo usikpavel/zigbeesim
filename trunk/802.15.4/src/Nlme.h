@@ -29,6 +29,8 @@ protected:
 	cMessage* lastUpperMsg;
 	unsigned short panId;
 	unsigned char logicalChannel;
+	NetworkDescriptor* networkDescriptors;
+	int networkDescriptorsArraySize;
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
 
@@ -94,6 +96,52 @@ protected:
 
 	unsigned char getLogicalChannel() {
 		return this->logicalChannel;
+	}
+
+	void setNetworkDescriptorsArraySize(int size) {
+		this->networkDescriptorsArraySize = size;
+	}
+
+	int getNetworkDescriptorsArraySize() {
+		return this->networkDescriptorsArraySize;
+	}
+
+	void setNetworkDescriptors(NetworkDescriptor* descriptors) {
+		this->networkDescriptors = descriptors;
+	}
+
+	NetworkDescriptor* getNetworkDescriptors() {
+		return this->networkDescriptors;
+	}
+
+	void addNetworkDescriptor(NetworkDescriptor descriptor) {
+		int size = getNetworkDescriptorsArraySize();
+		NetworkDescriptor* newNetworkDescriptors;
+		newNetworkDescriptors = new NetworkDescriptor[size + 1];
+		for (int i = 0; i < size; i++) {
+			newNetworkDescriptors[i] = this->networkDescriptors[i];
+		}
+		newNetworkDescriptors[size] = descriptor;
+		delete this->networkDescriptors;
+		this->networkDescriptors = newNetworkDescriptors;
+		setNetworkDescriptorsArraySize(size + 1);
+	}
+
+	bool isNetworkScanned(NetworkDescriptor descriptor) {
+		int size = getNetworkDescriptorsArraySize();
+		for (int i = 0; i < size; i++) {
+			if (getNetworkDescriptors()[i].panId
+					== descriptor.panId) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	void resetNetworkDescriptors() {
+		delete networkDescriptors;
+		setNetworkDescriptorsArraySize(0);
+		this->networkDescriptors = new NetworkDescriptor[0];
 	}
 };
 

@@ -10,6 +10,7 @@ typedef enum {
 	COMMENT_CHANNEL			= 0x08, // 0000 1000
 	COMMENT_STATUS			= 0x10, // 0001 0000
 	COMMENT_BEACON			= 0x20, // 0010 0000
+	COMMENT_PAN				= 0x40, // 0100 0000
 	COMMENT_ERROR			= 0x80, // 1000 0000
 	COMMENT_ALL 			= 0xFF  // 1111 1111
 } CommentsLevel;
@@ -114,6 +115,16 @@ typedef enum {
 	JOINING_PERMITTED_TIMER
 } SelfMessages;
 
+struct NetworkDescriptor {
+	unsigned short panId;
+	unsigned char logicalChannel;
+	unsigned char stackProfile;
+	unsigned char zigbeeVersion;
+	unsigned char beaconOrder;
+	unsigned char superframeOrder;
+	bool permitJoining;
+};
+
 /** @brief NWK PIB Enumerations */
 typedef enum {
 	NWK_SUCCESS 				= 0x00,
@@ -154,7 +165,7 @@ struct PanDescriptor {
 	bool batteryLifeExtension;
 	bool panCoordinator;
 	bool associationPermit;
-	bool GTSPermit;
+	bool gtsPermit;
 	unsigned char linkQuality;
 	unsigned int timeStamp;
 	unsigned char securityFailure;

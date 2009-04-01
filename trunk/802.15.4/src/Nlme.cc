@@ -19,6 +19,7 @@ void Nlme::initialize(int stage) {
 		commentsLevel = COMMENT_ALL;
 	} else if (stage == 1) {
 		lastUpperMsg = new cMessage();
+		networkDescriptors = new NetworkDescriptor[0];
 	}
 }
 
@@ -75,7 +76,7 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 						for (int i = 0; i
 								< confirm->getPanDescriptorListArraySize(); i++) {
 							if (getPanId()
-									== confirm->getPanDescriptorList(i).coordPANId)
+									== confirm->getPanDescriptorList(i).coordPanId)
 								idOk = false;
 						}
 					} while (!idOk);
@@ -95,8 +96,30 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 					sendMlmeDown(setRequest);
 				}
 			}
-		} else if (getLastUpperMsg()->getKind() == NLME_NETWORK_DISCOVERY__REQUEST) {
-
+		} else if (getLastUpperMsg()->getKind()
+				== NLME_NETWORK_DISCOVERY__REQUEST) {
+			NlmeNetworkDiscovery_confirm* response =
+					new NlmeNetworkDiscovery_confirm(
+							"NLME-NETWORK-DISCOVERY.confirm",
+							NLME_NETWORK_DISCOVERY_CONFIRM);
+			response->setNetworkCount(confirm->getResultListSize());
+			for (int i = 0; i < confirm->getResultListSize(); i++) {
+				NetworkDescriptor descriptor;
+				/** @test this might try to access some restricted areas */
+				descriptor.panId = confirm->getPanDescriptorList(i).coordPanId;
+				descriptor.logicalChannel
+						= confirm->getPanDescriptorList(i).logicalChannel;
+				/** @todo include stack profile, zigbee version,  into descriptor */
+				// descriptor.stackProfile =
+				// descriptor.zigbeeVersion =
+				descriptor.beaconOrder
+						= confirm->getPanDescriptorList(i).beaconOrder;
+				descriptor.superframeOrder
+						= confirm->getPanDescriptorList(i).superframeOrder;
+				addNetworkDescriptor(descriptor);
+			}
+			response->setStatus(confirm->getStatus());
+			sendNlmeUp(response);
 		}
 	} else if (msg->getKind() == MLME_SET_CONFIRM) {
 		MlmeSet_confirm* confirm = check_and_cast<MlmeSet_confirm *> (msg);
@@ -180,16 +203,22 @@ void Nlme::handleNlmeMsg(cMessage *msg) {
 		} else {
 			response->setPibAttributeValue(0, (unsigned int) true);
 			if (request->getPermitDuration() != 0xFF) {
-				cMessage* timer = new cMessage("JOINING_PERMITTED_TIMER", JOINING_PERMITTED_TIMER);
+				cMessage* timer = new cMessage("JOINING_PERMITTED_TIMER",
+						JOINING_PERMITTED_TIMER);
 				scheduleAt(simTime() + (double) (request->getPermitDuration()),
 						timer);
 			}
 		}
 		sendMlmeDown(response);
 	} else if (msg->getKind() == NLME_NETWORK_DISCOVERY__REQUEST) {
-		NlmeNetworkDiscovery_request* request = check_and_cast<NlmeNetworkDiscovery_request *>(msg);
-		MlmeScan_request* scan = new MlmeScan_request("MLME-SCAN.request", MLME_SCAN_REQUEST);
-		FFDAppLayer *appLayer = (FFDAppLayer *) (getParentModule()->getParentModule()->getModuleByRelativePath("app"));
+		NlmeNetworkDiscovery_request* request = check_and_cast<
+				NlmeNetworkDiscovery_request *> (msg);
+		MlmeScan_request* scan = new MlmeScan_request("MLME-SCAN.request",
+				MLME_SCAN_REQUEST);
+		FFDAppLayer
+				*appLayer =
+						(FFDAppLayer *) (getParentModule()->getParentModule()->getModuleByRelativePath(
+								"app"));
 		if (appLayer->getRole() == ROUTER) {
 			scan->setScanType(ACTIVE_SCAN);
 		} else {
@@ -200,6 +229,8 @@ void Nlme::handleNlmeMsg(cMessage *msg) {
 		scan->setScanDuration(request->getScanDuration());
 		scan->setChannelPage(request->getScanChannels() >> 28);
 		sendMlmeDown(scan);
+	} else if (msg->getKind() == NLME_JOIN_REQUEST) {
+
 	}
 }
 

@@ -97,6 +97,17 @@ void FFDAppLayer::handleNlmeMsg(cMessage* msg) {
 		request->setPermitDuration(0xAF);
 		sendNlmeDown(request);
 	} else if (msg->getKind() == NLME_PERMIT_JOINING_CONFIRM) {
+	} else if (msg->getKind() == NLME_NETWORK_DISCOVERY_CONFIRM) {
+		NlmeNetworkDiscovery_confirm* confirm = check_and_cast<NlmeNetworkDiscovery_confirm *>(msg);
+		NlmeJoin_request* request = new NlmeJoin_request("NLME-JOIN.request", NLME_JOIN_REQUEST);
+		/** @comment let's pick one random scanned network */
+		request->setPanId(confirm->getNetworkDescriptorList(rand()%(confirm->getNetworkCount())).panId);
+		request->setJoinAsRouter(getRole() == ROUTER);
+		request->setRejoinNetwork(false);
+		request->setPowerSource(false);
+		request->setRxOnWhenIdle(false);
+		request->setMacSecurity(false);
+		sendNlmeDown(request);
 	}
 	delete (msg);
 }
@@ -111,7 +122,7 @@ void FFDAppLayer::handleSelfMsg(cMessage* msg) {
 			 * more info on this on page 6 in the notepad, or in the 802154 doc */
 			request->setName("NLME-NETWORK-FORMATION.request");
 			request->setKind(NLME_NETWORK_FORMATION_REQUEST);
-			request->setScanChannels(0x00003800);
+			request->setScanChannels(0x00001800);
 			request->setScanDuration(0x00);
 			request->setBeaconOrder(0x0E);
 			request->setSuperframeOrder(0x0A);
@@ -121,7 +132,7 @@ void FFDAppLayer::handleSelfMsg(cMessage* msg) {
 			sendNlmeDown(request);
 		} else if (msgName == "NLME-NETWORK-DISCOVERY.request") {
 			NlmeNetworkDiscovery_request* request = new NlmeNetworkDiscovery_request("NLME-NETWORK-DISCOVERY.request", NLME_NETWORK_DISCOVERY__REQUEST);
-			request->setScanChannels(0x00013F00);
+			request->setScanChannels(0x00003000);
 			request->setScanDuration(0xCF);
 			sendNlmeDown(request);
 		}

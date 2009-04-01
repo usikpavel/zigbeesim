@@ -66,7 +66,7 @@ void Mlme::handleSelfMsg(cMessage *msg) {
 		}
 		sendPlmeDown(changeState);
 	} else if (msg->getKind() == BEACON_TIMER) {
-		MacBeacon* beacon = new MacBeacon("Beacon Command", MAC_BEACON_FRAME);
+		MacBeacon* beacon = new MacBeacon("Beacon command", MAC_BEACON_FRAME);
 		beacon->setBeaconOrder(getMacPib()->getMacBeaconOrder());
 		beacon->setSuperframeOrder(getMacPib()->getMacSuperframeOrder());
 		/** @todo better to put into some method the beacon creation */
@@ -174,10 +174,9 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 					confirm->setChannelPage(request->getChannelPage());
 					/** @todo include unscanned channels variable here */
 					/** @todo include result list size variable here */
-					int scannedChannelsSize = sizeof(getScannedChannels())
-							/ sizeof(PanDescriptor);
-					confirm->setPanDescriptorListArraySize(scannedChannelsSize);
-					for (int i = 0; i < scannedChannelsSize; i++) {
+					confirm->setPanDescriptorListArraySize(
+							getScannedPanDescriptorsArraySize());
+					for (int i = 0; i < getScannedPanDescriptorsArraySize(); i++) {
 						confirm->setPanDescriptorList(i,
 								getScannedPanDescriptors()[i]);
 					}
@@ -279,6 +278,7 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 	std::string msgName = msg->getName();
 	if (msg->getKind() == MLME_SCAN_REQUEST) {
 		MlmeScan_request* request = check_and_cast<MlmeScan_request *> (msg);
+		resetScannedPanDescriptors();
 		if (timer->isScheduled() && (timer->getKind() == ED_TIMER
 				|| timer->getKind() == ACTIVE_TIMER || timer->getKind()
 				== PASSIVE_TIMER || timer->getKind() == ORPHAN_TIMER)) {
@@ -390,7 +390,7 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 			}
 			delete (msg);
 		} else if (msgName == "Beacon command") {
-			MacBeacon* macBeacon = check_and_cast<MacBeacon *>(msg);
+			MacBeacon* macBeacon = check_and_cast<MacBeacon *> (msg);
 			/** @todo let's get rid of this one */
 			PdMsg* pdBeacon = getMcps()->getLastBeacon()->dup();
 			if (getLastUpperMsg()->getKind() == MLME_SCAN_REQUEST) {
@@ -398,16 +398,38 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 				/** @todo make an option to use also long addresses */
 				panDescriptor.coordAddrMode = SHORT_ADDRESS;
 				panDescriptor.coordPanId = pdBeacon->getSourcePanIdentifier();
+				if (macBeacon->getPanCoordinator()) {
+					panDescriptor.coordAddress = pdBeacon->getSourceAddress();
+				} else {
+					/** @fixme how to find the coordinator address from the beacon msg?? */
+					panDescriptor.coordAddress = (unsigned long) 0x00;
+				}
 				panDescriptor.logicalChannel = getCurrentChannel();
 				panDescriptor.channelPage = getCurrentPage();
 				panDescriptor.beaconOrder = macBeacon->getBeaconOrder();
-				panDescriptor
-				/*
-				if (not scanned pan descriptor) {
-					addScannedPanDescriptor();
-				}*/
+				panDescriptor.superframeOrder = macBeacon->getSuperframeOrder();
+				panDescriptor.finalCapSlot = macBeacon->getFinalCapSlot();
+				panDescriptor.batteryLifeExtension
+						= macBeacon->getBatteryLifeExtension();
+				panDescriptor.panCoordinator = macBeacon->getPanCoordinator();
+				panDescriptor.associationPermit
+						= macBeacon->getAssociationPermit();
+				panDescriptor.gtsPermit = macBeacon->getGtsPermit();
+				/** @todo add some method to lower layers to deal with the link quality of the last received msg */
+				/* panDescriptor.linkQuality = */
+				/* panDescriptor.timeStamp = */
+				if (getLastUpperMsg()->getKind() == MLME_SCAN_REQUEST) {
+					MlmeScan_request* scan = check_and_cast<MlmeScan_request *>(getLastUpperMsg());
+					if (scan->getScanType() == ACTIVE_SCAN
+							|| scan->getScanType() == PASSIVE_SCAN) {
+						if (!isPanScanned(panDescriptor)) {
+							addScannedPanDescriptor(panDescriptor);
+						}
+					}
+				}
 			}
-			delete(msg);
+			delete (pdBeacon);
+			delete (msg);
 		}
 	}
 }

@@ -39,6 +39,7 @@ protected:
 	char* energyLevels;
 	int layerStage;
 	PanDescriptor* scannedPanDescriptors;
+	int scannedPanDescriptorsArraySize;
 	double beaconPeriod;
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
@@ -128,8 +129,16 @@ protected:
 		return this->energyLevels;
 	}
 
-	void setScannedPanDescriptors(PanDescriptor* descriptor) {
-		this->scannedPanDescriptors = descriptor;
+	void setScannedPanDescriptorsArraySize(int size) {
+		this->scannedPanDescriptorsArraySize = size;
+	}
+
+	int getScannedPanDescriptorsArraySize() {
+		return this->scannedPanDescriptorsArraySize;
+	}
+
+	void setScannedPanDescriptors(PanDescriptor* descriptors) {
+		this->scannedPanDescriptors = descriptors;
 	}
 
 	PanDescriptor* getScannedPanDescriptors() {
@@ -137,7 +146,7 @@ protected:
 	}
 
 	void addScannedPanDescriptor(PanDescriptor descriptor) {
-		int size = sizeof(this->scannedPanDescriptors) / sizeof(PanDescriptor);
+		int size = getScannedPanDescriptorsArraySize();
 		PanDescriptor* newScannedPanDescriptors;
 		newScannedPanDescriptors = new PanDescriptor[size + 1];
 		for (int i = 0; i < size; i++) {
@@ -146,10 +155,25 @@ protected:
 		newScannedPanDescriptors[size] = descriptor;
 		delete this->scannedPanDescriptors;
 		this->scannedPanDescriptors = newScannedPanDescriptors;
+		setScannedPanDescriptorsArraySize(size + 1);
+		std::stringstream commentStream;
+		commentStream << "New PAN (ID: " << descriptor.coordPanId << ") detected";
+		comment(COMMENT_PAN, commentStream.str());
+	}
+
+	bool isPanScanned(PanDescriptor descriptor) {
+		int size = getScannedPanDescriptorsArraySize();
+		for (int i = 0; i < size; i++) {
+			if (getScannedPanDescriptors()[i].coordPanId == descriptor.coordPanId) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	void resetScannedPanDescriptors() {
 		delete scannedPanDescriptors;
+		setScannedPanDescriptorsArraySize(0);
 		this->scannedPanDescriptors = new PanDescriptor[0];
 	}
 
