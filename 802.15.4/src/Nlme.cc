@@ -69,9 +69,16 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 					scan->setChannelPage(request->getScanChannels() >> 28);
 					sendMlmeDown(scan);
 				} else if (confirm->getScanType() == ACTIVE_SCAN) {
-					/** @comment we'll find not used PAN ID from the scan and save it for a future use */
+					/** @comment we'll try to use the PAN ID provided by the application layer, if possible */
 					bool idOk = true;
-					do {
+					setPanId(request->getPANId());
+					for (int i = 0; i < confirm->getPanDescriptorListArraySize(); i++) {
+						if (getPanId() == confirm->getPanDescriptorList(i).coordPanId) {
+							idOk = false;
+						}
+					}
+					/** @comment otherwise we'll find not used PAN ID from the scan and save it for a future use (in case we're the coordinator)*/
+					while (!idOk) {
 						setPanId((unsigned short) (rand() % 0x00004000));
 						for (int i = 0; i
 								< confirm->getPanDescriptorListArraySize(); i++) {
@@ -79,7 +86,7 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 									== confirm->getPanDescriptorList(i).coordPanId)
 								idOk = false;
 						}
-					} while (!idOk);
+					}
 					MlmeSet_request* setRequest = new MlmeSet_request(
 							"MLME-SET.request", MLME_SET_REQUEST);
 					setRequest->setPibAttribute(PHY_CURRENT_CHANNEL);
@@ -117,6 +124,12 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 				descriptor.superframeOrder
 						= confirm->getPanDescriptorList(i).superframeOrder;
 				addNetworkDescriptor(descriptor);
+			}
+			response->setNetworkDescriptorListArraySize(
+					getNetworkDescriptorsArraySize());
+			for (int i = 0; i < getNetworkDescriptorsArraySize(); i++) {
+				response->setNetworkDescriptorList(i,
+						getNetworkDescriptors()[i]);
 			}
 			response->setStatus(confirm->getStatus());
 			sendNlmeUp(response);
@@ -156,6 +169,8 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 				startRequest->setCoordRealignment(false);
 				/** @fixme for now, omitting the security features of the message*/
 				sendMlmeDown(startRequest);
+			} else if (confirm->getPibAttribute() == MAC_ASSOCIATION_PERMIT) {
+				/** @comment no actions needed, the upper layer has already been notified */
 			}
 		} else if (getLastUpperMsg()->getKind() == NLME_PERMIT_JOINING_REQUEST) {
 			NlmePermitJoining_confirm* response =
@@ -174,8 +189,8 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 		/** @note here we play with the MAC status still */
 		response->setStatus(confirm->getStatus());
 		sendNlmeUp(response);
-	} else if (msg->getKind() == JOINING_PERMITTED_TIMER) {
-		/** @comment no notification to upper layer required */
+	} else if (msg->getKind() == MLME_BEACON_NOTIFY_INDICATION) {
+
 	}
 	delete (msg);
 }
@@ -203,7 +218,7 @@ void Nlme::handleNlmeMsg(cMessage *msg) {
 		} else {
 			response->setPibAttributeValue(0, (unsigned int) true);
 			if (request->getPermitDuration() != 0xFF) {
-				cMessage* timer = new cMessage("JOINING_PERMITTED_TIMER",
+				cMessage* timer = new cMessage("JOINING-PERMITTED.timer",
 						JOINING_PERMITTED_TIMER);
 				scheduleAt(simTime() + (double) (request->getPermitDuration()),
 						timer);
@@ -230,7 +245,10 @@ void Nlme::handleNlmeMsg(cMessage *msg) {
 		scan->setChannelPage(request->getScanChannels() >> 28);
 		sendMlmeDown(scan);
 	} else if (msg->getKind() == NLME_JOIN_REQUEST) {
+		NlmeJoin_request* request = check_and_cast<NlmeJoin_request *> (msg);
+		if (!request->getRejoinNetwork()) {
 
+		} /**@todo add network rejoining procedures */
 	}
 }
 

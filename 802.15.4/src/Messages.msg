@@ -157,6 +157,37 @@ message MlmeStart_confirm extends MlmeMsg {
     unsigned char status enum(MacEnum);
 };
 
+message MlmeAssociate_request extends MlmeMsg {
+    unsigned int logicalChannel;
+    unsigned char channelPage;
+    unsigned char coordAddrMode;
+    unsigned short coordPanId;
+    unsigned long coordAddress;
+	bool alternatePanCoordinator;
+	bool deviceType;
+	bool powerSource;
+	bool receiverOnWhenIdle;
+	bool secureCapability;
+	bool allocateAddress;
+	unsigned char securityLevel;
+	unsigned char keyIdMode;
+	unsigned char keySource[];
+	unsigned char keyIndex;
+};
+
+message MlmeAssociate_confirm extends MlmeMsg {
+};
+
+message MlmeBeaconNotify_indication extends MlmeMsg {
+    unsigned char bsn;
+    PanDescriptor panDescriptor;
+    unsigned char numberOfShortAddressesPending;
+  	unsigned char numberOfExtendedAddressesPending;
+  	unsigned long addressList[];
+  	unsigned int sduLength;
+  	unsigned char sdu[];
+};
+
 message McpsMsg extends cPacket {
 };
 

@@ -125,6 +125,29 @@ struct NetworkDescriptor {
 	bool permitJoining;
 };
 
+struct NetworkTableEntry {
+	unsigned short panId;
+	unsigned long extendedAddress;
+	unsigned short networkAddress;
+	Role deviceType;
+	bool rxOnWhenIdle;
+	/** @note on the realtionship:
+	 * 0x00 - neighbor is a parent
+	 * 0x01 - neighbor is a child
+	 * 0x02 - neighbor is a sibling
+	 * 0x03 - non of the above */
+	unsigned char relationship;
+	unsigned char depth;
+	unsigned char beaconOrder;
+	bool permitJoining;
+	unsigned char transmitFailure;
+	bool potentialParent;
+	unsigned char lqi;
+	unsigned char logicalChannel;
+	unsigned char incomingBeaconTimestamp;
+	unsigned int beaconTransmissionTimeOffset;
+};
+
 /** @brief NWK PIB Enumerations */
 typedef enum {
 	NWK_SUCCESS 				= 0x00,

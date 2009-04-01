@@ -157,7 +157,7 @@ protected:
 		this->scannedPanDescriptors = newScannedPanDescriptors;
 		setScannedPanDescriptorsArraySize(size + 1);
 		std::stringstream commentStream;
-		commentStream << "New PAN (ID: " << descriptor.coordPanId << ") detected";
+		commentStream << "New PAN (ID: " << descriptor.coordPanId << ") on this channel detected";
 		comment(COMMENT_PAN, commentStream.str());
 	}
 

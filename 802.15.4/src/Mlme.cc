@@ -174,6 +174,8 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 					confirm->setChannelPage(request->getChannelPage());
 					/** @todo include unscanned channels variable here */
 					/** @todo include result list size variable here */
+					confirm->setResultListSize(
+							getScannedPanDescriptorsArraySize());
 					confirm->setPanDescriptorListArraySize(
 							getScannedPanDescriptorsArraySize());
 					for (int i = 0; i < getScannedPanDescriptorsArraySize(); i++) {
@@ -393,43 +395,59 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 			MacBeacon* macBeacon = check_and_cast<MacBeacon *> (msg);
 			/** @todo let's get rid of this one */
 			PdMsg* pdBeacon = getMcps()->getLastBeacon()->dup();
+			MlmeBeaconNotify_indication* indication =
+					new MlmeBeaconNotify_indication(
+							"MLME-BEACON-NOTIFY.indication",
+							MLME_BEACON_NOTIFY_INDICATION);
+
+			PanDescriptor panDescriptor;
+			/** @todo make an option to use also long addresses */
+			panDescriptor.coordAddrMode = SHORT_ADDRESS;
+			panDescriptor.coordPanId = pdBeacon->getSourcePanIdentifier();
+			if (macBeacon->getPanCoordinator()) {
+				panDescriptor.coordAddress = pdBeacon->getSourceAddress();
+			} else {
+				/** @fixme how to find the coordinator address from the beacon msg?? */
+				panDescriptor.coordAddress = (unsigned long) 0x00;
+			}
+			panDescriptor.logicalChannel = getCurrentChannel();
+			panDescriptor.channelPage = getCurrentPage();
+			panDescriptor.beaconOrder = macBeacon->getBeaconOrder();
+			panDescriptor.superframeOrder = macBeacon->getSuperframeOrder();
+			panDescriptor.finalCapSlot = macBeacon->getFinalCapSlot();
+			panDescriptor.batteryLifeExtension
+					= macBeacon->getBatteryLifeExtension();
+			panDescriptor.panCoordinator = macBeacon->getPanCoordinator();
+			panDescriptor.associationPermit = macBeacon->getAssociationPermit();
+			panDescriptor.gtsPermit = macBeacon->getGtsPermit();
+			/** @todo add some method to lower layers to deal with the link quality of the last received msg */
+			/* panDescriptor.linkQuality = */
+			/* panDescriptor.timeStamp = */
 			if (getLastUpperMsg()->getKind() == MLME_SCAN_REQUEST) {
-				PanDescriptor panDescriptor;
-				/** @todo make an option to use also long addresses */
-				panDescriptor.coordAddrMode = SHORT_ADDRESS;
-				panDescriptor.coordPanId = pdBeacon->getSourcePanIdentifier();
-				if (macBeacon->getPanCoordinator()) {
-					panDescriptor.coordAddress = pdBeacon->getSourceAddress();
-				} else {
-					/** @fixme how to find the coordinator address from the beacon msg?? */
-					panDescriptor.coordAddress = (unsigned long) 0x00;
-				}
-				panDescriptor.logicalChannel = getCurrentChannel();
-				panDescriptor.channelPage = getCurrentPage();
-				panDescriptor.beaconOrder = macBeacon->getBeaconOrder();
-				panDescriptor.superframeOrder = macBeacon->getSuperframeOrder();
-				panDescriptor.finalCapSlot = macBeacon->getFinalCapSlot();
-				panDescriptor.batteryLifeExtension
-						= macBeacon->getBatteryLifeExtension();
-				panDescriptor.panCoordinator = macBeacon->getPanCoordinator();
-				panDescriptor.associationPermit
-						= macBeacon->getAssociationPermit();
-				panDescriptor.gtsPermit = macBeacon->getGtsPermit();
-				/** @todo add some method to lower layers to deal with the link quality of the last received msg */
-				/* panDescriptor.linkQuality = */
-				/* panDescriptor.timeStamp = */
-				if (getLastUpperMsg()->getKind() == MLME_SCAN_REQUEST) {
-					MlmeScan_request* scan = check_and_cast<MlmeScan_request *>(getLastUpperMsg());
-					if (scan->getScanType() == ACTIVE_SCAN
-							|| scan->getScanType() == PASSIVE_SCAN) {
-						if (!isPanScanned(panDescriptor)) {
-							addScannedPanDescriptor(panDescriptor);
-						}
+				MlmeScan_request* scan = check_and_cast<MlmeScan_request *> (
+						getLastUpperMsg());
+				if (scan->getScanType() == ACTIVE_SCAN || scan->getScanType()
+						== PASSIVE_SCAN) {
+					if (!isPanScanned(panDescriptor)) {
+						addScannedPanDescriptor(panDescriptor);
 					}
 				}
 			}
+			indication->setBsn(pdBeacon->getSequenceNumber());
+			indication->setPanDescriptor(panDescriptor);
+			indication->setNumberOfShortAddressesPending(macBeacon->getNumberOfShortAddressesPending());
+			indication->setNumberOfExtendedAddressesPending(macBeacon->getNumberOfExtendedAddressesPending());
+			indication->setAddressListArraySize(macBeacon->getAddressListArraySize());
+			for (int i = 0; i < macBeacon->getAddressListArraySize(); i++) {
+				indication->setAddressList(i, macBeacon->getAddressList(i));
+			}
+			indication->setSduArraySize(macBeacon->getMacBeaconPayloadArraySize());
+			for (int i = 0; i < macBeacon->getMacBeaconPayloadArraySize(); i++) {
+				indication->setSdu(i, macBeacon->getMacBeaconPayload(i));
+			}
 			delete (pdBeacon);
 			delete (msg);
+			sendMlmeUp(indication);
 		}
 	}
 }

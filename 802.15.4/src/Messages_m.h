@@ -893,6 +893,191 @@ inline void doUnpacking(cCommBuffer *b, MlmeStart_confirm& obj) {obj.parsimUnpac
 /**
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
+ * message MlmeAssociate_request extends MlmeMsg {
+ *     unsigned int logicalChannel;
+ *     unsigned char channelPage;
+ *     unsigned char coordAddrMode;
+ *     unsigned short coordPanId;
+ *     unsigned long coordAddress;
+ * 	bool alternatePanCoordinator;
+ * 	bool deviceType;
+ * 	bool powerSource;
+ * 	bool receiverOnWhenIdle;
+ * 	bool secureCapability;
+ * 	bool allocateAddress;
+ * 	unsigned char securityLevel;
+ * 	unsigned char keyIdMode;
+ * 	unsigned char keySource[];
+ * 	unsigned char keyIndex;
+ * };
+ * </pre>
+ */
+class MlmeAssociate_request : public MlmeMsg
+{
+  protected:
+    unsigned int logicalChannel_var;
+    unsigned char channelPage_var;
+    unsigned char coordAddrMode_var;
+    unsigned short coordPanId_var;
+    unsigned long coordAddress_var;
+    bool alternatePanCoordinator_var;
+    bool deviceType_var;
+    bool powerSource_var;
+    bool receiverOnWhenIdle_var;
+    bool secureCapability_var;
+    bool allocateAddress_var;
+    unsigned char securityLevel_var;
+    unsigned char keyIdMode_var;
+    unsigned char *keySource_var; // array ptr
+    unsigned int keySource_arraysize;
+    unsigned char keyIndex_var;
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const MlmeAssociate_request&);
+
+  public:
+    MlmeAssociate_request(const char *name=NULL, int kind=0);
+    MlmeAssociate_request(const MlmeAssociate_request& other);
+    virtual ~MlmeAssociate_request();
+    MlmeAssociate_request& operator=(const MlmeAssociate_request& other);
+    virtual MlmeAssociate_request *dup() const {return new MlmeAssociate_request(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+    virtual unsigned int getLogicalChannel() const;
+    virtual void setLogicalChannel(unsigned int logicalChannel_var);
+    virtual unsigned char getChannelPage() const;
+    virtual void setChannelPage(unsigned char channelPage_var);
+    virtual unsigned char getCoordAddrMode() const;
+    virtual void setCoordAddrMode(unsigned char coordAddrMode_var);
+    virtual unsigned short getCoordPanId() const;
+    virtual void setCoordPanId(unsigned short coordPanId_var);
+    virtual unsigned long getCoordAddress() const;
+    virtual void setCoordAddress(unsigned long coordAddress_var);
+    virtual bool getAlternatePanCoordinator() const;
+    virtual void setAlternatePanCoordinator(bool alternatePanCoordinator_var);
+    virtual bool getDeviceType() const;
+    virtual void setDeviceType(bool deviceType_var);
+    virtual bool getPowerSource() const;
+    virtual void setPowerSource(bool powerSource_var);
+    virtual bool getReceiverOnWhenIdle() const;
+    virtual void setReceiverOnWhenIdle(bool receiverOnWhenIdle_var);
+    virtual bool getSecureCapability() const;
+    virtual void setSecureCapability(bool secureCapability_var);
+    virtual bool getAllocateAddress() const;
+    virtual void setAllocateAddress(bool allocateAddress_var);
+    virtual unsigned char getSecurityLevel() const;
+    virtual void setSecurityLevel(unsigned char securityLevel_var);
+    virtual unsigned char getKeyIdMode() const;
+    virtual void setKeyIdMode(unsigned char keyIdMode_var);
+    virtual void setKeySourceArraySize(unsigned int size);
+    virtual unsigned int getKeySourceArraySize() const;
+    virtual unsigned char getKeySource(unsigned int k) const;
+    virtual void setKeySource(unsigned int k, unsigned char keySource_var);
+    virtual unsigned char getKeyIndex() const;
+    virtual void setKeyIndex(unsigned char keyIndex_var);
+};
+
+inline void doPacking(cCommBuffer *b, MlmeAssociate_request& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, MlmeAssociate_request& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
+ * message MlmeAssociate_confirm extends MlmeMsg {
+ * };
+ * </pre>
+ */
+class MlmeAssociate_confirm : public MlmeMsg
+{
+  protected:
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const MlmeAssociate_confirm&);
+
+  public:
+    MlmeAssociate_confirm(const char *name=NULL, int kind=0);
+    MlmeAssociate_confirm(const MlmeAssociate_confirm& other);
+    virtual ~MlmeAssociate_confirm();
+    MlmeAssociate_confirm& operator=(const MlmeAssociate_confirm& other);
+    virtual MlmeAssociate_confirm *dup() const {return new MlmeAssociate_confirm(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+};
+
+inline void doPacking(cCommBuffer *b, MlmeAssociate_confirm& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, MlmeAssociate_confirm& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
+ * message MlmeBeaconNotify_indication extends MlmeMsg {
+ *     unsigned char bsn;
+ *     PanDescriptor panDescriptor;
+ *     unsigned char numberOfShortAddressesPending;
+ *   	unsigned char numberOfExtendedAddressesPending;
+ *   	unsigned long addressList[];
+ *   	unsigned int sduLength;
+ *   	unsigned char sdu[];
+ * };
+ * </pre>
+ */
+class MlmeBeaconNotify_indication : public MlmeMsg
+{
+  protected:
+    unsigned char bsn_var;
+    PanDescriptor panDescriptor_var;
+    unsigned char numberOfShortAddressesPending_var;
+    unsigned char numberOfExtendedAddressesPending_var;
+    unsigned long *addressList_var; // array ptr
+    unsigned int addressList_arraysize;
+    unsigned int sduLength_var;
+    unsigned char *sdu_var; // array ptr
+    unsigned int sdu_arraysize;
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const MlmeBeaconNotify_indication&);
+
+  public:
+    MlmeBeaconNotify_indication(const char *name=NULL, int kind=0);
+    MlmeBeaconNotify_indication(const MlmeBeaconNotify_indication& other);
+    virtual ~MlmeBeaconNotify_indication();
+    MlmeBeaconNotify_indication& operator=(const MlmeBeaconNotify_indication& other);
+    virtual MlmeBeaconNotify_indication *dup() const {return new MlmeBeaconNotify_indication(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+    virtual unsigned char getBsn() const;
+    virtual void setBsn(unsigned char bsn_var);
+    virtual PanDescriptor& getPanDescriptor();
+    virtual const PanDescriptor& getPanDescriptor() const {return const_cast<MlmeBeaconNotify_indication*>(this)->getPanDescriptor();}
+    virtual void setPanDescriptor(const PanDescriptor& panDescriptor_var);
+    virtual unsigned char getNumberOfShortAddressesPending() const;
+    virtual void setNumberOfShortAddressesPending(unsigned char numberOfShortAddressesPending_var);
+    virtual unsigned char getNumberOfExtendedAddressesPending() const;
+    virtual void setNumberOfExtendedAddressesPending(unsigned char numberOfExtendedAddressesPending_var);
+    virtual void setAddressListArraySize(unsigned int size);
+    virtual unsigned int getAddressListArraySize() const;
+    virtual unsigned long getAddressList(unsigned int k) const;
+    virtual void setAddressList(unsigned int k, unsigned long addressList_var);
+    virtual unsigned int getSduLength() const;
+    virtual void setSduLength(unsigned int sduLength_var);
+    virtual void setSduArraySize(unsigned int size);
+    virtual unsigned int getSduArraySize() const;
+    virtual unsigned char getSdu(unsigned int k) const;
+    virtual void setSdu(unsigned int k, unsigned char sdu_var);
+};
+
+inline void doPacking(cCommBuffer *b, MlmeBeaconNotify_indication& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, MlmeBeaconNotify_indication& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
  * message McpsMsg extends cPacket {
  * };
  * </pre>
