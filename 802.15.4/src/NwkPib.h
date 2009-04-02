@@ -52,7 +52,7 @@ protected:
 	bool nwkUseTreeAddrAlloc;
 	bool nwkUseTreeRouting;
 	unsigned short nwkNextAddress;
-	unsigned short nwkAvailableAddress;
+	unsigned short nwkAvailableAddresses;
 	unsigned short nwkAddressIncrement;
 	unsigned short nwkTransactionPersistenceTime;
 	/** @brief Sets the level of comments to the EV output */
@@ -355,14 +355,14 @@ public:
         this->nwkNextAddress = nwkNextAddress;
     }
 
-    unsigned short getNwkAvailableAddress() const
+    unsigned short getNwkAvailableAddresses() const
     {
-        return nwkAvailableAddress;
+        return nwkAvailableAddresses;
     }
 
-    void setNwkAvailableAddress(unsigned short  nwkAvailableAddress)
+    void setNwkAvailableAddresses(unsigned short  nwkAvailableAddresses)
     {
-        this->nwkAvailableAddress = nwkAvailableAddress;
+        this->nwkAvailableAddresses = nwkAvailableAddresses;
     }
 
     unsigned short getNwkAddressIncrement() const
