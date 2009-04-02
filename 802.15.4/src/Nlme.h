@@ -7,6 +7,7 @@
 #include "typedef.h"
 #include "Messages_m.h"
 #include "FFDAppLayer.h"
+#include "NwkPib.h"
 
 class Nlme: public BasicModule {
 public:
@@ -73,6 +74,16 @@ protected:
 		comment(COMMENT_MESSAGE, commentStream.str());
 	}
 
+	NwkPib* getNwkPib() {
+		return ((NwkPib *) (this->getParentModule()->getModuleByRelativePath(
+				"nwkPib")));
+	}
+
+	FFDAppLayer* getFFDAppLayer() {
+		return (FFDAppLayer *) (getParentModule()->getParentModule()->getModuleByRelativePath(
+				"app"));
+	}
+
 	void setLastUpperMsg(cMessage* msg) {
 		delete (this->lastUpperMsg);
 		this->lastUpperMsg = msg;
@@ -130,8 +141,7 @@ protected:
 	bool isNetworkScanned(NetworkDescriptor descriptor) {
 		int size = getNetworkDescriptorsArraySize();
 		for (int i = 0; i < size; i++) {
-			if (getNetworkDescriptors()[i].panId
-					== descriptor.panId) {
+			if (getNetworkDescriptors()[i].panId == descriptor.panId) {
 				return true;
 			}
 		}
@@ -144,9 +154,6 @@ protected:
 		this->networkDescriptors = new NetworkDescriptor[0];
 	}
 
-	FFDAppLayer* getFFDAppLayer() {
-		return (FFDAppLayer *) (getParentModule()->getParentModule()->getModuleByRelativePath("app"));
-	}
 };
 
 #endif

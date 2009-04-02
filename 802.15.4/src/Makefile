@@ -221,6 +221,8 @@ $O/Nlme.o: Nlme.cc \
 	FFDAppLayer.h \
 	$(RTN_PROJ)/contrib/messages/ApplPkt_m.h \
 	typedef.h \
+	NwkPib.h \
+	BBItems.h \
 	$(RTN_PROJ)/core/blackboard/Blackboard.h \
 	$(RTN_PROJ)/core/basicModules/BasicModule.h \
 	Messages_m.h \
@@ -273,7 +275,16 @@ $O/MacPib.o: MacPib.cc \
 	Messages_m.h \
 	$(RTN_PROJ)/core/utils/ModuleAccess.h
 $O/NwkPib.o: NwkPib.cc \
-	NwkPib.h
+	FFDAppLayer.h \
+	$(RTN_PROJ)/contrib/messages/ApplPkt_m.h \
+	typedef.h \
+	NwkPib.h \
+	BBItems.h \
+	$(RTN_PROJ)/core/blackboard/Blackboard.h \
+	$(RTN_PROJ)/core/basicModules/BasicModule.h \
+	$(RTN_PROJ)/contrib/applLayer/BasicApplLayer.h \
+	Messages_m.h \
+	$(RTN_PROJ)/core/utils/ModuleAccess.h
 $O/SnrDecider802154.o: SnrDecider802154.cc \
 	$(RTN_PROJ)/core/basicMessages/AirFrame_m.h \
 	SnrDecider802154.h \

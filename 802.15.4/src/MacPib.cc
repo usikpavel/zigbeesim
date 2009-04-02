@@ -1,7 +1,6 @@
 #include "MacPib.h"
 
-Define_Module(MacPib)
-;
+Define_Module(MacPib);
 
 void MacPib::initialize(int stage) {
 	BasicModule::initialize(stage);

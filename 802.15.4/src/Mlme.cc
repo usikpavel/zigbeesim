@@ -395,11 +395,6 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 			MacBeacon* macBeacon = check_and_cast<MacBeacon *> (msg);
 			/** @todo let's get rid of this one */
 			PdMsg* pdBeacon = getMcps()->getLastBeacon()->dup();
-			MlmeBeaconNotify_indication* indication =
-					new MlmeBeaconNotify_indication(
-							"MLME-BEACON-NOTIFY.indication",
-							MLME_BEACON_NOTIFY_INDICATION);
-
 			PanDescriptor panDescriptor;
 			/** @todo make an option to use also long addresses */
 			panDescriptor.coordAddrMode = SHORT_ADDRESS;
@@ -433,21 +428,31 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 					}
 				}
 			}
-			indication->setBsn(pdBeacon->getSequenceNumber());
-			indication->setPanDescriptor(panDescriptor);
-			indication->setNumberOfShortAddressesPending(macBeacon->getNumberOfShortAddressesPending());
-			indication->setNumberOfExtendedAddressesPending(macBeacon->getNumberOfExtendedAddressesPending());
-			indication->setAddressListArraySize(macBeacon->getAddressListArraySize());
-			for (int i = 0; i < macBeacon->getAddressListArraySize(); i++) {
-				indication->setAddressList(i, macBeacon->getAddressList(i));
-			}
-			indication->setSduArraySize(macBeacon->getMacBeaconPayloadArraySize());
-			for (int i = 0; i < macBeacon->getMacBeaconPayloadArraySize(); i++) {
-				indication->setSdu(i, macBeacon->getMacBeaconPayload(i));
+			if (macBeacon->getMacBeaconPayloadArraySize() != 0) {
+				MlmeBeaconNotify_indication* indication =
+						new MlmeBeaconNotify_indication(
+								"MLME-BEACON-NOTIFY.indication",
+								MLME_BEACON_NOTIFY_INDICATION);
+				indication->setBsn(pdBeacon->getSequenceNumber());
+				indication->setPanDescriptor(panDescriptor);
+				indication->setNumberOfShortAddressesPending(
+						macBeacon->getNumberOfShortAddressesPending());
+				indication->setNumberOfExtendedAddressesPending(
+						macBeacon->getNumberOfExtendedAddressesPending());
+				indication->setAddressListArraySize(
+						macBeacon->getAddressListArraySize());
+				for (int i = 0; i < macBeacon->getAddressListArraySize(); i++) {
+					indication->setAddressList(i, macBeacon->getAddressList(i));
+				}
+				indication->setSduArraySize(
+						macBeacon->getMacBeaconPayloadArraySize());
+				for (int i = 0; i < macBeacon->getMacBeaconPayloadArraySize(); i++) {
+					indication->setSdu(i, macBeacon->getMacBeaconPayload(i));
+				}
+				sendMlmeUp(indication);
 			}
 			delete (pdBeacon);
 			delete (msg);
-			sendMlmeUp(indication);
 		}
 	}
 }
