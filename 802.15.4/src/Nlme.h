@@ -8,6 +8,7 @@
 #include "Messages_m.h"
 #include "FFDAppLayer.h"
 #include "NwkPib.h"
+#include "Mcps.h"
 
 class Nlme: public BasicModule {
 public:
@@ -32,6 +33,7 @@ protected:
 	unsigned char logicalChannel;
 	NetworkDescriptor* networkDescriptors;
 	int networkDescriptorsArraySize;
+	unsigned char networkAddress;
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
 
@@ -82,6 +84,10 @@ protected:
 	FFDAppLayer* getFFDAppLayer() {
 		return (FFDAppLayer *) (getParentModule()->getParentModule()->getModuleByRelativePath(
 				"app"));
+	}
+
+	Mcps* getMcps() {
+		return (Mcps *) (getParentModule()->getParentModule()->getModuleByRelativePath("mac")->getModuleByRelativePath("mcps"));
 	}
 
 	void setLastUpperMsg(cMessage* msg) {
@@ -152,6 +158,14 @@ protected:
 		delete networkDescriptors;
 		setNetworkDescriptorsArraySize(0);
 		this->networkDescriptors = new NetworkDescriptor[0];
+	}
+
+	unsigned short getNetworkAddress() {
+		return this->networkAddress;
+	}
+
+	void setNetworkAddress(unsigned short networkAddress) {
+		this->networkAddress = networkAddress;
 	}
 
 };
