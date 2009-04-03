@@ -186,6 +186,8 @@ message MlmeBeaconNotify_indication extends MlmeMsg {
   	unsigned long addressList[];
   	unsigned int sduLength;
   	unsigned char sdu[];
+  	// Fields added on the top of the ZigBee or 802.15.4 standards
+  	unsigned short networkAddress;
 };
 
 message McpsMsg extends cPacket {

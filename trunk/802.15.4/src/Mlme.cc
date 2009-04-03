@@ -21,6 +21,7 @@ void Mlme::initialize(int stage) {
 		}
 	} else if (stage == 1) {
 		lastUpperMsg = new cMessage();
+		lastBeacon = new MacBeacon();
 		timer = new cMessage("timer");
 		beaconTimer = new cMessage("Beacon timer", BEACON_TIMER);
 		setScannedChannels(0);
@@ -393,6 +394,7 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 			delete (msg);
 		} else if (msgName == "Beacon command") {
 			MacBeacon* macBeacon = check_and_cast<MacBeacon *> (msg);
+			setLastBeacon(macBeacon->dup());
 			/** @todo let's get rid of this one */
 			PdMsg* pdBeacon = getMcps()->getLastBeacon()->dup();
 			PanDescriptor panDescriptor;

@@ -31,6 +31,7 @@ protected:
 	/** additional variables */
 	Role role;
 	cMessage* lastUpperMsg;
+	MacBeacon* lastBeacon;
 	cMessage* timer;
 	cMessage* beaconTimer;
 	int currentChannel;
@@ -89,13 +90,20 @@ protected:
 		return ((Mcps *) (this->getParentModule()->getModuleByRelativePath(
 				"mcps")));
 	}
-	virtual void setLastUpperMsg(cMessage* msg) {
+	void setLastUpperMsg(cMessage* msg) {
 		setLayerStage(0);
 		delete (this->lastUpperMsg);
 		this->lastUpperMsg = msg;
 	}
 	cMessage* getLastUpperMsg() {
 		return this->lastUpperMsg;
+	}
+	void setLastBeacon(MacBeacon* msg) {
+		delete (this->lastBeacon);
+		this->lastBeacon = msg;
+	}
+	MacBeacon* getLastBeacon() {
+		return this->lastBeacon;
 	}
 	void setLayerStage(int stage) {
 		this->layerStage = stage;
@@ -157,14 +165,16 @@ protected:
 		this->scannedPanDescriptors = newScannedPanDescriptors;
 		setScannedPanDescriptorsArraySize(size + 1);
 		std::stringstream commentStream;
-		commentStream << "New PAN (ID: " << descriptor.coordPanId << ") on this channel detected";
+		commentStream << "New PAN (ID: " << descriptor.coordPanId
+				<< ") on this channel detected";
 		comment(COMMENT_PAN, commentStream.str());
 	}
 
 	bool isPanScanned(PanDescriptor descriptor) {
 		int size = getScannedPanDescriptorsArraySize();
 		for (int i = 0; i < size; i++) {
-			if (getScannedPanDescriptors()[i].coordPanId == descriptor.coordPanId) {
+			if (getScannedPanDescriptors()[i].coordPanId
+					== descriptor.coordPanId) {
 				return true;
 			}
 		}

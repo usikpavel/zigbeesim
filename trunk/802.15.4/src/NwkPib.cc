@@ -60,10 +60,14 @@ void NwkPib::resetNwkPibValues() {
 	setNwkMaxChildren(0x07);
 	setNwkMaxDepth(0x05);
 	setNwkMaxRouters(0x05);
+	neighborTable = new NeighborTableEntry[0];
+	setNeighborTableSize(0);
 	setNwkNetworkBroadcastDeliveryTime(getNwkPassiveAckTimeout()
 			* getNwkMaxBroadcastRetries());
 	setNwkReportConstantCost(0x00);
 	setNwkRouteDiscoveryRetriesPermitted(getNwkcDiscoveryRetryLimit());
+	routingTable = new RoutingTableEntry[0];
+	setRoutingTableSize(0);
 	setNwkSymLink(false);
 	NwkCapabilityInformation nci;
 	nci.alternatePanCoordinator = 0x00;

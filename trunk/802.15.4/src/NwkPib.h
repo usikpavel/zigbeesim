@@ -22,7 +22,7 @@ protected:
 	/*@}*/
 	/** NWK PIB constants */
 	bool nwkcCoordinatorCapable;
-	/** @fixme ommiting the nwkcDefaultSecurityLevel */
+	/** @fixme omitting the nwkcDefaultSecurityLevel */
 	unsigned char nwkcDiscoveryRetryLimit;
 	unsigned char nwkcMaxDepth;
 	unsigned char nwkcMinHeaderOverhead;
@@ -42,11 +42,13 @@ protected:
 	unsigned char nwkMaxChildren;
 	unsigned char nwkMaxDepth;
 	unsigned char nwkMaxRouters;
-	/** @todo network table belongs here... */
+	NetworkTableEntry* neighborTable;
+	int neighborTableSize;
 	unsigned char nwkNetworkBroadcastDeliveryTime;
 	unsigned char nwkReportConstantCost;
 	unsigned char nwkRouteDiscoveryRetriesPermitted;
-	/** @todo route table belongs here... */
+	RoutingTableEntry* routingTable;
+	int routingTableSize;
 	bool nwkSymLink;
 	NwkCapabilityInformation nwkCapabilityInformation;
 	bool nwkUseTreeAddrAlloc;
@@ -275,6 +277,14 @@ public:
         this->nwkMaxRouters = nwkMaxRouters;
     }
 
+    int getNeighborTableSize() {
+    	return this->neighborTableSize;
+    }
+
+    void setNeighborTableSize(int neighborTableSize) {
+    	this->neighborTableSize = neighborTableSize;
+    }
+
     unsigned char getNwkNetworkBroadcastDeliveryTime() const
     {
         return nwkNetworkBroadcastDeliveryTime;
@@ -303,6 +313,14 @@ public:
     void setNwkRouteDiscoveryRetriesPermitted(unsigned char nwkRouteDiscoveryRetriesPermitted)
     {
         this->nwkRouteDiscoveryRetriesPermitted = nwkRouteDiscoveryRetriesPermitted;
+    }
+
+    int getRoutingTableSize() {
+    	return this->routingTableSize;
+    }
+
+    void setRoutingTableSize(int routingTableSize) {
+    	this->routingTableSize = routingTableSize;
     }
 
     bool getNwkSymLink() const

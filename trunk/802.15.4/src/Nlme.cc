@@ -190,7 +190,11 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 		response->setStatus(confirm->getStatus());
 		sendNlmeUp(response);
 	} else if (msg->getKind() == MLME_BEACON_NOTIFY_INDICATION) {
-
+		MlmeBeaconNotify_indication* indication = check_and_cast<MlmeBeaconNotify_indication *>(msg);
+		NeighborTableEntry neighbor;
+		neighbor.panId = indication->getPanDescriptor().coordPanId;
+		neighbor.extendedAddress = getMcps()->getLastBeacon()->getSourceAddress();
+		neighbor.networkAddress =
 	}
 	delete (msg);
 }

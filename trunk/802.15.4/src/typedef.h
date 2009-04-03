@@ -134,11 +134,11 @@ struct NetworkDescriptor {
 	bool permitJoining;
 };
 
-struct NetworkTableEntry {
+struct NeighborTableEntry {
 	unsigned short panId;
 	unsigned long extendedAddress;
 	unsigned short networkAddress;
-	Role deviceType;
+	unsigned char deviceType;
 	bool rxOnWhenIdle;
 	/** @note on the relationship:
 	 * 0x00 - neighbor is a parent
@@ -153,8 +153,14 @@ struct NetworkTableEntry {
 	bool potentialParent;
 	unsigned char lqi;
 	unsigned char logicalChannel;
-	unsigned char incomingBeaconTimestamp;
+	unsigned int incomingBeaconTimestamp;
 	unsigned int beaconTransmissionTimeOffset;
+};
+
+struct RoutingTableEntry {
+	unsigned short destinationAddress;
+	unsigned char status;
+	unsigned short nextHopAddress;
 };
 
 /** @brief NWK PIB Enumerations */
