@@ -140,7 +140,7 @@ struct NetworkTableEntry {
 	unsigned short networkAddress;
 	Role deviceType;
 	bool rxOnWhenIdle;
-	/** @note on the realtionship:
+	/** @note on the relationship:
 	 * 0x00 - neighbor is a parent
 	 * 0x01 - neighbor is a child
 	 * 0x02 - neighbor is a sibling
