@@ -142,11 +142,11 @@ PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 		request->setFramePending(false);
 		request->setAckRequest(false);
 		request->setPanIdCompression(false);
-		request->setDestinationAddressingMode(SHORT_ADDRESS);
+		request->setDestinationAddressingMode(NOT_PRESENT);
 		request->setFrameVersion(0x01);
 		request->setSourceAddressingMode(LONG_ADDRESS);
 		request->setSequenceNumber(getMacPib()->getMacBSN());
-		getMacPib()->setMacBSN(getMacPib()->getMacBSN() + 1);
+		getMacPib()->setMacBSN((getMacPib()->getMacBSN()) + 1);
 		request->setDestinationPanIdentifier(0xFFFF);
 		request->setDestinationAddress((unsigned long) 0xFFFF);
 		request->setSourcePanIdentifier(getMacPib()->getPibAttribute(MAC_PAN_ID)[0]);

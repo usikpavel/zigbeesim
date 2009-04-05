@@ -185,9 +185,7 @@ message MlmeBeaconNotify_indication extends MlmeMsg {
   	unsigned char numberOfExtendedAddressesPending;
   	unsigned long addressList[];
   	unsigned int sduLength;
-  	unsigned char sdu[];
-  	// Fields added on the top of the ZigBee or 802.15.4 standards
-  	unsigned short networkAddress;
+  	unsigned int sdu[];
 };
 
 message McpsMsg extends cPacket {
@@ -209,7 +207,7 @@ message MacBeacon extends McpsMsg {
   	unsigned char numberOfShortAddressesPending;
   	unsigned char numberOfExtendedAddressesPending;
   	unsigned long addressList[];
-  	unsigned char macBeaconPayload[];
+  	unsigned int macBeaconPayload[];
 };
 
 message MacCommand extends McpsMsg {

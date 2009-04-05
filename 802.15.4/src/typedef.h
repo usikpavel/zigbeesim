@@ -190,6 +190,10 @@ typedef enum {
 	ORPHAN_ONLY 	= 0x03
 } ScanTypes;
 
+struct MacBeaconPayload {
+	unsigned short networkAddress;
+	unsigned char deviceType;
+};
 
 struct PanDescriptor {
 	unsigned char coordAddrMode;

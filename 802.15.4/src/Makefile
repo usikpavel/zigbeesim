@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for dip_802.15.4
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep -ID:/Private/mobility-fw2.0p3-o4/core/utils -ID:/Private/mobility-fw2.0p3-o4/core/basicModules -ID:/Private/mobility-fw2.0p3-o4/contrib/nic/phyLayer -ID:/Private/mobility-fw2.0p3-o4/contrib/messages -ID:/Private/mobility-fw2.0p3-o4/contrib/utils -ID:/Private/mobility-fw2.0p3-o4/core/channelControl -ID:/Private/mobility-fw2.0p3-o4/core/basicMessages -ID:/Private/mobility-fw2.0p3-o4/contrib/applLayer -ID:/Private/mobility-fw2.0p3-o4/core/blackboard -ID:/Private/mobility-fw2.0p3-o4/contrib/nic/radios -LD:/Private/mobility-fw2.0p3-o4/out/$(CONFIGNAME)/core -LD:/Private/mobility-fw2.0p3-o4/out/$(CONFIGNAME)/contrib -lmfcore -lmfcontrib -KRTN_PROJ=D:/Private/mobility-fw2.0p3-o4
+#  opp_makemake -f --deep -I../../rtn/core/basicModules -I../../rtn/core/utils -I../../rtn/contrib/messages -I../../rtn/contrib/utils -I../../rtn/core/channelControl -I../../rtn/contrib/applLayer -I../../rtn/core/blackboard -I../../rtn/contrib/nic/macLayer -I../../rtn/contrib/nic/phyLayer -I../../rtn/contrib/netwLayer -I../../rtn/core/basicMessages -I../../rtn/contrib/nic/radios -L../../rtn/out/$(CONFIGNAME)/core -L../../rtn/out/$(CONFIGNAME)/contrib -lmfcore -lmfcontrib -KRTN_PROJ=../../rtn
 #
 
 # Name of target to be created (-o option)
@@ -15,24 +15,26 @@ USERIF_LIBS = $(ALL_ENV_LIBS) # that is, $(TKENV_LIBS) $(CMDENV_LIBS)
 
 # C++ include paths (with -I)
 INCLUDE_PATH = \
-    -I$(RTN_PROJ)/core/utils \
-    -I$(RTN_PROJ)/core/basicModules \
-    -I$(RTN_PROJ)/contrib/nic/phyLayer \
-    -I$(RTN_PROJ)/contrib/messages \
-    -I$(RTN_PROJ)/contrib/utils \
-    -I$(RTN_PROJ)/core/channelControl \
-    -I$(RTN_PROJ)/core/basicMessages \
-    -I$(RTN_PROJ)/contrib/applLayer \
-    -I$(RTN_PROJ)/core/blackboard \
-    -I$(RTN_PROJ)/contrib/nic/radios \
+    -I../../rtn/core/basicModules \
+    -I../../rtn/core/utils \
+    -I../../rtn/contrib/messages \
+    -I../../rtn/contrib/utils \
+    -I../../rtn/core/channelControl \
+    -I../../rtn/contrib/applLayer \
+    -I../../rtn/core/blackboard \
+    -I../../rtn/contrib/nic/macLayer \
+    -I../../rtn/contrib/nic/phyLayer \
+    -I../../rtn/contrib/netwLayer \
+    -I../../rtn/core/basicMessages \
+    -I../../rtn/contrib/nic/radios \
     -I.
 
 # Additional object and library files to link with
 EXTRA_OBJS =
 
 # Additional libraries (-L, -l options)
-LIBS = -L$(RTN_PROJ)/out/$(CONFIGNAME)/core -L$(RTN_PROJ)/out/$(CONFIGNAME)/contrib  -lmfcore -lmfcontrib
-LIBS += -Wl,-rpath,`abspath $(RTN_PROJ)/out/$(CONFIGNAME)/core` -Wl,-rpath,`abspath $(RTN_PROJ)/out/$(CONFIGNAME)/contrib`
+LIBS = -L../../rtn/out/$(CONFIGNAME)/core -L../../rtn/out/$(CONFIGNAME)/contrib  -lmfcore -lmfcontrib
+LIBS += -Wl,-rpath,`abspath ../../rtn/out/$(CONFIGNAME)/core` -Wl,-rpath,`abspath ../../rtn/out/$(CONFIGNAME)/contrib`
 
 # Output directory
 PROJECT_OUTPUT_DIR = ../out
@@ -41,24 +43,24 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc and .msg files
 OBJS = \
-    $O/FFDAppLayer.o \
     $O/Llc8022.o \
     $O/Mac802154.o \
-    $O/MacPib.o \
-    $O/Mcps.o \
-    $O/Mlme.o \
     $O/Nlde.o \
-    $O/Nlme.o \
-    $O/NwkPib.o \
-    $O/Pd.o \
-    $O/PhyPib.o \
-    $O/Plme.o \
     $O/RFDAppLayer.o \
     $O/RFDNetLayer.o \
     $O/SnrDecider802154.o \
     $O/SnrEval802154.o \
     $O/Sscs.o \
     $O/ZigBeeArp.o \
+    $O/Mlme.o \
+    $O/PhyPib.o \
+    $O/Plme.o \
+    $O/Pd.o \
+    $O/Mcps.o \
+    $O/Nlme.o \
+    $O/FFDAppLayer.o \
+    $O/MacPib.o \
+    $O/NwkPib.o \
     $O/Messages_m.o
 
 # Message files
@@ -66,7 +68,7 @@ MSGFILES = \
     Messages.msg
 
 # Other makefile variables (-K)
-RTN_PROJ=D:/Private/mobility-fw2.0p3-o4
+RTN_PROJ=../../rtn
 
 #------------------------------------------------------------------------------
 
@@ -232,16 +234,16 @@ $O/Nlme.o: Nlme.cc \
 	$(RTN_PROJ)/contrib/applLayer/BasicApplLayer.h \
 	Messages_m.h
 $O/Mac802154.o: Mac802154.cc \
-	$(RTN_PROJ)/contrib/utils/Bitrate.h \
 	$(RTN_PROJ)/core/utils/ActiveChannel.h \
+	$(RTN_PROJ)/contrib/utils/Bitrate.h \
 	Mac802154.h \
 	$(RTN_PROJ)/core/utils/NicControlType.h \
-	$(RTN_PROJ)/core/basicModules/BasicLayer.h \
 	$(RTN_PROJ)/core/basicModules/BasicMacLayer.h \
+	$(RTN_PROJ)/core/basicModules/BasicLayer.h \
 	$(RTN_PROJ)/contrib/utils/RSSI.h \
-	$(RTN_PROJ)/core/basicModules/BasicModule.h \
-	$(RTN_PROJ)/core/utils/SimpleAddress.h \
 	$(RTN_PROJ)/core/basicMessages/MacPkt_m.h \
+	$(RTN_PROJ)/core/utils/SimpleAddress.h \
+	$(RTN_PROJ)/core/basicModules/BasicModule.h \
 	$(RTN_PROJ)/contrib/nic/radios/SingleChannelRadio.h \
 	$(RTN_PROJ)/core/utils/ModuleAccess.h \
 	$(RTN_PROJ)/contrib/utils/DroppedPacket.h \
@@ -252,10 +254,10 @@ $O/Pd.o: Pd.cc \
 	$(RTN_PROJ)/core/utils/MacControlInfo.h \
 	typedef.h \
 	$(RTN_PROJ)/contrib/utils/Bitrate.h \
-	$(RTN_PROJ)/core/utils/CoreDebug.h \
 	$(RTN_PROJ)/core/utils/ActiveChannel.h \
-	$(RTN_PROJ)/core/basicModules/BasicModule.h \
+	$(RTN_PROJ)/core/utils/CoreDebug.h \
 	$(RTN_PROJ)/core/utils/SimpleAddress.h \
+	$(RTN_PROJ)/core/basicModules/BasicModule.h \
 	$(RTN_PROJ)/contrib/nic/radios/SingleChannelRadio.h \
 	$(RTN_PROJ)/core/utils/ModuleAccess.h \
 	$(RTN_PROJ)/core/channelControl/NicEntry.h \
@@ -264,8 +266,8 @@ $O/Pd.o: Pd.cc \
 	$(RTN_PROJ)/core/channelControl/ChannelControl.h \
 	PhyPib.h \
 	BBItems.h \
-	$(RTN_PROJ)/core/utils/Coord.h \
 	$(RTN_PROJ)/core/blackboard/Blackboard.h \
+	$(RTN_PROJ)/core/utils/Coord.h \
 	Messages_m.h \
 	$(RTN_PROJ)/core/utils/FWMath.h
 $O/MacPib.o: MacPib.cc \
@@ -284,8 +286,8 @@ $O/NwkPib.o: NwkPib.cc \
 	BBItems.h \
 	$(RTN_PROJ)/core/blackboard/Blackboard.h \
 	$(RTN_PROJ)/core/basicModules/BasicModule.h \
-	$(RTN_PROJ)/contrib/applLayer/BasicApplLayer.h \
 	Messages_m.h \
+	$(RTN_PROJ)/contrib/applLayer/BasicApplLayer.h \
 	$(RTN_PROJ)/core/utils/ModuleAccess.h
 $O/SnrDecider802154.o: SnrDecider802154.cc \
 	$(RTN_PROJ)/core/basicMessages/AirFrame_m.h \
@@ -304,9 +306,9 @@ $O/RFDNetLayer.o: RFDNetLayer.cc \
 	$(RTN_PROJ)/core/basicModules/BasicLayer.h \
 	$(RTN_PROJ)/core/blackboard/Blackboard.h \
 	$(RTN_PROJ)/contrib/utils/NetwControlInfo.h \
+	$(RTN_PROJ)/core/basicModules/BasicModule.h \
 	$(RTN_PROJ)/contrib/messages/NetwPkt_m.h \
 	$(RTN_PROJ)/core/utils/SimpleAddress.h \
-	$(RTN_PROJ)/core/basicModules/BasicModule.h \
 	RFDNetLayer.h \
 	$(RTN_PROJ)/core/utils/ModuleAccess.h \
 	ZigBeeArp.h

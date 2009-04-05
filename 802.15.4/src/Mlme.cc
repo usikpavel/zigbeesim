@@ -1,6 +1,6 @@
 #include "Mlme.h"
 
-Define_Module( Mlme);
+Define_Module(Mlme);
 
 void Mlme::initialize(int stage) {
 	BasicModule::initialize(stage);
@@ -67,15 +67,15 @@ void Mlme::handleSelfMsg(cMessage *msg) {
 		}
 		sendPlmeDown(changeState);
 	} else if (msg->getKind() == BEACON_TIMER) {
+		/** @todo better to put into some method the beacon creation */
 		MacBeacon* beacon = new MacBeacon("Beacon command", MAC_BEACON_FRAME);
 		beacon->setBeaconOrder(getMacPib()->getMacBeaconOrder());
 		beacon->setSuperframeOrder(getMacPib()->getMacSuperframeOrder());
-		/** @todo better to put into some method the beacon creation */
 		/** @todo set FinalCapSlot */
 		//beacon->setFinalCapSlot();
 		beacon->setBatteryLifeExtension(false);
 		beacon->setPanCoordinator(getRole() == COORDINATOR);
-		beacon->setAssociationPermit(true);
+		beacon->setAssociationPermit(getMacPib()->getMacAssociationPermit());
 		beacon->setGtsDescriptorCount(0);
 		beacon->setGtsPermit(getMacPib()->getMacGTSPermit());
 		beacon->setNumberOfShortAddressesPending(0);
@@ -87,8 +87,8 @@ void Mlme::handleSelfMsg(cMessage *msg) {
 			beacon->setMacBeaconPayload(i,
 					getMacPib()->getMacBeaconPayload()[i]);
 		}
-		/** @todo add the right beacon length */
-		beacon->setByteLength(5);
+		/** @fixme add the right beacon length */
+		beacon->setByteLength(5 + sizeof(MacBeaconPayload));
 		sendMcps(beacon);
 		scheduleAt(simTime() + getBeaconPeriod(), beaconTimer);
 	}
