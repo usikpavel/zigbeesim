@@ -10,7 +10,6 @@ void MacPib::initialize(int stage) {
 
 		resetMacPibValues();
 		commentsLevel = COMMENT_ALL;
-		macBeaconPayload = new unsigned char[1];
 	}
 }
 
@@ -58,7 +57,7 @@ void MacPib::resetMacPibValues() {
 	setMacAssociationPermit(false);
 	setMacAutoRequest(true);
 	setMacBattLifeExt(false);
-	setMacBeaconPayloadLength(0);
+	setMacBeaconPayloadLength(sizeof(MacBeaconPayload));
 	setMacBeaconOrder(15);
 	setMacBeaconTxTime(0x00000000);
 	setMacBSN(rand() % 256);
@@ -104,9 +103,9 @@ MacEnum MacPib::setPibAttribute(PibIdentifier attribute, unsigned int* value) {
 		setMacBattLifeExtPeriods(value[0]);
 		break;
 	case MAC_BEACON_PAYLOAD:
-		/** @todo check this int* to char* conversion between the arrays */
-		std::cout << "!!!HAZARD" << endl;
-		setMacBeaconPayload((unsigned char*) value);
+		MacBeaconPayload* payload;
+		payload = (MacBeaconPayload *) value;
+		setMacBeaconPayload(*payload);
 		break;
 	case MAC_BEACON_PAYLOAD_LENGTH:
 		if (value[0] > getMaxBeaconPayloadLength()) {
@@ -314,7 +313,7 @@ unsigned int* MacPib::getPibAttribute(PibIdentifier attribute) {
 		value[0] = getMacBattLifeExtPeriods();
 		break;
 	case MAC_BEACON_PAYLOAD:
-		value = (unsigned int*)getMacBeaconPayload();
+		value = getMacBeaconPayload();
 		break;
 	case MAC_BEACON_PAYLOAD_LENGTH:
 		value = new unsigned int[1];

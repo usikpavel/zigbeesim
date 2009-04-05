@@ -42,7 +42,7 @@ protected:
 	bool macAutoRequest;
 	bool macBattLifeExt;
 	unsigned int macBattLifeExtPeriods;
-	unsigned char* macBeaconPayload;
+	MacBeaconPayload macBeaconPayload;
 	unsigned char macBeaconPayloadLength;
 	unsigned char macBeaconOrder;
 	unsigned int macBeaconTxTime;
@@ -224,15 +224,14 @@ public:
 	void setMacBattLifeExtPeriods(unsigned int macBattLifeExtPeriods) {
 		this->macBattLifeExtPeriods = macBattLifeExtPeriods;
 	}
-	unsigned char *getMacBeaconPayload() const {
-		return macBeaconPayload;
+	unsigned int* getMacBeaconPayload() {
+		return (unsigned int*) &macBeaconPayload;
 	}
-	void setMacBeaconPayload(unsigned char *macBeaconPayload) {
-		delete (this->macBeaconPayload);
+	void setMacBeaconPayload(MacBeaconPayload macBeaconPayload) {
 		this->macBeaconPayload = macBeaconPayload;
 	}
 	unsigned char getMacBeaconPayloadLength() const {
-		return macBeaconPayloadLength;
+		return sizeof(MacBeaconPayload);
 	}
 	void setMacBeaconPayloadLength(unsigned char macBeaconPayloadLength) {
 		this->macBeaconPayloadLength = macBeaconPayloadLength;

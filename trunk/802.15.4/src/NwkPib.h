@@ -42,7 +42,7 @@ protected:
 	unsigned char nwkMaxChildren;
 	unsigned char nwkMaxDepth;
 	unsigned char nwkMaxRouters;
-	NetworkTableEntry* neighborTable;
+	NeighborTableEntry* neighborTable;
 	int neighborTableSize;
 	unsigned char nwkNetworkBroadcastDeliveryTime;
 	unsigned char nwkReportConstantCost;

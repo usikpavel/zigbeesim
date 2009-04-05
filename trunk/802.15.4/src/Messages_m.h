@@ -1021,7 +1021,7 @@ inline void doUnpacking(cCommBuffer *b, MlmeAssociate_confirm& obj) {obj.parsimU
  *   	unsigned char numberOfExtendedAddressesPending;
  *   	unsigned long addressList[];
  *   	unsigned int sduLength;
- *   	unsigned char sdu[];
+ *   	unsigned int sdu[];
  * };
  * </pre>
  */
@@ -1035,7 +1035,7 @@ class MlmeBeaconNotify_indication : public MlmeMsg
     unsigned long *addressList_var; // array ptr
     unsigned int addressList_arraysize;
     unsigned int sduLength_var;
-    unsigned char *sdu_var; // array ptr
+    unsigned int *sdu_var; // array ptr
     unsigned int sdu_arraysize;
 
     // protected and unimplemented operator==(), to prevent accidental usage
@@ -1068,8 +1068,8 @@ class MlmeBeaconNotify_indication : public MlmeMsg
     virtual void setSduLength(unsigned int sduLength_var);
     virtual void setSduArraySize(unsigned int size);
     virtual unsigned int getSduArraySize() const;
-    virtual unsigned char getSdu(unsigned int k) const;
-    virtual void setSdu(unsigned int k, unsigned char sdu_var);
+    virtual unsigned int getSdu(unsigned int k) const;
+    virtual void setSdu(unsigned int k, unsigned int sdu_var);
 };
 
 inline void doPacking(cCommBuffer *b, MlmeBeaconNotify_indication& obj) {obj.parsimPack(b);}
@@ -1123,7 +1123,7 @@ inline void doUnpacking(cCommBuffer *b, McpsMsg& obj) {obj.parsimUnpack(b);}
  *   	unsigned char numberOfShortAddressesPending;
  *   	unsigned char numberOfExtendedAddressesPending;
  *   	unsigned long addressList[];
- *   	unsigned char macBeaconPayload[];
+ *   	unsigned int macBeaconPayload[];
  * };
  * </pre>
  */
@@ -1149,7 +1149,7 @@ class MacBeacon : public McpsMsg
     unsigned char numberOfExtendedAddressesPending_var;
     unsigned long *addressList_var; // array ptr
     unsigned int addressList_arraysize;
-    unsigned char *macBeaconPayload_var; // array ptr
+    unsigned int *macBeaconPayload_var; // array ptr
     unsigned int macBeaconPayload_arraysize;
 
     // protected and unimplemented operator==(), to prevent accidental usage
@@ -1205,8 +1205,8 @@ class MacBeacon : public McpsMsg
     virtual void setAddressList(unsigned int k, unsigned long addressList_var);
     virtual void setMacBeaconPayloadArraySize(unsigned int size);
     virtual unsigned int getMacBeaconPayloadArraySize() const;
-    virtual unsigned char getMacBeaconPayload(unsigned int k) const;
-    virtual void setMacBeaconPayload(unsigned int k, unsigned char macBeaconPayload_var);
+    virtual unsigned int getMacBeaconPayload(unsigned int k) const;
+    virtual void setMacBeaconPayload(unsigned int k, unsigned int macBeaconPayload_var);
 };
 
 inline void doPacking(cCommBuffer *b, MacBeacon& obj) {obj.parsimPack(b);}

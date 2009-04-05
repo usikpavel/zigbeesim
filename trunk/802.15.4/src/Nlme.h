@@ -34,6 +34,7 @@ protected:
 	NetworkDescriptor* networkDescriptors;
 	int networkDescriptorsArraySize;
 	unsigned char networkAddress;
+	MacBeaconPayload macBeaconPayload;
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
 
@@ -166,6 +167,14 @@ protected:
 
 	void setNetworkAddress(unsigned short networkAddress) {
 		this->networkAddress = networkAddress;
+	}
+
+	MacBeaconPayload getMacBeaconPayload() {
+		return this->macBeaconPayload;
+	}
+
+	void setMacBeaconPayload(MacBeaconPayload macBeaconPayload) {
+		this->macBeaconPayload = macBeaconPayload;
 	}
 
 };

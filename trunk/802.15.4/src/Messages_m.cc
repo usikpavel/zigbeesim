@@ -6370,7 +6370,7 @@ MlmeBeaconNotify_indication& MlmeBeaconNotify_indication::operator=(const MlmeBe
         this->addressList_var[i] = other.addressList_var[i];
     this->sduLength_var = other.sduLength_var;
     delete [] this->sdu_var;
-    this->sdu_var = (other.sdu_arraysize==0) ? NULL : new unsigned char[other.sdu_arraysize];
+    this->sdu_var = (other.sdu_arraysize==0) ? NULL : new unsigned int[other.sdu_arraysize];
     sdu_arraysize = other.sdu_arraysize;
     for (unsigned int i=0; i<sdu_arraysize; i++)
         this->sdu_var[i] = other.sdu_var[i];
@@ -6412,7 +6412,7 @@ void MlmeBeaconNotify_indication::parsimUnpack(cCommBuffer *b)
     if (sdu_arraysize==0) {
         this->sdu_var = 0;
     } else {
-        this->sdu_var = new unsigned char[sdu_arraysize];
+        this->sdu_var = new unsigned int[sdu_arraysize];
         doUnpacking(b,this->sdu_var,sdu_arraysize);
     }
 }
@@ -6499,7 +6499,7 @@ void MlmeBeaconNotify_indication::setSduLength(unsigned int sduLength_var)
 
 void MlmeBeaconNotify_indication::setSduArraySize(unsigned int size)
 {
-    unsigned char *sdu_var2 = (size==0) ? NULL : new unsigned char[size];
+    unsigned int *sdu_var2 = (size==0) ? NULL : new unsigned int[size];
     unsigned int sz = sdu_arraysize < size ? sdu_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         sdu_var2[i] = this->sdu_var[i];
@@ -6515,13 +6515,13 @@ unsigned int MlmeBeaconNotify_indication::getSduArraySize() const
     return sdu_arraysize;
 }
 
-unsigned char MlmeBeaconNotify_indication::getSdu(unsigned int k) const
+unsigned int MlmeBeaconNotify_indication::getSdu(unsigned int k) const
 {
     if (k>=sdu_arraysize) throw cRuntimeError("Array of size %d indexed by %d", sdu_arraysize, k);
     return sdu_var[k];
 }
 
-void MlmeBeaconNotify_indication::setSdu(unsigned int k, unsigned char sdu_var)
+void MlmeBeaconNotify_indication::setSdu(unsigned int k, unsigned int sdu_var)
 {
     if (k>=sdu_arraysize) throw cRuntimeError("Array of size %d indexed by %d", sdu_arraysize, k);
     this->sdu_var[k]=sdu_var;
@@ -6631,7 +6631,7 @@ const char *MlmeBeaconNotify_indicationDescriptor::getFieldTypeString(void *obje
         case 3: return "unsigned char";
         case 4: return "unsigned long";
         case 5: return "unsigned int";
-        case 6: return "unsigned char";
+        case 6: return "unsigned int";
         default: return NULL;
     }
 }
@@ -7026,7 +7026,7 @@ MacBeacon& MacBeacon::operator=(const MacBeacon& other)
     for (unsigned int i=0; i<addressList_arraysize; i++)
         this->addressList_var[i] = other.addressList_var[i];
     delete [] this->macBeaconPayload_var;
-    this->macBeaconPayload_var = (other.macBeaconPayload_arraysize==0) ? NULL : new unsigned char[other.macBeaconPayload_arraysize];
+    this->macBeaconPayload_var = (other.macBeaconPayload_arraysize==0) ? NULL : new unsigned int[other.macBeaconPayload_arraysize];
     macBeaconPayload_arraysize = other.macBeaconPayload_arraysize;
     for (unsigned int i=0; i<macBeaconPayload_arraysize; i++)
         this->macBeaconPayload_var[i] = other.macBeaconPayload_var[i];
@@ -7110,7 +7110,7 @@ void MacBeacon::parsimUnpack(cCommBuffer *b)
     if (macBeaconPayload_arraysize==0) {
         this->macBeaconPayload_var = 0;
     } else {
-        this->macBeaconPayload_var = new unsigned char[macBeaconPayload_arraysize];
+        this->macBeaconPayload_var = new unsigned int[macBeaconPayload_arraysize];
         doUnpacking(b,this->macBeaconPayload_var,macBeaconPayload_arraysize);
     }
 }
@@ -7347,7 +7347,7 @@ void MacBeacon::setAddressList(unsigned int k, unsigned long addressList_var)
 
 void MacBeacon::setMacBeaconPayloadArraySize(unsigned int size)
 {
-    unsigned char *macBeaconPayload_var2 = (size==0) ? NULL : new unsigned char[size];
+    unsigned int *macBeaconPayload_var2 = (size==0) ? NULL : new unsigned int[size];
     unsigned int sz = macBeaconPayload_arraysize < size ? macBeaconPayload_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         macBeaconPayload_var2[i] = this->macBeaconPayload_var[i];
@@ -7363,13 +7363,13 @@ unsigned int MacBeacon::getMacBeaconPayloadArraySize() const
     return macBeaconPayload_arraysize;
 }
 
-unsigned char MacBeacon::getMacBeaconPayload(unsigned int k) const
+unsigned int MacBeacon::getMacBeaconPayload(unsigned int k) const
 {
     if (k>=macBeaconPayload_arraysize) throw cRuntimeError("Array of size %d indexed by %d", macBeaconPayload_arraysize, k);
     return macBeaconPayload_var[k];
 }
 
-void MacBeacon::setMacBeaconPayload(unsigned int k, unsigned char macBeaconPayload_var)
+void MacBeacon::setMacBeaconPayload(unsigned int k, unsigned int macBeaconPayload_var)
 {
     if (k>=macBeaconPayload_arraysize) throw cRuntimeError("Array of size %d indexed by %d", macBeaconPayload_arraysize, k);
     this->macBeaconPayload_var[k]=macBeaconPayload_var;
@@ -7506,7 +7506,7 @@ const char *MacBeaconDescriptor::getFieldTypeString(void *object, int field) con
         case 12: return "unsigned char";
         case 13: return "unsigned char";
         case 14: return "unsigned long";
-        case 15: return "unsigned char";
+        case 15: return "unsigned int";
         default: return NULL;
     }
 }

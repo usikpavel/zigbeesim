@@ -154,6 +154,21 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 				setRequest->setPibAttributeValue(0, 0x0000);
 				sendMlmeDown(setRequest);
 			} else if (confirm->getPibAttribute() == MAC_SHORT_ADDRESS) {
+				MlmeSet_request* setRequest = new MlmeSet_request("MLME-SET.request", MLME_SET_REQUEST);
+				setRequest->setPibAttribute(MAC_BEACON_PAYLOAD);
+				MacBeaconPayload payload;
+				unsigned int* payloadArray;
+				payloadArray = (unsigned int*) &payload;
+				payload.networkAddress = 0x0000;
+				payload.deviceType = getFFDAppLayer()->getRole();
+				int payloadSize = (int) (((double)sizeof(MacBeaconPayload))/((double)sizeof(unsigned int)));
+				if (payloadSize * sizeof(unsigned int) < sizeof(MacBeaconPayload)) payloadSize++;
+				setRequest->setPibAttributeValueArraySize(payloadSize);
+				for (int i = 0; i < payloadSize; i++) {
+					setRequest->setPibAttributeValue(i, payloadArray[i]);
+				}
+				sendMlmeDown(setRequest);
+			} else if (confirm->getPibAttribute() == MAC_BEACON_PAYLOAD) {
 				MlmeStart_request* startRequest = new MlmeStart_request(
 						"MLME-START.request", MLME_START_REQUEST);
 				startRequest->setPanId(getPanId());
@@ -192,9 +207,6 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 	} else if (msg->getKind() == MLME_BEACON_NOTIFY_INDICATION) {
 		MlmeBeaconNotify_indication* indication = check_and_cast<MlmeBeaconNotify_indication *>(msg);
 		NeighborTableEntry neighbor;
-		neighbor.panId = indication->getPanDescriptor().coordPanId;
-		neighbor.extendedAddress = getMcps()->getLastBeacon()->getSourceAddress();
-		neighbor.networkAddress =
 	}
 	delete (msg);
 }
