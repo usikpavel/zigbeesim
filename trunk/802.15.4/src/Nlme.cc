@@ -19,6 +19,7 @@ void Nlme::initialize(int stage) {
 		commentsLevel = COMMENT_ALL;
 	} else if (stage == 1) {
 		lastUpperMsg = new cMessage();
+		setNetworkDescriptorsArraySize(0);
 		networkDescriptors = new NetworkDescriptor[0];
 	}
 }
@@ -53,7 +54,9 @@ void Nlme::handleSelfMsg(cMessage *msg) {
 }
 
 void Nlme::handleMlmeMsg(cMessage *msg) {
+	std::cout << "x" << endl;
 	if (msg->getKind() == MLME_SCAN_CONFIRM) {
+		std::cout << "-";
 		MlmeScan_confirm* confirm = check_and_cast<MlmeScan_confirm *> (msg);
 		if (getLastUpperMsg()->getKind() == NLME_NETWORK_FORMATION_REQUEST) {
 			NlmeNetworkFormation_request* request = check_and_cast<
@@ -72,7 +75,7 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 					/** @comment we'll try to use the PAN ID provided by the application layer, if possible */
 					bool idOk = true;
 					setPanId(request->getPANId());
-					for (int i = 0; i < confirm->getPanDescriptorListArraySize(); i++) {
+					for (unsigned int i = 0; i < confirm->getPanDescriptorListArraySize(); i++) {
 						if (getPanId() == confirm->getPanDescriptorList(i).coordPanId) {
 							idOk = false;
 						}
@@ -80,11 +83,12 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 					/** @comment otherwise we'll find not used PAN ID from the scan and save it for a future use (in case we're the coordinator)*/
 					while (!idOk) {
 						setPanId((unsigned short) (rand() % 0x00004000));
-						for (int i = 0; i
+						for (unsigned int i = 0; i
 								< confirm->getPanDescriptorListArraySize(); i++) {
 							if (getPanId()
-									== confirm->getPanDescriptorList(i).coordPanId)
+									== confirm->getPanDescriptorList(i).coordPanId) {
 								idOk = false;
+							}
 						}
 					}
 					MlmeSet_request* setRequest = new MlmeSet_request(
@@ -104,35 +108,51 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 				}
 			}
 		} else if (getLastUpperMsg()->getKind()
-				== NLME_NETWORK_DISCOVERY__REQUEST) {
+				== NLME_NETWORK_DISCOVERY_REQUEST) {
+			std::cout << "2";
 			NlmeNetworkDiscovery_confirm* response =
 					new NlmeNetworkDiscovery_confirm(
 							"NLME-NETWORK-DISCOVERY.confirm",
 							NLME_NETWORK_DISCOVERY_CONFIRM);
+			std::cout << "3";
 			response->setNetworkCount(confirm->getResultListSize());
-			for (int i = 0; i < confirm->getResultListSize(); i++) {
+			std::cout << "4";
+			for (unsigned int i = 0; i < confirm->getResultListSize(); i++) {
+				std::cout << "A";
 				NetworkDescriptor descriptor;
+				std::cout << "B";
 				/** @test this might try to access some restricted areas */
 				descriptor.panId = confirm->getPanDescriptorList(i).coordPanId;
+				std::cout << "C";
 				descriptor.logicalChannel
 						= confirm->getPanDescriptorList(i).logicalChannel;
+				std::cout << "D";
 				/** @todo include stack profile, zigbee version,  into descriptor */
 				// descriptor.stackProfile =
 				// descriptor.zigbeeVersion =
 				descriptor.beaconOrder
 						= confirm->getPanDescriptorList(i).beaconOrder;
+				std::cout << "E";
 				descriptor.superframeOrder
 						= confirm->getPanDescriptorList(i).superframeOrder;
+				std::cout << "F";
 				addNetworkDescriptor(descriptor);
+				std::cout << "G";
 			}
+			std::cout << "5";
 			response->setNetworkDescriptorListArraySize(
 					getNetworkDescriptorsArraySize());
+			std::cout << "6";
 			for (int i = 0; i < getNetworkDescriptorsArraySize(); i++) {
+				std::cout << "A";
 				response->setNetworkDescriptorList(i,
 						getNetworkDescriptors()[i]);
 			}
+			std::cout << "7";
 			response->setStatus(confirm->getStatus());
+			std::cout << "8";
 			sendNlmeUp(response);
+			std::cout << "9";
 		}
 	} else if (msg->getKind() == MLME_SET_CONFIRM) {
 		MlmeSet_confirm* confirm = check_and_cast<MlmeSet_confirm *> (msg);
@@ -161,6 +181,7 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 				payloadArray = (unsigned int*) &payload;
 				payload.networkAddress = 0x0000;
 				payload.deviceType = getFFDAppLayer()->getRole();
+				payload.rxOnWhenIdle = getMacPib()->getMacRxOnWhenIdle();
 				int payloadSize = (int) (((double)sizeof(MacBeaconPayload))/((double)sizeof(unsigned int)));
 				if (payloadSize * sizeof(unsigned int) < sizeof(MacBeaconPayload)) payloadSize++;
 				setRequest->setPibAttributeValueArraySize(payloadSize);
@@ -207,6 +228,23 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 	} else if (msg->getKind() == MLME_BEACON_NOTIFY_INDICATION) {
 		MlmeBeaconNotify_indication* indication = check_and_cast<MlmeBeaconNotify_indication *>(msg);
 		NeighborTableEntry neighbor;
+		MacBeaconPayload* macBeaconPayload;
+		unsigned int* sdu;
+		sdu = new unsigned int[indication->getSduArraySize()];
+		for (unsigned int i = 0; i < indication->getSduArraySize(); i++) {
+			sdu[i] =  indication->getSdu(i);
+		}
+		macBeaconPayload = (MacBeaconPayload*) sdu;
+		neighbor.networkAddress = macBeaconPayload->networkAddress;
+		neighbor.deviceType = macBeaconPayload->deviceType;
+		neighbor.rxOnWhenIdle = macBeaconPayload->rxOnWhenIdle;
+		neighbor.relationship = OTHER;
+		neighbor.depth = macBeaconPayload->depth;
+		neighbor.beaconOrder = indication->getPanDescriptor().beaconOrder;
+		neighbor.permitJoining = indication->getPanDescriptor().associationPermit;
+		neighbor.logicalChannel = indication->getPanDescriptor().logicalChannel;
+		neighbor.incomingBeaconTimestamp = 1;
+		neighbor.beaconTransmissionTimeOffset = 1;
 	}
 	delete (msg);
 }
@@ -216,6 +254,7 @@ void Nlme::handleNlmeMsg(cMessage *msg) {
 	if (msg->getKind() == NLME_NETWORK_FORMATION_REQUEST) {
 		NlmeNetworkFormation_request* request = check_and_cast<
 				NlmeNetworkFormation_request *> (msg);
+		setDepth(0x00);
 		MlmeScan_request* scan = new MlmeScan_request("MLME-SCAN.request",
 				MLME_SCAN_REQUEST);
 		scan->setScanType(ED_SCAN);
@@ -241,7 +280,7 @@ void Nlme::handleNlmeMsg(cMessage *msg) {
 			}
 		}
 		sendMlmeDown(response);
-	} else if (msg->getKind() == NLME_NETWORK_DISCOVERY__REQUEST) {
+	} else if (msg->getKind() == NLME_NETWORK_DISCOVERY_REQUEST) {
 		NlmeNetworkDiscovery_request* request = check_and_cast<
 				NlmeNetworkDiscovery_request *> (msg);
 		MlmeScan_request* scan = new MlmeScan_request("MLME-SCAN.request",

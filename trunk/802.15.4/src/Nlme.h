@@ -35,6 +35,7 @@ protected:
 	int networkDescriptorsArraySize;
 	unsigned char networkAddress;
 	MacBeaconPayload macBeaconPayload;
+	unsigned char depth;
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
 
@@ -76,7 +77,11 @@ protected:
 		commentStream << "Received " << msg->getName();
 		comment(COMMENT_MESSAGE, commentStream.str());
 	}
-
+	virtual void commentError(const char* errorMessage) {
+		std::stringstream commentStream;
+		commentStream << "ERROR: " << errorMessage;
+		comment(COMMENT_ERROR, commentStream.str());
+	}
 	NwkPib* getNwkPib() {
 		return ((NwkPib *) (this->getParentModule()->getModuleByRelativePath(
 				"nwkPib")));
@@ -88,7 +93,8 @@ protected:
 	}
 
 	Mcps* getMcps() {
-		return (Mcps *) (getParentModule()->getParentModule()->getModuleByRelativePath("mac")->getModuleByRelativePath("mcps"));
+		return (Mcps *) (getParentModule()->getParentModule()->getModuleByRelativePath(
+				"mac")->getModuleByRelativePath("mcps"));
 	}
 
 	void setLastUpperMsg(cMessage* msg) {
@@ -133,16 +139,28 @@ protected:
 	}
 
 	void addNetworkDescriptor(NetworkDescriptor descriptor) {
+		std::cout << "1";
 		int size = getNetworkDescriptorsArraySize();
+		std::cout << "2";
 		NetworkDescriptor* newNetworkDescriptors;
+		std::cout << "3";
+		std::cout << endl <<"size: " << size+1 << endl;
 		newNetworkDescriptors = new NetworkDescriptor[size + 1];
+		std::cout << "4";
 		for (int i = 0; i < size; i++) {
+			std::cout << "A";
 			newNetworkDescriptors[i] = this->networkDescriptors[i];
+			std::cout << "B";
 		}
+		std::cout << "5";
 		newNetworkDescriptors[size] = descriptor;
+		std::cout << "6";
 		delete this->networkDescriptors;
+		std::cout << "7";
 		this->networkDescriptors = newNetworkDescriptors;
+		std::cout << "8";
 		setNetworkDescriptorsArraySize(size + 1);
+		std::cout << "9";
 	}
 
 	bool isNetworkScanned(NetworkDescriptor descriptor) {
@@ -176,7 +194,17 @@ protected:
 	void setMacBeaconPayload(MacBeaconPayload macBeaconPayload) {
 		this->macBeaconPayload = macBeaconPayload;
 	}
-
+	MacPib* getMacPib() {
+		return ((MacPib *) (this->getParentModule()->getParentModule()->getModuleByRelativePath(
+				"nic")->getModuleByRelativePath("mac")->getModuleByRelativePath(
+				"macPib")));
+	}
+	void setDepth(unsigned char depth) {
+		this->depth = depth;
+	}
+	unsigned char getDepth() {
+		return this->depth;
+	}
 };
 
 #endif

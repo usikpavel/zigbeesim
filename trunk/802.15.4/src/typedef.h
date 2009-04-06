@@ -25,7 +25,7 @@ typedef enum {
 /** @brief Kinds of messages */
 typedef enum {
 	/** NLME-SAP messages */
-	NLME_NETWORK_DISCOVERY__REQUEST,
+	NLME_NETWORK_DISCOVERY_REQUEST,
 	NLME_NETWORK_DISCOVERY_CONFIRM,
 	NLME_NETWORK_FORMATION_REQUEST,
 	NLME_NETWORK_FORMATION_CONFIRM,
@@ -107,6 +107,7 @@ typedef enum {
 typedef enum {
 	/** @brief Starting the node */
 	START_TIMER,
+	SFD_FRAME_TIMER,
 	ED_TIMER,
 	ACTIVE_TIMER,
 	PASSIVE_TIMER,
@@ -140,11 +141,6 @@ struct NeighborTableEntry {
 	unsigned short networkAddress;
 	unsigned char deviceType;
 	bool rxOnWhenIdle;
-	/** @note on the relationship:
-	 * 0x00 - neighbor is a parent
-	 * 0x01 - neighbor is a child
-	 * 0x02 - neighbor is a sibling
-	 * 0x03 - non of the above */
 	unsigned char relationship;
 	unsigned char depth;
 	unsigned char beaconOrder;
@@ -155,6 +151,13 @@ struct NeighborTableEntry {
 	unsigned char logicalChannel;
 	unsigned int incomingBeaconTimestamp;
 	unsigned int beaconTransmissionTimeOffset;
+};
+
+enum relationship {
+	PARENT	= 0x00,
+	CHILD	= 0x01,
+	SIBLING	= 0x02,
+	OTHER	= 0x03
 };
 
 struct RoutingTableEntry {
@@ -193,6 +196,8 @@ typedef enum {
 struct MacBeaconPayload {
 	unsigned short networkAddress;
 	unsigned char deviceType;
+	bool rxOnWhenIdle;
+	unsigned char depth;
 };
 
 struct PanDescriptor {

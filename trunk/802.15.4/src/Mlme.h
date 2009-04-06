@@ -56,7 +56,7 @@ protected:
 	virtual double symbolsToSeconds(int, int, int);
 	virtual void switchRadioToChannel(unsigned int);
 	virtual void comment(CommentsLevel level, std::string s) {
-		/** @todo align logName substrings for routers and endDevices */
+		/** @TODO align logName substrings for routers and endDevices */
 		if ((level & commentsLevel) > COMMENT_NOTHING) {
 			std::cout << logName() << "." << getName() << "\t" << s << endl;
 		}
@@ -71,7 +71,7 @@ protected:
 		commentStream << "Received " << msg->getName();
 		comment(COMMENT_MESSAGE, commentStream.str());
 	}
-	virtual void commentError(char* errorMessage) {
+	virtual void commentError(const char* errorMessage) {
 		std::stringstream commentStream;
 		commentStream << "ERROR: " << errorMessage;
 		comment(COMMENT_ERROR, commentStream.str());

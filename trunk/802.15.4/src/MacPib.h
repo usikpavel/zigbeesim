@@ -90,7 +90,7 @@ protected:
 		commentStream << "Received " << msg->getName();
 		comment(COMMENT_MESSAGE, commentStream.str());
 	}
-	virtual void commentError(char* errorMessage) {
+	virtual void commentError(const char* errorMessage) {
 		std::stringstream commentStream;
 		commentStream << "ERROR: " << errorMessage;
 		comment(COMMENT_ERROR, commentStream.str());
