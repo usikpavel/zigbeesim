@@ -1111,9 +1111,9 @@ inline void doUnpacking(cCommBuffer *b, McpsMsg& obj) {obj.parsimUnpack(b);}
  *   	unsigned char beaconOrder;
  *   	unsigned char superframeOrder;
  *   	unsigned char finalCapSlot;
- *   	bool BatteryLifeExtension;
+ *   	bool batteryLifeExtension;
  *   	bool panCoordinator;
- *   	bool AssociationPermit;
+ *   	bool associationPermit;
  *   	unsigned char gtsDescriptorCount;
  *   	bool gtsPermit;
  *   	unsigned char directionMask;
@@ -1133,9 +1133,9 @@ class MacBeacon : public McpsMsg
     unsigned char beaconOrder_var;
     unsigned char superframeOrder_var;
     unsigned char finalCapSlot_var;
-    bool BatteryLifeExtension_var;
+    bool batteryLifeExtension_var;
     bool panCoordinator_var;
-    bool AssociationPermit_var;
+    bool associationPermit_var;
     unsigned char gtsDescriptorCount_var;
     bool gtsPermit_var;
     unsigned char directionMask_var;
@@ -1172,11 +1172,11 @@ class MacBeacon : public McpsMsg
     virtual unsigned char getFinalCapSlot() const;
     virtual void setFinalCapSlot(unsigned char finalCapSlot_var);
     virtual bool getBatteryLifeExtension() const;
-    virtual void setBatteryLifeExtension(bool BatteryLifeExtension_var);
+    virtual void setBatteryLifeExtension(bool batteryLifeExtension_var);
     virtual bool getPanCoordinator() const;
     virtual void setPanCoordinator(bool panCoordinator_var);
     virtual bool getAssociationPermit() const;
-    virtual void setAssociationPermit(bool AssociationPermit_var);
+    virtual void setAssociationPermit(bool associationPermit_var);
     virtual unsigned char getGtsDescriptorCount() const;
     virtual void setGtsDescriptorCount(unsigned char gtsDescriptorCount_var);
     virtual bool getGtsPermit() const;

@@ -119,6 +119,7 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 						commentStream << "Performing ED scan for " << edTimer
 								<< " seconds on channel " << channel;
 						comment(COMMENT_TIMER, commentStream.str());
+						timer->setName("ED-SCAN.timer");
 						timer->setKind(ED_TIMER);
 						scheduleAt(simTime() + edTimer, timer);
 						switchRadioToChannel(channel);
@@ -149,6 +150,7 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 									<< channel;
 							setCurrentChannel(channel);
 							comment(COMMENT_TIMER, commentStream.str());
+							timer->setName("ACTIVE-SCAN.timer");
 							timer->setKind(ACTIVE_TIMER);
 							scheduleAt(simTime() + activeTimer, timer);
 							PlmeSet_request* set = new PlmeSet_request(
@@ -254,8 +256,8 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 					commentStream << "Performing ED scan for " << edTimer
 							<< " seconds on channel " << channel;
 					comment(COMMENT_TIMER, commentStream.str());
+					timer->setName("ED-SCAN.timer");
 					scheduleAt(simTime() + edTimer, timer);
-
 					switchRadioToChannel(channel);
 					delete (msg);
 					return;
@@ -314,7 +316,7 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 			setRequest->setPibAttribute(request->getPibAttribute());
 			setRequest->setPibAttributeValueArraySize(
 					request->getPibAttributeValueArraySize());
-			for (int i = 0; i < request->getPibAttributeValueArraySize(); i++) {
+			for (unsigned int i = 0; i < request->getPibAttributeValueArraySize(); i++) {
 				setRequest->setPibAttributeValue(i,
 						request->getPibAttributeValue(i));
 			}
@@ -325,7 +327,7 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 			 * through the PIB Attribute Index */
 			unsigned int* value =
 					new unsigned int[request->getPibAttributeValueArraySize()];
-			for (int i = 0; i < request->getPibAttributeValueArraySize(); i++) {
+			for (unsigned int i = 0; i < request->getPibAttributeValueArraySize(); i++) {
 				value[i] = request->getPibAttributeValue(i);
 			}
 			MlmeSet_confirm* response = new MlmeSet_confirm("MLME-SET.confirm",
@@ -443,12 +445,12 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 						macBeacon->getNumberOfExtendedAddressesPending());
 				indication->setAddressListArraySize(
 						macBeacon->getAddressListArraySize());
-				for (int i = 0; i < macBeacon->getAddressListArraySize(); i++) {
+				for (unsigned int i = 0; i < macBeacon->getAddressListArraySize(); i++) {
 					indication->setAddressList(i, macBeacon->getAddressList(i));
 				}
 				indication->setSduArraySize(
 						macBeacon->getMacBeaconPayloadArraySize());
-				for (int i = 0; i < macBeacon->getMacBeaconPayloadArraySize(); i++) {
+				for (unsigned int i = 0; i < macBeacon->getMacBeaconPayloadArraySize(); i++) {
 					indication->setSdu(i, macBeacon->getMacBeaconPayload(i));
 				}
 				sendMlmeUp(indication);

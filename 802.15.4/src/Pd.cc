@@ -25,6 +25,7 @@ void Pd::initialize(int stage) {
 		phyState = RX;
 	} else if (stage == 1) {
 		lastUpperMsg = new cMessage();
+		frameTimer = new cMessage();
 	}
 }
 
@@ -47,6 +48,9 @@ void Pd::handleMessage(cMessage *msg) {
 
 void Pd::handleSelfMsg(cMessage *msg) {
 	std::string msgName = msg->getName();
+	if (msg->getKind() == SFD_FRAME_TIMER) {
+		setLastMsgTimestamp(simTime());
+	}
 	delete (msg);
 }
 
@@ -81,6 +85,10 @@ void Pd::handleRfControl(cMessage *msg) {
 				PD_DATA_CONFIRM);
 		confirm->setStatus(PHY_SUCCESS);
 		sendPdUp(confirm);
+	} else if (msgName == "RECEIVING_START") {
+		frameTimer->setKind(SFD_FRAME_TIMER);
+		frameTimer->setName("SFD processed, setting timestamp");
+		scheduleAt(simTime() + calculatePreambleLengthInSeconds() + calculateSfdLengthInSeconds(), frameTimer);
 	}
 	delete (msg);
 }
@@ -156,6 +164,97 @@ void Pd::prepareSend() {
 		if (radio->switchToSend()) {
 			phyState = TX;
 		}
+	}
+}
+
+unsigned char Pd::calculatePreambleLengthInSymbols() {
+	unsigned char currentChannel = getPhyPib()->getPhyCurrentChannel();
+	unsigned char currentPage = getPhyPib()->getPhyCurrentPage();
+	switch (currentPage) {
+	case 0x00:
+		if (currentChannel <= 0x0A)
+			return 32;
+		else
+			return 8;
+	case 0x01:
+		if (currentChannel == 0x00)
+			return 2;
+		else
+			return 6;
+	case 0x02:
+		return 8;
+	default:
+		commentError("Unsupported page number");
+	}
+}
+
+double Pd::calculatePreambleLengthInSeconds() {
+	unsigned char currentChannel = getPhyPib()->getPhyCurrentChannel();
+	unsigned char currentPage = getPhyPib()->getPhyCurrentPage();
+	switch (currentPage) {
+	case 0x00:
+		if (currentChannel == 0x00)
+			return 0.0016;
+		else if (currentChannel <= 0x0A)
+			return 0.0008;
+		else
+			return 0.000128;
+	case 0x01:
+		if (currentChannel == 0x00)
+			return 0.00016;
+		else
+			return 0.00012;
+	case 0x02:
+		if (currentChannel == 0x00)
+			return 0.00032;
+		else
+			return 0.000128;
+	default:
+		commentError("Unsupported page number");
+	}
+}
+
+unsigned char Pd::calculateSfdLengthInSymbols() {
+	unsigned char currentChannel = getPhyPib()->getPhyCurrentChannel();
+	unsigned char currentPage = getPhyPib()->getPhyCurrentPage();
+	switch (currentPage) {
+	case 0x00:
+		if (currentChannel <= 0x0A)
+			return 8;
+		else
+			return 2;
+	case 0x01:
+		return 1;
+	case 0x02:
+		return 2;
+	default:
+		commentError("Unsupported page number");
+	}
+}
+
+double Pd::calculateSfdLengthInSeconds() {
+	unsigned char currentChannel = getPhyPib()->getPhyCurrentChannel();
+	unsigned char currentPage = getPhyPib()->getPhyCurrentPage();
+	switch (currentPage) {
+	case 0x00:
+		if (currentChannel == 0x00)
+			return 0.0004;
+		else if (currentChannel <= 0x0A)
+			return 0.0002;
+		else
+			return 0.000032;
+	case 0x01:
+		if (currentChannel == 0x00)
+			return 0.00008;
+		else
+			return 0.00002;
+	case 0x02:
+		if (currentChannel == 0x00)
+			return 0.00008;
+		else
+			return 0.000032;
+	default:
+		commentError("Unsupported page number");
 	}
 }
 

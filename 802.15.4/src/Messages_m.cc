@@ -6945,9 +6945,9 @@ MacBeacon::MacBeacon(const char *name, int kind) : McpsMsg(name,kind)
     this->beaconOrder_var = 0;
     this->superframeOrder_var = 0;
     this->finalCapSlot_var = 0;
-    this->BatteryLifeExtension_var = 0;
+    this->batteryLifeExtension_var = 0;
     this->panCoordinator_var = 0;
-    this->AssociationPermit_var = 0;
+    this->associationPermit_var = 0;
     this->gtsDescriptorCount_var = 0;
     this->gtsPermit_var = 0;
     this->directionMask_var = 0;
@@ -6997,9 +6997,9 @@ MacBeacon& MacBeacon::operator=(const MacBeacon& other)
     this->beaconOrder_var = other.beaconOrder_var;
     this->superframeOrder_var = other.superframeOrder_var;
     this->finalCapSlot_var = other.finalCapSlot_var;
-    this->BatteryLifeExtension_var = other.BatteryLifeExtension_var;
+    this->batteryLifeExtension_var = other.batteryLifeExtension_var;
     this->panCoordinator_var = other.panCoordinator_var;
-    this->AssociationPermit_var = other.AssociationPermit_var;
+    this->associationPermit_var = other.associationPermit_var;
     this->gtsDescriptorCount_var = other.gtsDescriptorCount_var;
     this->gtsPermit_var = other.gtsPermit_var;
     this->directionMask_var = other.directionMask_var;
@@ -7039,9 +7039,9 @@ void MacBeacon::parsimPack(cCommBuffer *b)
     doPacking(b,this->beaconOrder_var);
     doPacking(b,this->superframeOrder_var);
     doPacking(b,this->finalCapSlot_var);
-    doPacking(b,this->BatteryLifeExtension_var);
+    doPacking(b,this->batteryLifeExtension_var);
     doPacking(b,this->panCoordinator_var);
-    doPacking(b,this->AssociationPermit_var);
+    doPacking(b,this->associationPermit_var);
     doPacking(b,this->gtsDescriptorCount_var);
     doPacking(b,this->gtsPermit_var);
     doPacking(b,this->directionMask_var);
@@ -7065,9 +7065,9 @@ void MacBeacon::parsimUnpack(cCommBuffer *b)
     doUnpacking(b,this->beaconOrder_var);
     doUnpacking(b,this->superframeOrder_var);
     doUnpacking(b,this->finalCapSlot_var);
-    doUnpacking(b,this->BatteryLifeExtension_var);
+    doUnpacking(b,this->batteryLifeExtension_var);
     doUnpacking(b,this->panCoordinator_var);
-    doUnpacking(b,this->AssociationPermit_var);
+    doUnpacking(b,this->associationPermit_var);
     doUnpacking(b,this->gtsDescriptorCount_var);
     doUnpacking(b,this->gtsPermit_var);
     doUnpacking(b,this->directionMask_var);
@@ -7147,12 +7147,12 @@ void MacBeacon::setFinalCapSlot(unsigned char finalCapSlot_var)
 
 bool MacBeacon::getBatteryLifeExtension() const
 {
-    return BatteryLifeExtension_var;
+    return batteryLifeExtension_var;
 }
 
-void MacBeacon::setBatteryLifeExtension(bool BatteryLifeExtension_var)
+void MacBeacon::setBatteryLifeExtension(bool batteryLifeExtension_var)
 {
-    this->BatteryLifeExtension_var = BatteryLifeExtension_var;
+    this->batteryLifeExtension_var = batteryLifeExtension_var;
 }
 
 bool MacBeacon::getPanCoordinator() const
@@ -7167,12 +7167,12 @@ void MacBeacon::setPanCoordinator(bool panCoordinator_var)
 
 bool MacBeacon::getAssociationPermit() const
 {
-    return AssociationPermit_var;
+    return associationPermit_var;
 }
 
-void MacBeacon::setAssociationPermit(bool AssociationPermit_var)
+void MacBeacon::setAssociationPermit(bool associationPermit_var)
 {
-    this->AssociationPermit_var = AssociationPermit_var;
+    this->associationPermit_var = associationPermit_var;
 }
 
 unsigned char MacBeacon::getGtsDescriptorCount() const
@@ -7465,9 +7465,9 @@ const char *MacBeaconDescriptor::getFieldName(void *object, int field) const
         case 0: return "beaconOrder";
         case 1: return "superframeOrder";
         case 2: return "finalCapSlot";
-        case 3: return "BatteryLifeExtension";
+        case 3: return "batteryLifeExtension";
         case 4: return "panCoordinator";
-        case 5: return "AssociationPermit";
+        case 5: return "associationPermit";
         case 6: return "gtsDescriptorCount";
         case 7: return "gtsPermit";
         case 8: return "directionMask";

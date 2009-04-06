@@ -148,7 +148,7 @@ void FFDAppLayer::handleSelfMsg(cMessage* msg) {
 			NlmeNetworkDiscovery_request* request =
 					new NlmeNetworkDiscovery_request(
 							"NLME-NETWORK-DISCOVERY.request",
-							NLME_NETWORK_DISCOVERY__REQUEST);
+							NLME_NETWORK_DISCOVERY_REQUEST);
 			request->setScanChannels(0x00003000);
 			request->setScanDuration(0xCF);
 			sendNlmeDown(request);

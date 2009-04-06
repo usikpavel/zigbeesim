@@ -11,15 +11,12 @@
 #include "PhyPib.h"
 #include "SingleChannelRadio.h"
 #include <cassert>
-
-/** temp */
 #include "MacControlInfo.h"
 #include "SimpleAddress.h"
 #include "CoreDebug.h"
 #include <list>
 #include <ActiveChannel.h>
 #include "ChannelControl.h"
-/** -temp */
 
 class Pd: public BasicModule {
 public:
@@ -38,7 +35,8 @@ protected:
 	/*@}*/
 	/** @brief Last message received from upper level */
 	cMessage* lastUpperMsg;
-	cMessage* timer;
+	cMessage* frameTimer;
+	SimTime lastMsgTimestamp;
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
 	/** @todo remove this temporary cc */
@@ -53,6 +51,10 @@ protected:
 	void sendPlme(cMessage *);
 	Frame802154* encapsulatePd(PdMsg*);
 	PdMsg* decapsulateFrame(Frame802154*);
+	unsigned char calculatePreambleLengthInSymbols();
+	double calculatePreambleLengthInSeconds();
+	unsigned char calculateSfdLengthInSymbols();
+	double calculateSfdLengthInSeconds();
 	void comment(CommentsLevel level, std::string s) {
 		/** @todo align logName substrings for routers and endDevices */
 		if ((level & commentsLevel) > COMMENT_NOTHING) {
@@ -69,6 +71,11 @@ protected:
 		commentStream << "Received " << msg->getName();
 		comment(COMMENT_MESSAGE, commentStream.str());
 	}
+	void commentError(const char* errorMessage) {
+		std::stringstream commentStream;
+		commentStream << "ERROR: " << errorMessage;
+		comment(COMMENT_ERROR, commentStream.str());
+	}
 	PhyPib* getPhyPib() {
 		return ((PhyPib *) (this->getParentModule()->getModuleByRelativePath(
 				"phyPib")));
@@ -79,7 +86,13 @@ protected:
 	cMessage* getLastUpperMsg() {
 		return this->lastUpperMsg;
 	}
-
+	void setLastMsgTimestamp(SimTime lastMsgTimestamp) {
+		this->lastMsgTimestamp = lastMsgTimestamp;
+	}
+	SimTime getLastMsgTimestamp() {
+		return this->lastMsgTimestamp;
+	}
+	/** @TODO clean this up*/
 	/** temp */
 	typedef std::list<Frame802154 *> FrameQueue;
 	enum States {
@@ -93,7 +106,8 @@ protected:
 	int myMacAddr;
 	unsigned int queueLength;
 	void prepareSend();
-	virtual void receiveBBItem(int category, const BBItem *details, int scopeModuleId);
+	void receiveBBItem(int category, const BBItem *details,
+			int scopeModuleId);
 	/** -temp */
 };
 

@@ -195,9 +195,9 @@ message MacBeacon extends McpsMsg {
   	unsigned char beaconOrder;
   	unsigned char superframeOrder;
   	unsigned char finalCapSlot;
-  	bool BatteryLifeExtension;
+  	bool batteryLifeExtension;
   	bool panCoordinator;
-  	bool AssociationPermit;
+  	bool associationPermit;
   	unsigned char gtsDescriptorCount;
   	bool gtsPermit;
   	unsigned char directionMask;

@@ -139,6 +139,7 @@ void SnrEval802154::handleLowerMsgStart(AirFrame *frame)
             if(radioState == RadioState::RECV) {
                 bb->publishBBItem(catRSSI, &rssi, nicModuleId);
                 bb->publishBBItem(catIndication, &indication, nicModuleId);
+                sendControlUp(new cMessage("RECEIVING_START", NicControlType::TRANSMISSION_OVER));
             }
         }
         else {
