@@ -189,6 +189,8 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 						== "coordinator"));
 				startRequest->setBatteryLifeExtension(false);
 				startRequest->setCoordRealignment(false);
+				startRequest->setCoordRealignKeySourceArraySize(0);
+				startRequest->setBeaconKeySourceArraySize(0);
 				/** @fixme for now, omitting the security features of the message*/
 				sendMlmeDown(startRequest);
 			} else if (confirm->getPibAttribute() == MAC_ASSOCIATION_PERMIT) {
@@ -290,9 +292,36 @@ void Nlme::handleNlmeMsg(cMessage *msg) {
 		sendMlmeDown(scan);
 	} else if (msg->getKind() == NLME_JOIN_REQUEST) {
 		NlmeJoin_request* request = check_and_cast<NlmeJoin_request *> (msg);
-		if (!request->getRejoinNetwork()) {
-
-		} /**@todo add network rejoining procedures */
+		/** @TODO check whether we have already joined the network */
+		if (request->getRejoinNetwork()) {
+			/** @TODO add network rejoining procedures */
+		} else {
+			NeighborTableEntry parent;
+			parent = findRouterForJoining(request->getPanId());
+			NwkCapabilityInformation capability;
+			capability.alternatePanCoordinator = false;
+			capability.deviceType = request->getJoinAsRouter();
+			capability.powerSource = request->getPowerSource();
+			capability.receiverOnWhenIdle = request->getRxOnWhenIdle();
+			capability.securityCapability = false;
+			capability.allocateAddress = true;
+			getNwkPib()->setNwkCapabilityInformation(capability);
+			MlmeAssociate_request* associate = new MlmeAssociate_request("MLME-ASSOCIATE.request", MLME_ASSOCIATE_REQUEST);
+			associate->setLogicalChannel(parent.logicalChannel);
+			/** @TODO set channel page */
+			associate->setCoordAddrMode(LONG_ADDRESS);
+			associate->setCoordPanId(parent.panId);
+			associate->setCoordAddress(parent.extendedAddress);
+			associate->setAlternatePanCoordinator(capability.alternatePanCoordinator);
+			associate->setDeviceType(capability.deviceType);
+			associate->setPowerSource(capability.powerSource);
+			associate->setReceiverOnWhenIdle(capability.receiverOnWhenIdle);
+			associate->setSecureCapability(capability.securityCapability);
+			associate->setAllocateAddress(capability.allocateAddress);
+			associate->setSecurityLevel(0x00);
+			associate->setKeySourceArraySize(0);
+			sendMlmeDown(associate);
+		}
 	}
 }
 

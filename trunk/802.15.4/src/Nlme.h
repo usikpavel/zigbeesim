@@ -232,6 +232,26 @@ protected:
 		iterator = neighborTable.find(key);
 		return iterator->second;
 	}
+	NeighborTableEntry findRouterForJoining(unsigned short panId) {
+		std::list<NeighborTableEntry> possibleRouters;
+		NeighborTableEntry routerForJoining;
+		/** @comment let's create a list of possible parents */
+		for (std::map<unsigned long, NeighborTableEntry>::iterator iterator =
+				neighborTable.begin(); iterator != neighborTable.end(); iterator++) {
+			if (iterator->second.panId == panId) {
+				possibleRouters.push_back(iterator->second);
+			}
+		}
+		/** @comment now find the parent with the lowest depth in the network tree */
+		routerForJoining = *(possibleRouters.begin());
+		for (std::list<NeighborTableEntry>::iterator iterator =
+				possibleRouters.begin(); iterator != possibleRouters.end(); iterator++) {
+			if (routerForJoining.depth > (*(iterator)).depth) {
+				routerForJoining = *(iterator);
+			}
+		}
+		return routerForJoining;
+	}
 };
 
 #endif
