@@ -2806,6 +2806,10 @@ Register_Class(NlmeJoin_confirm);
 
 NlmeJoin_confirm::NlmeJoin_confirm(const char *name, int kind) : NlmeMsg(name,kind)
 {
+    this->status_var = 0;
+    this->networkAddress_var = 0;
+    this->extendedPanId_var = 0;
+    this->currentChannel_var = 0;
 }
 
 NlmeJoin_confirm::NlmeJoin_confirm(const NlmeJoin_confirm& other) : NlmeMsg()
@@ -2822,17 +2826,69 @@ NlmeJoin_confirm& NlmeJoin_confirm::operator=(const NlmeJoin_confirm& other)
 {
     if (this==&other) return *this;
     NlmeMsg::operator=(other);
+    this->status_var = other.status_var;
+    this->networkAddress_var = other.networkAddress_var;
+    this->extendedPanId_var = other.extendedPanId_var;
+    this->currentChannel_var = other.currentChannel_var;
     return *this;
 }
 
 void NlmeJoin_confirm::parsimPack(cCommBuffer *b)
 {
     NlmeMsg::parsimPack(b);
+    doPacking(b,this->status_var);
+    doPacking(b,this->networkAddress_var);
+    doPacking(b,this->extendedPanId_var);
+    doPacking(b,this->currentChannel_var);
 }
 
 void NlmeJoin_confirm::parsimUnpack(cCommBuffer *b)
 {
     NlmeMsg::parsimUnpack(b);
+    doUnpacking(b,this->status_var);
+    doUnpacking(b,this->networkAddress_var);
+    doUnpacking(b,this->extendedPanId_var);
+    doUnpacking(b,this->currentChannel_var);
+}
+
+unsigned char NlmeJoin_confirm::getStatus() const
+{
+    return status_var;
+}
+
+void NlmeJoin_confirm::setStatus(unsigned char status_var)
+{
+    this->status_var = status_var;
+}
+
+unsigned short NlmeJoin_confirm::getNetworkAddress() const
+{
+    return networkAddress_var;
+}
+
+void NlmeJoin_confirm::setNetworkAddress(unsigned short networkAddress_var)
+{
+    this->networkAddress_var = networkAddress_var;
+}
+
+unsigned long NlmeJoin_confirm::getExtendedPanId() const
+{
+    return extendedPanId_var;
+}
+
+void NlmeJoin_confirm::setExtendedPanId(unsigned long extendedPanId_var)
+{
+    this->extendedPanId_var = extendedPanId_var;
+}
+
+unsigned char NlmeJoin_confirm::getCurrentChannel() const
+{
+    return currentChannel_var;
+}
+
+void NlmeJoin_confirm::setCurrentChannel(unsigned char currentChannel_var)
+{
+    this->currentChannel_var = currentChannel_var;
 }
 
 class NlmeJoin_confirmDescriptor : public cClassDescriptor
@@ -2881,7 +2937,7 @@ const char *NlmeJoin_confirmDescriptor::getProperty(const char *propertyname) co
 int NlmeJoin_confirmDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 0+basedesc->getFieldCount(object) : 0;
+    return basedesc ? 4+basedesc->getFieldCount(object) : 4;
 }
 
 unsigned int NlmeJoin_confirmDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -2893,6 +2949,10 @@ unsigned int NlmeJoin_confirmDescriptor::getFieldTypeFlags(void *object, int fie
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
+        case 0: return FD_ISEDITABLE;
+        case 1: return FD_ISEDITABLE;
+        case 2: return FD_ISEDITABLE;
+        case 3: return FD_ISEDITABLE;
         default: return 0;
     }
 }
@@ -2906,6 +2966,10 @@ const char *NlmeJoin_confirmDescriptor::getFieldName(void *object, int field) co
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
+        case 0: return "status";
+        case 1: return "networkAddress";
+        case 2: return "extendedPanId";
+        case 3: return "currentChannel";
         default: return NULL;
     }
 }
@@ -2919,6 +2983,10 @@ const char *NlmeJoin_confirmDescriptor::getFieldTypeString(void *object, int fie
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
+        case 0: return "unsigned char";
+        case 1: return "unsigned short";
+        case 2: return "unsigned long";
+        case 3: return "unsigned char";
         default: return NULL;
     }
 }
@@ -2960,6 +3028,10 @@ bool NlmeJoin_confirmDescriptor::getFieldAsString(void *object, int field, int i
     }
     NlmeJoin_confirm *pp = (NlmeJoin_confirm *)object; (void)pp;
     switch (field) {
+        case 0: ulong2string(pp->getStatus(),resultbuf,bufsize); return true;
+        case 1: ulong2string(pp->getNetworkAddress(),resultbuf,bufsize); return true;
+        case 2: ulong2string(pp->getExtendedPanId(),resultbuf,bufsize); return true;
+        case 3: ulong2string(pp->getCurrentChannel(),resultbuf,bufsize); return true;
         default: return false;
     }
 }
@@ -2974,6 +3046,10 @@ bool NlmeJoin_confirmDescriptor::setFieldAsString(void *object, int field, int i
     }
     NlmeJoin_confirm *pp = (NlmeJoin_confirm *)object; (void)pp;
     switch (field) {
+        case 0: pp->setStatus(string2ulong(value)); return true;
+        case 1: pp->setNetworkAddress(string2ulong(value)); return true;
+        case 2: pp->setExtendedPanId(string2ulong(value)); return true;
+        case 3: pp->setCurrentChannel(string2ulong(value)); return true;
         default: return false;
     }
 }
@@ -4915,12 +4991,12 @@ void MlmeStart_request::setPanId(unsigned short PanId_var)
     this->PanId_var = PanId_var;
 }
 
-unsigned int MlmeStart_request::getLogicalChannel() const
+unsigned char MlmeStart_request::getLogicalChannel() const
 {
     return logicalChannel_var;
 }
 
-void MlmeStart_request::setLogicalChannel(unsigned int logicalChannel_var)
+void MlmeStart_request::setLogicalChannel(unsigned char logicalChannel_var)
 {
     this->logicalChannel_var = logicalChannel_var;
 }
@@ -5234,7 +5310,7 @@ const char *MlmeStart_requestDescriptor::getFieldTypeString(void *object, int fi
     }
     switch (field) {
         case 0: return "unsigned short";
-        case 1: return "unsigned int";
+        case 1: return "unsigned char";
         case 2: return "unsigned char";
         case 3: return "unsigned int";
         case 4: return "unsigned char";
@@ -5610,7 +5686,7 @@ MlmeAssociate_request::MlmeAssociate_request(const char *name, int kind) : MlmeM
     this->deviceType_var = 0;
     this->powerSource_var = 0;
     this->receiverOnWhenIdle_var = 0;
-    this->secureCapability_var = 0;
+    this->securityCapability_var = 0;
     this->allocateAddress_var = 0;
     this->securityLevel_var = 0;
     this->keyIdMode_var = 0;
@@ -5645,7 +5721,7 @@ MlmeAssociate_request& MlmeAssociate_request::operator=(const MlmeAssociate_requ
     this->deviceType_var = other.deviceType_var;
     this->powerSource_var = other.powerSource_var;
     this->receiverOnWhenIdle_var = other.receiverOnWhenIdle_var;
-    this->secureCapability_var = other.secureCapability_var;
+    this->securityCapability_var = other.securityCapability_var;
     this->allocateAddress_var = other.allocateAddress_var;
     this->securityLevel_var = other.securityLevel_var;
     this->keyIdMode_var = other.keyIdMode_var;
@@ -5670,7 +5746,7 @@ void MlmeAssociate_request::parsimPack(cCommBuffer *b)
     doPacking(b,this->deviceType_var);
     doPacking(b,this->powerSource_var);
     doPacking(b,this->receiverOnWhenIdle_var);
-    doPacking(b,this->secureCapability_var);
+    doPacking(b,this->securityCapability_var);
     doPacking(b,this->allocateAddress_var);
     doPacking(b,this->securityLevel_var);
     doPacking(b,this->keyIdMode_var);
@@ -5691,7 +5767,7 @@ void MlmeAssociate_request::parsimUnpack(cCommBuffer *b)
     doUnpacking(b,this->deviceType_var);
     doUnpacking(b,this->powerSource_var);
     doUnpacking(b,this->receiverOnWhenIdle_var);
-    doUnpacking(b,this->secureCapability_var);
+    doUnpacking(b,this->securityCapability_var);
     doUnpacking(b,this->allocateAddress_var);
     doUnpacking(b,this->securityLevel_var);
     doUnpacking(b,this->keyIdMode_var);
@@ -5706,12 +5782,12 @@ void MlmeAssociate_request::parsimUnpack(cCommBuffer *b)
     doUnpacking(b,this->keyIndex_var);
 }
 
-unsigned int MlmeAssociate_request::getLogicalChannel() const
+unsigned char MlmeAssociate_request::getLogicalChannel() const
 {
     return logicalChannel_var;
 }
 
-void MlmeAssociate_request::setLogicalChannel(unsigned int logicalChannel_var)
+void MlmeAssociate_request::setLogicalChannel(unsigned char logicalChannel_var)
 {
     this->logicalChannel_var = logicalChannel_var;
 }
@@ -5796,14 +5872,14 @@ void MlmeAssociate_request::setReceiverOnWhenIdle(bool receiverOnWhenIdle_var)
     this->receiverOnWhenIdle_var = receiverOnWhenIdle_var;
 }
 
-bool MlmeAssociate_request::getSecureCapability() const
+bool MlmeAssociate_request::getSecurityCapability() const
 {
-    return secureCapability_var;
+    return securityCapability_var;
 }
 
-void MlmeAssociate_request::setSecureCapability(bool secureCapability_var)
+void MlmeAssociate_request::setSecurityCapability(bool securityCapability_var)
 {
-    this->secureCapability_var = secureCapability_var;
+    this->securityCapability_var = securityCapability_var;
 }
 
 bool MlmeAssociate_request::getAllocateAddress() const
@@ -5971,7 +6047,7 @@ const char *MlmeAssociate_requestDescriptor::getFieldName(void *object, int fiel
         case 6: return "deviceType";
         case 7: return "powerSource";
         case 8: return "receiverOnWhenIdle";
-        case 9: return "secureCapability";
+        case 9: return "securityCapability";
         case 10: return "allocateAddress";
         case 11: return "securityLevel";
         case 12: return "keyIdMode";
@@ -5990,7 +6066,7 @@ const char *MlmeAssociate_requestDescriptor::getFieldTypeString(void *object, in
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
-        case 0: return "unsigned int";
+        case 0: return "unsigned char";
         case 1: return "unsigned char";
         case 2: return "unsigned char";
         case 3: return "unsigned short";
@@ -6056,7 +6132,7 @@ bool MlmeAssociate_requestDescriptor::getFieldAsString(void *object, int field, 
         case 6: bool2string(pp->getDeviceType(),resultbuf,bufsize); return true;
         case 7: bool2string(pp->getPowerSource(),resultbuf,bufsize); return true;
         case 8: bool2string(pp->getReceiverOnWhenIdle(),resultbuf,bufsize); return true;
-        case 9: bool2string(pp->getSecureCapability(),resultbuf,bufsize); return true;
+        case 9: bool2string(pp->getSecurityCapability(),resultbuf,bufsize); return true;
         case 10: bool2string(pp->getAllocateAddress(),resultbuf,bufsize); return true;
         case 11: ulong2string(pp->getSecurityLevel(),resultbuf,bufsize); return true;
         case 12: ulong2string(pp->getKeyIdMode(),resultbuf,bufsize); return true;
@@ -6085,7 +6161,7 @@ bool MlmeAssociate_requestDescriptor::setFieldAsString(void *object, int field, 
         case 6: pp->setDeviceType(string2bool(value)); return true;
         case 7: pp->setPowerSource(string2bool(value)); return true;
         case 8: pp->setReceiverOnWhenIdle(string2bool(value)); return true;
-        case 9: pp->setSecureCapability(string2bool(value)); return true;
+        case 9: pp->setSecurityCapability(string2bool(value)); return true;
         case 10: pp->setAllocateAddress(string2bool(value)); return true;
         case 11: pp->setSecurityLevel(string2ulong(value)); return true;
         case 12: pp->setKeyIdMode(string2ulong(value)); return true;
