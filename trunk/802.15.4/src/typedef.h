@@ -198,6 +198,8 @@ struct MacBeaconPayload {
 	unsigned char deviceType;
 	bool rxOnWhenIdle;
 	unsigned char depth;
+	unsigned int beaconTimestamp;
+	unsigned int beaconTransmissionTimeOffset;
 };
 
 struct PanDescriptor {

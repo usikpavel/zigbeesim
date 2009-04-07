@@ -54,9 +54,7 @@ void Nlme::handleSelfMsg(cMessage *msg) {
 }
 
 void Nlme::handleMlmeMsg(cMessage *msg) {
-	std::cout << "x" << endl;
 	if (msg->getKind() == MLME_SCAN_CONFIRM) {
-		std::cout << "-";
 		MlmeScan_confirm* confirm = check_and_cast<MlmeScan_confirm *> (msg);
 		if (getLastUpperMsg()->getKind() == NLME_NETWORK_FORMATION_REQUEST) {
 			NlmeNetworkFormation_request* request = check_and_cast<
@@ -109,50 +107,34 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 			}
 		} else if (getLastUpperMsg()->getKind()
 				== NLME_NETWORK_DISCOVERY_REQUEST) {
-			std::cout << "2";
 			NlmeNetworkDiscovery_confirm* response =
 					new NlmeNetworkDiscovery_confirm(
 							"NLME-NETWORK-DISCOVERY.confirm",
 							NLME_NETWORK_DISCOVERY_CONFIRM);
-			std::cout << "3";
 			response->setNetworkCount(confirm->getResultListSize());
-			std::cout << "4";
 			for (unsigned int i = 0; i < confirm->getResultListSize(); i++) {
-				std::cout << "A";
 				NetworkDescriptor descriptor;
-				std::cout << "B";
 				/** @test this might try to access some restricted areas */
 				descriptor.panId = confirm->getPanDescriptorList(i).coordPanId;
-				std::cout << "C";
 				descriptor.logicalChannel
 						= confirm->getPanDescriptorList(i).logicalChannel;
-				std::cout << "D";
-				/** @todo include stack profile, zigbee version,  into descriptor */
+				/** @TODO include stack profile, zigbee version,  into descriptor */
 				// descriptor.stackProfile =
 				// descriptor.zigbeeVersion =
 				descriptor.beaconOrder
 						= confirm->getPanDescriptorList(i).beaconOrder;
-				std::cout << "E";
 				descriptor.superframeOrder
 						= confirm->getPanDescriptorList(i).superframeOrder;
-				std::cout << "F";
 				addNetworkDescriptor(descriptor);
-				std::cout << "G";
 			}
-			std::cout << "5";
 			response->setNetworkDescriptorListArraySize(
 					getNetworkDescriptorsArraySize());
-			std::cout << "6";
 			for (int i = 0; i < getNetworkDescriptorsArraySize(); i++) {
-				std::cout << "A";
 				response->setNetworkDescriptorList(i,
 						getNetworkDescriptors()[i]);
 			}
-			std::cout << "7";
 			response->setStatus(confirm->getStatus());
-			std::cout << "8";
 			sendNlmeUp(response);
-			std::cout << "9";
 		}
 	} else if (msg->getKind() == MLME_SET_CONFIRM) {
 		MlmeSet_confirm* confirm = check_and_cast<MlmeSet_confirm *> (msg);
@@ -182,6 +164,10 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 				payload.networkAddress = 0x0000;
 				payload.deviceType = getFFDAppLayer()->getRole();
 				payload.rxOnWhenIdle = getMacPib()->getMacRxOnWhenIdle();
+				payload.depth = 0x00;
+				/** @comment Coordinator has no beacon time offset */
+				payload.beaconTimestamp = 0x00000000;
+				payload.beaconTransmissionTimeOffset = 0x00000000;
 				int payloadSize = (int) (((double)sizeof(MacBeaconPayload))/((double)sizeof(unsigned int)));
 				if (payloadSize * sizeof(unsigned int) < sizeof(MacBeaconPayload)) payloadSize++;
 				setRequest->setPibAttributeValueArraySize(payloadSize);
@@ -235,6 +221,8 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 			sdu[i] =  indication->getSdu(i);
 		}
 		macBeaconPayload = (MacBeaconPayload*) sdu;
+		neighbor.panId = indication->getPanDescriptor().coordPanId;
+		neighbor.extendedAddress = getMcps()->getLastBeacon()->getSourceAddress();
 		neighbor.networkAddress = macBeaconPayload->networkAddress;
 		neighbor.deviceType = macBeaconPayload->deviceType;
 		neighbor.rxOnWhenIdle = macBeaconPayload->rxOnWhenIdle;
@@ -243,8 +231,9 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 		neighbor.beaconOrder = indication->getPanDescriptor().beaconOrder;
 		neighbor.permitJoining = indication->getPanDescriptor().associationPermit;
 		neighbor.logicalChannel = indication->getPanDescriptor().logicalChannel;
-		neighbor.incomingBeaconTimestamp = 1;
-		neighbor.beaconTransmissionTimeOffset = 1;
+		neighbor.incomingBeaconTimestamp = macBeaconPayload->beaconTimestamp;
+		neighbor.beaconTransmissionTimeOffset = macBeaconPayload->beaconTransmissionTimeOffset;
+		addNeighborTableEntry(neighbor);
 	}
 	delete (msg);
 }

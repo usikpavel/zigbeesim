@@ -36,6 +36,7 @@ protected:
 	unsigned char networkAddress;
 	MacBeaconPayload macBeaconPayload;
 	unsigned char depth;
+	std::map<unsigned long, NeighborTableEntry> neighborTable;
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
 
@@ -94,7 +95,8 @@ protected:
 
 	Mcps* getMcps() {
 		return (Mcps *) (getParentModule()->getParentModule()->getModuleByRelativePath(
-				"mac")->getModuleByRelativePath("mcps"));
+				"nic")->getModuleByRelativePath("mac")->getModuleByRelativePath(
+				"mcps"));
 	}
 
 	void setLastUpperMsg(cMessage* msg) {
@@ -139,28 +141,16 @@ protected:
 	}
 
 	void addNetworkDescriptor(NetworkDescriptor descriptor) {
-		std::cout << "1";
 		int size = getNetworkDescriptorsArraySize();
-		std::cout << "2";
 		NetworkDescriptor* newNetworkDescriptors;
-		std::cout << "3";
-		std::cout << endl <<"size: " << size+1 << endl;
 		newNetworkDescriptors = new NetworkDescriptor[size + 1];
-		std::cout << "4";
 		for (int i = 0; i < size; i++) {
-			std::cout << "A";
 			newNetworkDescriptors[i] = this->networkDescriptors[i];
-			std::cout << "B";
 		}
-		std::cout << "5";
 		newNetworkDescriptors[size] = descriptor;
-		std::cout << "6";
 		delete this->networkDescriptors;
-		std::cout << "7";
 		this->networkDescriptors = newNetworkDescriptors;
-		std::cout << "8";
 		setNetworkDescriptorsArraySize(size + 1);
-		std::cout << "9";
 	}
 
 	bool isNetworkScanned(NetworkDescriptor descriptor) {
@@ -204,6 +194,43 @@ protected:
 	}
 	unsigned char getDepth() {
 		return this->depth;
+	}
+	void addNeighborTableEntry(NeighborTableEntry entry) {
+		unsigned long key = entry.extendedAddress;
+		if (!hasNeighborTableEntry(key)) {
+			/** @comment the neighbor is not in the map, so let's add it */
+			neighborTable.insert(std::pair<unsigned long, NeighborTableEntry>(
+					key, entry));
+		}
+	}
+	bool hasNeighborTableEntry(NeighborTableEntry entry) {
+		unsigned long key = entry.extendedAddress;
+		return hasNeighborTableEntry(key);
+	}
+	bool hasNeighborTableEntry(unsigned long key) {
+		std::map<unsigned long, NeighborTableEntry>::iterator iterator =
+				neighborTable.begin();
+		iterator = neighborTable.find(key);
+		if (iterator == neighborTable.end())
+			return false;
+		else
+			return true;
+	}
+	void deleteNeighborTableEntry(NeighborTableEntry entry) {
+		unsigned long key = entry.extendedAddress;
+		if (hasNeighborTableEntry(entry)) {
+			std::map<unsigned long, NeighborTableEntry>::iterator iterator =
+					neighborTable.begin();
+			iterator = neighborTable.find(key);
+			neighborTable.erase(iterator);
+		}
+	}
+	/** @note if the neighbor is not in the table, returns NULL */
+	NeighborTableEntry getNeighborTableEntry(unsigned long key) {
+		std::map<unsigned long, NeighborTableEntry>::iterator iterator =
+				neighborTable.begin();
+		iterator = neighborTable.find(key);
+		return iterator->second;
 	}
 };
 
