@@ -1,6 +1,6 @@
 #include "Mlme.h"
 
-Define_Module(Mlme);
+Define_Module( Mlme);
 
 void Mlme::initialize(int stage) {
 	BasicModule::initialize(stage);
@@ -68,7 +68,7 @@ void Mlme::handleSelfMsg(cMessage *msg) {
 		sendPlmeDown(changeState);
 	} else if (msg->getKind() == BEACON_TIMER) {
 		/** @todo better to put into some method the beacon creation */
-		MacBeacon* beacon = new MacBeacon("Beacon command", MAC_BEACON_FRAME);
+		MacBeacon* beacon = new MacBeacon("Beacon Command", MAC_BEACON_FRAME);
 		beacon->setBeaconOrder(getMacPib()->getMacBeaconOrder());
 		beacon->setSuperframeOrder(getMacPib()->getMacSuperframeOrder());
 		/** @todo set FinalCapSlot */
@@ -224,6 +224,30 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 					switchRadioToChannel(getCurrentChannel());
 				}
 			}
+		} else if (getLastUpperMsg()->getKind() == MLME_ASSOCIATE_REQUEST) {
+			MlmeAssociate_request* request = check_and_cast<
+					MlmeAssociate_request *> (getLastUpperMsg());
+			if (confirm->getPibAttribute() == PHY_CURRENT_CHANNEL) {
+				/** @TODO omitting the channel page PIB attribute */
+				/** @TODO now send the association request frame */
+				MacCommand* command = new MacCommand("Association Command", MAC_COMMAND_FRAME);
+				command->setCommandType(ASSOCIATION_REQUEST);
+				/** @COMMENT Command Frame Identifier (1B) + Capability Information (1B) */
+				command->setByteLength(2);
+				NwkCapabilityInformation capability;
+				unsigned char* commandPayload;
+				commandPayload = (unsigned char*) &capability;
+				capability.alternatePanCoordinator = request->getAlternatePanCoordinator();
+				capability.deviceType = request->getDeviceType();
+				capability.powerSource = request->getPowerSource();
+				capability.receiverOnWhenIdle = request->getReceiverOnWhenIdle();
+				capability.securityCapability = request->getSecurityCapability();
+				command->setCommandPayloadArraySize(sizeof(capability));
+				for (int i = 0; i < sizeof(capability); i++) {
+					command->setCommandPayload(i, commandPayload[i]);
+				}
+				sendMcps(command);
+			}
 		}
 	} else if (msgName == "PLME-ED.confirm") {
 		PlmeEd_confirm* confirm = check_and_cast<PlmeEd_confirm *> (msg);
@@ -316,7 +340,8 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 			setRequest->setPibAttribute(request->getPibAttribute());
 			setRequest->setPibAttributeValueArraySize(
 					request->getPibAttributeValueArraySize());
-			for (unsigned int i = 0; i < request->getPibAttributeValueArraySize(); i++) {
+			for (unsigned int i = 0; i
+					< request->getPibAttributeValueArraySize(); i++) {
 				setRequest->setPibAttributeValue(i,
 						request->getPibAttributeValue(i));
 			}
@@ -327,7 +352,8 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 			 * through the PIB Attribute Index */
 			unsigned int* value =
 					new unsigned int[request->getPibAttributeValueArraySize()];
-			for (unsigned int i = 0; i < request->getPibAttributeValueArraySize(); i++) {
+			for (unsigned int i = 0; i
+					< request->getPibAttributeValueArraySize(); i++) {
 				value[i] = request->getPibAttributeValue(i);
 			}
 			MlmeSet_confirm* response = new MlmeSet_confirm("MLME-SET.confirm",
@@ -367,6 +393,26 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 		} else {
 			/** @todo coord realignment set to true */
 		}
+	} else if (msg->getKind() == MLME_ASSOCIATE_REQUEST) {
+		MlmeAssociate_request* associate = check_and_cast<
+				MlmeAssociate_request *> (msg);
+		/** @COMMENT let's set the appropriate MAC PIB and PHY PIB attributes*/
+		getMacPib()->setMacPANId(associate->getCoordPanId());
+		if (associate->getCoordAddrMode() == SHORT_ADDRESS) {
+			getMacPib()->setMacCoordShortAddress(associate->getCoordAddress());
+		} else {
+			getMacPib()->setMacCoordExtendedAddress(
+					associate->getCoordAddress());
+		}
+		getMacPib()->setMacRxOnWhenIdle(associate->getReceiverOnWhenIdle());
+		if (!associate->getSecurityCapability())
+			getMacPib()->setMacSecurityEnabled(false);
+		PlmeSet_request* setRequest = new PlmeSet_request("PLME-SET.request",
+				PLME_SET_REQUEST);
+		setRequest->setPibAttribute(PHY_CURRENT_CHANNEL);
+		setRequest->setPibAttributeValueArraySize(1);
+		setRequest->setPibAttributeValue(0, associate->getLogicalChannel());
+		sendPlmeDown(setRequest);
 	}
 }
 
@@ -394,7 +440,7 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 				sendMlmeUp(confirm);
 			}
 			delete (msg);
-		} else if (msgName == "Beacon command") {
+		} else if (msgName == "Beacon Command") {
 			MacBeacon* macBeacon = check_and_cast<MacBeacon *> (msg);
 			setLastBeacon(macBeacon->dup());
 			/** @todo let's get rid of this one */
@@ -445,12 +491,14 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 						macBeacon->getNumberOfExtendedAddressesPending());
 				indication->setAddressListArraySize(
 						macBeacon->getAddressListArraySize());
-				for (unsigned int i = 0; i < macBeacon->getAddressListArraySize(); i++) {
+				for (unsigned int i = 0; i
+						< macBeacon->getAddressListArraySize(); i++) {
 					indication->setAddressList(i, macBeacon->getAddressList(i));
 				}
 				indication->setSduArraySize(
 						macBeacon->getMacBeaconPayloadArraySize());
-				for (unsigned int i = 0; i < macBeacon->getMacBeaconPayloadArraySize(); i++) {
+				for (unsigned int i = 0; i
+						< macBeacon->getMacBeaconPayloadArraySize(); i++) {
 					indication->setSdu(i, macBeacon->getMacBeaconPayload(i));
 				}
 				sendMlmeUp(indication);

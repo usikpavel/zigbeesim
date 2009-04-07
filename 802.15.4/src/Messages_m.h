@@ -454,12 +454,20 @@ inline void doUnpacking(cCommBuffer *b, NlmeJoin_indication& obj) {obj.parsimUnp
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
  * message NlmeJoin_confirm extends NlmeMsg {
+ *     unsigned char status;
+ *     unsigned short networkAddress;
+ *     unsigned long extendedPanId;
+ *     unsigned char currentChannel;
  * };
  * </pre>
  */
 class NlmeJoin_confirm : public NlmeMsg
 {
   protected:
+    unsigned char status_var;
+    unsigned short networkAddress_var;
+    unsigned long extendedPanId_var;
+    unsigned char currentChannel_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const NlmeJoin_confirm&);
@@ -474,6 +482,14 @@ class NlmeJoin_confirm : public NlmeMsg
     virtual void parsimUnpack(cCommBuffer *b);
 
     // field getter/setter methods
+    virtual unsigned char getStatus() const;
+    virtual void setStatus(unsigned char status_var);
+    virtual unsigned short getNetworkAddress() const;
+    virtual void setNetworkAddress(unsigned short networkAddress_var);
+    virtual unsigned long getExtendedPanId() const;
+    virtual void setExtendedPanId(unsigned long extendedPanId_var);
+    virtual unsigned char getCurrentChannel() const;
+    virtual void setCurrentChannel(unsigned char currentChannel_var);
 };
 
 inline void doPacking(cCommBuffer *b, NlmeJoin_confirm& obj) {obj.parsimPack(b);}
@@ -759,7 +775,7 @@ inline void doUnpacking(cCommBuffer *b, MlmeSet_confirm& obj) {obj.parsimUnpack(
  * <pre>
  * message MlmeStart_request extends MlmeMsg {
  *     unsigned short PanId;
- *     unsigned int logicalChannel;
+ *     unsigned char logicalChannel;
  *     unsigned char channelPage;
  *     unsigned int startTime;
  *     unsigned char beaconOrder;
@@ -782,7 +798,7 @@ class MlmeStart_request : public MlmeMsg
 {
   protected:
     unsigned short PanId_var;
-    unsigned int logicalChannel_var;
+    unsigned char logicalChannel_var;
     unsigned char channelPage_var;
     unsigned int startTime_var;
     unsigned char beaconOrder_var;
@@ -816,8 +832,8 @@ class MlmeStart_request : public MlmeMsg
     // field getter/setter methods
     virtual unsigned short getPanId() const;
     virtual void setPanId(unsigned short PanId_var);
-    virtual unsigned int getLogicalChannel() const;
-    virtual void setLogicalChannel(unsigned int logicalChannel_var);
+    virtual unsigned char getLogicalChannel() const;
+    virtual void setLogicalChannel(unsigned char logicalChannel_var);
     virtual unsigned char getChannelPage() const;
     virtual void setChannelPage(unsigned char channelPage_var);
     virtual unsigned int getStartTime() const;
@@ -894,7 +910,7 @@ inline void doUnpacking(cCommBuffer *b, MlmeStart_confirm& obj) {obj.parsimUnpac
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
  * message MlmeAssociate_request extends MlmeMsg {
- *     unsigned int logicalChannel;
+ *     unsigned char logicalChannel;
  *     unsigned char channelPage;
  *     unsigned char coordAddrMode;
  *     unsigned short coordPanId;
@@ -903,7 +919,7 @@ inline void doUnpacking(cCommBuffer *b, MlmeStart_confirm& obj) {obj.parsimUnpac
  * 	bool deviceType;
  * 	bool powerSource;
  * 	bool receiverOnWhenIdle;
- * 	bool secureCapability;
+ * 	bool securityCapability;
  * 	bool allocateAddress;
  * 	unsigned char securityLevel;
  * 	unsigned char keyIdMode;
@@ -915,7 +931,7 @@ inline void doUnpacking(cCommBuffer *b, MlmeStart_confirm& obj) {obj.parsimUnpac
 class MlmeAssociate_request : public MlmeMsg
 {
   protected:
-    unsigned int logicalChannel_var;
+    unsigned char logicalChannel_var;
     unsigned char channelPage_var;
     unsigned char coordAddrMode_var;
     unsigned short coordPanId_var;
@@ -924,7 +940,7 @@ class MlmeAssociate_request : public MlmeMsg
     bool deviceType_var;
     bool powerSource_var;
     bool receiverOnWhenIdle_var;
-    bool secureCapability_var;
+    bool securityCapability_var;
     bool allocateAddress_var;
     unsigned char securityLevel_var;
     unsigned char keyIdMode_var;
@@ -945,8 +961,8 @@ class MlmeAssociate_request : public MlmeMsg
     virtual void parsimUnpack(cCommBuffer *b);
 
     // field getter/setter methods
-    virtual unsigned int getLogicalChannel() const;
-    virtual void setLogicalChannel(unsigned int logicalChannel_var);
+    virtual unsigned char getLogicalChannel() const;
+    virtual void setLogicalChannel(unsigned char logicalChannel_var);
     virtual unsigned char getChannelPage() const;
     virtual void setChannelPage(unsigned char channelPage_var);
     virtual unsigned char getCoordAddrMode() const;
@@ -963,8 +979,8 @@ class MlmeAssociate_request : public MlmeMsg
     virtual void setPowerSource(bool powerSource_var);
     virtual bool getReceiverOnWhenIdle() const;
     virtual void setReceiverOnWhenIdle(bool receiverOnWhenIdle_var);
-    virtual bool getSecureCapability() const;
-    virtual void setSecureCapability(bool secureCapability_var);
+    virtual bool getSecurityCapability() const;
+    virtual void setSecurityCapability(bool securityCapability_var);
     virtual bool getAllocateAddress() const;
     virtual void setAllocateAddress(bool allocateAddress_var);
     virtual unsigned char getSecurityLevel() const;

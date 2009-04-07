@@ -87,6 +87,10 @@ message NlmeJoin_indication extends NlmeMsg {
 };
 
 message NlmeJoin_confirm extends NlmeMsg {
+    unsigned char status;
+    unsigned short networkAddress;
+    unsigned long extendedPanId;
+    unsigned char currentChannel;
 };
 
 message NldeMsg extends cMessage {
@@ -135,7 +139,7 @@ message MlmeSet_confirm extends MlmeMsg {
 
 message MlmeStart_request extends MlmeMsg {
     unsigned short PanId;
-    unsigned int logicalChannel;
+    unsigned char logicalChannel;
     unsigned char channelPage;
     unsigned int startTime;
     unsigned char beaconOrder;
@@ -158,7 +162,7 @@ message MlmeStart_confirm extends MlmeMsg {
 };
 
 message MlmeAssociate_request extends MlmeMsg {
-    unsigned int logicalChannel;
+    unsigned char logicalChannel;
     unsigned char channelPage;
     unsigned char coordAddrMode;
     unsigned short coordPanId;
@@ -167,7 +171,7 @@ message MlmeAssociate_request extends MlmeMsg {
 	bool deviceType;
 	bool powerSource;
 	bool receiverOnWhenIdle;
-	bool secureCapability;
+	bool securityCapability;
 	bool allocateAddress;
 	unsigned char securityLevel;
 	unsigned char keyIdMode;

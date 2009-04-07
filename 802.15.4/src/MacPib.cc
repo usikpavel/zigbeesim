@@ -75,6 +75,7 @@ void MacPib::resetMacPibValues() {
 	setMacSecurityEnabled(false);
 	setMacShortAddress(0xFFFF);
 	setMacSuperframeOrder(15);
+	setMacTimestampSupported(true);
 	setMacTransactionPersistenceTime(0x01F4);
 }
 
