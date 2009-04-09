@@ -257,9 +257,9 @@ message PdMsg extends cPacket {
     bool framePending;
     bool ackRequest;
     bool panIdCompression;
-    char destinationAddressingMode;
-    char frameVersion;
-    char sourceAddressingMode;
+    unsigned char destinationAddressingMode;
+    unsigned char frameVersion;
+    unsigned char sourceAddressingMode;
     // MHR fields - end of FrameControl
     unsigned char sequenceNumber;
     unsigned short destinationPanIdentifier;

@@ -1517,9 +1517,9 @@ inline void doUnpacking(cCommBuffer *b, PlmeEd_confirm& obj) {obj.parsimUnpack(b
  *     bool framePending;
  *     bool ackRequest;
  *     bool panIdCompression;
- *     char destinationAddressingMode;
- *     char frameVersion;
- *     char sourceAddressingMode;
+ *     unsigned char destinationAddressingMode;
+ *     unsigned char frameVersion;
+ *     unsigned char sourceAddressingMode;
  *     
  *     unsigned char sequenceNumber;
  *     unsigned short destinationPanIdentifier;
@@ -1539,9 +1539,9 @@ class PdMsg : public cPacket
     bool framePending_var;
     bool ackRequest_var;
     bool panIdCompression_var;
-    char destinationAddressingMode_var;
-    char frameVersion_var;
-    char sourceAddressingMode_var;
+    unsigned char destinationAddressingMode_var;
+    unsigned char frameVersion_var;
+    unsigned char sourceAddressingMode_var;
     unsigned char sequenceNumber_var;
     unsigned short destinationPanIdentifier_var;
     unsigned long destinationAddress_var;
@@ -1574,12 +1574,12 @@ class PdMsg : public cPacket
     virtual void setAckRequest(bool ackRequest_var);
     virtual bool getPanIdCompression() const;
     virtual void setPanIdCompression(bool panIdCompression_var);
-    virtual char getDestinationAddressingMode() const;
-    virtual void setDestinationAddressingMode(char destinationAddressingMode_var);
-    virtual char getFrameVersion() const;
-    virtual void setFrameVersion(char frameVersion_var);
-    virtual char getSourceAddressingMode() const;
-    virtual void setSourceAddressingMode(char sourceAddressingMode_var);
+    virtual unsigned char getDestinationAddressingMode() const;
+    virtual void setDestinationAddressingMode(unsigned char destinationAddressingMode_var);
+    virtual unsigned char getFrameVersion() const;
+    virtual void setFrameVersion(unsigned char frameVersion_var);
+    virtual unsigned char getSourceAddressingMode() const;
+    virtual void setSourceAddressingMode(unsigned char sourceAddressingMode_var);
     virtual unsigned char getSequenceNumber() const;
     virtual void setSequenceNumber(unsigned char sequenceNumber_var);
     virtual unsigned short getDestinationPanIdentifier() const;
