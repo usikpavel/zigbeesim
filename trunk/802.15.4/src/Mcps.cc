@@ -17,6 +17,7 @@ void Mcps::initialize(int stage) {
 	} else if (stage == 1) {
 		lastUpperMsg = new cMessage();
 		lastBeacon = new PdMsg();
+		nextEncapsulation = &encapsulation;
 	}
 }
 
@@ -44,7 +45,7 @@ void Mcps::handlePdMsg(cMessage *msg) {
 		PdData_confirm* confirm = check_and_cast<PdData_confirm *> (msg);
 		if (confirm->getStatus() == PHY_SUCCESS) {
 			if (getLastUpperMsg()->getKind() == MAC_COMMAND_FRAME) {
-				MacCommand* command = new MacCommand("Beacon request sent",
+				MacCommand* command = new MacCommand("Beacon Request sent",
 						MAC_COMMAND_FRAME);
 				command->setCommandType(BEACON_REQUEST);
 				sendMlme(command);
@@ -56,11 +57,11 @@ void Mcps::handlePdMsg(cMessage *msg) {
 		}
 		delete (msg);
 	} else if (msg->getKind() == PD_DATA_INDICATION) {
-		PdMsg* pdMsg = check_and_cast<PdMsg *>(msg);
+		PdMsg* pdMsg = check_and_cast<PdMsg *> (msg);
 		if (pdMsg->getFrameType() == BEACON) {
 			setLastBeacon(pdMsg->dup());
 			McpsMsg* mcpsMsg = decapsulatePd(pdMsg);
-			MacBeacon* beacon = check_and_cast<MacBeacon *>(mcpsMsg);
+			MacBeacon* beacon = check_and_cast<MacBeacon *> (mcpsMsg);
 			beacon->setKind(MAC_BEACON_FRAME);
 			sendMlme(beacon);
 		}
@@ -69,7 +70,7 @@ void Mcps::handlePdMsg(cMessage *msg) {
 
 void Mcps::handleMcpsMsg(cMessage *msg) {
 	setLastUpperMsg(msg->dup());
-	delete(msg);
+	delete (msg);
 }
 
 void Mcps::handleMlmeMsg(cMessage *msg) {
@@ -79,6 +80,8 @@ void Mcps::handleMlmeMsg(cMessage *msg) {
 	if (msg->getKind() == MAC_COMMAND_FRAME) {
 		MacCommand* command = check_and_cast<MacCommand *> (msg);
 		if (command->getCommandType() == BEACON_REQUEST) {
+			sendPdDown(encapsulateMcps(command));
+		} else if (command->getCommandType() == ASSOCIATION_REQUEST) {
 			sendPdDown(encapsulateMcps(command));
 		}
 	} else if (msg->getKind() == MAC_BEACON_FRAME) {
@@ -106,7 +109,7 @@ PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 	if (msg->getKind() == MAC_COMMAND_FRAME) {
 		MacCommand* command = check_and_cast<MacCommand *> (msg);
 		if (command->getCommandType() == BEACON_REQUEST) {
-			PdData_request *request = new PdData_request("Beacon request",
+			PdData_request *request = new PdData_request("Beacon Request",
 					PD_DATA_REQUEST);
 			request->setByteLength(11);
 			/** @comment this should not be the same as ByteLength */
@@ -130,6 +133,39 @@ PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 			request->setFcs((unsigned short) (rand() % 65536));
 			request->encapsulate(command);
 			return request;
+		} else if (command->getCommandType() == ASSOCIATION_REQUEST) {
+			PdData_request *request = new PdData_request("Association Request",
+					PD_DATA_REQUEST);
+			if (getNextEncapsulation()->destinationAddressingMode
+					== LONG_ADDRESS)
+				request->setByteLength(25);
+			else
+				request->setByteLength(19);
+			/** @comment this should not be the same as ByteLength */
+			request->setPsduLength(msg->getByteLength());
+			request->setFrameType(COMMAND);
+			request->setSecurityEnabled(false);
+			request->setFramePending(false);
+			request->setAckRequest(true);
+			request->setPanIdCompression(false);
+			request->setDestinationAddressingMode(
+					getNextEncapsulation()->destinationAddressingMode);
+			request->setFrameVersion(0x01);
+			request->setSourceAddressingMode(LONG_ADDRESS);
+			request->setSequenceNumber(getMacPib()->getMacDSN());
+			getMacPib()->setMacDSN(getMacPib()->getMacDSN() + 1);
+			request->setDestinationPanIdentifier(
+					getNextEncapsulation()->destinationPanIdentifier);
+			request->setDestinationAddress(
+					getNextEncapsulation()->destinationAddress);
+			request->setSourcePanIdentifier(0xFFFF);
+			request->setSourceAddress(
+					(unsigned long) (getMacPib()->getExtendedAddress()));
+			request->setAuxiliarySecurityHeaderArraySize(0);
+			/** @todo who wants to calculate the fcs? :) */
+			request->setFcs((unsigned short) (rand() % 65536));
+			request->encapsulate(command);
+			return request;
 		}
 	} else if (msg->getKind() == MAC_BEACON_FRAME) {
 		MacBeacon* beacon = check_and_cast<MacBeacon *> (msg);
@@ -143,13 +179,14 @@ PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 		request->setAckRequest(false);
 		request->setPanIdCompression(false);
 		request->setDestinationAddressingMode(NOT_PRESENT);
-		request->setFrameVersion(0x01);
+		request->setFrameVersion(0x00);
 		request->setSourceAddressingMode(LONG_ADDRESS);
 		request->setSequenceNumber(getMacPib()->getMacBSN());
 		getMacPib()->setMacBSN((getMacPib()->getMacBSN()) + 1);
 		request->setDestinationPanIdentifier(0xFFFF);
 		request->setDestinationAddress((unsigned long) 0xFFFF);
-		request->setSourcePanIdentifier(getMacPib()->getPibAttribute(MAC_PAN_ID)[0]);
+		request->setSourcePanIdentifier(
+				getMacPib()->getPibAttribute(MAC_PAN_ID)[0]);
 		request->setSourceAddress(
 				(unsigned long) (getMacPib()->getExtendedAddress()));
 		request->setAuxiliarySecurityHeaderArraySize(0);
@@ -165,4 +202,9 @@ McpsMsg* Mcps::decapsulatePd(PdMsg *msg) {
 	McpsMsg* mcpsMsg = static_cast<McpsMsg *> (msg->decapsulate());
 	delete (msg);
 	return mcpsMsg;
+}
+
+Mcps::~Mcps() {
+	delete lastBeacon;
+	delete lastUpperMsg;
 }

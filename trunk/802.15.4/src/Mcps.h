@@ -26,10 +26,13 @@ protected:
 	/*@}*/
 	/** additional variables */
 	cMessage* lastUpperMsg;
-	cMessage* timer;
+	//cMessage* timer;
 	PdMsg* lastBeacon;
+	McpsEncapsulation encapsulation;
+	McpsEncapsulation* nextEncapsulation;
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
+	virtual ~Mcps();
 	void handleSelfMsg(cMessage *);
 	void handlePdMsg(cMessage *);
 	void handleMcpsMsg(cMessage *);
@@ -78,6 +81,24 @@ public:
 	}
 	PdMsg* getLastBeacon() {
 		return this->lastBeacon;
+	}
+	void setNextEncapsulation(McpsEncapsulation nextEncapsulation) {
+		this->nextEncapsulation->frameType = nextEncapsulation.framePending;
+		this->nextEncapsulation->securityEnabled = nextEncapsulation.securityEnabled;
+		this->nextEncapsulation->framePending = nextEncapsulation.framePending;
+		this->nextEncapsulation->ackRequest = nextEncapsulation.ackRequest;
+		this->nextEncapsulation->panIdCompression = nextEncapsulation.panIdCompression;
+		this->nextEncapsulation->destinationAddressingMode = nextEncapsulation.destinationAddressingMode;
+		this->nextEncapsulation->frameVersion = nextEncapsulation.frameVersion;
+		this->nextEncapsulation->sourceAddressingMode = nextEncapsulation.sourceAddressingMode;
+		this->nextEncapsulation->sequenceNumber = nextEncapsulation.sequenceNumber;
+		this->nextEncapsulation->destinationPanIdentifier = nextEncapsulation.destinationPanIdentifier;
+		this->nextEncapsulation->destinationAddress = nextEncapsulation.destinationAddress;
+		this->nextEncapsulation->sourcePanIdentifier = nextEncapsulation.sourcePanIdentifier;
+		this->nextEncapsulation->sourceAddress = nextEncapsulation.sourceAddress;
+	}
+	McpsEncapsulation* getNextEncapsulation() {
+		return nextEncapsulation;
 	}
 };
 

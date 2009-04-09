@@ -202,6 +202,22 @@ struct MacBeaconPayload {
 	unsigned int beaconTransmissionTimeOffset;
 };
 
+struct McpsEncapsulation {
+	unsigned char frameType;
+	bool securityEnabled;
+	bool framePending;
+	bool ackRequest;
+	bool panIdCompression;
+	unsigned char destinationAddressingMode;
+	unsigned char frameVersion;
+	unsigned char sourceAddressingMode;
+	unsigned char sequenceNumber;
+	unsigned short destinationPanIdentifier;
+	unsigned long destinationAddress;
+	unsigned short sourcePanIdentifier;
+	unsigned long sourceAddress;
+};
+
 struct PanDescriptor {
 	unsigned char coordAddrMode;
 	unsigned short coordPanId;

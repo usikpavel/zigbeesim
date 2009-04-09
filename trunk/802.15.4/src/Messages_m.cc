@@ -9759,32 +9759,32 @@ void PdMsg::setPanIdCompression(bool panIdCompression_var)
     this->panIdCompression_var = panIdCompression_var;
 }
 
-char PdMsg::getDestinationAddressingMode() const
+unsigned char PdMsg::getDestinationAddressingMode() const
 {
     return destinationAddressingMode_var;
 }
 
-void PdMsg::setDestinationAddressingMode(char destinationAddressingMode_var)
+void PdMsg::setDestinationAddressingMode(unsigned char destinationAddressingMode_var)
 {
     this->destinationAddressingMode_var = destinationAddressingMode_var;
 }
 
-char PdMsg::getFrameVersion() const
+unsigned char PdMsg::getFrameVersion() const
 {
     return frameVersion_var;
 }
 
-void PdMsg::setFrameVersion(char frameVersion_var)
+void PdMsg::setFrameVersion(unsigned char frameVersion_var)
 {
     this->frameVersion_var = frameVersion_var;
 }
 
-char PdMsg::getSourceAddressingMode() const
+unsigned char PdMsg::getSourceAddressingMode() const
 {
     return sourceAddressingMode_var;
 }
 
-void PdMsg::setSourceAddressingMode(char sourceAddressingMode_var)
+void PdMsg::setSourceAddressingMode(unsigned char sourceAddressingMode_var)
 {
     this->sourceAddressingMode_var = sourceAddressingMode_var;
 }
@@ -9998,9 +9998,9 @@ const char *PdMsgDescriptor::getFieldTypeString(void *object, int field) const
         case 2: return "bool";
         case 3: return "bool";
         case 4: return "bool";
-        case 5: return "char";
-        case 6: return "char";
-        case 7: return "char";
+        case 5: return "unsigned char";
+        case 6: return "unsigned char";
+        case 7: return "unsigned char";
         case 8: return "unsigned char";
         case 9: return "unsigned short";
         case 10: return "unsigned long";
@@ -10058,9 +10058,9 @@ bool PdMsgDescriptor::getFieldAsString(void *object, int field, int i, char *res
         case 2: bool2string(pp->getFramePending(),resultbuf,bufsize); return true;
         case 3: bool2string(pp->getAckRequest(),resultbuf,bufsize); return true;
         case 4: bool2string(pp->getPanIdCompression(),resultbuf,bufsize); return true;
-        case 5: long2string(pp->getDestinationAddressingMode(),resultbuf,bufsize); return true;
-        case 6: long2string(pp->getFrameVersion(),resultbuf,bufsize); return true;
-        case 7: long2string(pp->getSourceAddressingMode(),resultbuf,bufsize); return true;
+        case 5: ulong2string(pp->getDestinationAddressingMode(),resultbuf,bufsize); return true;
+        case 6: ulong2string(pp->getFrameVersion(),resultbuf,bufsize); return true;
+        case 7: ulong2string(pp->getSourceAddressingMode(),resultbuf,bufsize); return true;
         case 8: ulong2string(pp->getSequenceNumber(),resultbuf,bufsize); return true;
         case 9: ulong2string(pp->getDestinationPanIdentifier(),resultbuf,bufsize); return true;
         case 10: ulong2string(pp->getDestinationAddress(),resultbuf,bufsize); return true;
@@ -10087,9 +10087,9 @@ bool PdMsgDescriptor::setFieldAsString(void *object, int field, int i, const cha
         case 2: pp->setFramePending(string2bool(value)); return true;
         case 3: pp->setAckRequest(string2bool(value)); return true;
         case 4: pp->setPanIdCompression(string2bool(value)); return true;
-        case 5: pp->setDestinationAddressingMode(string2long(value)); return true;
-        case 6: pp->setFrameVersion(string2long(value)); return true;
-        case 7: pp->setSourceAddressingMode(string2long(value)); return true;
+        case 5: pp->setDestinationAddressingMode(string2ulong(value)); return true;
+        case 6: pp->setFrameVersion(string2ulong(value)); return true;
+        case 7: pp->setSourceAddressingMode(string2ulong(value)); return true;
         case 8: pp->setSequenceNumber(string2ulong(value)); return true;
         case 9: pp->setDestinationPanIdentifier(string2ulong(value)); return true;
         case 10: pp->setDestinationAddress(string2ulong(value)); return true;
