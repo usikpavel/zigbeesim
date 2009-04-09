@@ -60,10 +60,12 @@ void Mcps::handlePdMsg(cMessage *msg) {
 		PdMsg* pdMsg = check_and_cast<PdMsg *> (msg);
 		if (pdMsg->getFrameType() == BEACON) {
 			setLastBeacon(pdMsg->dup());
-			McpsMsg* mcpsMsg = decapsulatePd(pdMsg);
-			MacBeacon* beacon = check_and_cast<MacBeacon *> (mcpsMsg);
+			MacBeacon* beacon = check_and_cast<MacBeacon *> (decapsulatePd(pdMsg));
 			beacon->setKind(MAC_BEACON_FRAME);
 			sendMlme(beacon);
+		} else if (pdMsg->getFrameType() == COMMAND) {
+			MacCommand* macCommand = check_and_cast<MacCommand *>(decapsulatePd(pdMsg));
+			sendMlme(macCommand);
 		}
 	}
 }

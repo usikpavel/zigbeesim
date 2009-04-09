@@ -229,7 +229,6 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 					MlmeAssociate_request *> (getLastUpperMsg());
 			if (confirm->getPibAttribute() == PHY_CURRENT_CHANNEL) {
 				/** @TODO omitting the channel page PIB attribute */
-				/** @TODO now send the association request frame */
 				MacCommand* command = new MacCommand("Association Request Command", MAC_COMMAND_FRAME);
 				command->setCommandType(ASSOCIATION_REQUEST);
 				/** @COMMENT Command Frame Identifier (1B) + Capability Information (1B) */

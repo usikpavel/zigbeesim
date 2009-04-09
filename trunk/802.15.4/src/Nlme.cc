@@ -338,6 +338,10 @@ void Nlme::handleNlmeMsg(cMessage *msg) {
 				associate->setAllocateAddress(capability.allocateAddress);
 				associate->setSecurityLevel(0x00);
 				associate->setKeySourceArraySize(0);
+				/** @TODO this should be interchangeable with SHORT_ADDRESS */
+				getMcps()->getNextEncapsulation()->destinationAddressingMode = LONG_ADDRESS;
+				getMcps()->getNextEncapsulation()->destinationAddress = parent.extendedAddress;
+				getMcps()->getNextEncapsulation()->destinationPanIdentifier = parent.panId;
 				sendMlmeDown(associate);
 			}
 		}
