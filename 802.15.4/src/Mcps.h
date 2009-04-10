@@ -27,7 +27,7 @@ protected:
 	/** additional variables */
 	cMessage* lastUpperMsg;
 	//cMessage* timer;
-	PdMsg* lastBeacon;
+	PdMsg* lastLowerMsg;
 	McpsEncapsulation encapsulation;
 	McpsEncapsulation* nextEncapsulation;
 	/** @brief Sets the level of comments to the EV output */
@@ -75,12 +75,12 @@ public:
 			return ((MacPib *) (this->getParentModule()->getModuleByRelativePath(
 					"macPib")));
 		}
-	void setLastBeacon(PdMsg* lastBeacon) {
-		delete(this->lastBeacon);
-		this->lastBeacon = lastBeacon;
+	void setLastLowerMsg(PdMsg* lastLowerMsg) {
+		delete(this->lastLowerMsg);
+		this->lastLowerMsg = lastLowerMsg;
 	}
-	PdMsg* getLastBeacon() {
-		return this->lastBeacon;
+	PdMsg* getLastLowerMsg() {
+		return this->lastLowerMsg;
 	}
 	void setNextEncapsulation(McpsEncapsulation nextEncapsulation) {
 		this->nextEncapsulation->frameType = nextEncapsulation.framePending;

@@ -16,7 +16,7 @@ void Mcps::initialize(int stage) {
 		commentsLevel = COMMENT_ALL;
 	} else if (stage == 1) {
 		lastUpperMsg = new cMessage();
-		lastBeacon = new PdMsg();
+		lastLowerMsg = new PdMsg();
 		nextEncapsulation = &encapsulation;
 	}
 }
@@ -58,8 +58,8 @@ void Mcps::handlePdMsg(cMessage *msg) {
 		delete (msg);
 	} else if (msg->getKind() == PD_DATA_INDICATION) {
 		PdMsg* pdMsg = check_and_cast<PdMsg *> (msg);
+		setLastLowerMsg(pdMsg->dup());
 		if (pdMsg->getFrameType() == BEACON) {
-			setLastBeacon(pdMsg->dup());
 			MacBeacon* beacon = check_and_cast<MacBeacon *> (decapsulatePd(pdMsg));
 			beacon->setKind(MAC_BEACON_FRAME);
 			sendMlme(beacon);
@@ -207,6 +207,6 @@ McpsMsg* Mcps::decapsulatePd(PdMsg *msg) {
 }
 
 Mcps::~Mcps() {
-	delete lastBeacon;
-	delete lastUpperMsg;
+	delete (lastLowerMsg);
+	delete (lastUpperMsg);
 }

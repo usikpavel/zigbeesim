@@ -232,7 +232,7 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 		macBeaconPayload = (MacBeaconPayload*) sdu;
 		neighbor.panId = indication->getPanDescriptor().coordPanId;
 		neighbor.extendedAddress
-				= getMcps()->getLastBeacon()->getSourceAddress();
+				= getMcps()->getLastLowerMsg()->getSourceAddress();
 		neighbor.networkAddress = macBeaconPayload->networkAddress;
 		neighbor.deviceType = macBeaconPayload->deviceType;
 		neighbor.rxOnWhenIdle = macBeaconPayload->rxOnWhenIdle;
