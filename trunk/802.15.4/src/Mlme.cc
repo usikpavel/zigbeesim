@@ -242,7 +242,7 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 				capability.receiverOnWhenIdle = request->getReceiverOnWhenIdle();
 				capability.securityCapability = request->getSecurityCapability();
 				command->setCommandPayloadArraySize(sizeof(capability));
-				for (int i = 0; i < sizeof(capability); i++) {
+				for (unsigned int i = 0; i < sizeof(capability); i++) {
 					command->setCommandPayload(i, commandPayload[i]);
 				}
 				sendMcps(command);
@@ -443,7 +443,7 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 			MacBeacon* macBeacon = check_and_cast<MacBeacon *> (msg);
 			setLastBeacon(macBeacon->dup());
 			/** @todo let's get rid of this one */
-			PdMsg* pdBeacon = getMcps()->getLastBeacon()->dup();
+			PdMsg* pdBeacon = getMcps()->getLastLowerMsg()->dup();
 			PanDescriptor panDescriptor;
 			/** @todo make an option to use also long addresses */
 			panDescriptor.coordAddrMode = SHORT_ADDRESS;
