@@ -22,7 +22,7 @@ class Pd: public BasicModule {
 public:
 	void initialize(int);
 	void handleMessage(cMessage *msg);
-protected:
+
 	/** @brief gate id*/
 	/*@{*/
 	int pdSapOut;
@@ -55,6 +55,7 @@ protected:
 	double calculatePreambleLengthInSeconds();
 	unsigned char calculateSfdLengthInSymbols();
 	double calculateSfdLengthInSeconds();
+	double symbolsToSeconds(unsigned int symbols);
 	void comment(CommentsLevel level, std::string s) {
 		/** @todo align logName substrings for routers and endDevices */
 		if ((level & commentsLevel) > COMMENT_NOTHING) {

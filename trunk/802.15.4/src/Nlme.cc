@@ -42,7 +42,7 @@ void Nlme::handleMessage(cMessage *msg) {
 }
 
 void Nlme::handleSelfMsg(cMessage *msg) {
-	if (msg->getKind() == JOINING_PERMITTED_TIMER) {
+	if (msg->getKind() == TIMER_JOINING_PERMITTED) {
 		setLastUpperMsg(msg);
 		MlmeSet_request* response = new MlmeSet_request("MLME-SET.request",
 				MLME_SET_REQUEST);
@@ -275,7 +275,7 @@ void Nlme::handleNlmeMsg(cMessage *msg) {
 			response->setPibAttributeValue(0, (unsigned int) true);
 			if (request->getPermitDuration() != 0xFF) {
 				cMessage* timer = new cMessage("JOINING-PERMITTED.timer",
-						JOINING_PERMITTED_TIMER);
+						TIMER_JOINING_PERMITTED);
 				scheduleAt(simTime() + (double) (request->getPermitDuration()),
 						timer);
 			}

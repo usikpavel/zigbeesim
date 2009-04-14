@@ -48,7 +48,7 @@ void Pd::handleMessage(cMessage *msg) {
 
 void Pd::handleSelfMsg(cMessage *msg) {
 	std::string msgName = msg->getName();
-	if (msg->getKind() == SFD_FRAME_TIMER) {
+	if (msg->getKind() == TIMER_SFD_FRAME) {
 		setLastMsgTimestamp(simTime());
 	}
 	delete (msg);
@@ -86,9 +86,10 @@ void Pd::handleRfControl(cMessage *msg) {
 		confirm->setStatus(PHY_SUCCESS);
 		sendPdUp(confirm);
 	} else if (msgName == "RECEIVING_START") {
-		frameTimer->setKind(SFD_FRAME_TIMER);
+		frameTimer->setKind(TIMER_SFD_FRAME);
 		frameTimer->setName("SFD processed, setting timestamp");
-		scheduleAt(simTime() + calculatePreambleLengthInSeconds() + calculateSfdLengthInSeconds(), frameTimer);
+		scheduleAt(simTime() + calculatePreambleLengthInSeconds()
+				+ calculateSfdLengthInSeconds(), frameTimer);
 	}
 	delete (msg);
 }
@@ -256,6 +257,30 @@ double Pd::calculateSfdLengthInSeconds() {
 	default:
 		commentError("Unsupported page number");
 	}
+}
+
+double Pd::symbolsToSeconds(unsigned int symbols) {
+	unsigned char currentChannel = getPhyPib()->getPhyCurrentChannel();
+	unsigned char currentPage = getPhyPib()->getPhyCurrentPage();
+	int symbolrate;
+	switch (currentPage) {
+	case 0x00:
+		if (currentChannel == 0x00) symbolrate = 20000;
+		else if (currentChannel <= 0x0A) symbolrate = 40000;
+		else symbolrate = 62500;
+		break;
+	case 0x01:
+		if (currentChannel == 0x00) symbolrate = 12500;
+		else symbolrate = 50000;
+		break;
+	case 0x02:
+		if (currentChannel == 0x00) symbolrate = 25000;
+		else symbolrate = 62500;
+		break;
+	default:
+		commentError("Unsupported page number");
+	}
+	return ((double) symbols)/((double) symbolrate);
 }
 
 void Pd::receiveBBItem(int category, const BBItem *details, int scopeModuleId) {

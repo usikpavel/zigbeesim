@@ -219,6 +219,10 @@ message MacCommand extends McpsMsg {
     unsigned char commandPayload[];
 };
 
+message MacAck extends McpsMsg {
+    unsigned char sequenceNumber;
+};
+
 // Physical layer messages
 message PlmeMsg extends cMessage {
 };

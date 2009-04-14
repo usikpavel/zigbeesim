@@ -15,6 +15,7 @@ void Mcps::initialize(int stage) {
 
 		commentsLevel = COMMENT_ALL;
 	} else if (stage == 1) {
+		ackTimer = new cMessage("ACK.timer", TIMER_ACK);
 		lastUpperMsg = new cMessage();
 		lastLowerMsg = new PdMsg();
 		nextEncapsulation = &encapsulation;
@@ -37,6 +38,12 @@ void Mcps::handleMessage(cMessage *msg) {
 }
 
 void Mcps::handleSelfMsg(cMessage *msg) {
+	if (msg->getKind() == TIMER_ACK) {
+		MacAck* macAck = new MacAck("Acknowledgment", MAC_ACK_FRAME);
+		sendPdDown(encapsulateMcps(macAck));
+		/** @comment this has to me made for a decision on what to do with the PD-DATA.confirm message */
+		setLastUpperMsg(msg->dup());
+	}
 	delete (msg);
 }
 
@@ -45,27 +52,44 @@ void Mcps::handlePdMsg(cMessage *msg) {
 		PdData_confirm* confirm = check_and_cast<PdData_confirm *> (msg);
 		if (confirm->getStatus() == PHY_SUCCESS) {
 			if (getLastUpperMsg()->getKind() == MAC_COMMAND_FRAME) {
-				MacCommand* command = new MacCommand("Beacon Request sent",
+				MacCommand* command = new MacCommand("Command sent",
 						MAC_COMMAND_FRAME);
-				command->setCommandType(BEACON_REQUEST);
+				command->setCommandType(check_and_cast<MacCommand*> (
+						getLastUpperMsg())->getCommandType());
 				sendMlme(command);
 			} else if (getLastUpperMsg()->getKind() == MAC_BEACON_FRAME) {
 				MacBeacon* beacon = new MacBeacon("Beacon sent",
 						MAC_BEACON_FRAME);
 				sendMlme(beacon);
+			} else if (getLastUpperMsg()->getKind() == TIMER_ACK) {
+				/** @comment no additional action needed */
 			}
 		}
 		delete (msg);
 	} else if (msg->getKind() == PD_DATA_INDICATION) {
 		PdMsg* pdMsg = check_and_cast<PdMsg *> (msg);
 		setLastLowerMsg(pdMsg->dup());
-		if (pdMsg->getFrameType() == BEACON) {
-			MacBeacon* beacon = check_and_cast<MacBeacon *> (decapsulatePd(pdMsg));
-			beacon->setKind(MAC_BEACON_FRAME);
-			sendMlme(beacon);
-		} else if (pdMsg->getFrameType() == COMMAND) {
-			MacCommand* macCommand = check_and_cast<MacCommand *>(decapsulatePd(pdMsg));
-			sendMlme(macCommand);
+
+		/** @note be careful
+		 * maybe the code needs to be duplicated for the selfMsg part as well */
+		if (pdMsg->getAckRequest()) {
+			double ackTime = getPd()->symbolsToSeconds(
+					getPhyPib()->getTurnAroundTime());
+			scheduleAt(simTime() + ackTime, ackTimer);
+		} else {
+			if (pdMsg->getFrameType() == BEACON) {
+				MacBeacon* beacon = check_and_cast<MacBeacon *> (decapsulatePd(
+						pdMsg));
+				beacon->setKind(MAC_BEACON_FRAME);
+				sendMlme(beacon);
+			} else if (pdMsg->getFrameType() == COMMAND) {
+				MacCommand* macCommand = check_and_cast<MacCommand *> (
+						decapsulatePd(pdMsg));
+				macCommand->setKind(MAC_COMMAND_FRAME);
+				sendMlme(macCommand);
+			} else if (pdMsg->getFrameType() == ACK) {
+
+			}
 		}
 	}
 }
@@ -83,7 +107,7 @@ void Mcps::handleMlmeMsg(cMessage *msg) {
 		MacCommand* command = check_and_cast<MacCommand *> (msg);
 		if (command->getCommandType() == BEACON_REQUEST) {
 			sendPdDown(encapsulateMcps(command));
-		} else if (command->getCommandType() == ASSOCIATION_REQUEST) {
+		} else if (command->getCommandType() == ASSOCIATE_REQUEST) {
 			sendPdDown(encapsulateMcps(command));
 		}
 	} else if (msg->getKind() == MAC_BEACON_FRAME) {
@@ -135,7 +159,7 @@ PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 			request->setFcs((unsigned short) (rand() % 65536));
 			request->encapsulate(command);
 			return request;
-		} else if (command->getCommandType() == ASSOCIATION_REQUEST) {
+		} else if (command->getCommandType() == ASSOCIATE_REQUEST) {
 			PdData_request *request = new PdData_request("Association Request",
 					PD_DATA_REQUEST);
 			if (getNextEncapsulation()->destinationAddressingMode
@@ -192,9 +216,28 @@ PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 		request->setSourceAddress(
 				(unsigned long) (getMacPib()->getExtendedAddress()));
 		request->setAuxiliarySecurityHeaderArraySize(0);
-		/** @todo who wants to calculate the fcs? :) */
+		/** @TODO who wants to calculate the fcs? :) */
 		request->setFcs((unsigned short) (rand() % 65536));
 		request->encapsulate(beacon);
+		return request;
+	} else if (msg->getKind() == MAC_ACK_FRAME) {
+		MacAck* macAck = check_and_cast<MacAck *>(msg);
+		PdData_request *request = new PdData_request("Acknowledgement",
+				PD_DATA_REQUEST);
+		/** @note the 0x00 fields are ignored on the reception */
+		request->setByteLength(5);
+		request->setFrameType(ACK);
+		request->setSecurityEnabled(0x00);
+		request->setFramePending(false);
+		request->setAckRequest(0x00);
+		request->setPanIdCompression(0x00);
+		request->setDestinationAddressingMode(0x00);
+		request->setFrameVersion(0x00);
+		request->setSourceAddressingMode(0x00);
+		request->setSequenceNumber(getLastLowerMsg()->getSequenceNumber());
+		/** @TODO who wants to calculate the fcs? :) */
+		request->setFcs((unsigned short) (rand() % 65536));
+		request->encapsulate(macAck);
 		return request;
 	}
 	return NULL;
@@ -209,4 +252,5 @@ McpsMsg* Mcps::decapsulatePd(PdMsg *msg) {
 Mcps::~Mcps() {
 	delete (lastLowerMsg);
 	delete (lastUpperMsg);
+	delete (ackTimer);
 }

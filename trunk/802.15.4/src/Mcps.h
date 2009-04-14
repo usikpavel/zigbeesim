@@ -9,6 +9,8 @@
 #include <string>
 #include <sstream>
 #include "MacPib.h"
+#include "Pd.h"
+#include "PhyPib.h"
 
 class Mcps: public BasicModule {
 public:
@@ -26,7 +28,7 @@ protected:
 	/*@}*/
 	/** additional variables */
 	cMessage* lastUpperMsg;
-	//cMessage* timer;
+	cMessage* ackTimer;
 	PdMsg* lastLowerMsg;
 	McpsEncapsulation encapsulation;
 	McpsEncapsulation* nextEncapsulation;
@@ -72,11 +74,19 @@ public:
 		return this->lastUpperMsg;
 	}
 	MacPib* getMacPib() {
-			return ((MacPib *) (this->getParentModule()->getModuleByRelativePath(
-					"macPib")));
-		}
+		return ((MacPib *) (this->getParentModule()->getModuleByRelativePath(
+				"macPib")));
+	}
+	Pd* getPd() {
+		return ((Pd *) (this->getParentModule()->getParentModule()->getModuleByRelativePath(
+				"phy.pd")));
+	}
+	PhyPib* getPhyPib() {
+		return ((PhyPib *) (this->getParentModule()->getParentModule()->getModuleByRelativePath(
+				"phy.phyPib")));
+	}
 	void setLastLowerMsg(PdMsg* lastLowerMsg) {
-		delete(this->lastLowerMsg);
+		delete (this->lastLowerMsg);
 		this->lastLowerMsg = lastLowerMsg;
 	}
 	PdMsg* getLastLowerMsg() {
@@ -84,18 +94,27 @@ public:
 	}
 	void setNextEncapsulation(McpsEncapsulation nextEncapsulation) {
 		this->nextEncapsulation->frameType = nextEncapsulation.framePending;
-		this->nextEncapsulation->securityEnabled = nextEncapsulation.securityEnabled;
+		this->nextEncapsulation->securityEnabled
+				= nextEncapsulation.securityEnabled;
 		this->nextEncapsulation->framePending = nextEncapsulation.framePending;
 		this->nextEncapsulation->ackRequest = nextEncapsulation.ackRequest;
-		this->nextEncapsulation->panIdCompression = nextEncapsulation.panIdCompression;
-		this->nextEncapsulation->destinationAddressingMode = nextEncapsulation.destinationAddressingMode;
+		this->nextEncapsulation->panIdCompression
+				= nextEncapsulation.panIdCompression;
+		this->nextEncapsulation->destinationAddressingMode
+				= nextEncapsulation.destinationAddressingMode;
 		this->nextEncapsulation->frameVersion = nextEncapsulation.frameVersion;
-		this->nextEncapsulation->sourceAddressingMode = nextEncapsulation.sourceAddressingMode;
-		this->nextEncapsulation->sequenceNumber = nextEncapsulation.sequenceNumber;
-		this->nextEncapsulation->destinationPanIdentifier = nextEncapsulation.destinationPanIdentifier;
-		this->nextEncapsulation->destinationAddress = nextEncapsulation.destinationAddress;
-		this->nextEncapsulation->sourcePanIdentifier = nextEncapsulation.sourcePanIdentifier;
-		this->nextEncapsulation->sourceAddress = nextEncapsulation.sourceAddress;
+		this->nextEncapsulation->sourceAddressingMode
+				= nextEncapsulation.sourceAddressingMode;
+		this->nextEncapsulation->sequenceNumber
+				= nextEncapsulation.sequenceNumber;
+		this->nextEncapsulation->destinationPanIdentifier
+				= nextEncapsulation.destinationPanIdentifier;
+		this->nextEncapsulation->destinationAddress
+				= nextEncapsulation.destinationAddress;
+		this->nextEncapsulation->sourcePanIdentifier
+				= nextEncapsulation.sourcePanIdentifier;
+		this->nextEncapsulation->sourceAddress
+				= nextEncapsulation.sourceAddress;
 	}
 	McpsEncapsulation* getNextEncapsulation() {
 		return nextEncapsulation;

@@ -24,6 +24,16 @@ typedef enum {
 
 /** @brief Kinds of messages */
 typedef enum {
+	/** Timers */
+	TIMER_START,
+	TIMER_SFD_FRAME,
+	TIMER_ED_SCAN,
+	TIMER_ACTIVE_SCAN,
+	TIMER_PASSIVE_SCAN,
+	TIMER_ORPHAN_SCAN,
+	TIMER_BEACON,
+	TIMER_JOINING_PERMITTED,
+	TIMER_ACK,
 	/** NLME-SAP messages */
 	NLME_NETWORK_DISCOVERY_REQUEST,
 	NLME_NETWORK_DISCOVERY_CONFIRM,
@@ -102,19 +112,6 @@ typedef enum {
 	PD_DATA_CONFIRM,
 	PD_DATA_INDICATION
 } msgTypes;
-
-/** @brief Kinds of self messages */
-typedef enum {
-	/** @brief Starting the node */
-	START_TIMER,
-	SFD_FRAME_TIMER,
-	ED_TIMER,
-	ACTIVE_TIMER,
-	PASSIVE_TIMER,
-	ORPHAN_TIMER,
-	BEACON_TIMER,
-	JOINING_PERMITTED_TIMER
-} SelfMessages;
 
 struct NwkCapabilityInformation {
 	bool alternatePanCoordinator;
@@ -376,8 +373,8 @@ typedef enum {
 } MacEnum;
 
 typedef enum {
-	ASSOCIATION_REQUEST				= 0x01,
-	ASSOCIATION_REPONSE				= 0x02,
+	ASSOCIATE_REQUEST				= 0x01,
+	ASSOCIATE_RESPONSE				= 0x02,
 	DISASSOCIATION_INDICATION		= 0x03,
 	DATA_REQUEST					= 0x04,
 	PAN_ID_CONFLICT_NOTIFIACTION	= 0x05,

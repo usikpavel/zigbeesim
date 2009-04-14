@@ -7984,6 +7984,228 @@ void *MacCommandDescriptor::getFieldStructPointer(void *object, int field, int i
     }
 }
 
+Register_Class(MacAck);
+
+MacAck::MacAck(const char *name, int kind) : McpsMsg(name,kind)
+{
+    this->sequenceNumber_var = 0;
+}
+
+MacAck::MacAck(const MacAck& other) : McpsMsg()
+{
+    setName(other.getName());
+    operator=(other);
+}
+
+MacAck::~MacAck()
+{
+}
+
+MacAck& MacAck::operator=(const MacAck& other)
+{
+    if (this==&other) return *this;
+    McpsMsg::operator=(other);
+    this->sequenceNumber_var = other.sequenceNumber_var;
+    return *this;
+}
+
+void MacAck::parsimPack(cCommBuffer *b)
+{
+    McpsMsg::parsimPack(b);
+    doPacking(b,this->sequenceNumber_var);
+}
+
+void MacAck::parsimUnpack(cCommBuffer *b)
+{
+    McpsMsg::parsimUnpack(b);
+    doUnpacking(b,this->sequenceNumber_var);
+}
+
+unsigned char MacAck::getSequenceNumber() const
+{
+    return sequenceNumber_var;
+}
+
+void MacAck::setSequenceNumber(unsigned char sequenceNumber_var)
+{
+    this->sequenceNumber_var = sequenceNumber_var;
+}
+
+class MacAckDescriptor : public cClassDescriptor
+{
+  public:
+    MacAckDescriptor();
+    virtual ~MacAckDescriptor();
+
+    virtual bool doesSupport(cObject *obj) const;
+    virtual const char *getProperty(const char *propertyname) const;
+    virtual int getFieldCount(void *object) const;
+    virtual const char *getFieldName(void *object, int field) const;
+    virtual unsigned int getFieldTypeFlags(void *object, int field) const;
+    virtual const char *getFieldTypeString(void *object, int field) const;
+    virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
+    virtual int getArraySize(void *object, int field) const;
+
+    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
+
+    virtual const char *getFieldStructName(void *object, int field) const;
+    virtual void *getFieldStructPointer(void *object, int field, int i) const;
+};
+
+Register_ClassDescriptor(MacAckDescriptor);
+
+MacAckDescriptor::MacAckDescriptor() : cClassDescriptor("MacAck", "McpsMsg")
+{
+}
+
+MacAckDescriptor::~MacAckDescriptor()
+{
+}
+
+bool MacAckDescriptor::doesSupport(cObject *obj) const
+{
+    return dynamic_cast<MacAck *>(obj)!=NULL;
+}
+
+const char *MacAckDescriptor::getProperty(const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->getProperty(propertyname) : NULL;
+}
+
+int MacAckDescriptor::getFieldCount(void *object) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? 1+basedesc->getFieldCount(object) : 1;
+}
+
+unsigned int MacAckDescriptor::getFieldTypeFlags(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeFlags(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return FD_ISEDITABLE;
+        default: return 0;
+    }
+}
+
+const char *MacAckDescriptor::getFieldName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "sequenceNumber";
+        default: return NULL;
+    }
+}
+
+const char *MacAckDescriptor::getFieldTypeString(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeString(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "unsigned char";
+        default: return NULL;
+    }
+}
+
+const char *MacAckDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldProperty(object, field, propertyname);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+int MacAckDescriptor::getArraySize(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getArraySize(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    MacAck *pp = (MacAck *)object; (void)pp;
+    switch (field) {
+        default: return 0;
+    }
+}
+
+bool MacAckDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+        field -= basedesc->getFieldCount(object);
+    }
+    MacAck *pp = (MacAck *)object; (void)pp;
+    switch (field) {
+        case 0: ulong2string(pp->getSequenceNumber(),resultbuf,bufsize); return true;
+        default: return false;
+    }
+}
+
+bool MacAckDescriptor::setFieldAsString(void *object, int field, int i, const char *value) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->setFieldAsString(object,field,i,value);
+        field -= basedesc->getFieldCount(object);
+    }
+    MacAck *pp = (MacAck *)object; (void)pp;
+    switch (field) {
+        case 0: pp->setSequenceNumber(string2ulong(value)); return true;
+        default: return false;
+    }
+}
+
+const char *MacAckDescriptor::getFieldStructName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+void *MacAckDescriptor::getFieldStructPointer(void *object, int field, int i) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructPointer(object, field, i);
+        field -= basedesc->getFieldCount(object);
+    }
+    MacAck *pp = (MacAck *)object; (void)pp;
+    switch (field) {
+        default: return NULL;
+    }
+}
+
 Register_Class(PlmeMsg);
 
 PlmeMsg::PlmeMsg(const char *name, int kind) : cMessage(name,kind)
