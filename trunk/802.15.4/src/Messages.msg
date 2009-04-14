@@ -182,6 +182,30 @@ message MlmeAssociate_request extends MlmeMsg {
 message MlmeAssociate_confirm extends MlmeMsg {
 };
 
+message MlmeAssociate_indication extends MlmeMsg {
+    unsigned long deviceAddress;
+    bool alternatePanCoordinator;
+	bool deviceType;
+	bool powerSource;
+	bool receiverOnWhenIdle;
+	bool securityCapability;
+	bool allocateAddress;
+    unsigned char securityLevel;
+	unsigned char keyIdMode;
+	unsigned char keySource[];
+	unsigned char keyIndex;
+};
+
+message MlmeAssociate_response extends MlmeMsg {
+    unsigned long deviceAddress;
+    unsigned short assocShortAddress;
+    unsigned char status;
+    unsigned char securityLevel;
+    unsigned char keyIdMode;
+    unsigned char keySource[];
+    unsigned char keyIndex;
+};
+
 message MlmeBeaconNotify_indication extends MlmeMsg {
     unsigned char bsn;
     PanDescriptor panDescriptor;

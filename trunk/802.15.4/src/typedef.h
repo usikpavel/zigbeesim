@@ -237,6 +237,12 @@ struct PanDescriptor {
 	unsigned char kedyIndex;
 };
 
+typedef enum {
+	ASSOCIATION_SUCCESSFUL	= 0x00,
+	PAN_AT_CAPACITY			= 0x01,
+	PAN_ACCESS_DENIED		= 0x02
+} AssociationStatus;
+
 /** @brief PIB identifiers */
 typedef enum {
 	/** PHY PIB Identifiers */
