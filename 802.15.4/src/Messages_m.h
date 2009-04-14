@@ -1271,6 +1271,39 @@ inline void doUnpacking(cCommBuffer *b, MacCommand& obj) {obj.parsimUnpack(b);}
 /**
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
+ * message MacAck extends McpsMsg {
+ *     unsigned char sequenceNumber;
+ * };
+ * </pre>
+ */
+class MacAck : public McpsMsg
+{
+  protected:
+    unsigned char sequenceNumber_var;
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const MacAck&);
+
+  public:
+    MacAck(const char *name=NULL, int kind=0);
+    MacAck(const MacAck& other);
+    virtual ~MacAck();
+    MacAck& operator=(const MacAck& other);
+    virtual MacAck *dup() const {return new MacAck(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+    virtual unsigned char getSequenceNumber() const;
+    virtual void setSequenceNumber(unsigned char sequenceNumber_var);
+};
+
+inline void doPacking(cCommBuffer *b, MacAck& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, MacAck& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
  * message PlmeMsg extends cMessage {
  * };
  * </pre>

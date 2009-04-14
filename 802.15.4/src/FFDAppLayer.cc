@@ -51,11 +51,11 @@ void FFDAppLayer::initialize(int stage) {
 	} else if (stage == 1) {
 		if (getRole() == COORDINATOR) {
 			cMessage* msg = new cMessage("NLME-NETWORK-FORMATION.request",
-					START_TIMER);
+					TIMER_START);
 			scheduleAt(simTime(), msg);
 		} else if (getRole() == ROUTER) {
 			cMessage* msg = new cMessage("NLME-NETWORK-DISCOVERY.request",
-					START_TIMER);
+					TIMER_START);
 			scheduleAt(simTime() + uniform(0, 0.5), msg);
 		}
 	}
@@ -106,7 +106,7 @@ void FFDAppLayer::handleNlmeMsg(cMessage* msg) {
 		if (confirm->getNetworkCount() == 0) {
 			delete (msg);
 			cMessage* msg = new cMessage("NLME-NETWORK-DISCOVERY.request",
-					START_TIMER);
+					TIMER_START);
 			comment(COMMENT_PAN, "No networks detected, trying again in 60s");
 			/** @todo add this param into the omnetpp.ini */
 			scheduleAt(simTime() + 60.0, msg);
@@ -126,7 +126,7 @@ void FFDAppLayer::handleNlmeMsg(cMessage* msg) {
 }
 
 void FFDAppLayer::handleSelfMsg(cMessage* msg) {
-	if (msg->getKind() == START_TIMER) {
+	if (msg->getKind() == TIMER_START) {
 		std::string msgName = msg->getName();
 		if (msgName == "NLME-NETWORK-FORMATION.request") {
 			NlmeNetworkFormation_request* request =

@@ -148,24 +148,50 @@ $O/Plme.o: Plme.cc \
 	$(RTN_PROJ)/core/utils/ModuleAccess.h \
 	Plme.h
 $O/Mcps.o: Mcps.cc \
+	$(RTN_PROJ)/core/utils/MacControlInfo.h \
 	typedef.h \
-	MacPib.h \
-	BBItems.h \
-	$(RTN_PROJ)/core/blackboard/Blackboard.h \
+	$(RTN_PROJ)/contrib/utils/Bitrate.h \
+	$(RTN_PROJ)/core/utils/ActiveChannel.h \
+	$(RTN_PROJ)/core/utils/CoreDebug.h \
 	$(RTN_PROJ)/core/basicModules/BasicModule.h \
-	Messages_m.h \
+	$(RTN_PROJ)/core/utils/SimpleAddress.h \
 	Mcps.h \
-	$(RTN_PROJ)/core/utils/ModuleAccess.h
+	$(RTN_PROJ)/contrib/nic/radios/SingleChannelRadio.h \
+	$(RTN_PROJ)/core/utils/ModuleAccess.h \
+	$(RTN_PROJ)/core/channelControl/NicEntry.h \
+	$(RTN_PROJ)/contrib/utils/RadioState.h \
+	Pd.h \
+	$(RTN_PROJ)/core/channelControl/ChannelControl.h \
+	MacPib.h \
+	PhyPib.h \
+	BBItems.h \
+	$(RTN_PROJ)/core/utils/Coord.h \
+	$(RTN_PROJ)/core/blackboard/Blackboard.h \
+	Messages_m.h \
+	$(RTN_PROJ)/core/utils/FWMath.h
 $O/Mlme.o: Mlme.cc \
+	$(RTN_PROJ)/core/utils/MacControlInfo.h \
 	typedef.h \
-	MacPib.h \
-	BBItems.h \
-	$(RTN_PROJ)/core/blackboard/Blackboard.h \
+	$(RTN_PROJ)/contrib/utils/Bitrate.h \
+	$(RTN_PROJ)/core/utils/ActiveChannel.h \
+	$(RTN_PROJ)/core/utils/CoreDebug.h \
 	$(RTN_PROJ)/core/basicModules/BasicModule.h \
-	Messages_m.h \
-	Mcps.h \
+	$(RTN_PROJ)/core/utils/SimpleAddress.h \
 	Mlme.h \
-	$(RTN_PROJ)/core/utils/ModuleAccess.h
+	Mcps.h \
+	$(RTN_PROJ)/contrib/nic/radios/SingleChannelRadio.h \
+	$(RTN_PROJ)/core/utils/ModuleAccess.h \
+	$(RTN_PROJ)/core/channelControl/NicEntry.h \
+	$(RTN_PROJ)/contrib/utils/RadioState.h \
+	$(RTN_PROJ)/core/channelControl/ChannelControl.h \
+	Pd.h \
+	MacPib.h \
+	PhyPib.h \
+	BBItems.h \
+	$(RTN_PROJ)/core/utils/Coord.h \
+	$(RTN_PROJ)/core/blackboard/Blackboard.h \
+	Messages_m.h \
+	$(RTN_PROJ)/core/utils/FWMath.h
 $O/PhyPib.o: PhyPib.cc \
 	typedef.h \
 	PhyPib.h \
@@ -221,18 +247,31 @@ $O/RFDAppLayer.o: RFDAppLayer.cc \
 	$(RTN_PROJ)/core/utils/ModuleAccess.h
 $O/Nlme.o: Nlme.cc \
 	typedef.h \
-	$(RTN_PROJ)/core/basicModules/BasicModule.h \
+	$(RTN_PROJ)/core/utils/ActiveChannel.h \
 	Mcps.h \
-	Nlme.h \
-	$(RTN_PROJ)/core/utils/ModuleAccess.h \
-	FFDAppLayer.h \
-	$(RTN_PROJ)/contrib/messages/ApplPkt_m.h \
+	Pd.h \
+	$(RTN_PROJ)/core/channelControl/ChannelControl.h \
 	MacPib.h \
-	NwkPib.h \
-	BBItems.h \
+	PhyPib.h \
 	$(RTN_PROJ)/core/blackboard/Blackboard.h \
+	$(RTN_PROJ)/core/utils/Coord.h \
+	Messages_m.h \
 	$(RTN_PROJ)/contrib/applLayer/BasicApplLayer.h \
-	Messages_m.h
+	$(RTN_PROJ)/core/utils/FWMath.h \
+	$(RTN_PROJ)/core/utils/MacControlInfo.h \
+	$(RTN_PROJ)/contrib/utils/Bitrate.h \
+	$(RTN_PROJ)/core/utils/CoreDebug.h \
+	$(RTN_PROJ)/core/basicModules/BasicModule.h \
+	$(RTN_PROJ)/core/utils/SimpleAddress.h \
+	Nlme.h \
+	$(RTN_PROJ)/contrib/nic/radios/SingleChannelRadio.h \
+	$(RTN_PROJ)/core/utils/ModuleAccess.h \
+	$(RTN_PROJ)/core/channelControl/NicEntry.h \
+	FFDAppLayer.h \
+	$(RTN_PROJ)/contrib/utils/RadioState.h \
+	$(RTN_PROJ)/contrib/messages/ApplPkt_m.h \
+	NwkPib.h \
+	BBItems.h
 $O/Mac802154.o: Mac802154.cc \
 	$(RTN_PROJ)/core/utils/ActiveChannel.h \
 	$(RTN_PROJ)/contrib/utils/Bitrate.h \

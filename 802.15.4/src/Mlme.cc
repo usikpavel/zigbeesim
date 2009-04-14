@@ -23,7 +23,7 @@ void Mlme::initialize(int stage) {
 		lastUpperMsg = new cMessage();
 		lastBeacon = new MacBeacon();
 		timer = new cMessage("timer");
-		beaconTimer = new cMessage("Beacon timer", BEACON_TIMER);
+		beaconTimer = new cMessage("Beacon timer", TIMER_BEACON);
 		setScannedChannels(0);
 		energyLevels = new char[32];
 		scannedPanDescriptors = new PanDescriptor[0];
@@ -48,9 +48,9 @@ void Mlme::handleMessage(cMessage *msg) {
 }
 
 void Mlme::handleSelfMsg(cMessage *msg) {
-	if (msg->getKind() == ED_TIMER) {
+	if (msg->getKind() == TIMER_ED_SCAN) {
 		return;
-	} else if (msg->getKind() == ACTIVE_TIMER) {
+	} else if (msg->getKind() == TIMER_ACTIVE_SCAN) {
 		setCurrentChannel(getCurrentChannel() + 1);
 		MlmeScan_request* request = check_and_cast<MlmeScan_request *> (
 				getLastUpperMsg());
@@ -66,7 +66,7 @@ void Mlme::handleSelfMsg(cMessage *msg) {
 			setLayerStage(2);
 		}
 		sendPlmeDown(changeState);
-	} else if (msg->getKind() == BEACON_TIMER) {
+	} else if (msg->getKind() == TIMER_BEACON) {
 		/** @todo better to put into some method the beacon creation */
 		MacBeacon* beacon = new MacBeacon("Beacon Command", MAC_BEACON_FRAME);
 		beacon->setBeaconOrder(getMacPib()->getMacBeaconOrder());
@@ -120,7 +120,7 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 								<< " seconds on channel " << channel;
 						comment(COMMENT_TIMER, commentStream.str());
 						timer->setName("ED-SCAN.timer");
-						timer->setKind(ED_TIMER);
+						timer->setKind(TIMER_ED_SCAN);
 						scheduleAt(simTime() + edTimer, timer);
 						switchRadioToChannel(channel);
 						break;
@@ -151,7 +151,7 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 							setCurrentChannel(channel);
 							comment(COMMENT_TIMER, commentStream.str());
 							timer->setName("ACTIVE-SCAN.timer");
-							timer->setKind(ACTIVE_TIMER);
+							timer->setKind(TIMER_ACTIVE_SCAN);
 							scheduleAt(simTime() + activeTimer, timer);
 							PlmeSet_request* set = new PlmeSet_request(
 									"PLME-SET.request", PLME_SET_REQUEST);
@@ -229,8 +229,8 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 					MlmeAssociate_request *> (getLastUpperMsg());
 			if (confirm->getPibAttribute() == PHY_CURRENT_CHANNEL) {
 				/** @TODO omitting the channel page PIB attribute */
-				MacCommand* command = new MacCommand("Association Request Command", MAC_COMMAND_FRAME);
-				command->setCommandType(ASSOCIATION_REQUEST);
+				MacCommand* command = new MacCommand("Associate Request Command", MAC_COMMAND_FRAME);
+				command->setCommandType(ASSOCIATE_REQUEST);
 				/** @COMMENT Command Frame Identifier (1B) + Capability Information (1B) */
 				command->setByteLength(2);
 				NwkCapabilityInformation capability;
@@ -307,9 +307,9 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 	if (msg->getKind() == MLME_SCAN_REQUEST) {
 		MlmeScan_request* request = check_and_cast<MlmeScan_request *> (msg);
 		resetScannedPanDescriptors();
-		if (timer->isScheduled() && (timer->getKind() == ED_TIMER
-				|| timer->getKind() == ACTIVE_TIMER || timer->getKind()
-				== PASSIVE_TIMER || timer->getKind() == ORPHAN_TIMER)) {
+		if (timer->isScheduled() && (timer->getKind() == TIMER_ED_SCAN
+				|| timer->getKind() == TIMER_ACTIVE_SCAN || timer->getKind()
+				== TIMER_PASSIVE_SCAN || timer->getKind() == TIMER_ORPHAN_SCAN)) {
 			MlmeScan_confirm* response = new MlmeScan_confirm(
 					"MLME-SCAN.confirm", MLME_SCAN_CONFIRM);
 			response->setStatus(MAC_SCAN_IN_PROGRESS);
@@ -428,6 +428,12 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 			request->setState(PHY_RX_ON);
 			sendPlmeDown(request);
 			delete (command);
+		} else if (command->getCommandType() == ASSOCIATE_REQUEST) {
+			if (!getMacPib()->getMacAssociationPermit()) {
+				comment(COMMENT_PAN, "Association not allowed, discarding request");
+				delete (command);
+				return;
+			}
 		}
 	} else if (msg->getKind() == MAC_BEACON_FRAME) {
 		std::string msgName = msg->getName();
