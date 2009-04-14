@@ -187,6 +187,7 @@ unsigned char Pd::calculatePreambleLengthInSymbols() {
 	default:
 		commentError("Unsupported page number");
 	}
+	return 0;
 }
 
 double Pd::calculatePreambleLengthInSeconds() {
@@ -213,6 +214,7 @@ double Pd::calculatePreambleLengthInSeconds() {
 	default:
 		commentError("Unsupported page number");
 	}
+	return 0;
 }
 
 unsigned char Pd::calculateSfdLengthInSymbols() {
@@ -231,6 +233,7 @@ unsigned char Pd::calculateSfdLengthInSymbols() {
 	default:
 		commentError("Unsupported page number");
 	}
+	return 0;
 }
 
 double Pd::calculateSfdLengthInSeconds() {
@@ -257,6 +260,7 @@ double Pd::calculateSfdLengthInSeconds() {
 	default:
 		commentError("Unsupported page number");
 	}
+	return 0;
 }
 
 double Pd::symbolsToSeconds(unsigned int symbols) {

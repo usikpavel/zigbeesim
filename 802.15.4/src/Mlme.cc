@@ -229,18 +229,23 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 					MlmeAssociate_request *> (getLastUpperMsg());
 			if (confirm->getPibAttribute() == PHY_CURRENT_CHANNEL) {
 				/** @TODO omitting the channel page PIB attribute */
-				MacCommand* command = new MacCommand("Associate Request Command", MAC_COMMAND_FRAME);
+				MacCommand* command = new MacCommand(
+						"Associate Request Command", MAC_COMMAND_FRAME);
 				command->setCommandType(ASSOCIATE_REQUEST);
 				/** @COMMENT Command Frame Identifier (1B) + Capability Information (1B) */
 				command->setByteLength(2);
 				NwkCapabilityInformation capability;
 				unsigned char* commandPayload;
 				commandPayload = (unsigned char*) &capability;
-				capability.alternatePanCoordinator = request->getAlternatePanCoordinator();
+				capability.alternatePanCoordinator
+						= request->getAlternatePanCoordinator();
 				capability.deviceType = request->getDeviceType();
 				capability.powerSource = request->getPowerSource();
-				capability.receiverOnWhenIdle = request->getReceiverOnWhenIdle();
-				capability.securityCapability = request->getSecurityCapability();
+				capability.receiverOnWhenIdle
+						= request->getReceiverOnWhenIdle();
+				capability.securityCapability
+						= request->getSecurityCapability();
+				capability.allocateAddress = request->getAllocateAddress();
 				command->setCommandPayloadArraySize(sizeof(capability));
 				for (unsigned int i = 0; i < sizeof(capability); i++) {
 					command->setCommandPayload(i, commandPayload[i]);
@@ -430,10 +435,30 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 			delete (command);
 		} else if (command->getCommandType() == ASSOCIATE_REQUEST) {
 			if (!getMacPib()->getMacAssociationPermit()) {
-				comment(COMMENT_PAN, "Association not allowed, discarding request");
+				comment(COMMENT_PAN,
+						"Association not allowed, discarding request");
 				delete (command);
 				return;
 			}
+			MlmeAssociate_indication* indication = new MlmeAssociate_indication(
+					"MLME-ASSOCIATE.indication", MLME_ASSOCIATE_INDICATION);
+			unsigned char* payload;
+			NwkCapabilityInformation* capability;
+			payload = new unsigned char[sizeof(NwkCapabilityInformation)];
+			for (unsigned int i; i < sizeof(NwkCapabilityInformation); i++) {
+				payload[i] = command->getCommandPayload(i);
+			}
+			capability = (NwkCapabilityInformation*) payload;
+			indication->setDeviceAddress(
+					getMcps()->getLastLowerMsg()->getSourceAddress());
+			indication->setAlternatePanCoordinator(capability->alternatePanCoordinator);
+			indication->setDeviceType(capability->deviceType);
+			indication->setPowerSource(capability->powerSource);
+			indication->setReceiverOnWhenIdle(capability->receiverOnWhenIdle);
+			indication->setSecurityCapability(capability->securityCapability);
+			indication->setAllocateAddress(capability->allocateAddress);
+			sendMlmeUp(indication);
+			delete(command);
 		}
 	} else if (msg->getKind() == MAC_BEACON_FRAME) {
 		std::string msgName = msg->getName();

@@ -58,7 +58,7 @@ protected:
 	unsigned char macMinBE;
 	unsigned char macMinLIFSPeriod;
 	unsigned char macMinSIFSPeriod;
-	unsigned int macPANId;
+	unsigned short macPANId;
 	bool macPromiscuousMode;
 	unsigned char macResponseWaitTime;
 	bool macRxOnWhenIdle;
@@ -320,10 +320,10 @@ public:
 	void setMacMinSIFSPeriod(unsigned char macMinSIFSPeriod) {
 		this->macMinSIFSPeriod = macMinSIFSPeriod;
 	}
-	unsigned int getMacPANId() const {
+	unsigned short getMacPANId() const {
 		return macPANId;
 	}
-	void setMacPANId(unsigned int macPANId) {
+	void setMacPANId(unsigned short macPANId) {
 		this->macPANId = macPANId;
 	}
 	bool getMacPromiscuousMode() const {

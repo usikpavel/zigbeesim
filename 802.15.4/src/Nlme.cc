@@ -246,6 +246,24 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 		neighbor.beaconTransmissionTimeOffset
 				= macBeaconPayload->beaconTransmissionTimeOffset;
 		addNeighborTableEntry(neighbor);
+	} else if (msg->getKind() == MLME_ASSOCIATE_INDICATION) {
+		MlmeAssociate_indication* indication = check_and_cast<
+				MlmeAssociate_indication *> (msg);
+		if (hasNeighborTableEntry(indication->getDeviceAddress())) {
+			NeighborTableEntry entry = getNeighborTableEntry(
+					indication->getDeviceAddress());
+			/** @TODO check the device capabilities. if they differ, update */
+
+		} else {
+			NeighborTableEntry entry;
+			entry.panId = getMacPib()->getMacPANId();
+			entry.extendedAddress = indication->getDeviceAddress();
+			entry.deviceType = indication->getDeviceType();
+			entry.rxOnWhenIdle = indication->getReceiverOnWhenIdle();
+		}
+		NeighborTableEntry entry = getNeighborTableEntry(indication->getDeviceAddress());
+		/** @TODO pick an address for the device and set relationship to CHILD
+		 * set the depth, set the beacon order */
 	}
 	delete (msg);
 }
@@ -316,7 +334,11 @@ void Nlme::handleNlmeMsg(cMessage *msg) {
 				parent = findRouterForJoining(request->getPanId());
 				NwkCapabilityInformation capability;
 				capability.alternatePanCoordinator = false;
-				capability.deviceType = request->getJoinAsRouter();
+				if (request->getJoinAsRouter()) {
+					capability.deviceType = ROUTER;
+				} else {
+					capability.deviceType = END_DEVICE;
+				}
 				capability.powerSource = request->getPowerSource();
 				capability.receiverOnWhenIdle = request->getRxOnWhenIdle();
 				capability.securityCapability = false;
@@ -339,9 +361,12 @@ void Nlme::handleNlmeMsg(cMessage *msg) {
 				associate->setSecurityLevel(0x00);
 				associate->setKeySourceArraySize(0);
 				/** @TODO this should be interchangeable with SHORT_ADDRESS */
-				getMcps()->getNextEncapsulation()->destinationAddressingMode = LONG_ADDRESS;
-				getMcps()->getNextEncapsulation()->destinationAddress = parent.extendedAddress;
-				getMcps()->getNextEncapsulation()->destinationPanIdentifier = parent.panId;
+				getMcps()->getNextEncapsulation()->destinationAddressingMode
+						= LONG_ADDRESS;
+				getMcps()->getNextEncapsulation()->destinationAddress
+						= parent.extendedAddress;
+				getMcps()->getNextEncapsulation()->destinationPanIdentifier
+						= parent.panId;
 				sendMlmeDown(associate);
 			}
 		}

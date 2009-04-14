@@ -1030,6 +1030,142 @@ inline void doUnpacking(cCommBuffer *b, MlmeAssociate_confirm& obj) {obj.parsimU
 /**
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
+ * message MlmeAssociate_indication extends MlmeMsg {
+ *     unsigned long deviceAddress;
+ *     bool alternatePanCoordinator;
+ * 	bool deviceType;
+ * 	bool powerSource;
+ * 	bool receiverOnWhenIdle;
+ * 	bool securityCapability;
+ * 	bool allocateAddress;
+ *     unsigned char securityLevel;
+ * 	unsigned char keyIdMode;
+ * 	unsigned char keySource[];
+ * 	unsigned char keyIndex;
+ * };
+ * </pre>
+ */
+class MlmeAssociate_indication : public MlmeMsg
+{
+  protected:
+    unsigned long deviceAddress_var;
+    bool alternatePanCoordinator_var;
+    bool deviceType_var;
+    bool powerSource_var;
+    bool receiverOnWhenIdle_var;
+    bool securityCapability_var;
+    bool allocateAddress_var;
+    unsigned char securityLevel_var;
+    unsigned char keyIdMode_var;
+    unsigned char *keySource_var; // array ptr
+    unsigned int keySource_arraysize;
+    unsigned char keyIndex_var;
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const MlmeAssociate_indication&);
+
+  public:
+    MlmeAssociate_indication(const char *name=NULL, int kind=0);
+    MlmeAssociate_indication(const MlmeAssociate_indication& other);
+    virtual ~MlmeAssociate_indication();
+    MlmeAssociate_indication& operator=(const MlmeAssociate_indication& other);
+    virtual MlmeAssociate_indication *dup() const {return new MlmeAssociate_indication(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+    virtual unsigned long getDeviceAddress() const;
+    virtual void setDeviceAddress(unsigned long deviceAddress_var);
+    virtual bool getAlternatePanCoordinator() const;
+    virtual void setAlternatePanCoordinator(bool alternatePanCoordinator_var);
+    virtual bool getDeviceType() const;
+    virtual void setDeviceType(bool deviceType_var);
+    virtual bool getPowerSource() const;
+    virtual void setPowerSource(bool powerSource_var);
+    virtual bool getReceiverOnWhenIdle() const;
+    virtual void setReceiverOnWhenIdle(bool receiverOnWhenIdle_var);
+    virtual bool getSecurityCapability() const;
+    virtual void setSecurityCapability(bool securityCapability_var);
+    virtual bool getAllocateAddress() const;
+    virtual void setAllocateAddress(bool allocateAddress_var);
+    virtual unsigned char getSecurityLevel() const;
+    virtual void setSecurityLevel(unsigned char securityLevel_var);
+    virtual unsigned char getKeyIdMode() const;
+    virtual void setKeyIdMode(unsigned char keyIdMode_var);
+    virtual void setKeySourceArraySize(unsigned int size);
+    virtual unsigned int getKeySourceArraySize() const;
+    virtual unsigned char getKeySource(unsigned int k) const;
+    virtual void setKeySource(unsigned int k, unsigned char keySource_var);
+    virtual unsigned char getKeyIndex() const;
+    virtual void setKeyIndex(unsigned char keyIndex_var);
+};
+
+inline void doPacking(cCommBuffer *b, MlmeAssociate_indication& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, MlmeAssociate_indication& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
+ * message MlmeAssociate_response extends MlmeMsg {
+ *     unsigned long deviceAddress;
+ *     unsigned short assocShortAddress;
+ *     unsigned char status;
+ *     unsigned char securityLevel;
+ *     unsigned char keyIdMode;
+ *     unsigned char keySource[];
+ *     unsigned char keyIndex;
+ * };
+ * </pre>
+ */
+class MlmeAssociate_response : public MlmeMsg
+{
+  protected:
+    unsigned long deviceAddress_var;
+    unsigned short assocShortAddress_var;
+    unsigned char status_var;
+    unsigned char securityLevel_var;
+    unsigned char keyIdMode_var;
+    unsigned char *keySource_var; // array ptr
+    unsigned int keySource_arraysize;
+    unsigned char keyIndex_var;
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const MlmeAssociate_response&);
+
+  public:
+    MlmeAssociate_response(const char *name=NULL, int kind=0);
+    MlmeAssociate_response(const MlmeAssociate_response& other);
+    virtual ~MlmeAssociate_response();
+    MlmeAssociate_response& operator=(const MlmeAssociate_response& other);
+    virtual MlmeAssociate_response *dup() const {return new MlmeAssociate_response(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+    virtual unsigned long getDeviceAddress() const;
+    virtual void setDeviceAddress(unsigned long deviceAddress_var);
+    virtual unsigned short getAssocShortAddress() const;
+    virtual void setAssocShortAddress(unsigned short assocShortAddress_var);
+    virtual unsigned char getStatus() const;
+    virtual void setStatus(unsigned char status_var);
+    virtual unsigned char getSecurityLevel() const;
+    virtual void setSecurityLevel(unsigned char securityLevel_var);
+    virtual unsigned char getKeyIdMode() const;
+    virtual void setKeyIdMode(unsigned char keyIdMode_var);
+    virtual void setKeySourceArraySize(unsigned int size);
+    virtual unsigned int getKeySourceArraySize() const;
+    virtual unsigned char getKeySource(unsigned int k) const;
+    virtual void setKeySource(unsigned int k, unsigned char keySource_var);
+    virtual unsigned char getKeyIndex() const;
+    virtual void setKeyIndex(unsigned char keyIndex_var);
+};
+
+inline void doPacking(cCommBuffer *b, MlmeAssociate_response& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, MlmeAssociate_response& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
  * message MlmeBeaconNotify_indication extends MlmeMsg {
  *     unsigned char bsn;
  *     PanDescriptor panDescriptor;
