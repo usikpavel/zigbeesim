@@ -27,6 +27,7 @@ void Mlme::initialize(int stage) {
 		setScannedChannels(0);
 		energyLevels = new char[32];
 		scannedPanDescriptors = new PanDescriptor[0];
+
 	}
 }
 

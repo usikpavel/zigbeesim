@@ -36,6 +36,8 @@ protected:
 	unsigned char networkAddress;
 	MacBeaconPayload macBeaconPayload;
 	unsigned char depth;
+	unsigned int associatedRouters;
+	unsigned int associatedEndDevices;
 	std::map<unsigned long, NeighborTableEntry> neighborTable;
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
@@ -251,6 +253,13 @@ protected:
 			}
 		}
 		return routerForJoining;
+	}
+	void setAssociatedEndDevices(unsigned int associatedEndDevices) {
+		this->associatedEndDevices = associatedEndDevices;
+	}
+
+	unsigned int getAssociatedEndDevices() {
+		return this->associatedEndDevices;
 	}
 };
 
