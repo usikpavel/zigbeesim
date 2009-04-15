@@ -21,6 +21,8 @@ void Nlme::initialize(int stage) {
 		lastUpperMsg = new cMessage();
 		setNetworkDescriptorsArraySize(0);
 		networkDescriptors = new NetworkDescriptor[0];
+		setAssociatedRouters(0);
+		setAssociatedEndDevices(0);
 	}
 }
 
@@ -253,17 +255,27 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 			NeighborTableEntry entry = getNeighborTableEntry(
 					indication->getDeviceAddress());
 			/** @TODO check the device capabilities. if they differ, update */
-
 		} else {
+			/** @COMMENT the device is not in the neighbor table. add it */
 			NeighborTableEntry entry;
 			entry.panId = getMacPib()->getMacPANId();
 			entry.extendedAddress = indication->getDeviceAddress();
 			entry.deviceType = indication->getDeviceType();
 			entry.rxOnWhenIdle = indication->getReceiverOnWhenIdle();
 		}
-		NeighborTableEntry entry = getNeighborTableEntry(indication->getDeviceAddress());
+		NeighborTableEntry entry = getNeighborTableEntry(
+				indication->getDeviceAddress());
+		deleteNeighborTableEntry(indication->getDeviceAddress());
 		/** @TODO pick an address for the device and set relationship to CHILD
 		 * set the depth, set the beacon order */
+		if (indication->getAllocateAddress())
+			entry.networkAddress = assignNetworkAddress();
+		else
+			entry.networkAddress = 0xFFFE;
+		entry.beaconOrder = getMacPib()->getMacBeaconOrder();
+		entry.relationship = CHILD;
+		entry.depth = getDepth() + 1;
+		addNeighborTableEntry(entry);
 	}
 	delete (msg);
 }
