@@ -39,6 +39,8 @@ protected:
 	unsigned int associatedRouters;
 	unsigned int associatedEndDevices;
 	std::map<unsigned long, NeighborTableEntry> neighborTable;
+	/** @brief addressing procedure variable */
+	unsigned short cskip;
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
 
@@ -61,6 +63,12 @@ protected:
 	virtual void sendNwkPib(cMessage *);
 
 	unsigned char getChannelPageFromChannels(unsigned int channels);
+
+	unsigned short assignNetworkAddress();
+
+	unsigned short calculateCskip();
+
+	double power(int a, int b);
 
 	virtual void comment(CommentsLevel level, std::string s) {
 		/** @todo align logName substrings for routers and endDevices */
@@ -218,6 +226,9 @@ protected:
 		else
 			return true;
 	}
+	void deleteNeighborTableEntry(unsigned long key) {
+		deleteNeighborTableEntry(getNeighborTableEntry(key));
+	}
 	void deleteNeighborTableEntry(NeighborTableEntry entry) {
 		unsigned long key = entry.extendedAddress;
 		if (hasNeighborTableEntry(entry)) {
@@ -260,6 +271,22 @@ protected:
 
 	unsigned int getAssociatedEndDevices() {
 		return this->associatedEndDevices;
+	}
+
+	void setAssociatedRouters(unsigned int associatedRouters) {
+		this->associatedRouters = associatedRouters;
+	}
+
+	unsigned int getAssociatedRouters() {
+		return this->associatedRouters;
+	}
+
+	void setCskip(unsigned int cskip) {
+		this->cskip = cskip;
+	}
+
+	unsigned int getCskip() {
+		return this->cskip;
 	}
 };
 

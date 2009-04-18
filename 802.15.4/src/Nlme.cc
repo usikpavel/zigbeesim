@@ -21,8 +21,10 @@ void Nlme::initialize(int stage) {
 		lastUpperMsg = new cMessage();
 		setNetworkDescriptorsArraySize(0);
 		networkDescriptors = new NetworkDescriptor[0];
-		setAssociatedRouters(0);
-		setAssociatedEndDevices(0);
+		if (getFFDAppLayer()->getRole() != END_DEVICE) {
+			setAssociatedRouters(0);
+			setAssociatedEndDevices(0);
+		}
 	}
 }
 
@@ -201,6 +203,8 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 				startRequest->setBeaconKeySourceArraySize(0);
 				/** @fixme for now, omitting the security features of the message*/
 				sendMlmeDown(startRequest);
+				/** @note this is the best time to prepare cskip for distributing addresses */
+				setCskip(calculateCskip());
 			} else if (confirm->getPibAttribute() == MAC_ASSOCIATION_PERMIT) {
 				/** @comment no actions needed, the upper layer has already been notified */
 			}
@@ -251,6 +255,20 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 	} else if (msg->getKind() == MLME_ASSOCIATE_INDICATION) {
 		MlmeAssociate_indication* indication = check_and_cast<
 				MlmeAssociate_indication *> (msg);
+		MlmeAssociate_response* response = new MlmeAssociate_response(
+				"MLME-ASSOCIATE.response", MLME_ASSOCIATE_RESPONSE);
+		response->setDeviceAddress(indication->getDeviceAddress());
+		/** @COMMENT let's determine whether there's a space for the device association
+		 * if the device wants to join as router, check whether we can associate more routers */
+		if ((getNwkPib()->getNwkMaxChildren() == getAssociatedRouters()
+				+ getAssociatedEndDevices()) || (indication->getDeviceType()
+				== ROUTER && getNwkPib()->getNwkMaxRouters()
+				== getAssociatedRouters())) {
+			response->setStatus(PAN_AT_CAPACITY);
+			sendMlmeDown(response);
+			delete (msg);
+			return;
+		}
 		if (hasNeighborTableEntry(indication->getDeviceAddress())) {
 			NeighborTableEntry entry = getNeighborTableEntry(
 					indication->getDeviceAddress());
@@ -262,20 +280,29 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 			entry.extendedAddress = indication->getDeviceAddress();
 			entry.deviceType = indication->getDeviceType();
 			entry.rxOnWhenIdle = indication->getReceiverOnWhenIdle();
+			addNeighborTableEntry(entry);
 		}
 		NeighborTableEntry entry = getNeighborTableEntry(
 				indication->getDeviceAddress());
 		deleteNeighborTableEntry(indication->getDeviceAddress());
-		/** @TODO pick an address for the device and set relationship to CHILD
-		 * set the depth, set the beacon order */
 		if (indication->getAllocateAddress())
 			entry.networkAddress = assignNetworkAddress();
 		else
+			/** @note with this network address the device is forced to use the IEEE 64-bit address */
 			entry.networkAddress = 0xFFFE;
 		entry.beaconOrder = getMacPib()->getMacBeaconOrder();
 		entry.relationship = CHILD;
 		entry.depth = getDepth() + 1;
+		entry.potentialParent = false;
 		addNeighborTableEntry(entry);
+		response->setAssocShortAddress(entry.networkAddress);
+		response->setStatus(ASSOCIATION_SUCCESSFUL);
+		response->setSecurityLevel(0x00);
+		if (indication->getDeviceType() == ROUTER)
+			setAssociatedRouters(getAssociatedRouters() + 1);
+		else
+			setAssociatedEndDevices(getAssociatedEndDevices() + 1);
+		sendMlmeDown(response);
 	}
 	delete (msg);
 }
@@ -414,7 +441,45 @@ void Nlme::sendNwkPib(cMessage *msg) {
 }
 
 unsigned char Nlme::getChannelPageFromChannels(unsigned int channels) {
-	unsigned char page;
-	page = (unsigned char) (channels >> 26);
-	return page;
+	return (unsigned char) (channels >> 26);
+}
+
+unsigned short Nlme::assignNetworkAddress() {
+	return 0xFFFE;
+}
+
+unsigned short Nlme::calculateCskip() {
+
+	int rm = getNwkPib()->getNwkMaxRouters();
+	int cm = getNwkPib()->getNwkMaxChildren();
+	int lm = getNwkPib()->getNwkMaxDepth();
+	int d = getDepth();
+	int cskip;
+
+	if (lm == d)
+		return 0;
+
+	if (rm == 1) {
+		cskip = 1 + cm * (lm - d - 1);
+	} else {
+		cskip = (1 + cm - rm - (cm * ((int) power(rm, (lm - d - 1))))) / (1
+				- rm);
+	}
+	return cskip;
+}
+
+double Nlme::power(int a, int b) {
+	double result = 1.0;
+	if (b >= 0) {
+		for (int i = 0; i < b; i++) {
+			result *= a;
+		}
+	} else {
+		for (int i = 0; i > b; i--) {
+			result /= a;
+		}
+	}
+	std::cout << "power: " << result << endl;
+	std::cout << "retyped power: " << (unsigned int) result << endl;
+	return result;
 }

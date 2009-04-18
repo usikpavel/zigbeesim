@@ -372,14 +372,18 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 		}
 	} else if (msg->getKind() == MLME_START_REQUEST) {
 		MlmeStart_request* request = check_and_cast<MlmeStart_request *> (msg);
+		MlmeStart_confirm* response = new MlmeStart_confirm(
+							"MLME-START.confirm", MLME_START_CONFIRM);
+		if (getMacPib()->getMacShortAddress() == 0xFFFF) {
+			response->setStatus(MAC_NO_SHORT_ADDRESS);
+			sendMlmeUp(response);
+		}
 		if (!request->getCoordRealignment()) {
 			/** @note Logical Channel and Channel Page are set within the previous MLME-SET.request command */
 			getMacPib()->setMacPANId(request->getPanId());
 			getMacPib()->setMacBeaconOrder(request->getBeaconOrder());
 			getMacPib()->setMacSuperframeOrder(request->getSuperframeOrder());
 			getMacPib()->setMacBattLifeExt(request->getBatteryLifeExtension());
-			MlmeStart_confirm* response = new MlmeStart_confirm(
-					"MLME-START.confirm", MLME_START_CONFIRM);
 			int beaconDelaySymbols = getMacPib()->getBaseSuperFrameDuration();
 			beaconDelaySymbols = beaconDelaySymbols
 					<< getMacPib()->getMacBeaconOrder();
@@ -458,6 +462,7 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 			indication->setReceiverOnWhenIdle(capability->receiverOnWhenIdle);
 			indication->setSecurityCapability(capability->securityCapability);
 			indication->setAllocateAddress(capability->allocateAddress);
+			indication->setSecurityLevel(0x00);
 			sendMlmeUp(indication);
 			delete(command);
 		}
