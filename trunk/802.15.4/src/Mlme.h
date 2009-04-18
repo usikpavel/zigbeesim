@@ -194,14 +194,6 @@ protected:
 	double getBeaconPeriod() {
 		return this->beaconPeriod;
 	}
-
-	void setAssociatedRouters(unsigned int associatedRouters) {
-		this->associatedRouters = associatedRouters;
-	}
-
-	unsigned int getAssociatedRouters() {
-		return this->associatedRouters;
-	}
 };
 
 #endif
