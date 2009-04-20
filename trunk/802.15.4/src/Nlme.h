@@ -62,13 +62,13 @@ protected:
 
 	virtual void sendNwkPib(cMessage *);
 
-	unsigned char getChannelPageFromChannels(unsigned int channels);
+	unsigned char getChannelPageFromChannels(unsigned int);
 
-	unsigned short assignNetworkAddress();
+	unsigned short assignNetworkAddress(bool);
 
 	unsigned short calculateCskip();
 
-	double power(int a, int b);
+	double power(int, int);
 
 	virtual void comment(CommentsLevel level, std::string s) {
 		/** @todo align logName substrings for routers and endDevices */

@@ -173,8 +173,8 @@ $O/Mlme.o: Mlme.cc \
 	$(RTN_PROJ)/core/utils/MacControlInfo.h \
 	typedef.h \
 	$(RTN_PROJ)/contrib/utils/Bitrate.h \
-	$(RTN_PROJ)/core/utils/ActiveChannel.h \
 	$(RTN_PROJ)/core/utils/CoreDebug.h \
+	$(RTN_PROJ)/core/utils/ActiveChannel.h \
 	$(RTN_PROJ)/core/basicModules/BasicModule.h \
 	$(RTN_PROJ)/core/utils/SimpleAddress.h \
 	Mlme.h \

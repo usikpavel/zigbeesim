@@ -3,16 +3,17 @@
 
 /** @brief Sets the level of comments to the EV output */
 typedef enum {
-	COMMENT_NOTHING			= 0x00, // 0000 0000
-	COMMENT_INITIALIZATION	= 0x01, // 0000 0001
-	COMMENT_TIMER			= 0x02, // 0000 0010
-	COMMENT_MESSAGE			= 0x04, // 0000 0100
-	COMMENT_CHANNEL			= 0x08, // 0000 1000
-	COMMENT_STATUS			= 0x10, // 0001 0000
-	COMMENT_BEACON			= 0x20, // 0010 0000
-	COMMENT_PAN				= 0x40, // 0100 0000
-	COMMENT_ERROR			= 0x80, // 1000 0000
-	COMMENT_ALL 			= 0xFF  // 1111 1111
+	COMMENT_NOTHING			= 0x0000, // 0000 0000 0000 0000
+	COMMENT_INITIALIZATION	= 0x0001, // 0000 0000 0000 0001
+	COMMENT_TIMER			= 0x0002, // 0000 0000 0000 0010
+	COMMENT_MESSAGE			= 0x0004, // 0000 0000 0000 0100
+	COMMENT_CHANNEL			= 0x0008, // 0000 0000 0000 1000
+	COMMENT_STATUS			= 0x0010, // 0000 0000 0001 0000
+	COMMENT_BEACON			= 0x0020, // 0000 0000 0010 0000
+	COMMENT_PAN				= 0x0040, // 0000 0000 0100 0000
+	COMMENT_FRAME			= 0x0080, // 0000 0000 1000 0000
+	COMMENT_ERROR			= 0x8000, // 1000 0000 0000 0000
+	COMMENT_ALL 			= 0xFFFF  // 1111 1111 1111 1111
 } CommentsLevel;
 
 /** @brief Role of the node (according to ZigBee spec.) */
@@ -33,7 +34,10 @@ typedef enum {
 	TIMER_ORPHAN_SCAN,
 	TIMER_BEACON,
 	TIMER_JOINING_PERMITTED,
+	TIMER_DATA_REQUEST,
 	TIMER_ACK,
+	TIMER_CAP_SLOT,
+	TIMER_BACKOFF,
 	/** NLME-SAP messages */
 	NLME_NETWORK_DISCOVERY_REQUEST,
 	NLME_NETWORK_DISCOVERY_CONFIRM,
@@ -115,6 +119,7 @@ typedef enum {
 
 struct NwkCapabilityInformation {
 	bool alternatePanCoordinator;
+	/** @note 0=RFD, 1=FFD*/
 	bool deviceType;
 	bool powerSource;
 	bool receiverOnWhenIdle;
@@ -190,6 +195,12 @@ typedef enum {
 	ORPHAN_ONLY 	= 0x03
 } ScanTypes;
 
+struct GtsDescriptor {
+	unsigned short deviceShortAddress;
+	unsigned char gtsStartingSlot;
+	unsigned char gtsLength;
+};
+
 struct MacBeaconPayload {
 	unsigned short networkAddress;
 	unsigned char deviceType;
@@ -236,6 +247,12 @@ struct PanDescriptor {
 	unsigned char keySource[8];
 	unsigned char kedyIndex;
 };
+
+typedef enum {
+	CAP,
+	CFP,
+	INACTIVE
+} SuperframePeriod;
 
 typedef enum {
 	ASSOCIATION_SUCCESSFUL	= 0x00,

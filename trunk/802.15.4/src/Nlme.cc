@@ -286,7 +286,10 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 				indication->getDeviceAddress());
 		deleteNeighborTableEntry(indication->getDeviceAddress());
 		if (indication->getAllocateAddress())
-			entry.networkAddress = assignNetworkAddress();
+			/** @comment transformation between deviceType 0x00 (COORDINATOR) - 0x02 (END DEVICE)
+			 * into the deviceType bool true (FFD) and false (RFD) */
+			entry.networkAddress = assignNetworkAddress(
+					indication->getDeviceType() == ROUTER);
 		else
 			/** @note with this network address the device is forced to use the IEEE 64-bit address */
 			entry.networkAddress = 0xFFFE;
@@ -444,7 +447,15 @@ unsigned char Nlme::getChannelPageFromChannels(unsigned int channels) {
 	return (unsigned char) (channels >> 26);
 }
 
-unsigned short Nlme::assignNetworkAddress() {
+unsigned short Nlme::assignNetworkAddress(bool deviceType) {
+	int rm = getNwkPib()->getNwkMaxRouters();
+
+	/** deviceType true -> FFD, false -> RFD*/
+	if (deviceType) {
+		return getNetworkAddress() + getCskip()*getAssociatedRouters() + 1;
+	} else {
+		return getNetworkAddress() + getCskip()*rm + getAssociatedEndDevices() + 1;
+	}
 	return 0xFFFE;
 }
 
@@ -479,7 +490,5 @@ double Nlme::power(int a, int b) {
 			result /= a;
 		}
 	}
-	std::cout << "power: " << result << endl;
-	std::cout << "retyped power: " << (unsigned int) result << endl;
 	return result;
 }

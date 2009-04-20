@@ -10,6 +10,7 @@
 #include <sstream>
 #include "MacPib.h"
 #include "Mcps.h"
+#include "Pd.h"
 
 class Mlme: public BasicModule {
 public:
@@ -34,6 +35,8 @@ protected:
 	MacBeacon* lastBeacon;
 	cMessage* timer;
 	cMessage* beaconTimer;
+	cMessage* backoffTimer;
+	cMessage* capSlotTimer;
 	int currentChannel;
 	unsigned char currentPage;
 	int scannedChannels;
@@ -42,6 +45,13 @@ protected:
 	PanDescriptor* scannedPanDescriptors;
 	int scannedPanDescriptorsArraySize;
 	double beaconPeriod;
+	SimTime lastBeaconTimestamp;
+	int capSlotNumber;
+	int backoffExponent;
+	int numberOfBackoffs;
+	SimTime capSlotDuration;
+	SimTime backoffPeriod;
+	SuperframePeriod superframePeriod;
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
 	virtual void handleSelfMsg(cMessage *);
@@ -89,6 +99,10 @@ protected:
 	Mcps* getMcps() {
 		return ((Mcps *) (this->getParentModule()->getModuleByRelativePath(
 				"mcps")));
+	}
+	Pd* getPd() {
+		return ((Pd *) (this->getParentModule()->getParentModule()->getModuleByRelativePath(
+				"phy.pd")));
 	}
 	void setLastUpperMsg(cMessage* msg) {
 		setLayerStage(0);
@@ -193,6 +207,50 @@ protected:
 
 	double getBeaconPeriod() {
 		return this->beaconPeriod;
+	}
+
+	void setLastBeaconTimestamp(SimTime lastBeaconTimestamp) {
+		this->lastBeaconTimestamp = lastBeaconTimestamp;
+	}
+
+	SimTime getLastBeaconTimestamp() {
+		return this->lastBeaconTimestamp;
+	}
+	void setCapSlotNumber(int capSlotNumber) {
+		this->capSlotNumber = capSlotNumber;
+	}
+	int getCapSlotNumber() {
+		return this->capSlotNumber;
+	}
+	void setBackoffPeriod(SimTime backoffPeriod) {
+		this->backoffPeriod = backoffPeriod;
+	}
+	SimTime getBackoffPeriod() {
+		return this->backoffPeriod;
+	}
+	void setBackoffExponent(int backoffExponent) {
+		this->backoffExponent = backoffExponent;
+	}
+	int getBackoffExponent() {
+		return this->backoffExponent;
+	}
+	void setNumberOfBackoffs(int numberOfBackoffs) {
+		this->numberOfBackoffs = numberOfBackoffs;
+	}
+	int getNumberOfBacoffs() {
+		return this->numberOfBackoffs;
+	}
+	void setCapSlotDuration(SimTime capSlotDuration) {
+		this->capSlotDuration = capSlotDuration;
+	}
+	SimTime getCapSlotDuration() {
+		return this->capSlotDuration;
+	}
+	void setSuperframePeriod(SuperframePeriod superframePeriod) {
+		this->superframePeriod = superframePeriod;
+	}
+	SuperframePeriod getSuperframePeriod() {
+		return this->superframePeriod;
 	}
 };
 

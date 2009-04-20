@@ -7849,12 +7849,8 @@ MacBeacon::MacBeacon(const char *name, int kind) : McpsMsg(name,kind)
     this->gtsDescriptorCount_var = 0;
     this->gtsPermit_var = 0;
     this->directionMask_var = 0;
-    deviceShortAddress_arraysize = 0;
-    this->deviceShortAddress_var = 0;
-    gtsStartingSlot_arraysize = 0;
-    this->gtsStartingSlot_var = 0;
-    gtsLength_arraysize = 0;
-    this->gtsLength_var = 0;
+    gtsList_arraysize = 0;
+    this->gtsList_var = 0;
     this->numberOfShortAddressesPending_var = 0;
     this->numberOfExtendedAddressesPending_var = 0;
     addressList_arraysize = 0;
@@ -7866,12 +7862,8 @@ MacBeacon::MacBeacon(const char *name, int kind) : McpsMsg(name,kind)
 MacBeacon::MacBeacon(const MacBeacon& other) : McpsMsg()
 {
     setName(other.getName());
-    deviceShortAddress_arraysize = 0;
-    this->deviceShortAddress_var = 0;
-    gtsStartingSlot_arraysize = 0;
-    this->gtsStartingSlot_var = 0;
-    gtsLength_arraysize = 0;
-    this->gtsLength_var = 0;
+    gtsList_arraysize = 0;
+    this->gtsList_var = 0;
     addressList_arraysize = 0;
     this->addressList_var = 0;
     macBeaconPayload_arraysize = 0;
@@ -7881,9 +7873,7 @@ MacBeacon::MacBeacon(const MacBeacon& other) : McpsMsg()
 
 MacBeacon::~MacBeacon()
 {
-    delete [] deviceShortAddress_var;
-    delete [] gtsStartingSlot_var;
-    delete [] gtsLength_var;
+    delete [] gtsList_var;
     delete [] addressList_var;
     delete [] macBeaconPayload_var;
 }
@@ -7901,21 +7891,11 @@ MacBeacon& MacBeacon::operator=(const MacBeacon& other)
     this->gtsDescriptorCount_var = other.gtsDescriptorCount_var;
     this->gtsPermit_var = other.gtsPermit_var;
     this->directionMask_var = other.directionMask_var;
-    delete [] this->deviceShortAddress_var;
-    this->deviceShortAddress_var = (other.deviceShortAddress_arraysize==0) ? NULL : new unsigned short[other.deviceShortAddress_arraysize];
-    deviceShortAddress_arraysize = other.deviceShortAddress_arraysize;
-    for (unsigned int i=0; i<deviceShortAddress_arraysize; i++)
-        this->deviceShortAddress_var[i] = other.deviceShortAddress_var[i];
-    delete [] this->gtsStartingSlot_var;
-    this->gtsStartingSlot_var = (other.gtsStartingSlot_arraysize==0) ? NULL : new unsigned char[other.gtsStartingSlot_arraysize];
-    gtsStartingSlot_arraysize = other.gtsStartingSlot_arraysize;
-    for (unsigned int i=0; i<gtsStartingSlot_arraysize; i++)
-        this->gtsStartingSlot_var[i] = other.gtsStartingSlot_var[i];
-    delete [] this->gtsLength_var;
-    this->gtsLength_var = (other.gtsLength_arraysize==0) ? NULL : new unsigned char[other.gtsLength_arraysize];
-    gtsLength_arraysize = other.gtsLength_arraysize;
-    for (unsigned int i=0; i<gtsLength_arraysize; i++)
-        this->gtsLength_var[i] = other.gtsLength_var[i];
+    delete [] this->gtsList_var;
+    this->gtsList_var = (other.gtsList_arraysize==0) ? NULL : new GtsDescriptor[other.gtsList_arraysize];
+    gtsList_arraysize = other.gtsList_arraysize;
+    for (unsigned int i=0; i<gtsList_arraysize; i++)
+        this->gtsList_var[i] = other.gtsList_var[i];
     this->numberOfShortAddressesPending_var = other.numberOfShortAddressesPending_var;
     this->numberOfExtendedAddressesPending_var = other.numberOfExtendedAddressesPending_var;
     delete [] this->addressList_var;
@@ -7943,12 +7923,8 @@ void MacBeacon::parsimPack(cCommBuffer *b)
     doPacking(b,this->gtsDescriptorCount_var);
     doPacking(b,this->gtsPermit_var);
     doPacking(b,this->directionMask_var);
-    b->pack(deviceShortAddress_arraysize);
-    doPacking(b,this->deviceShortAddress_var,deviceShortAddress_arraysize);
-    b->pack(gtsStartingSlot_arraysize);
-    doPacking(b,this->gtsStartingSlot_var,gtsStartingSlot_arraysize);
-    b->pack(gtsLength_arraysize);
-    doPacking(b,this->gtsLength_var,gtsLength_arraysize);
+    b->pack(gtsList_arraysize);
+    doPacking(b,this->gtsList_var,gtsList_arraysize);
     doPacking(b,this->numberOfShortAddressesPending_var);
     doPacking(b,this->numberOfExtendedAddressesPending_var);
     b->pack(addressList_arraysize);
@@ -7969,29 +7945,13 @@ void MacBeacon::parsimUnpack(cCommBuffer *b)
     doUnpacking(b,this->gtsDescriptorCount_var);
     doUnpacking(b,this->gtsPermit_var);
     doUnpacking(b,this->directionMask_var);
-    delete [] this->deviceShortAddress_var;
-    b->unpack(deviceShortAddress_arraysize);
-    if (deviceShortAddress_arraysize==0) {
-        this->deviceShortAddress_var = 0;
+    delete [] this->gtsList_var;
+    b->unpack(gtsList_arraysize);
+    if (gtsList_arraysize==0) {
+        this->gtsList_var = 0;
     } else {
-        this->deviceShortAddress_var = new unsigned short[deviceShortAddress_arraysize];
-        doUnpacking(b,this->deviceShortAddress_var,deviceShortAddress_arraysize);
-    }
-    delete [] this->gtsStartingSlot_var;
-    b->unpack(gtsStartingSlot_arraysize);
-    if (gtsStartingSlot_arraysize==0) {
-        this->gtsStartingSlot_var = 0;
-    } else {
-        this->gtsStartingSlot_var = new unsigned char[gtsStartingSlot_arraysize];
-        doUnpacking(b,this->gtsStartingSlot_var,gtsStartingSlot_arraysize);
-    }
-    delete [] this->gtsLength_var;
-    b->unpack(gtsLength_arraysize);
-    if (gtsLength_arraysize==0) {
-        this->gtsLength_var = 0;
-    } else {
-        this->gtsLength_var = new unsigned char[gtsLength_arraysize];
-        doUnpacking(b,this->gtsLength_var,gtsLength_arraysize);
+        this->gtsList_var = new GtsDescriptor[gtsList_arraysize];
+        doUnpacking(b,this->gtsList_var,gtsList_arraysize);
     }
     doUnpacking(b,this->numberOfShortAddressesPending_var);
     doUnpacking(b,this->numberOfExtendedAddressesPending_var);
@@ -8103,94 +8063,32 @@ void MacBeacon::setDirectionMask(unsigned char directionMask_var)
     this->directionMask_var = directionMask_var;
 }
 
-void MacBeacon::setDeviceShortAddressArraySize(unsigned int size)
+void MacBeacon::setGtsListArraySize(unsigned int size)
 {
-    unsigned short *deviceShortAddress_var2 = (size==0) ? NULL : new unsigned short[size];
-    unsigned int sz = deviceShortAddress_arraysize < size ? deviceShortAddress_arraysize : size;
+    GtsDescriptor *gtsList_var2 = (size==0) ? NULL : new GtsDescriptor[size];
+    unsigned int sz = gtsList_arraysize < size ? gtsList_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
-        deviceShortAddress_var2[i] = this->deviceShortAddress_var[i];
-    for (unsigned int i=sz; i<size; i++)
-        deviceShortAddress_var2[i] = 0;
-    deviceShortAddress_arraysize = size;
-    delete [] this->deviceShortAddress_var;
-    this->deviceShortAddress_var = deviceShortAddress_var2;
+        gtsList_var2[i] = this->gtsList_var[i];
+    gtsList_arraysize = size;
+    delete [] this->gtsList_var;
+    this->gtsList_var = gtsList_var2;
 }
 
-unsigned int MacBeacon::getDeviceShortAddressArraySize() const
+unsigned int MacBeacon::getGtsListArraySize() const
 {
-    return deviceShortAddress_arraysize;
+    return gtsList_arraysize;
 }
 
-unsigned short MacBeacon::getDeviceShortAddress(unsigned int k) const
+GtsDescriptor& MacBeacon::getGtsList(unsigned int k)
 {
-    if (k>=deviceShortAddress_arraysize) throw cRuntimeError("Array of size %d indexed by %d", deviceShortAddress_arraysize, k);
-    return deviceShortAddress_var[k];
+    if (k>=gtsList_arraysize) throw cRuntimeError("Array of size %d indexed by %d", gtsList_arraysize, k);
+    return gtsList_var[k];
 }
 
-void MacBeacon::setDeviceShortAddress(unsigned int k, unsigned short deviceShortAddress_var)
+void MacBeacon::setGtsList(unsigned int k, const GtsDescriptor& gtsList_var)
 {
-    if (k>=deviceShortAddress_arraysize) throw cRuntimeError("Array of size %d indexed by %d", deviceShortAddress_arraysize, k);
-    this->deviceShortAddress_var[k]=deviceShortAddress_var;
-}
-
-void MacBeacon::setGtsStartingSlotArraySize(unsigned int size)
-{
-    unsigned char *gtsStartingSlot_var2 = (size==0) ? NULL : new unsigned char[size];
-    unsigned int sz = gtsStartingSlot_arraysize < size ? gtsStartingSlot_arraysize : size;
-    for (unsigned int i=0; i<sz; i++)
-        gtsStartingSlot_var2[i] = this->gtsStartingSlot_var[i];
-    for (unsigned int i=sz; i<size; i++)
-        gtsStartingSlot_var2[i] = 0;
-    gtsStartingSlot_arraysize = size;
-    delete [] this->gtsStartingSlot_var;
-    this->gtsStartingSlot_var = gtsStartingSlot_var2;
-}
-
-unsigned int MacBeacon::getGtsStartingSlotArraySize() const
-{
-    return gtsStartingSlot_arraysize;
-}
-
-unsigned char MacBeacon::getGtsStartingSlot(unsigned int k) const
-{
-    if (k>=gtsStartingSlot_arraysize) throw cRuntimeError("Array of size %d indexed by %d", gtsStartingSlot_arraysize, k);
-    return gtsStartingSlot_var[k];
-}
-
-void MacBeacon::setGtsStartingSlot(unsigned int k, unsigned char gtsStartingSlot_var)
-{
-    if (k>=gtsStartingSlot_arraysize) throw cRuntimeError("Array of size %d indexed by %d", gtsStartingSlot_arraysize, k);
-    this->gtsStartingSlot_var[k]=gtsStartingSlot_var;
-}
-
-void MacBeacon::setGtsLengthArraySize(unsigned int size)
-{
-    unsigned char *gtsLength_var2 = (size==0) ? NULL : new unsigned char[size];
-    unsigned int sz = gtsLength_arraysize < size ? gtsLength_arraysize : size;
-    for (unsigned int i=0; i<sz; i++)
-        gtsLength_var2[i] = this->gtsLength_var[i];
-    for (unsigned int i=sz; i<size; i++)
-        gtsLength_var2[i] = 0;
-    gtsLength_arraysize = size;
-    delete [] this->gtsLength_var;
-    this->gtsLength_var = gtsLength_var2;
-}
-
-unsigned int MacBeacon::getGtsLengthArraySize() const
-{
-    return gtsLength_arraysize;
-}
-
-unsigned char MacBeacon::getGtsLength(unsigned int k) const
-{
-    if (k>=gtsLength_arraysize) throw cRuntimeError("Array of size %d indexed by %d", gtsLength_arraysize, k);
-    return gtsLength_var[k];
-}
-
-void MacBeacon::setGtsLength(unsigned int k, unsigned char gtsLength_var)
-{
-    if (k>=gtsLength_arraysize) throw cRuntimeError("Array of size %d indexed by %d", gtsLength_arraysize, k);
-    this->gtsLength_var[k]=gtsLength_var;
+    if (k>=gtsList_arraysize) throw cRuntimeError("Array of size %d indexed by %d", gtsList_arraysize, k);
+    this->gtsList_var[k]=gtsList_var;
 }
 
 unsigned char MacBeacon::getNumberOfShortAddressesPending() const
@@ -8319,7 +8217,7 @@ const char *MacBeaconDescriptor::getProperty(const char *propertyname) const
 int MacBeaconDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 16+basedesc->getFieldCount(object) : 16;
+    return basedesc ? 14+basedesc->getFieldCount(object) : 14;
 }
 
 unsigned int MacBeaconDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -8340,13 +8238,11 @@ unsigned int MacBeaconDescriptor::getFieldTypeFlags(void *object, int field) con
         case 6: return FD_ISEDITABLE;
         case 7: return FD_ISEDITABLE;
         case 8: return FD_ISEDITABLE;
-        case 9: return FD_ISARRAY | FD_ISEDITABLE;
-        case 10: return FD_ISARRAY | FD_ISEDITABLE;
-        case 11: return FD_ISARRAY | FD_ISEDITABLE;
-        case 12: return FD_ISEDITABLE;
-        case 13: return FD_ISEDITABLE;
-        case 14: return FD_ISARRAY | FD_ISEDITABLE;
-        case 15: return FD_ISARRAY | FD_ISEDITABLE;
+        case 9: return FD_ISARRAY | FD_ISCOMPOUND;
+        case 10: return FD_ISEDITABLE;
+        case 11: return FD_ISEDITABLE;
+        case 12: return FD_ISARRAY | FD_ISEDITABLE;
+        case 13: return FD_ISARRAY | FD_ISEDITABLE;
         default: return 0;
     }
 }
@@ -8369,13 +8265,11 @@ const char *MacBeaconDescriptor::getFieldName(void *object, int field) const
         case 6: return "gtsDescriptorCount";
         case 7: return "gtsPermit";
         case 8: return "directionMask";
-        case 9: return "deviceShortAddress";
-        case 10: return "gtsStartingSlot";
-        case 11: return "gtsLength";
-        case 12: return "numberOfShortAddressesPending";
-        case 13: return "numberOfExtendedAddressesPending";
-        case 14: return "addressList";
-        case 15: return "macBeaconPayload";
+        case 9: return "gtsList";
+        case 10: return "numberOfShortAddressesPending";
+        case 11: return "numberOfExtendedAddressesPending";
+        case 12: return "addressList";
+        case 13: return "macBeaconPayload";
         default: return NULL;
     }
 }
@@ -8398,13 +8292,11 @@ const char *MacBeaconDescriptor::getFieldTypeString(void *object, int field) con
         case 6: return "unsigned char";
         case 7: return "bool";
         case 8: return "unsigned char";
-        case 9: return "unsigned short";
+        case 9: return "GtsDescriptor";
         case 10: return "unsigned char";
         case 11: return "unsigned char";
-        case 12: return "unsigned char";
-        case 13: return "unsigned char";
-        case 14: return "unsigned long";
-        case 15: return "unsigned int";
+        case 12: return "unsigned long";
+        case 13: return "unsigned int";
         default: return NULL;
     }
 }
@@ -8432,11 +8324,9 @@ int MacBeaconDescriptor::getArraySize(void *object, int field) const
     }
     MacBeacon *pp = (MacBeacon *)object; (void)pp;
     switch (field) {
-        case 9: return pp->getDeviceShortAddressArraySize();
-        case 10: return pp->getGtsStartingSlotArraySize();
-        case 11: return pp->getGtsLengthArraySize();
-        case 14: return pp->getAddressListArraySize();
-        case 15: return pp->getMacBeaconPayloadArraySize();
+        case 9: return pp->getGtsListArraySize();
+        case 12: return pp->getAddressListArraySize();
+        case 13: return pp->getMacBeaconPayloadArraySize();
         default: return 0;
     }
 }
@@ -8460,13 +8350,11 @@ bool MacBeaconDescriptor::getFieldAsString(void *object, int field, int i, char 
         case 6: ulong2string(pp->getGtsDescriptorCount(),resultbuf,bufsize); return true;
         case 7: bool2string(pp->getGtsPermit(),resultbuf,bufsize); return true;
         case 8: ulong2string(pp->getDirectionMask(),resultbuf,bufsize); return true;
-        case 9: ulong2string(pp->getDeviceShortAddress(i),resultbuf,bufsize); return true;
-        case 10: ulong2string(pp->getGtsStartingSlot(i),resultbuf,bufsize); return true;
-        case 11: ulong2string(pp->getGtsLength(i),resultbuf,bufsize); return true;
-        case 12: ulong2string(pp->getNumberOfShortAddressesPending(),resultbuf,bufsize); return true;
-        case 13: ulong2string(pp->getNumberOfExtendedAddressesPending(),resultbuf,bufsize); return true;
-        case 14: ulong2string(pp->getAddressList(i),resultbuf,bufsize); return true;
-        case 15: ulong2string(pp->getMacBeaconPayload(i),resultbuf,bufsize); return true;
+        case 9: {std::stringstream out; out << pp->getGtsList(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
+        case 10: ulong2string(pp->getNumberOfShortAddressesPending(),resultbuf,bufsize); return true;
+        case 11: ulong2string(pp->getNumberOfExtendedAddressesPending(),resultbuf,bufsize); return true;
+        case 12: ulong2string(pp->getAddressList(i),resultbuf,bufsize); return true;
+        case 13: ulong2string(pp->getMacBeaconPayload(i),resultbuf,bufsize); return true;
         default: return false;
     }
 }
@@ -8490,13 +8378,10 @@ bool MacBeaconDescriptor::setFieldAsString(void *object, int field, int i, const
         case 6: pp->setGtsDescriptorCount(string2ulong(value)); return true;
         case 7: pp->setGtsPermit(string2bool(value)); return true;
         case 8: pp->setDirectionMask(string2ulong(value)); return true;
-        case 9: pp->setDeviceShortAddress(i,string2ulong(value)); return true;
-        case 10: pp->setGtsStartingSlot(i,string2ulong(value)); return true;
-        case 11: pp->setGtsLength(i,string2ulong(value)); return true;
-        case 12: pp->setNumberOfShortAddressesPending(string2ulong(value)); return true;
-        case 13: pp->setNumberOfExtendedAddressesPending(string2ulong(value)); return true;
-        case 14: pp->setAddressList(i,string2ulong(value)); return true;
-        case 15: pp->setMacBeaconPayload(i,string2ulong(value)); return true;
+        case 10: pp->setNumberOfShortAddressesPending(string2ulong(value)); return true;
+        case 11: pp->setNumberOfExtendedAddressesPending(string2ulong(value)); return true;
+        case 12: pp->setAddressList(i,string2ulong(value)); return true;
+        case 13: pp->setMacBeaconPayload(i,string2ulong(value)); return true;
         default: return false;
     }
 }
@@ -8510,6 +8395,7 @@ const char *MacBeaconDescriptor::getFieldStructName(void *object, int field) con
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
+        case 9: return "GtsDescriptor"; break;
         default: return NULL;
     }
 }
@@ -8524,6 +8410,7 @@ void *MacBeaconDescriptor::getFieldStructPointer(void *object, int field, int i)
     }
     MacBeacon *pp = (MacBeacon *)object; (void)pp;
     switch (field) {
+        case 9: return (void *)(&pp->getGtsList(i)); break;
         default: return NULL;
     }
 }
