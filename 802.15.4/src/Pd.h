@@ -37,9 +37,10 @@ public:
 	cMessage* lastUpperMsg;
 	cMessage* frameTimer;
 	SimTime lastMsgTimestamp;
+	SimTime backoffPeriod;
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
-	/** @todo remove this temporary cc */
+	/** @TODO remove this temporary cc */
 	ChannelControl* cc;
 	void handleSelfMsg(cMessage *);
 	void handlePdMsg(cMessage *);
@@ -107,8 +108,7 @@ public:
 	int myMacAddr;
 	unsigned int queueLength;
 	void prepareSend();
-	void receiveBBItem(int category, const BBItem *details,
-			int scopeModuleId);
+	void receiveBBItem(int category, const BBItem *details, int scopeModuleId);
 	/** -temp */
 };
 

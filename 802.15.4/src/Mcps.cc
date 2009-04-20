@@ -68,8 +68,21 @@ void Mcps::handlePdMsg(cMessage *msg) {
 		delete (msg);
 	} else if (msg->getKind() == PD_DATA_INDICATION) {
 		PdMsg* pdMsg = check_and_cast<PdMsg *> (msg);
-		setLastLowerMsg(pdMsg->dup());
+		/** @comment is the message really mentioned for us? */
+		if (((pdMsg->getDestinationAddressingMode() == LONG_ADDRESS
+				&& pdMsg->getDestinationAddress()
+						!= getMacPib()->getExtendedAddress())
+				|| (pdMsg->getDestinationAddressingMode() == SHORT_ADDRESS
+						&& pdMsg->getDestinationAddress()
+								!= getMacPib()->getMacShortAddress()
+						&& pdMsg->getDestinationAddress() != 0xFFFF))
+				&& pdMsg->getDestinationPanIdentifier() != 0xFFFF) {
+			comment(COMMENT_FRAME, "Frame not for us, discarding");
+			delete(pdMsg);
+			return;
+		}
 
+		setLastLowerMsg(pdMsg->dup());
 		/** @note be careful
 		 * maybe the code needs to be duplicated for the selfMsg part as well */
 		if (pdMsg->getAckRequest()) {
@@ -210,7 +223,6 @@ PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 		request->setSequenceNumber(getMacPib()->getMacBSN());
 		getMacPib()->setMacBSN((getMacPib()->getMacBSN()) + 1);
 		request->setDestinationPanIdentifier(0xFFFF);
-		request->setDestinationAddress((unsigned long) 0xFFFF);
 		request->setSourcePanIdentifier(
 				getMacPib()->getPibAttribute(MAC_PAN_ID)[0]);
 		request->setSourceAddress(
@@ -221,7 +233,7 @@ PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 		request->encapsulate(beacon);
 		return request;
 	} else if (msg->getKind() == MAC_ACK_FRAME) {
-		MacAck* macAck = check_and_cast<MacAck *>(msg);
+		MacAck* macAck = check_and_cast<MacAck *> (msg);
 		PdData_request *request = new PdData_request("Acknowledgement",
 				PD_DATA_REQUEST);
 		/** @note the 0x00 fields are ignored on the reception */

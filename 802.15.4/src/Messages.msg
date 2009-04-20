@@ -21,6 +21,7 @@ enum MacEnum;
 enum PhyEnum;
 enum FrameType;
 struct NetworkDescriptor;
+struct GtsDescriptor;
 struct PanDescriptor;
 
 // Application<-->Network layer interface messages
@@ -229,9 +230,7 @@ message MacBeacon extends McpsMsg {
   	unsigned char gtsDescriptorCount;
   	bool gtsPermit;
   	unsigned char directionMask;
-  	unsigned short deviceShortAddress[];
-  	unsigned char gtsStartingSlot[];
-  	unsigned char gtsLength[];
+  	GtsDescriptor gtsList[];
   	unsigned char numberOfShortAddressesPending;
   	unsigned char numberOfExtendedAddressesPending;
   	unsigned long addressList[];

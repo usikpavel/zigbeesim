@@ -24,10 +24,14 @@ void Mlme::initialize(int stage) {
 		lastBeacon = new MacBeacon();
 		timer = new cMessage("timer");
 		beaconTimer = new cMessage("Beacon timer", TIMER_BEACON);
+		backoffTimer = new cMessage("Backoff timer", TIMER_BACKOFF);
+		capSlotTimer = new cMessage("CAP slot timer", TIMER_CAP_SLOT);
+		setBackoffPeriod((SimTime) 0.0);
+		setBackoffExponent(getMacPib()->getMacMinBE());
+		setNumberOfBackoffs(0);
 		setScannedChannels(0);
 		energyLevels = new char[32];
 		scannedPanDescriptors = new PanDescriptor[0];
-
 	}
 }
 
@@ -92,6 +96,18 @@ void Mlme::handleSelfMsg(cMessage *msg) {
 		beacon->setByteLength(5 + sizeof(MacBeaconPayload));
 		sendMcps(beacon);
 		scheduleAt(simTime() + getBeaconPeriod(), beaconTimer);
+	} else if (msg->getKind() == TIMER_DATA_REQUEST) {
+		/** @comment no action needed. this timer was just blocking the data request
+		 * to be sent to router because the there was a doubt whether the data is ready already */
+	} else if (msg->getKind() == TIMER_CAP_SLOT) {
+		if (getCapSlotNumber() < 16) {
+			setCapSlotNumber(getCapSlotNumber() + 1);
+			if (getCapSlotNumber() == getLastBeacon()->getFinalCapSlot())
+				setSuperframePeriod(CFP);
+			scheduleAt(simTime() + getCapSlotDuration(), capSlotTimer);
+		} else {
+			setSuperframePeriod(INACTIVE);
+		}
 	}
 }
 
@@ -373,7 +389,7 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 	} else if (msg->getKind() == MLME_START_REQUEST) {
 		MlmeStart_request* request = check_and_cast<MlmeStart_request *> (msg);
 		MlmeStart_confirm* response = new MlmeStart_confirm(
-							"MLME-START.confirm", MLME_START_CONFIRM);
+				"MLME-START.confirm", MLME_START_CONFIRM);
 		if (getMacPib()->getMacShortAddress() == 0xFFFF) {
 			response->setStatus(MAC_NO_SHORT_ADDRESS);
 			sendMlmeUp(response);
@@ -422,6 +438,10 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 		setRequest->setPibAttributeValueArraySize(1);
 		setRequest->setPibAttributeValue(0, associate->getLogicalChannel());
 		sendPlmeDown(setRequest);
+	} else if (msg->getKind() == MLME_ASSOCIATE_RESPONSE) {
+		MlmeAssociate_response* response = check_and_cast<
+				MlmeAssociate_response *> (msg);
+
 	}
 }
 
@@ -445,8 +465,9 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 				delete (command);
 				return;
 			}
-			MlmeAssociate_indication* indication = new MlmeAssociate_indication(
-					"MLME-ASSOCIATE.indication", MLME_ASSOCIATE_INDICATION);
+			MlmeAssociate_indication* indication =
+					new MlmeAssociate_indication("MLME-ASSOCIATE.indication",
+							MLME_ASSOCIATE_INDICATION);
 			unsigned char* payload;
 			NwkCapabilityInformation* capability;
 			payload = new unsigned char[sizeof(NwkCapabilityInformation)];
@@ -456,7 +477,8 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 			capability = (NwkCapabilityInformation*) payload;
 			indication->setDeviceAddress(
 					getMcps()->getLastLowerMsg()->getSourceAddress());
-			indication->setAlternatePanCoordinator(capability->alternatePanCoordinator);
+			indication->setAlternatePanCoordinator(
+					capability->alternatePanCoordinator);
 			indication->setDeviceType(capability->deviceType);
 			indication->setPowerSource(capability->powerSource);
 			indication->setReceiverOnWhenIdle(capability->receiverOnWhenIdle);
@@ -464,7 +486,7 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 			indication->setAllocateAddress(capability->allocateAddress);
 			indication->setSecurityLevel(0x00);
 			sendMlmeUp(indication);
-			delete(command);
+			delete (command);
 		}
 	} else if (msg->getKind() == MAC_BEACON_FRAME) {
 		std::string msgName = msg->getName();
@@ -479,18 +501,30 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 		} else if (msgName == "Beacon Command") {
 			MacBeacon* macBeacon = check_and_cast<MacBeacon *> (msg);
 			setLastBeacon(macBeacon->dup());
-			/** @todo let's get rid of this one */
 			PdMsg* pdBeacon = getMcps()->getLastLowerMsg()->dup();
+			if ((pdBeacon->getSourceAddressingMode() == LONG_ADDRESS
+					&& pdBeacon->getSourceAddress()
+							== getMacPib()->getMacCoordExtendedAddress())
+					|| (pdBeacon->getSourceAddressingMode() == SHORT_ADDRESS
+							&& pdBeacon->getSourceAddress()
+									== getMacPib()->getMacCoordShortAddress())) {
+				/** @comment now we found the beacon from the coordinator we'd like to work with */
+				/** @comment capSlotDuration = aBaseSlotDuration * 2^superframeOrder */
+				setCapSlotDuration((SimTime) symbolsToSeconds(
+						getMacPib()->getBaseSlotDuration() * (1
+								<< macBeacon->getSuperframeOrder()),
+						getCurrentChannel(), getCurrentPage()));
+				setCapSlotNumber(1);
+				setSuperframePeriod(CAP);
+				scheduleAt(simTime() + getCapSlotDuration(), capSlotTimer);
+
+			}
 			PanDescriptor panDescriptor;
 			/** @todo make an option to use also long addresses */
 			panDescriptor.coordAddrMode = SHORT_ADDRESS;
 			panDescriptor.coordPanId = pdBeacon->getSourcePanIdentifier();
-			if (macBeacon->getPanCoordinator()) {
-				panDescriptor.coordAddress = pdBeacon->getSourceAddress();
-			} else {
-				/** @fixme how to find the coordinator address from the beacon msg?? */
-				panDescriptor.coordAddress = (unsigned long) 0x00;
-			}
+			/** @note here i guess, we're talking about the related ffd address, not the PAN coord address*/
+			panDescriptor.coordAddress = pdBeacon->getSourceAddress();
 			panDescriptor.logicalChannel = getCurrentChannel();
 			panDescriptor.channelPage = getCurrentPage();
 			panDescriptor.beaconOrder = macBeacon->getBeaconOrder();

@@ -1269,9 +1269,7 @@ inline void doUnpacking(cCommBuffer *b, McpsMsg& obj) {obj.parsimUnpack(b);}
  *   	unsigned char gtsDescriptorCount;
  *   	bool gtsPermit;
  *   	unsigned char directionMask;
- *   	unsigned short deviceShortAddress[];
- *   	unsigned char gtsStartingSlot[];
- *   	unsigned char gtsLength[];
+ *   	GtsDescriptor gtsList[];
  *   	unsigned char numberOfShortAddressesPending;
  *   	unsigned char numberOfExtendedAddressesPending;
  *   	unsigned long addressList[];
@@ -1291,12 +1289,8 @@ class MacBeacon : public McpsMsg
     unsigned char gtsDescriptorCount_var;
     bool gtsPermit_var;
     unsigned char directionMask_var;
-    unsigned short *deviceShortAddress_var; // array ptr
-    unsigned int deviceShortAddress_arraysize;
-    unsigned char *gtsStartingSlot_var; // array ptr
-    unsigned int gtsStartingSlot_arraysize;
-    unsigned char *gtsLength_var; // array ptr
-    unsigned int gtsLength_arraysize;
+    GtsDescriptor *gtsList_var; // array ptr
+    unsigned int gtsList_arraysize;
     unsigned char numberOfShortAddressesPending_var;
     unsigned char numberOfExtendedAddressesPending_var;
     unsigned long *addressList_var; // array ptr
@@ -1335,18 +1329,11 @@ class MacBeacon : public McpsMsg
     virtual void setGtsPermit(bool gtsPermit_var);
     virtual unsigned char getDirectionMask() const;
     virtual void setDirectionMask(unsigned char directionMask_var);
-    virtual void setDeviceShortAddressArraySize(unsigned int size);
-    virtual unsigned int getDeviceShortAddressArraySize() const;
-    virtual unsigned short getDeviceShortAddress(unsigned int k) const;
-    virtual void setDeviceShortAddress(unsigned int k, unsigned short deviceShortAddress_var);
-    virtual void setGtsStartingSlotArraySize(unsigned int size);
-    virtual unsigned int getGtsStartingSlotArraySize() const;
-    virtual unsigned char getGtsStartingSlot(unsigned int k) const;
-    virtual void setGtsStartingSlot(unsigned int k, unsigned char gtsStartingSlot_var);
-    virtual void setGtsLengthArraySize(unsigned int size);
-    virtual unsigned int getGtsLengthArraySize() const;
-    virtual unsigned char getGtsLength(unsigned int k) const;
-    virtual void setGtsLength(unsigned int k, unsigned char gtsLength_var);
+    virtual void setGtsListArraySize(unsigned int size);
+    virtual unsigned int getGtsListArraySize() const;
+    virtual GtsDescriptor& getGtsList(unsigned int k);
+    virtual const GtsDescriptor& getGtsList(unsigned int k) const {return const_cast<MacBeacon*>(this)->getGtsList(k);}
+    virtual void setGtsList(unsigned int k, const GtsDescriptor& gtsList_var);
     virtual unsigned char getNumberOfShortAddressesPending() const;
     virtual void setNumberOfShortAddressesPending(unsigned char numberOfShortAddressesPending_var);
     virtual unsigned char getNumberOfExtendedAddressesPending() const;
