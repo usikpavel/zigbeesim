@@ -38,6 +38,7 @@ protected:
 	cMessage* backoffTimer;
 	cMessage* capSlotTimer;
 	cMessage* superframeTimer;
+	cMessage* dataRequestTimer;
 	int currentChannel;
 	unsigned char currentPage;
 	int scannedChannels;

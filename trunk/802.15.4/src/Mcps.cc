@@ -19,6 +19,8 @@ void Mcps::initialize(int stage) {
 		lastUpperMsg = new cMessage();
 		lastLowerMsg = new PdMsg();
 		nextEncapsulation = &encapsulation;
+		setFrameQueueLength(0);
+		setPriorityFrameQueueLength(0);
 	}
 }
 
@@ -101,7 +103,7 @@ void Mcps::handlePdMsg(cMessage *msg) {
 				macCommand->setKind(MAC_COMMAND_FRAME);
 				sendMlme(macCommand);
 			} else if (pdMsg->getFrameType() == ACK) {
-
+				sendMlme(decapsulatePd(pdMsg));
 			}
 		}
 	}
@@ -109,6 +111,7 @@ void Mcps::handlePdMsg(cMessage *msg) {
 
 void Mcps::handleMcpsMsg(cMessage *msg) {
 	setLastUpperMsg(msg->dup());
+	/** @TODO most probably put this message into the frame queue */
 	delete (msg);
 }
 
@@ -122,6 +125,9 @@ void Mcps::handleMlmeMsg(cMessage *msg) {
 			sendPdDown(encapsulateMcps(command));
 		} else if (command->getCommandType() == ASSOCIATE_REQUEST) {
 			sendPdDown(encapsulateMcps(command));
+		} else if (command->getCommandType() == DATA_REQUEST) {
+			setPriorityFrameQueueLength(getPriorityFrameQueueLength());
+			priorityFrameQueue.push_back(encapsulateMcps(command));
 		}
 	} else if (msg->getKind() == MAC_BEACON_FRAME) {
 		MacBeacon* beacon = check_and_cast<MacBeacon *> (msg);
@@ -147,7 +153,8 @@ void Mcps::sendMlme(cMessage *msg) {
 PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 	if (msg->getKind() == MAC_COMMAND_FRAME) {
 		MacCommand* command = check_and_cast<MacCommand *> (msg);
-		PdData_request *request = new PdData_request(PD_DATA_REQUEST);
+		PdData_request *request = new PdData_request();
+		request->setKind(PD_DATA_REQUEST);
 		/** @comment this should not be the same as ByteLength */
 		request->setPsduLength(msg->getByteLength());
 		request->setSecurityEnabled(false);
@@ -212,7 +219,6 @@ PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 			request->setAckRequest(true);
 			request->setFramePending(false);
 			request->setPanIdCompression(true);
-			request->setDestinationPanIdentifier(getMacPib()->getMacPANId());
 		}
 		request->setSequenceNumber(getMacPib()->getMacDSN());
 		getMacPib()->setMacDSN(getMacPib()->getMacDSN() + 1);

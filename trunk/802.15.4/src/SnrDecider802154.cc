@@ -27,7 +27,7 @@ Define_Module(SnrDecider802154);
 
 void SnrDecider802154::initialize(int stage)
 {
-    SnrDecider::initialize(stage);
+    BasicDecider::initialize(stage);
 
     if (stage == 0) {
         snrThresholdLevel = FWMath::dBm2mW(par("snrThresholdLevel"));
@@ -57,7 +57,7 @@ bool SnrDecider802154::snrOverThreshold(const SnrList& snrlist) const
 void SnrDecider802154::handleLowerMsg(AirFrame *af, const SnrList& receivedList)
 {
     if(snrOverThreshold(receivedList)) {
-        EV << "Message handed on to Mac\n";
+        EV << "Message handed on to Pd\n";
         sendUp(af->decapsulate());
     }
     delete af;

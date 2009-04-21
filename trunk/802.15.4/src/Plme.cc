@@ -83,8 +83,12 @@ void Plme::handlePlmeMsg(cMessage *msg) {
 			value[i] = request->getPibAttributeValue(i);
 		}
 		PlmeSet_confirm* response = new PlmeSet_confirm("PLME-SET.confirm", PLME_SET_CONFIRM);
+		std::cout << "setting something, channel at: " << (int) (getPhyPib()->getPhyCurrentChannel()) << endl;
+		std::cout << "page at: " << (int) (getPhyPib()->getPhyCurrentPage()) << endl;
 		PhyEnum status = getPhyPib()->setPibAttribute(
 				(PibIdentifier) request->getPibAttribute(), value);
+		std::cout << "setting done, channel at: " << (int) (getPhyPib()->getPhyCurrentChannel()) << endl;
+		std::cout << "page at: " << (int) (getPhyPib()->getPhyCurrentPage()) << endl;
 		response->setStatus(status);
 		response->setPibAttribute(request->getPibAttribute());
 		sendPlmeUp(response);

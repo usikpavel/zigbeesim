@@ -23,7 +23,7 @@
 #ifndef SNR_EVAL802154_H
 #define SNR_EVAL802154_H
 
-#include <SnrEval.h>
+#include <BasicSnrEval.h>
 #include "RadioState.h"
 #include "RSSI.h"
 #include "MediumIndication.h"
@@ -59,7 +59,7 @@
  * @ingroup snrEval
  **/
 
-class SnrEval802154 : public SnrEval {
+class SnrEval802154 : public BasicSnrEval {
 
 
 public:
@@ -70,6 +70,7 @@ public:
     virtual void receiveBBItem(int category, const BBItem *details, int scopeModuleId);
 
 protected:
+	virtual void handleMessage(cMessage*);
 
     /** @brief Buffer the frame and update noise levels and snr information...*/
     virtual void handleLowerMsgStart(AirFrame*);

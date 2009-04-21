@@ -21,7 +21,7 @@
 #ifndef SNR_DECIDER802154_H
 #define SNR_DECIDER802154_H
 
-#include <SnrDecider.h>
+#include <BasicDecider.h>
 
 /**
  * @brief a simple snr decider...
@@ -36,7 +36,7 @@
  *
  * @ingroup decider
  */
-class  SnrDecider802154 : public SnrDecider
+class  SnrDecider802154 : public BasicDecider
 {
   protected:
     /** @brief Level for decision [mW]
