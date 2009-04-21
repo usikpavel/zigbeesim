@@ -10531,6 +10531,434 @@ void *PlmeEd_confirmDescriptor::getFieldStructPointer(void *object, int field, i
     }
 }
 
+Register_Class(PlmeCca_request);
+
+PlmeCca_request::PlmeCca_request(const char *name, int kind) : PlmeMsg(name,kind)
+{
+}
+
+PlmeCca_request::PlmeCca_request(const PlmeCca_request& other) : PlmeMsg()
+{
+    setName(other.getName());
+    operator=(other);
+}
+
+PlmeCca_request::~PlmeCca_request()
+{
+}
+
+PlmeCca_request& PlmeCca_request::operator=(const PlmeCca_request& other)
+{
+    if (this==&other) return *this;
+    PlmeMsg::operator=(other);
+    return *this;
+}
+
+void PlmeCca_request::parsimPack(cCommBuffer *b)
+{
+    PlmeMsg::parsimPack(b);
+}
+
+void PlmeCca_request::parsimUnpack(cCommBuffer *b)
+{
+    PlmeMsg::parsimUnpack(b);
+}
+
+class PlmeCca_requestDescriptor : public cClassDescriptor
+{
+  public:
+    PlmeCca_requestDescriptor();
+    virtual ~PlmeCca_requestDescriptor();
+
+    virtual bool doesSupport(cObject *obj) const;
+    virtual const char *getProperty(const char *propertyname) const;
+    virtual int getFieldCount(void *object) const;
+    virtual const char *getFieldName(void *object, int field) const;
+    virtual unsigned int getFieldTypeFlags(void *object, int field) const;
+    virtual const char *getFieldTypeString(void *object, int field) const;
+    virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
+    virtual int getArraySize(void *object, int field) const;
+
+    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
+
+    virtual const char *getFieldStructName(void *object, int field) const;
+    virtual void *getFieldStructPointer(void *object, int field, int i) const;
+};
+
+Register_ClassDescriptor(PlmeCca_requestDescriptor);
+
+PlmeCca_requestDescriptor::PlmeCca_requestDescriptor() : cClassDescriptor("PlmeCca_request", "PlmeMsg")
+{
+}
+
+PlmeCca_requestDescriptor::~PlmeCca_requestDescriptor()
+{
+}
+
+bool PlmeCca_requestDescriptor::doesSupport(cObject *obj) const
+{
+    return dynamic_cast<PlmeCca_request *>(obj)!=NULL;
+}
+
+const char *PlmeCca_requestDescriptor::getProperty(const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->getProperty(propertyname) : NULL;
+}
+
+int PlmeCca_requestDescriptor::getFieldCount(void *object) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? 0+basedesc->getFieldCount(object) : 0;
+}
+
+unsigned int PlmeCca_requestDescriptor::getFieldTypeFlags(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeFlags(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return 0;
+    }
+}
+
+const char *PlmeCca_requestDescriptor::getFieldName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+const char *PlmeCca_requestDescriptor::getFieldTypeString(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeString(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+const char *PlmeCca_requestDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldProperty(object, field, propertyname);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+int PlmeCca_requestDescriptor::getArraySize(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getArraySize(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    PlmeCca_request *pp = (PlmeCca_request *)object; (void)pp;
+    switch (field) {
+        default: return 0;
+    }
+}
+
+bool PlmeCca_requestDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+        field -= basedesc->getFieldCount(object);
+    }
+    PlmeCca_request *pp = (PlmeCca_request *)object; (void)pp;
+    switch (field) {
+        default: return false;
+    }
+}
+
+bool PlmeCca_requestDescriptor::setFieldAsString(void *object, int field, int i, const char *value) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->setFieldAsString(object,field,i,value);
+        field -= basedesc->getFieldCount(object);
+    }
+    PlmeCca_request *pp = (PlmeCca_request *)object; (void)pp;
+    switch (field) {
+        default: return false;
+    }
+}
+
+const char *PlmeCca_requestDescriptor::getFieldStructName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+void *PlmeCca_requestDescriptor::getFieldStructPointer(void *object, int field, int i) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructPointer(object, field, i);
+        field -= basedesc->getFieldCount(object);
+    }
+    PlmeCca_request *pp = (PlmeCca_request *)object; (void)pp;
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+Register_Class(PlmeCca_confirm);
+
+PlmeCca_confirm::PlmeCca_confirm(const char *name, int kind) : PlmeMsg(name,kind)
+{
+    this->status_var = 0;
+}
+
+PlmeCca_confirm::PlmeCca_confirm(const PlmeCca_confirm& other) : PlmeMsg()
+{
+    setName(other.getName());
+    operator=(other);
+}
+
+PlmeCca_confirm::~PlmeCca_confirm()
+{
+}
+
+PlmeCca_confirm& PlmeCca_confirm::operator=(const PlmeCca_confirm& other)
+{
+    if (this==&other) return *this;
+    PlmeMsg::operator=(other);
+    this->status_var = other.status_var;
+    return *this;
+}
+
+void PlmeCca_confirm::parsimPack(cCommBuffer *b)
+{
+    PlmeMsg::parsimPack(b);
+    doPacking(b,this->status_var);
+}
+
+void PlmeCca_confirm::parsimUnpack(cCommBuffer *b)
+{
+    PlmeMsg::parsimUnpack(b);
+    doUnpacking(b,this->status_var);
+}
+
+unsigned char PlmeCca_confirm::getStatus() const
+{
+    return status_var;
+}
+
+void PlmeCca_confirm::setStatus(unsigned char status_var)
+{
+    this->status_var = status_var;
+}
+
+class PlmeCca_confirmDescriptor : public cClassDescriptor
+{
+  public:
+    PlmeCca_confirmDescriptor();
+    virtual ~PlmeCca_confirmDescriptor();
+
+    virtual bool doesSupport(cObject *obj) const;
+    virtual const char *getProperty(const char *propertyname) const;
+    virtual int getFieldCount(void *object) const;
+    virtual const char *getFieldName(void *object, int field) const;
+    virtual unsigned int getFieldTypeFlags(void *object, int field) const;
+    virtual const char *getFieldTypeString(void *object, int field) const;
+    virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
+    virtual int getArraySize(void *object, int field) const;
+
+    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
+
+    virtual const char *getFieldStructName(void *object, int field) const;
+    virtual void *getFieldStructPointer(void *object, int field, int i) const;
+};
+
+Register_ClassDescriptor(PlmeCca_confirmDescriptor);
+
+PlmeCca_confirmDescriptor::PlmeCca_confirmDescriptor() : cClassDescriptor("PlmeCca_confirm", "PlmeMsg")
+{
+}
+
+PlmeCca_confirmDescriptor::~PlmeCca_confirmDescriptor()
+{
+}
+
+bool PlmeCca_confirmDescriptor::doesSupport(cObject *obj) const
+{
+    return dynamic_cast<PlmeCca_confirm *>(obj)!=NULL;
+}
+
+const char *PlmeCca_confirmDescriptor::getProperty(const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->getProperty(propertyname) : NULL;
+}
+
+int PlmeCca_confirmDescriptor::getFieldCount(void *object) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? 1+basedesc->getFieldCount(object) : 1;
+}
+
+unsigned int PlmeCca_confirmDescriptor::getFieldTypeFlags(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeFlags(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return FD_ISEDITABLE;
+        default: return 0;
+    }
+}
+
+const char *PlmeCca_confirmDescriptor::getFieldName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "status";
+        default: return NULL;
+    }
+}
+
+const char *PlmeCca_confirmDescriptor::getFieldTypeString(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldTypeString(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0: return "unsigned char";
+        default: return NULL;
+    }
+}
+
+const char *PlmeCca_confirmDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldProperty(object, field, propertyname);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        case 0:
+            if (!strcmp(propertyname,"enum")) return "PhyEnum";
+            return NULL;
+        default: return NULL;
+    }
+}
+
+int PlmeCca_confirmDescriptor::getArraySize(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getArraySize(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    PlmeCca_confirm *pp = (PlmeCca_confirm *)object; (void)pp;
+    switch (field) {
+        default: return 0;
+    }
+}
+
+bool PlmeCca_confirmDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+        field -= basedesc->getFieldCount(object);
+    }
+    PlmeCca_confirm *pp = (PlmeCca_confirm *)object; (void)pp;
+    switch (field) {
+        case 0: ulong2string(pp->getStatus(),resultbuf,bufsize); return true;
+        default: return false;
+    }
+}
+
+bool PlmeCca_confirmDescriptor::setFieldAsString(void *object, int field, int i, const char *value) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->setFieldAsString(object,field,i,value);
+        field -= basedesc->getFieldCount(object);
+    }
+    PlmeCca_confirm *pp = (PlmeCca_confirm *)object; (void)pp;
+    switch (field) {
+        case 0: pp->setStatus(string2ulong(value)); return true;
+        default: return false;
+    }
+}
+
+const char *PlmeCca_confirmDescriptor::getFieldStructName(void *object, int field) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructName(object, field);
+        field -= basedesc->getFieldCount(object);
+    }
+    switch (field) {
+        default: return NULL;
+    }
+}
+
+void *PlmeCca_confirmDescriptor::getFieldStructPointer(void *object, int field, int i) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    if (basedesc) {
+        if (field < basedesc->getFieldCount(object))
+            return basedesc->getFieldStructPointer(object, field, i);
+        field -= basedesc->getFieldCount(object);
+    }
+    PlmeCca_confirm *pp = (PlmeCca_confirm *)object; (void)pp;
+    switch (field) {
+        default: return NULL;
+    }
+}
+
 Register_Class(PdMsg);
 
 PdMsg::PdMsg(const char *name, int kind) : cPacket(name,kind)

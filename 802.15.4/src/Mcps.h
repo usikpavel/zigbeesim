@@ -34,6 +34,10 @@ protected:
 	McpsEncapsulation* nextEncapsulation;
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
+	int frameQueueLength;
+	std::list<PdMsg *> frameQueue;
+	int priorityFrameQueueLength;
+	std::list<PdMsg *> priorityFrameQueue;
 	virtual ~Mcps();
 	void handleSelfMsg(cMessage *);
 	void handlePdMsg(cMessage *);
@@ -118,6 +122,18 @@ public:
 	}
 	McpsEncapsulation* getNextEncapsulation() {
 		return nextEncapsulation;
+	}
+	void setFrameQueueLength(int frameQueueLength) {
+		this->frameQueueLength = frameQueueLength;
+	}
+	int getFrameQueueLength() {
+		return this->frameQueueLength;
+	}
+	void setPriorityFrameQueueLength(int priorityFrameQueueLength) {
+		this->priorityFrameQueueLength = priorityFrameQueueLength;
+	}
+	int getPriorityFrameQueueLength() {
+		return this->priorityFrameQueueLength;
 	}
 };
 

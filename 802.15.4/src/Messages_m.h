@@ -1665,6 +1665,68 @@ inline void doUnpacking(cCommBuffer *b, PlmeEd_confirm& obj) {obj.parsimUnpack(b
 /**
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
+ * message PlmeCca_request extends PlmeMsg {
+ * };
+ * </pre>
+ */
+class PlmeCca_request : public PlmeMsg
+{
+  protected:
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const PlmeCca_request&);
+
+  public:
+    PlmeCca_request(const char *name=NULL, int kind=0);
+    PlmeCca_request(const PlmeCca_request& other);
+    virtual ~PlmeCca_request();
+    PlmeCca_request& operator=(const PlmeCca_request& other);
+    virtual PlmeCca_request *dup() const {return new PlmeCca_request(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+};
+
+inline void doPacking(cCommBuffer *b, PlmeCca_request& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, PlmeCca_request& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
+ * message PlmeCca_confirm extends PlmeMsg {
+ *     unsigned char status enum(PhyEnum);
+ * };
+ * </pre>
+ */
+class PlmeCca_confirm : public PlmeMsg
+{
+  protected:
+    unsigned char status_var;
+
+    // protected and unimplemented operator==(), to prevent accidental usage
+    bool operator==(const PlmeCca_confirm&);
+
+  public:
+    PlmeCca_confirm(const char *name=NULL, int kind=0);
+    PlmeCca_confirm(const PlmeCca_confirm& other);
+    virtual ~PlmeCca_confirm();
+    PlmeCca_confirm& operator=(const PlmeCca_confirm& other);
+    virtual PlmeCca_confirm *dup() const {return new PlmeCca_confirm(*this);}
+    virtual void parsimPack(cCommBuffer *b);
+    virtual void parsimUnpack(cCommBuffer *b);
+
+    // field getter/setter methods
+    virtual unsigned char getStatus() const;
+    virtual void setStatus(unsigned char status_var);
+};
+
+inline void doPacking(cCommBuffer *b, PlmeCca_confirm& obj) {obj.parsimPack(b);}
+inline void doUnpacking(cCommBuffer *b, PlmeCca_confirm& obj) {obj.parsimUnpack(b);}
+
+/**
+ * Class generated from <tt>Messages.msg</tt> by opp_msgc.
+ * <pre>
  * message PdMsg extends cPacket {
  *     
  *     

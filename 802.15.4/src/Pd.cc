@@ -25,7 +25,7 @@ void Pd::initialize(int stage) {
 		phyState = RX;
 	} else if (stage == 1) {
 		lastUpperMsg = new cMessage();
-		frameTimer = new cMessage();
+		frameTimer = new cMessage("SFD processed, setting timestamp", TIMER_SFD_FRAME);
 	}
 }
 
@@ -49,9 +49,9 @@ void Pd::handleMessage(cMessage *msg) {
 void Pd::handleSelfMsg(cMessage *msg) {
 	std::string msgName = msg->getName();
 	if (msg->getKind() == TIMER_SFD_FRAME) {
+		std::cout << "sfd processed at: " << simTime() << endl;
 		setLastMsgTimestamp(simTime());
 	}
-	delete (msg);
 }
 
 void Pd::handlePdMsg(cMessage *msg) {
@@ -78,6 +78,7 @@ void Pd::handlePlmeMsg(cMessage *msg) {
 void Pd::handleRfControl(cMessage *msg) {
 	std::string msgName = msg->getName();
 	if (msgName == "TRANSMISSION_OVER") {
+		std::cout << "finished at: " << simTime() << endl;
 		if (radio->switchToRecv()) {
 			phyState = RX;
 		}
@@ -85,9 +86,10 @@ void Pd::handleRfControl(cMessage *msg) {
 				PD_DATA_CONFIRM);
 		confirm->setStatus(PHY_SUCCESS);
 		sendPdUp(confirm);
-	} else if (msgName == "RECEIVING_START") {
-		frameTimer->setKind(TIMER_SFD_FRAME);
-		frameTimer->setName("SFD processed, setting timestamp");
+	} else if (msgName == "RECEIVING_STARTED") {
+		std::cout << "started at: " << simTime() << endl;
+		std::cout << "preamble duration: " << calculatePreambleLengthInSeconds() << endl;
+		std::cout << "sfd duration: " << calculateSfdLengthInSeconds() << endl;
 		scheduleAt(simTime() + calculatePreambleLengthInSeconds()
 				+ calculateSfdLengthInSeconds(), frameTimer);
 	}
@@ -193,6 +195,8 @@ unsigned char Pd::calculatePreambleLengthInSymbols() {
 double Pd::calculatePreambleLengthInSeconds() {
 	unsigned char currentChannel = getPhyPib()->getPhyCurrentChannel();
 	unsigned char currentPage = getPhyPib()->getPhyCurrentPage();
+	std::cout << "page: " << (unsigned int) (getPhyPib()->getPhyCurrentPage()) << endl;
+	std::cout << "channel: " << (unsigned int) (getPhyPib()->getPhyCurrentChannel()) << endl;
 	switch (currentPage) {
 	case 0x00:
 		if (currentChannel == 0x00)

@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for dip_802.15.4
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep -I../../rtn/core/basicModules -I../../rtn/core/utils -I../../rtn/contrib/messages -I../../rtn/contrib/utils -I../../rtn/core/channelControl -I../../rtn/contrib/applLayer -I../../rtn/core/blackboard -I../../rtn/contrib/nic/macLayer -I../../rtn/contrib/nic/phyLayer -I../../rtn/contrib/netwLayer -I../../rtn/core/basicMessages -I../../rtn/contrib/nic/radios -L../../rtn/out/$(CONFIGNAME)/core -L../../rtn/out/$(CONFIGNAME)/contrib -lmfcore -lmfcontrib -KRTN_PROJ=../../rtn
+#  opp_makemake -f --deep -I../../rtn/contrib/nic/macLayer -I../../rtn/core/utils -I../../rtn/core/basicModules -I../../rtn/contrib/netwLayer -I../../rtn/contrib/messages -I../../rtn/contrib/utils -I../../rtn/core/channelControl -I../../rtn/core/basicMessages -I../../rtn/contrib/applLayer -I../../rtn/core/blackboard -I../../rtn/contrib/nic/radios -L../../rtn/out/$(CONFIGNAME)/core -L../../rtn/out/$(CONFIGNAME)/contrib -lmfcore -lmfcontrib -KRTN_PROJ=../../rtn
 #
 
 # Name of target to be created (-o option)
@@ -15,17 +15,16 @@ USERIF_LIBS = $(ALL_ENV_LIBS) # that is, $(TKENV_LIBS) $(CMDENV_LIBS)
 
 # C++ include paths (with -I)
 INCLUDE_PATH = \
-    -I../../rtn/core/basicModules \
+    -I../../rtn/contrib/nic/macLayer \
     -I../../rtn/core/utils \
+    -I../../rtn/core/basicModules \
+    -I../../rtn/contrib/netwLayer \
     -I../../rtn/contrib/messages \
     -I../../rtn/contrib/utils \
     -I../../rtn/core/channelControl \
+    -I../../rtn/core/basicMessages \
     -I../../rtn/contrib/applLayer \
     -I../../rtn/core/blackboard \
-    -I../../rtn/contrib/nic/macLayer \
-    -I../../rtn/contrib/nic/phyLayer \
-    -I../../rtn/contrib/netwLayer \
-    -I../../rtn/core/basicMessages \
     -I../../rtn/contrib/nic/radios \
     -I.
 
@@ -44,7 +43,6 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 # Object files for local .cc and .msg files
 OBJS = \
     $O/Llc8022.o \
-    $O/Mac802154.o \
     $O/Nlde.o \
     $O/RFDAppLayer.o \
     $O/RFDNetLayer.o \
@@ -205,7 +203,6 @@ $O/SnrEval802154.o: SnrEval802154.cc \
 	$(RTN_PROJ)/core/utils/ActiveChannel.h \
 	$(RTN_PROJ)/contrib/utils/Bitrate.h \
 	$(RTN_PROJ)/core/utils/NicControlType.h \
-	$(RTN_PROJ)/contrib/nic/phyLayer/SnrEval.h \
 	$(RTN_PROJ)/contrib/utils/RSSI.h \
 	$(RTN_PROJ)/core/basicModules/BasicModule.h \
 	SnrEval802154.h \
@@ -331,7 +328,6 @@ $O/NwkPib.o: NwkPib.cc \
 $O/SnrDecider802154.o: SnrDecider802154.cc \
 	$(RTN_PROJ)/core/basicMessages/AirFrame_m.h \
 	SnrDecider802154.h \
-	$(RTN_PROJ)/contrib/nic/phyLayer/SnrDecider.h \
 	$(RTN_PROJ)/core/utils/SnrList.h \
 	$(RTN_PROJ)/core/blackboard/Blackboard.h \
 	$(RTN_PROJ)/core/utils/Coord.h \

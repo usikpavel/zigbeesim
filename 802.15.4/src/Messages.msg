@@ -276,6 +276,13 @@ message PlmeEd_confirm extends PlmeMsg {
     unsigned char energyLevel;
 };
 
+message PlmeCca_request extends PlmeMsg {
+};
+
+message PlmeCca_confirm extends PlmeMsg {
+    unsigned char status enum(PhyEnum);
+};
+
 message PdMsg extends cPacket {
     // MHR fields
     // MHR fields - FrameControl

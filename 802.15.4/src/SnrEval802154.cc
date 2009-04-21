@@ -36,7 +36,7 @@ Define_Module(SnrEval802154);
  **/
 void SnrEval802154::initialize(int stage)
 {
-    SnrEval::initialize(stage);
+    BasicSnrEval::initialize(stage);
 
     if(stage==0){
 
@@ -112,6 +112,37 @@ void SnrEval802154::initialize(int stage)
  * frame is added to the accumulated noise.
  *
  **/
+void SnrEval802154::handleMessage(cMessage *msg)
+{
+    if (msg->getArrivalGateId() == uppergateIn){
+        assert(dynamic_cast<cPacket*>(msg));
+        AirFrame *frame = encapsMsg(static_cast<cPacket*>(msg));
+        handleUpperMsg(frame);
+    }
+    else if(msg == txOverTimer) {
+        // transmission over
+        sendControlUp(new cMessage("TRANSMISSION_OVER", NicControlType::TRANSMISSION_OVER));
+    }
+    else if (msg->isSelfMessage()) {
+        if(msg->getKind() == RECEPTION_COMPLETE) {
+            // frame is completely received now
+            // unbuffer the message
+            AirFrame *frame = unbufferMsg(msg);
+            handleLowerMsgEnd(frame);
+        }
+        else {
+            handleSelfMsg(msg);
+        }
+    }
+    else {
+        // msg must come from channel
+        AirFrame *frame = static_cast<AirFrame *>(msg);
+        handleLowerMsgStart(frame);
+        bufferMsg(frame);
+        sendControlUp(new cMessage("RECEIVING_STARTED", NicControlType::TRANSMISSION_OVER));
+    }
+}
+
 void SnrEval802154::handleLowerMsgStart(AirFrame *frame)
 {
     double rcvdPower = calcRcvdPower(frame);
