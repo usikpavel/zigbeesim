@@ -78,7 +78,7 @@ void Mcps::handlePdMsg(cMessage *msg) {
 						&& pdMsg->getDestinationAddress() != 0xFFFF))
 				&& pdMsg->getDestinationPanIdentifier() != 0xFFFF) {
 			comment(COMMENT_FRAME, "Frame not for us, discarding");
-			delete(pdMsg);
+			delete (pdMsg);
 			return;
 		}
 
@@ -147,43 +147,31 @@ void Mcps::sendMlme(cMessage *msg) {
 PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 	if (msg->getKind() == MAC_COMMAND_FRAME) {
 		MacCommand* command = check_and_cast<MacCommand *> (msg);
+		PdData_request *request = new PdData_request(PD_DATA_REQUEST);
+		/** @comment this should not be the same as ByteLength */
+		request->setPsduLength(msg->getByteLength());
+		request->setSecurityEnabled(false);
+		request->setFrameType(COMMAND);
 		if (command->getCommandType() == BEACON_REQUEST) {
-			PdData_request *request = new PdData_request("Beacon Request",
-					PD_DATA_REQUEST);
+			request->setName("Beacon Request");
 			request->setByteLength(11);
-			/** @comment this should not be the same as ByteLength */
-			request->setPsduLength(msg->getByteLength());
-			request->setFrameType(COMMAND);
-			request->setSecurityEnabled(false);
 			request->setFramePending(false);
 			request->setAckRequest(false);
 			request->setPanIdCompression(true);
 			request->setDestinationAddressingMode(SHORT_ADDRESS);
 			request->setFrameVersion(0x01);
 			request->setSourceAddressingMode(SHORT_ADDRESS);
-			request->setSequenceNumber(getMacPib()->getMacDSN());
-			getMacPib()->setMacDSN(getMacPib()->getMacDSN() + 1);
 			request->setDestinationPanIdentifier(0xFFFF);
 			request->setDestinationAddress((unsigned long) 0xFFFF);
 			request->setSourceAddress(
 					(unsigned long) (getMacPib()->getMacShortAddress()));
-			request->setAuxiliarySecurityHeaderArraySize(0);
-			/** @todo who wants to calculate the fcs? :) */
-			request->setFcs((unsigned short) (rand() % 65536));
-			request->encapsulate(command);
-			return request;
 		} else if (command->getCommandType() == ASSOCIATE_REQUEST) {
-			PdData_request *request = new PdData_request("Association Request",
-					PD_DATA_REQUEST);
+			request->setName("Association Request");
 			if (getNextEncapsulation()->destinationAddressingMode
 					== LONG_ADDRESS)
 				request->setByteLength(25);
 			else
 				request->setByteLength(19);
-			/** @comment this should not be the same as ByteLength */
-			request->setPsduLength(msg->getByteLength());
-			request->setFrameType(COMMAND);
-			request->setSecurityEnabled(false);
 			request->setFramePending(false);
 			request->setAckRequest(true);
 			request->setPanIdCompression(false);
@@ -191,8 +179,6 @@ PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 					getNextEncapsulation()->destinationAddressingMode);
 			request->setFrameVersion(0x01);
 			request->setSourceAddressingMode(LONG_ADDRESS);
-			request->setSequenceNumber(getMacPib()->getMacDSN());
-			getMacPib()->setMacDSN(getMacPib()->getMacDSN() + 1);
 			request->setDestinationPanIdentifier(
 					getNextEncapsulation()->destinationPanIdentifier);
 			request->setDestinationAddress(
@@ -200,12 +186,41 @@ PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 			request->setSourcePanIdentifier(0xFFFF);
 			request->setSourceAddress(
 					(unsigned long) (getMacPib()->getExtendedAddress()));
-			request->setAuxiliarySecurityHeaderArraySize(0);
-			/** @todo who wants to calculate the fcs? :) */
-			request->setFcs((unsigned short) (rand() % 65536));
-			request->encapsulate(command);
-			return request;
+		} else if (command->getCommandType() == DATA_REQUEST) {
+			request->setName("Data Request");
+			request->setByteLength(6);
+			if (getNextEncapsulation()->sourceAddressingMode == LONG_ADDRESS)
+				request->setByteLength(request->getByteLength() + 8);
+			else
+				request->setByteLength(request->getByteLength() + 2);
+			if (getNextEncapsulation()->destinationAddressingMode
+					== LONG_ADDRESS)
+				request->setByteLength(request->getByteLength() + 8);
+			else
+				request->setByteLength(request->getByteLength() + 2);
+			request->setSourceAddressingMode(
+					getNextEncapsulation()->sourceAddressingMode);
+			request->setSourceAddress(getNextEncapsulation()->sourceAddress);
+			request->setDestinationAddressingMode(
+					getNextEncapsulation()->destinationAddressingMode);
+			if (getNextEncapsulation()->destinationAddressingMode
+					!= NOT_PRESENT)
+				request->setDestinationAddress(
+						getNextEncapsulation()->destinationAddress);
+			request->setDestinationPanIdentifier(
+					getNextEncapsulation()->destinationPanIdentifier);
+			request->setAckRequest(true);
+			request->setFramePending(false);
+			request->setPanIdCompression(true);
+			request->setDestinationPanIdentifier(getMacPib()->getMacPANId());
 		}
+		request->setSequenceNumber(getMacPib()->getMacDSN());
+		getMacPib()->setMacDSN(getMacPib()->getMacDSN() + 1);
+		request->setAuxiliarySecurityHeaderArraySize(0);
+		/** @todo who wants to calculate the fcs? :) */
+		request->setFcs((unsigned short) (rand() % 65536));
+		request->encapsulate(command);
+		return request;
 	} else if (msg->getKind() == MAC_BEACON_FRAME) {
 		MacBeacon* beacon = check_and_cast<MacBeacon *> (msg);
 		PdData_request *request = new PdData_request("Beacon", PD_DATA_REQUEST);

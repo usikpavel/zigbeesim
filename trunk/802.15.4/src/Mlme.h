@@ -37,6 +37,7 @@ protected:
 	cMessage* beaconTimer;
 	cMessage* backoffTimer;
 	cMessage* capSlotTimer;
+	cMessage* superframeTimer;
 	int currentChannel;
 	unsigned char currentPage;
 	int scannedChannels;
@@ -50,6 +51,7 @@ protected:
 	int backoffExponent;
 	int numberOfBackoffs;
 	SimTime capSlotDuration;
+	SimTime superframeDuration;
 	SimTime backoffPeriod;
 	SuperframePeriod superframePeriod;
 	/** @brief Sets the level of comments to the EV output */
@@ -245,6 +247,12 @@ protected:
 	}
 	SimTime getCapSlotDuration() {
 		return this->capSlotDuration;
+	}
+	void setSuperframeDuration(SimTime superframeDuration) {
+		this->superframeDuration = superframeDuration;
+	}
+	SimTime getSuperframeDuration() {
+		return this->superframeDuration;
 	}
 	void setSuperframePeriod(SuperframePeriod superframePeriod) {
 		this->superframePeriod = superframePeriod;
