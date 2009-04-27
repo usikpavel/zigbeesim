@@ -23,11 +23,11 @@
 /**
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
- * message NlmeMsg extends cMessage {
+ * message NlmeMsg extends cPacket {
  * };
  * </pre>
  */
-class NlmeMsg : public cMessage
+class NlmeMsg : public cPacket
 {
   protected:
 
@@ -498,11 +498,11 @@ inline void doUnpacking(cCommBuffer *b, NlmeJoin_confirm& obj) {obj.parsimUnpack
 /**
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
- * message NldeMsg extends cMessage {
+ * message NldeMsg extends cPacket {
  * };
  * </pre>
  */
-class NldeMsg : public cMessage
+class NldeMsg : public cPacket
 {
   protected:
 
@@ -527,11 +527,11 @@ inline void doUnpacking(cCommBuffer *b, NldeMsg& obj) {obj.parsimUnpack(b);}
 /**
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
- * message MlmeMsg extends cMessage {
+ * message MlmeMsg extends cPacket {
  * };
  * </pre>
  */
-class MlmeMsg : public cMessage
+class MlmeMsg : public cPacket
 {
   protected:
 
@@ -1427,11 +1427,11 @@ inline void doUnpacking(cCommBuffer *b, MacAck& obj) {obj.parsimUnpack(b);}
 /**
  * Class generated from <tt>Messages.msg</tt> by opp_msgc.
  * <pre>
- * message PlmeMsg extends cMessage {
+ * message PlmeMsg extends cPacket {
  * };
  * </pre>
  */
-class PlmeMsg : public cMessage
+class PlmeMsg : public cPacket
 {
   protected:
 

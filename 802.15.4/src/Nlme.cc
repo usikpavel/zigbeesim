@@ -120,7 +120,6 @@ void Nlme::handleMlmeMsg(cMessage *msg) {
 			response->setNetworkCount(confirm->getResultListSize());
 			for (unsigned int i = 0; i < confirm->getResultListSize(); i++) {
 				NetworkDescriptor descriptor;
-				/** @test this might try to access some restricted areas */
 				descriptor.panId = confirm->getPanDescriptorList(i).coordPanId;
 				descriptor.logicalChannel
 						= confirm->getPanDescriptorList(i).logicalChannel;
@@ -368,49 +367,49 @@ void Nlme::handleNlmeMsg(cMessage *msg) {
 					"NLME-JOIN.confirm", NLME_JOIN_CONFIRM);
 			confirm->setStatus(NWK_INVALID_REQUEST);
 			sendNlmeUp(confirm);
+			return;
+		}
+		if (request->getRejoinNetwork()) {
+			/** @TODO add network rejoining procedures */
 		} else {
-			if (request->getRejoinNetwork()) {
-				/** @TODO add network rejoining procedures */
+			NeighborTableEntry parent;
+			parent = findRouterForJoining(request->getPanId());
+			NwkCapabilityInformation capability;
+			capability.alternatePanCoordinator = false;
+			if (request->getJoinAsRouter()) {
+				capability.deviceType = ROUTER;
 			} else {
-				NeighborTableEntry parent;
-				parent = findRouterForJoining(request->getPanId());
-				NwkCapabilityInformation capability;
-				capability.alternatePanCoordinator = false;
-				if (request->getJoinAsRouter()) {
-					capability.deviceType = ROUTER;
-				} else {
-					capability.deviceType = END_DEVICE;
-				}
-				capability.powerSource = request->getPowerSource();
-				capability.receiverOnWhenIdle = request->getRxOnWhenIdle();
-				capability.securityCapability = false;
-				capability.allocateAddress = true;
-				getNwkPib()->setNwkCapabilityInformation(capability);
-				MlmeAssociate_request* associate = new MlmeAssociate_request(
-						"MLME-ASSOCIATE.request", MLME_ASSOCIATE_REQUEST);
-				associate->setLogicalChannel(parent.logicalChannel);
-				/** @TODO set channel page */
-				associate->setCoordAddrMode(LONG_ADDRESS);
-				associate->setCoordPanId(parent.panId);
-				associate->setCoordAddress(parent.extendedAddress);
-				associate->setAlternatePanCoordinator(
-						capability.alternatePanCoordinator);
-				associate->setDeviceType(capability.deviceType);
-				associate->setPowerSource(capability.powerSource);
-				associate->setReceiverOnWhenIdle(capability.receiverOnWhenIdle);
-				associate->setSecurityCapability(capability.securityCapability);
-				associate->setAllocateAddress(capability.allocateAddress);
-				associate->setSecurityLevel(0x00);
-				associate->setKeySourceArraySize(0);
-				/** @TODO this should be interchangeable with SHORT_ADDRESS */
-				getMcps()->getNextEncapsulation()->destinationAddressingMode
-						= LONG_ADDRESS;
-				getMcps()->getNextEncapsulation()->destinationAddress
-						= parent.extendedAddress;
-				getMcps()->getNextEncapsulation()->destinationPanIdentifier
-						= parent.panId;
-				sendMlmeDown(associate);
+				capability.deviceType = END_DEVICE;
 			}
+			capability.powerSource = request->getPowerSource();
+			capability.receiverOnWhenIdle = request->getRxOnWhenIdle();
+			capability.securityCapability = false;
+			capability.allocateAddress = true;
+			getNwkPib()->setNwkCapabilityInformation(capability);
+			MlmeAssociate_request* associate = new MlmeAssociate_request(
+					"MLME-ASSOCIATE.request", MLME_ASSOCIATE_REQUEST);
+			associate->setLogicalChannel(parent.logicalChannel);
+			/** @TODO set channel page */
+			associate->setCoordAddrMode(LONG_ADDRESS);
+			associate->setCoordPanId(parent.panId);
+			associate->setCoordAddress(parent.extendedAddress);
+			associate->setAlternatePanCoordinator(
+					capability.alternatePanCoordinator);
+			associate->setDeviceType(capability.deviceType);
+			associate->setPowerSource(capability.powerSource);
+			associate->setReceiverOnWhenIdle(capability.receiverOnWhenIdle);
+			associate->setSecurityCapability(capability.securityCapability);
+			associate->setAllocateAddress(capability.allocateAddress);
+			associate->setSecurityLevel(0x00);
+			associate->setKeySourceArraySize(0);
+			/** @TODO this should be interchangeable with SHORT_ADDRESS */
+			getMcps()->getNextEncapsulation()->destinationAddressingMode
+					= LONG_ADDRESS;
+			getMcps()->getNextEncapsulation()->destinationAddress
+					= parent.extendedAddress;
+			getMcps()->getNextEncapsulation()->destinationPanIdentifier
+					= parent.panId;
+			sendMlmeDown(associate);
 		}
 	}
 }
@@ -452,9 +451,10 @@ unsigned short Nlme::assignNetworkAddress(bool deviceType) {
 
 	/** deviceType true -> FFD, false -> RFD*/
 	if (deviceType) {
-		return getNetworkAddress() + getCskip()*getAssociatedRouters() + 1;
+		return getNetworkAddress() + getCskip() * getAssociatedRouters() + 1;
 	} else {
-		return getNetworkAddress() + getCskip()*rm + getAssociatedEndDevices() + 1;
+		return getNetworkAddress() + getCskip() * rm
+				+ getAssociatedEndDevices() + 1;
 	}
 	return 0xFFFE;
 }

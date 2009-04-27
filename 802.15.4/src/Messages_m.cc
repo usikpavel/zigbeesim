@@ -32,11 +32,11 @@ void doUnpacking(cCommBuffer *, T& t) {
 
 Register_Class(NlmeMsg);
 
-NlmeMsg::NlmeMsg(const char *name, int kind) : cMessage(name,kind)
+NlmeMsg::NlmeMsg(const char *name, int kind) : cPacket(name,kind)
 {
 }
 
-NlmeMsg::NlmeMsg(const NlmeMsg& other) : cMessage()
+NlmeMsg::NlmeMsg(const NlmeMsg& other) : cPacket()
 {
     setName(other.getName());
     operator=(other);
@@ -49,18 +49,18 @@ NlmeMsg::~NlmeMsg()
 NlmeMsg& NlmeMsg::operator=(const NlmeMsg& other)
 {
     if (this==&other) return *this;
-    cMessage::operator=(other);
+    cPacket::operator=(other);
     return *this;
 }
 
 void NlmeMsg::parsimPack(cCommBuffer *b)
 {
-    cMessage::parsimPack(b);
+    cPacket::parsimPack(b);
 }
 
 void NlmeMsg::parsimUnpack(cCommBuffer *b)
 {
-    cMessage::parsimUnpack(b);
+    cPacket::parsimUnpack(b);
 }
 
 class NlmeMsgDescriptor : public cClassDescriptor
@@ -87,7 +87,7 @@ class NlmeMsgDescriptor : public cClassDescriptor
 
 Register_ClassDescriptor(NlmeMsgDescriptor);
 
-NlmeMsgDescriptor::NlmeMsgDescriptor() : cClassDescriptor("NlmeMsg", "cMessage")
+NlmeMsgDescriptor::NlmeMsgDescriptor() : cClassDescriptor("NlmeMsg", "cPacket")
 {
 }
 
@@ -3083,11 +3083,11 @@ void *NlmeJoin_confirmDescriptor::getFieldStructPointer(void *object, int field,
 
 Register_Class(NldeMsg);
 
-NldeMsg::NldeMsg(const char *name, int kind) : cMessage(name,kind)
+NldeMsg::NldeMsg(const char *name, int kind) : cPacket(name,kind)
 {
 }
 
-NldeMsg::NldeMsg(const NldeMsg& other) : cMessage()
+NldeMsg::NldeMsg(const NldeMsg& other) : cPacket()
 {
     setName(other.getName());
     operator=(other);
@@ -3100,18 +3100,18 @@ NldeMsg::~NldeMsg()
 NldeMsg& NldeMsg::operator=(const NldeMsg& other)
 {
     if (this==&other) return *this;
-    cMessage::operator=(other);
+    cPacket::operator=(other);
     return *this;
 }
 
 void NldeMsg::parsimPack(cCommBuffer *b)
 {
-    cMessage::parsimPack(b);
+    cPacket::parsimPack(b);
 }
 
 void NldeMsg::parsimUnpack(cCommBuffer *b)
 {
-    cMessage::parsimUnpack(b);
+    cPacket::parsimUnpack(b);
 }
 
 class NldeMsgDescriptor : public cClassDescriptor
@@ -3138,7 +3138,7 @@ class NldeMsgDescriptor : public cClassDescriptor
 
 Register_ClassDescriptor(NldeMsgDescriptor);
 
-NldeMsgDescriptor::NldeMsgDescriptor() : cClassDescriptor("NldeMsg", "cMessage")
+NldeMsgDescriptor::NldeMsgDescriptor() : cClassDescriptor("NldeMsg", "cPacket")
 {
 }
 
@@ -3286,11 +3286,11 @@ void *NldeMsgDescriptor::getFieldStructPointer(void *object, int field, int i) c
 
 Register_Class(MlmeMsg);
 
-MlmeMsg::MlmeMsg(const char *name, int kind) : cMessage(name,kind)
+MlmeMsg::MlmeMsg(const char *name, int kind) : cPacket(name,kind)
 {
 }
 
-MlmeMsg::MlmeMsg(const MlmeMsg& other) : cMessage()
+MlmeMsg::MlmeMsg(const MlmeMsg& other) : cPacket()
 {
     setName(other.getName());
     operator=(other);
@@ -3303,18 +3303,18 @@ MlmeMsg::~MlmeMsg()
 MlmeMsg& MlmeMsg::operator=(const MlmeMsg& other)
 {
     if (this==&other) return *this;
-    cMessage::operator=(other);
+    cPacket::operator=(other);
     return *this;
 }
 
 void MlmeMsg::parsimPack(cCommBuffer *b)
 {
-    cMessage::parsimPack(b);
+    cPacket::parsimPack(b);
 }
 
 void MlmeMsg::parsimUnpack(cCommBuffer *b)
 {
-    cMessage::parsimUnpack(b);
+    cPacket::parsimUnpack(b);
 }
 
 class MlmeMsgDescriptor : public cClassDescriptor
@@ -3341,7 +3341,7 @@ class MlmeMsgDescriptor : public cClassDescriptor
 
 Register_ClassDescriptor(MlmeMsgDescriptor);
 
-MlmeMsgDescriptor::MlmeMsgDescriptor() : cClassDescriptor("MlmeMsg", "cMessage")
+MlmeMsgDescriptor::MlmeMsgDescriptor() : cClassDescriptor("MlmeMsg", "cPacket")
 {
 }
 
@@ -8917,11 +8917,11 @@ void *MacAckDescriptor::getFieldStructPointer(void *object, int field, int i) co
 
 Register_Class(PlmeMsg);
 
-PlmeMsg::PlmeMsg(const char *name, int kind) : cMessage(name,kind)
+PlmeMsg::PlmeMsg(const char *name, int kind) : cPacket(name,kind)
 {
 }
 
-PlmeMsg::PlmeMsg(const PlmeMsg& other) : cMessage()
+PlmeMsg::PlmeMsg(const PlmeMsg& other) : cPacket()
 {
     setName(other.getName());
     operator=(other);
@@ -8934,18 +8934,18 @@ PlmeMsg::~PlmeMsg()
 PlmeMsg& PlmeMsg::operator=(const PlmeMsg& other)
 {
     if (this==&other) return *this;
-    cMessage::operator=(other);
+    cPacket::operator=(other);
     return *this;
 }
 
 void PlmeMsg::parsimPack(cCommBuffer *b)
 {
-    cMessage::parsimPack(b);
+    cPacket::parsimPack(b);
 }
 
 void PlmeMsg::parsimUnpack(cCommBuffer *b)
 {
-    cMessage::parsimUnpack(b);
+    cPacket::parsimUnpack(b);
 }
 
 class PlmeMsgDescriptor : public cClassDescriptor
@@ -8972,7 +8972,7 @@ class PlmeMsgDescriptor : public cClassDescriptor
 
 Register_ClassDescriptor(PlmeMsgDescriptor);
 
-PlmeMsgDescriptor::PlmeMsgDescriptor() : cClassDescriptor("PlmeMsg", "cMessage")
+PlmeMsgDescriptor::PlmeMsgDescriptor() : cClassDescriptor("PlmeMsg", "cPacket")
 {
 }
 

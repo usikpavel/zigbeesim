@@ -38,6 +38,7 @@ public:
 	cMessage* frameTimer;
 	SimTime lastMsgTimestamp;
 	SimTime backoffPeriod;
+	unsigned int bitrate;
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
 	/** @TODO remove this temporary cc */
@@ -93,6 +94,12 @@ public:
 	}
 	SimTime getLastMsgTimestamp() {
 		return this->lastMsgTimestamp;
+	}
+	void setBitrate(unsigned int bitrate) {
+		this->bitrate = bitrate;
+	}
+	unsigned int getBitrate() {
+		return this->bitrate;
 	}
 	/** @TODO clean this up*/
 	/** temp */

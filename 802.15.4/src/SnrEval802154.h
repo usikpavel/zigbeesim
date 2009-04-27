@@ -125,14 +125,14 @@ protected:
         /** @brief Snr list to store the SNR values*/
         SnrList sList;
     };
-
+public:
     /**
      * @brief SnrInfo stores the snrList and the the recvdPower for the
      * message currently beeing received together with a pointer to the
      * message.
      **/
     SnrStruct snrInfo;
-
+protected:
     /**
      * @brief Typedef used to store received messages together with
      * receive power.

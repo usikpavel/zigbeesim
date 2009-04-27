@@ -138,13 +138,37 @@ depend:
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 $O/Plme.o: Plme.cc \
 	typedef.h \
+	$(RTN_PROJ)/core/basicModules/BasicSnrEval.h \
+	$(RTN_PROJ)/core/utils/ActiveChannel.h \
+	$(RTN_PROJ)/core/utils/NicControlType.h \
+	Mcps.h \
+	SnrEval802154.h \
+	$(RTN_PROJ)/core/utils/HostMove.h \
+	$(RTN_PROJ)/core/basicMessages/AirFrame_m.h \
+	$(RTN_PROJ)/core/channelControl/ChannelControl.h \
+	Pd.h \
+	MacPib.h \
 	PhyPib.h \
-	BBItems.h \
+	$(RTN_PROJ)/core/utils/SnrList.h \
 	$(RTN_PROJ)/core/blackboard/Blackboard.h \
-	$(RTN_PROJ)/core/basicModules/BasicModule.h \
+	$(RTN_PROJ)/core/utils/Coord.h \
 	Messages_m.h \
+	$(RTN_PROJ)/core/utils/FWMath.h \
+	Plme.h \
+	$(RTN_PROJ)/core/utils/MacControlInfo.h \
+	$(RTN_PROJ)/contrib/utils/Bitrate.h \
+	$(RTN_PROJ)/core/utils/CoreDebug.h \
+	$(RTN_PROJ)/contrib/utils/RSSI.h \
+	$(RTN_PROJ)/core/basicModules/BasicModule.h \
+	$(RTN_PROJ)/core/utils/SimpleAddress.h \
+	Mlme.h \
+	$(RTN_PROJ)/contrib/utils/MediumIndication.h \
+	$(RTN_PROJ)/contrib/nic/radios/SingleChannelRadio.h \
 	$(RTN_PROJ)/core/utils/ModuleAccess.h \
-	Plme.h
+	$(RTN_PROJ)/core/channelControl/ChannelAccess.h \
+	$(RTN_PROJ)/core/channelControl/NicEntry.h \
+	$(RTN_PROJ)/contrib/utils/RadioState.h \
+	BBItems.h
 $O/Mcps.o: Mcps.cc \
 	$(RTN_PROJ)/core/utils/MacControlInfo.h \
 	typedef.h \
@@ -269,23 +293,6 @@ $O/Nlme.o: Nlme.cc \
 	$(RTN_PROJ)/contrib/messages/ApplPkt_m.h \
 	NwkPib.h \
 	BBItems.h
-$O/Mac802154.o: Mac802154.cc \
-	$(RTN_PROJ)/core/utils/ActiveChannel.h \
-	$(RTN_PROJ)/contrib/utils/Bitrate.h \
-	Mac802154.h \
-	$(RTN_PROJ)/core/utils/NicControlType.h \
-	$(RTN_PROJ)/core/basicModules/BasicMacLayer.h \
-	$(RTN_PROJ)/core/basicModules/BasicLayer.h \
-	$(RTN_PROJ)/contrib/utils/RSSI.h \
-	$(RTN_PROJ)/core/basicMessages/MacPkt_m.h \
-	$(RTN_PROJ)/core/utils/SimpleAddress.h \
-	$(RTN_PROJ)/core/basicModules/BasicModule.h \
-	$(RTN_PROJ)/contrib/nic/radios/SingleChannelRadio.h \
-	$(RTN_PROJ)/core/utils/ModuleAccess.h \
-	$(RTN_PROJ)/contrib/utils/DroppedPacket.h \
-	$(RTN_PROJ)/contrib/utils/RadioState.h \
-	$(RTN_PROJ)/core/blackboard/Blackboard.h \
-	$(RTN_PROJ)/core/utils/FWMath.h
 $O/Pd.o: Pd.cc \
 	$(RTN_PROJ)/core/utils/MacControlInfo.h \
 	typedef.h \

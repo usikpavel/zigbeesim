@@ -25,7 +25,7 @@ struct GtsDescriptor;
 struct PanDescriptor;
 
 // Application<-->Network layer interface messages
-message NlmeMsg extends cMessage {
+message NlmeMsg extends cPacket {
 };
 
 message NlmeNetworkFormation_request extends NlmeMsg {
@@ -94,11 +94,11 @@ message NlmeJoin_confirm extends NlmeMsg {
     unsigned char currentChannel;
 };
 
-message NldeMsg extends cMessage {
+message NldeMsg extends cPacket {
 };
 
 // Network<-->Nic layer interface messages
-message MlmeMsg extends cMessage {
+message MlmeMsg extends cPacket {
 };
 
 message MlmeScan_request extends MlmeMsg {
@@ -247,7 +247,7 @@ message MacAck extends McpsMsg {
 };
 
 // Physical layer messages
-message PlmeMsg extends cMessage {
+message PlmeMsg extends cPacket {
 };
 
 message PlmeSetTrxState_request extends PlmeMsg {
