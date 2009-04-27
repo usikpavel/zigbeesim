@@ -38,14 +38,19 @@ void Plme::handleMessage(cMessage *msg) {
 }
 
 void Plme::handleSelfMsg(cMessage *msg) {
-	std::string msgName = msg->getName();
-	if (msgName == "ED.timer") {
+	if (msg->getKind() == TIMER_ED_SCAN) {
 		/** @todo here, we should do the energy measurement */
 		PlmeEd_confirm* confirm = new PlmeEd_confirm();
 		confirm->setName("PLME-ED.confirm");
 		confirm->setKind(PLME_ED_CONFIRM);
 		confirm->setStatus(PHY_SUCCESS);
 		confirm->setEnergyLevel((rand() % 26) + 'a');
+		sendPlmeUp(confirm);
+	} else if (msg->getKind() == TIMER_CCA) {
+		PlmeCca_confirm *confirm = new PlmeCca_confirm("PLME-CCA.confirm", PLME_CCA_CONFIRM);
+		if (getLayerState() == PHY_TRX_OFF) confirm->setStatus(PHY_TRX_OFF);
+		else if (getSnrEval()->snrInfo.ptr == 0) confirm->setStatus(PHY_IDLE);
+		else confirm->setStatus(PHY_BUSY);
 		sendPlmeUp(confirm);
 	}
 }
@@ -79,34 +84,31 @@ void Plme::handlePlmeMsg(cMessage *msg) {
 		PlmeSet_request* request = check_and_cast<PlmeSet_request *> (msg);
 		unsigned int* value =
 				new unsigned int[request->getPibAttributeValueArraySize()];
-		for (int i = 0; i < request->getPibAttributeValueArraySize(); i++) {
+		for (unsigned int i = 0; i < request->getPibAttributeValueArraySize(); i++) {
 			value[i] = request->getPibAttributeValue(i);
 		}
 		PlmeSet_confirm* response = new PlmeSet_confirm("PLME-SET.confirm", PLME_SET_CONFIRM);
-		std::cout << "setting something, channel at: " << (int) (getPhyPib()->getPhyCurrentChannel()) << endl;
-		std::cout << "page at: " << (int) (getPhyPib()->getPhyCurrentPage()) << endl;
 		PhyEnum status = getPhyPib()->setPibAttribute(
 				(PibIdentifier) request->getPibAttribute(), value);
-		std::cout << "setting done, channel at: " << (int) (getPhyPib()->getPhyCurrentChannel()) << endl;
-		std::cout << "page at: " << (int) (getPhyPib()->getPhyCurrentPage()) << endl;
 		response->setStatus(status);
 		response->setPibAttribute(request->getPibAttribute());
 		sendPlmeUp(response);
-	} else if (msgName == "PLME-ED.request") {
+	} else if (msg->getKind() == PLME_ED_REQUEST) {
 		if ((getLayerState() == PHY_TRX_OFF) || (getLayerState() == PHY_TX_ON)) {
-			PlmeEd_confirm* confirm = new PlmeEd_confirm();
-			confirm->setName("PLME-ED.confirm");
-			confirm->setKind(PLME_ED_CONFIRM);
+			PlmeEd_confirm* confirm = new PlmeEd_confirm("PLME-ED.confirm", PLME_ED_CONFIRM);
 			confirm->setStatus(getLayerState());
 			confirm->setEnergyLevel(0x00);
 			sendPlmeUp(confirm);
 		} else {
-			timer->setName("ED.timer");
+			timer->setKind(TIMER_ED_SCAN);
 			/** @todo 960/62500 = 0.01536s - theoretically shortest ED scan*/
 			/** let's give it multiplier x0.9 */
 			/** how long does it take to make the measurement in real environment? */
 			scheduleAt(simTime() + 0.013824, timer);
 		}
+	} else if (msg->getKind() == PLME_CCA_REQUEST) {
+		timer->setKind(TIMER_CCA);
+		scheduleAt(simTime() + getMlme()->symbolsToSeconds(8, getMlme()->getCurrentChannel(), getMlme()->getCurrentPage()), timer);
 	}
 }
 

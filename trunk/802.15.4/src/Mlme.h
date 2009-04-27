@@ -39,6 +39,7 @@ protected:
 	cMessage* capSlotTimer;
 	cMessage* superframeTimer;
 	cMessage* dataRequestTimer;
+	cMessage* timeoutMsg;
 	int currentChannel;
 	unsigned char currentPage;
 	int scannedChannels;
@@ -55,6 +56,7 @@ protected:
 	SimTime superframeDuration;
 	SimTime backoffPeriod;
 	SuperframePeriod superframePeriod;
+	bool dataRequestScheduled;
 	/** @brief Sets the level of comments to the EV output */
 	CommentsLevel commentsLevel;
 	virtual void handleSelfMsg(cMessage *);
@@ -66,7 +68,9 @@ protected:
 	virtual void sendMlmeUp(cMessage *);
 	virtual void sendMacPib(cMessage *);
 	virtual void sendMcps(cMessage *);
+public:
 	virtual double symbolsToSeconds(int, int, int);
+protected:
 	virtual void switchRadioToChannel(unsigned int);
 	virtual void comment(CommentsLevel level, std::string s) {
 		/** @TODO align logName substrings for routers and endDevices */
@@ -131,15 +135,19 @@ protected:
 	void setCurrentChannel(int channel) {
 		this->currentChannel = channel;
 	}
+public:
 	int getCurrentChannel() {
 		return this->currentChannel;
 	}
+protected:
 	void setCurrentPage(unsigned char page) {
 		this->currentPage = page;
 	}
+public:
 	unsigned char getCurrentPage() {
 		return this->currentPage;
 	}
+protected:
 	void setScannedChannels(int scannedChannels) {
 		this->scannedChannels = scannedChannels;
 	}
@@ -260,6 +268,12 @@ protected:
 	}
 	SuperframePeriod getSuperframePeriod() {
 		return this->superframePeriod;
+	}
+	void setDataRequestScheduled(bool dataRequestScheduled) {
+		this->dataRequestScheduled = dataRequestScheduled;
+	}
+	bool getDataRequestScheduled() {
+		return this->dataRequestScheduled;
 	}
 };
 

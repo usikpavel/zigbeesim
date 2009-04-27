@@ -29,12 +29,14 @@ void Mlme::initialize(int stage) {
 		superframeTimer = new cMessage("Superframe timer", TIMER_SUPERFRAME);
 		dataRequestTimer = new cMessage("Data request timer",
 				TIMER_DATA_REQUEST);
+		timeoutMsg = new cMessage("", DUMMY_MSG);
 		setBackoffPeriod((SimTime) 0.0);
 		setBackoffExponent(getMacPib()->getMacMinBE());
 		setNumberOfBackoffs(0);
 		setScannedChannels(0);
 		energyLevels = new char[32];
 		scannedPanDescriptors = new PanDescriptor[0];
+		setDataRequestScheduled(false);
 	}
 }
 
@@ -79,8 +81,8 @@ void Mlme::handleSelfMsg(cMessage *msg) {
 		MacBeacon* beacon = new MacBeacon("Beacon Command", MAC_BEACON_FRAME);
 		beacon->setBeaconOrder(getMacPib()->getMacBeaconOrder());
 		beacon->setSuperframeOrder(getMacPib()->getMacSuperframeOrder());
-		/** @todo set FinalCapSlot */
-		//beacon->setFinalCapSlot();
+		/** @todo set FinalCapSlot according to GTS request */
+		beacon->setFinalCapSlot(16);
 		beacon->setBatteryLifeExtension(false);
 		beacon->setPanCoordinator(getRole() == COORDINATOR);
 		beacon->setAssociationPermit(getMacPib()->getMacAssociationPermit());
@@ -100,6 +102,12 @@ void Mlme::handleSelfMsg(cMessage *msg) {
 		sendMcps(beacon);
 		scheduleAt(simTime() + getBeaconPeriod(), beaconTimer);
 	} else if (msg->getKind() == TIMER_DATA_REQUEST) {
+		if (timeoutMsg->getKind() != DUMMY_MSG) {
+			/** @comment no reply from the ffd, letting know the upper layer */
+			sendMlmeUp(timeoutMsg);
+			timeoutMsg = new cMessage("", DUMMY_MSG);
+			return;
+		}
 		MlmeAssociate_request* request =
 				check_and_cast<MlmeAssociate_request *> (getLastUpperMsg());
 		MacCommand* macCommand = new MacCommand("Data Request Command",
@@ -120,16 +128,25 @@ void Mlme::handleSelfMsg(cMessage *msg) {
 			setCapSlotNumber(getCapSlotNumber() + 1);
 			if (getCapSlotNumber() <= getLastBeacon()->getFinalCapSlot() && !backoffTimer->isScheduled()) {
 				if (getMcps()->getFrameQueueLength() > 0 || getMcps()->getPriorityFrameQueueLength() > 0) {
-					/** @comment start the CCMA procedure */
+					/** @comment start the CCA procedure */
+					PlmeCca_request *request = new PlmeCca_request("PLME-CCA.request", PLME_CCA_REQUEST);
+					sendPlmeDown(request);
+				} else {
+					/** @comment no data in the queues */
 				}
 			}
-			if (getCapSlotNumber() == getLastBeacon()->getFinalCapSlot())
+			if (getCapSlotNumber() == getLastBeacon()->getFinalCapSlot()) {
+				comment(COMMENT_SUPERFRAME, "Starting Content Free Period");
 				setSuperframePeriod(CFP);
+			}
 			scheduleAt(simTime() + getCapSlotDuration(), capSlotTimer);
 		} else {
+			comment(COMMENT_SUPERFRAME, "Starting Inactive Period");
 			setSuperframePeriod(INACTIVE);
+			/** @comment turn off the radio */
 		}
 	} else if (msg->getKind() == TIMER_BACKOFF) {
+		/** @comment backoff timer is just blocking the start of the CCA procedure */
 		if (getSuperframePeriod() != CAP) {
 			/** @comment backoff shot at the CFP or Inactive period - not good
 			 * reschedule it to hit the incoming CAP period */
@@ -297,7 +314,7 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 				sendMcps(command);
 			}
 		}
-	} else if (msgName == "PLME-ED.confirm") {
+	} else if (msg->getKind() == PLME_ED_CONFIRM) {
 		PlmeEd_confirm* confirm = check_and_cast<PlmeEd_confirm *> (msg);
 		MlmeScan_request* request = check_and_cast<MlmeScan_request *> (
 				getLastUpperMsg());
@@ -346,6 +363,9 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 			}
 			sendMlmeUp(response);
 		}
+	} else if (msg->getKind() == PLME_CCA_CONFIRM) {
+		/** @comment channel clear, transmit the frame */
+		getMcps()->sendCapFrame();
 	}
 	delete (msg);
 }
@@ -543,11 +563,9 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 						getCurrentChannel(), getCurrentPage()));
 				setCapSlotNumber(1);
 				setSuperframePeriod(CAP);
-				std::cout << "last: " << getPd()->getLastMsgTimestamp() << endl;
-				std::cout << "simtime: " << simTime() << endl;
-				std::cout << "cap slot duration: " << getCapSlotDuration() << endl;
-				std::cout << "schedule: " << getPd()->getLastMsgTimestamp()
-				+ getCapSlotDuration() << endl;
+				std::stringstream commentStream;
+				commentStream << "Starting the Contention Access Period; CAP slot duration: " << getCapSlotDuration();
+				comment(COMMENT_SUPERFRAME, commentStream.str());
 				scheduleAt(getPd()->getLastMsgTimestamp()
 						+ getCapSlotDuration(), capSlotTimer);
 				setSuperframeDuration((SimTime)(symbolsToSeconds(
@@ -559,6 +577,7 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 				setLastBeaconTimestamp(getPd()->getLastMsgTimestamp());
 				McpsEncapsulation encapsulation;
 				encapsulation.sourceAddressingMode = NOT_PRESENT;
+				setDataRequestScheduled(false);
 				for (int i = 0; i
 						< macBeacon->getNumberOfShortAddressesPending(); i++) {
 					if (macBeacon->getAddressList(i)
@@ -668,9 +687,12 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 			delete (msg);
 		}
 	} else if (msg->getKind() == MAC_ACK_FRAME) {
-		scheduleAt(simTime() + symbolsToSeconds(
-				getMacPib()->getMacResponseWaitTime(), getCurrentChannel(),
-				getCurrentPage()), dataRequestTimer);
+		if (!getDataRequestScheduled()) {
+			if (getLastUpperMsg()->getKind() == MLME_ASSOCIATE_REQUEST) {
+				scheduleAt(simTime() + symbolsToSeconds(getMacPib()->getMacResponseWaitTime()*getMacPib()->getBaseSuperFrameDuration(), getCurrentChannel(), getCurrentPage()), dataRequestTimer);
+				setDataRequestScheduled(true);
+			}
+		}
 	}
 }
 

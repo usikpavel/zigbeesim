@@ -12,6 +12,7 @@ typedef enum {
 	COMMENT_BEACON			= 0x0020, // 0000 0000 0010 0000
 	COMMENT_PAN				= 0x0040, // 0000 0000 0100 0000
 	COMMENT_FRAME			= 0x0080, // 0000 0000 1000 0000
+	COMMENT_SUPERFRAME		= 0x0100, // 0000 0001 0000 0000
 	COMMENT_ERROR			= 0x8000, // 1000 0000 0000 0000
 	COMMENT_ALL 			= 0xFFFF  // 1111 1111 1111 1111
 } CommentsLevel;
@@ -25,6 +26,7 @@ typedef enum {
 
 /** @brief Kinds of messages */
 typedef enum {
+	DUMMY_MSG,
 	/** Timers */
 	TIMER_START,
 	TIMER_SFD_FRAME,

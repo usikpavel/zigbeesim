@@ -46,6 +46,12 @@ protected:
 	void sendPdDown(cMessage *);
 	void sendMcpsUp(cMessage *);
 	void sendMlme(cMessage *);
+	void sendMcpsUp(cMessage *, double);
+	void sendMlme(cMessage *, double);
+	/** @brief method to extract the frame from the queue and send it*/
+public:
+	void sendCapFrame();
+protected:
 	PdMsg* encapsulateMcps(McpsMsg *);
 	McpsMsg* decapsulatePd(PdMsg *);
 	void comment(CommentsLevel level, std::string s) {

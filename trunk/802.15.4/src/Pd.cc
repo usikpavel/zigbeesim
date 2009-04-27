@@ -23,9 +23,11 @@ void Pd::initialize(int stage) {
 				getParentModule()->getParentModule()->getId());
 		radio = SingleChannelRadioAccess().get();
 		phyState = RX;
+		setBitrate(0);
 	} else if (stage == 1) {
 		lastUpperMsg = new cMessage();
-		frameTimer = new cMessage("SFD processed, setting timestamp", TIMER_SFD_FRAME);
+		frameTimer = new cMessage("SFD processed, setting timestamp",
+				TIMER_SFD_FRAME);
 	}
 }
 
@@ -49,7 +51,9 @@ void Pd::handleMessage(cMessage *msg) {
 void Pd::handleSelfMsg(cMessage *msg) {
 	std::string msgName = msg->getName();
 	if (msg->getKind() == TIMER_SFD_FRAME) {
-		std::cout << "sfd processed at: " << simTime() << endl;
+		std::stringstream commentStream;
+		commentStream << "Sfd processed at: " << simTime();
+		comment(COMMENT_FRAME, commentStream.str());
 		setLastMsgTimestamp(simTime());
 	}
 }
@@ -68,6 +72,8 @@ void Pd::handlePdMsg(cMessage *msg) {
 
 void Pd::handleRfMsg(cMessage *msg) {
 	Frame802154* frame = check_and_cast<Frame802154 *> (msg);
+	/** @TODO when the bitrate is fixed in SingleChannelRadio, we can remove this setLastTimestamp */
+	setLastMsgTimestamp(simTime());
 	sendPdUp(decapsulateFrame(frame));
 }
 
@@ -78,7 +84,9 @@ void Pd::handlePlmeMsg(cMessage *msg) {
 void Pd::handleRfControl(cMessage *msg) {
 	std::string msgName = msg->getName();
 	if (msgName == "TRANSMISSION_OVER") {
-		std::cout << "finished at: " << simTime() << endl;
+		std::stringstream commentStream;
+		commentStream << "Receiving frame finished at: " << simTime();
+		comment(COMMENT_FRAME, commentStream.str());
 		if (radio->switchToRecv()) {
 			phyState = RX;
 		}
@@ -87,11 +95,18 @@ void Pd::handleRfControl(cMessage *msg) {
 		confirm->setStatus(PHY_SUCCESS);
 		sendPdUp(confirm);
 	} else if (msgName == "RECEIVING_STARTED") {
-		std::cout << "started at: " << simTime() << endl;
-		std::cout << "preamble duration: " << calculatePreambleLengthInSeconds() << endl;
-		std::cout << "sfd duration: " << calculateSfdLengthInSeconds() << endl;
-		scheduleAt(simTime() + calculatePreambleLengthInSeconds()
-				+ calculateSfdLengthInSeconds(), frameTimer);
+		std::stringstream commentStream;
+		commentStream << "Receiving started at: " << simTime();
+		comment(COMMENT_FRAME, commentStream.str());
+		commentStream.str("");
+		commentStream << "Preamble duration: "
+				<< calculatePreambleLengthInSeconds();
+		comment(COMMENT_FRAME, commentStream.str());
+		commentStream.str("");
+		commentStream << "Sfd duration: " << calculateSfdLengthInSeconds();
+		comment(COMMENT_FRAME, commentStream.str());
+		/** @TODO when the bitrate is fixed in SingleChannelRadio, we can use this SFD timer */
+		/** scheduleAt(simTime() + calculatePreambleLengthInSeconds() + calculateSfdLengthInSeconds(), frameTimer);*/
 	}
 	delete (msg);
 }
@@ -122,11 +137,11 @@ Frame802154* Pd::encapsulatePd(PdMsg *msg) {
 		preambleLength = 32;
 		sfdLength = 8;
 		if (currentChannel == 0x00) {
-			radio->setBitrate(20480);
+			setBitrate(20480);
 		} else if (currentChannel <= 0x0A) {
-			radio->setBitrate(40960);
+			setBitrate(40960);
 		} else {
-			radio->setBitrate(256000);
+			setBitrate(40960);
 		}
 		break;
 	case 0x01:
@@ -137,18 +152,19 @@ Frame802154* Pd::encapsulatePd(PdMsg *msg) {
 			preambleLength = 30;
 			sfdLength = 5;
 		}
-		radio->setBitrate(256000);
+		setBitrate(256000);
 		break;
 	case 0x02:
 		preambleLength = 32;
 		sfdLength = 8;
 		if (currentChannel == 0x00) {
-			radio->setBitrate(102400);
+			setBitrate(102400);
 		} else if (currentChannel <= 0x0A) {
-			radio->setBitrate(256000);
+			setBitrate(256000);
 		}
 		break;
 	}
+	radio->setBitrate(getBitrate());
 	frame->setBitLength(preambleLength + sfdLength);
 	frame->encapsulate(msg);
 	return frame;
@@ -195,8 +211,6 @@ unsigned char Pd::calculatePreambleLengthInSymbols() {
 double Pd::calculatePreambleLengthInSeconds() {
 	unsigned char currentChannel = getPhyPib()->getPhyCurrentChannel();
 	unsigned char currentPage = getPhyPib()->getPhyCurrentPage();
-	std::cout << "page: " << (unsigned int) (getPhyPib()->getPhyCurrentPage()) << endl;
-	std::cout << "channel: " << (unsigned int) (getPhyPib()->getPhyCurrentChannel()) << endl;
 	switch (currentPage) {
 	case 0x00:
 		if (currentChannel == 0x00)
@@ -273,22 +287,29 @@ double Pd::symbolsToSeconds(unsigned int symbols) {
 	int symbolrate;
 	switch (currentPage) {
 	case 0x00:
-		if (currentChannel == 0x00) symbolrate = 20000;
-		else if (currentChannel <= 0x0A) symbolrate = 40000;
-		else symbolrate = 62500;
+		if (currentChannel == 0x00)
+			symbolrate = 20000;
+		else if (currentChannel <= 0x0A)
+			symbolrate = 40000;
+		else
+			symbolrate = 62500;
 		break;
 	case 0x01:
-		if (currentChannel == 0x00) symbolrate = 12500;
-		else symbolrate = 50000;
+		if (currentChannel == 0x00)
+			symbolrate = 12500;
+		else
+			symbolrate = 50000;
 		break;
 	case 0x02:
-		if (currentChannel == 0x00) symbolrate = 25000;
-		else symbolrate = 62500;
+		if (currentChannel == 0x00)
+			symbolrate = 25000;
+		else
+			symbolrate = 62500;
 		break;
 	default:
 		commentError("Unsupported page number");
 	}
-	return ((double) symbols)/((double) symbolrate);
+	return ((double) symbols) / ((double) symbolrate);
 }
 
 void Pd::receiveBBItem(int category, const BBItem *details, int scopeModuleId) {

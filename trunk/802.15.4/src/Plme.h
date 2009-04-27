@@ -9,6 +9,8 @@
 #include <string>
 #include <sstream>
 #include "PhyPib.h"
+#include "SnrEval802154.h"
+#include "Mlme.h"
 
 class Plme: public BasicModule {
 public:
@@ -41,6 +43,14 @@ protected:
 	PhyPib* getPhyPib() {
 		return ((PhyPib *) (this->getParentModule()->getModuleByRelativePath(
 				"phyPib")));
+	}
+	SnrEval802154* getSnrEval() {
+		return ((SnrEval802154 *) (this->getParentModule()->getModuleByRelativePath(
+				"snrEval")));
+	}
+	Mlme* getMlme() {
+		return ((Mlme *) (this->getParentModule()->getParentModule()->getModuleByRelativePath(
+				"mac.mlme")));
 	}
 	virtual void setLastUpperMsg(cMessage* msg) {
 		delete (lastUpperMsg);

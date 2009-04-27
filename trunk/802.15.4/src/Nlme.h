@@ -163,14 +163,26 @@ protected:
 		setNetworkDescriptorsArraySize(size + 1);
 	}
 
-	bool isNetworkScanned(NetworkDescriptor descriptor) {
+	bool isNetworkScanned(unsigned short panId) {
 		int size = getNetworkDescriptorsArraySize();
 		for (int i = 0; i < size; i++) {
-			if (getNetworkDescriptors()[i].panId == descriptor.panId) {
+			if (getNetworkDescriptors()[i].panId == panId) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+	bool isNetworkScanned(NetworkDescriptor descriptor) {
+		return isNetworkScanned(descriptor.panId);
+	}
+
+	NetworkDescriptor getNetworkDescriptor(unsigned short panId) {
+		for (int i = 0; i < getNetworkDescriptorsArraySize(); i++) {
+			if (getNetworkDescriptors()[i].panId == panId) {
+				return getNetworkDescriptors()[i];
+			}
+		}
 	}
 
 	void resetNetworkDescriptors() {
@@ -207,7 +219,11 @@ protected:
 	}
 	void addNeighborTableEntry(NeighborTableEntry entry) {
 		unsigned long key = entry.extendedAddress;
-		if (!hasNeighborTableEntry(key)) {
+		if (hasNeighborTableEntry(key)) {
+			/** @comment update the neighbor's status */
+			deleteNeighborTableEntry(key);
+			addNeighborTableEntry(entry);
+		} else {
 			/** @comment the neighbor is not in the map, so let's add it */
 			neighborTable.insert(std::pair<unsigned long, NeighborTableEntry>(
 					key, entry));

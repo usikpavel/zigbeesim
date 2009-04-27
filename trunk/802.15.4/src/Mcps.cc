@@ -42,11 +42,11 @@ void Mcps::handleMessage(cMessage *msg) {
 void Mcps::handleSelfMsg(cMessage *msg) {
 	if (msg->getKind() == TIMER_ACK) {
 		MacAck* macAck = new MacAck("Acknowledgment", MAC_ACK_FRAME);
+		macAck->setByteLength(0);
 		sendPdDown(encapsulateMcps(macAck));
 		/** @comment this has to me made for a decision on what to do with the PD-DATA.confirm message */
 		setLastUpperMsg(msg->dup());
 	}
-	delete (msg);
 }
 
 void Mcps::handlePdMsg(cMessage *msg) {
@@ -83,28 +83,37 @@ void Mcps::handlePdMsg(cMessage *msg) {
 			delete (pdMsg);
 			return;
 		}
-
 		setLastLowerMsg(pdMsg->dup());
+		double ackTime = 0.0;
 		/** @note be careful
 		 * maybe the code needs to be duplicated for the selfMsg part as well */
 		if (pdMsg->getAckRequest()) {
-			double ackTime = getPd()->symbolsToSeconds(
+			ackTime = rand()%(getMacPib()->getUnitBackoffPeriod());
+			ackTime = getPd()->symbolsToSeconds((unsigned int) ackTime +
 					getPhyPib()->getTurnAroundTime());
 			scheduleAt(simTime() + ackTime, ackTimer);
-		} else {
-			if (pdMsg->getFrameType() == BEACON) {
-				MacBeacon* beacon = check_and_cast<MacBeacon *> (decapsulatePd(
-						pdMsg));
-				beacon->setKind(MAC_BEACON_FRAME);
-				sendMlme(beacon);
-			} else if (pdMsg->getFrameType() == COMMAND) {
-				MacCommand* macCommand = check_and_cast<MacCommand *> (
-						decapsulatePd(pdMsg));
-				macCommand->setKind(MAC_COMMAND_FRAME);
-				sendMlme(macCommand);
-			} else if (pdMsg->getFrameType() == ACK) {
-				sendMlme(decapsulatePd(pdMsg));
-			}
+		}
+		if (ackTime > 0.0) {
+			/** @comment we're sending the ack frame */
+			/** 11 Bytes - size of the ACK frame */
+			ackTime += 11*8 / getPd()->getBitrate();
+		}
+		/** @comment according to received frame size adjust the ifs period*/
+		double ifsPeriod = getPd()->symbolsToSeconds(getMacPib()->getMacMinSIFSPeriod());
+		if ((check_and_cast<cPacket *>(msg))->getByteLength() > getMacPib()->getMaxSIFSFrameSize())
+			ifsPeriod = getPd()->symbolsToSeconds(getMacPib()->getMacMinLIFSPeriod());
+		if (pdMsg->getFrameType() == BEACON) {
+			MacBeacon* beacon = check_and_cast<MacBeacon *> (decapsulatePd(
+					pdMsg));
+			beacon->setKind(MAC_BEACON_FRAME);
+			sendMlme(beacon, ackTime + ifsPeriod);
+		} else if (pdMsg->getFrameType() == COMMAND) {
+			MacCommand* macCommand = check_and_cast<MacCommand *> (
+					decapsulatePd(pdMsg));
+			macCommand->setKind(MAC_COMMAND_FRAME);
+			sendMlme(macCommand, ackTime + ifsPeriod);
+		} else if (pdMsg->getFrameType() == ACK) {
+			sendMlme(decapsulatePd(pdMsg), ackTime + ifsPeriod);
 		}
 	}
 }
@@ -126,12 +135,24 @@ void Mcps::handleMlmeMsg(cMessage *msg) {
 		} else if (command->getCommandType() == ASSOCIATE_REQUEST) {
 			sendPdDown(encapsulateMcps(command));
 		} else if (command->getCommandType() == DATA_REQUEST) {
-			setPriorityFrameQueueLength(getPriorityFrameQueueLength());
+			setPriorityFrameQueueLength(getPriorityFrameQueueLength() + 1);
 			priorityFrameQueue.push_back(encapsulateMcps(command));
 		}
 	} else if (msg->getKind() == MAC_BEACON_FRAME) {
 		MacBeacon* beacon = check_and_cast<MacBeacon *> (msg);
 		sendPdDown(encapsulateMcps(beacon));
+	}
+}
+
+void Mcps::sendCapFrame() {
+	if (getPriorityFrameQueueLength() > 0) {
+		sendPdDown(priorityFrameQueue.front());
+		priorityFrameQueue.pop_front();
+		setPriorityFrameQueueLength(getPriorityFrameQueueLength() - 1);
+	} else if (getFrameQueueLength() > 0) {
+		sendPdDown(frameQueue.front());
+		frameQueue.pop_front();
+		setFrameQueueLength(getFrameQueueLength() - 1);
 	}
 }
 
@@ -148,6 +169,16 @@ void Mcps::sendMcpsUp(cMessage *msg) {
 void Mcps::sendMlme(cMessage *msg) {
 	commentMsgSending(msg);
 	sendDelayed(msg, 0.0, mlmeOut);
+}
+
+void Mcps::sendMcpsUp(cMessage *msg, double delay) {
+	commentMsgSending(msg);
+	sendDelayed(msg, delay, mcpsSapOut);
+}
+
+void Mcps::sendMlme(cMessage *msg, double delay) {
+	commentMsgSending(msg);
+	sendDelayed(msg, delay, mlmeOut);
 }
 
 PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
