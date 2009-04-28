@@ -1,0 +1,24 @@
+\chapter{Zigbee a IEEE 802.15.4}
+
+\indent\indent S nástupom zariadení pre bezdrôtovú komunikáciu určených pre použitie v lokálnych (LAN - Local Area Network), alebo osobných (PAN - Personal Area Network) sieťach sa začala vynárať možnosť využiť bezdrôtovú technológiu aj pre inteligentné systémy, ktoré nevyžadujú vysoké prenosové rýchlosti. To bol popud pre vznik štandardu pre bezdrôtovú komunikáciu v LAN a PAN sieťach charakteristickú nízkymi prenosovými rýchlosťami, malými nárokmi na konfiguráciu a aj samotnú prevádzku.
+
+\section{IEEE 802.15.4}
+
+\indent\indent Tento štandard definujúci fyzickú (PHY) a linkovú (MAC) vrstvu bol prvý krát predstavený v roku 2003~\cite{ieee03}. Od toho momentu je ďalej vyvíjaný dvoma smermi. Jeden bol predstavený v roku 2006 pod označením IEEE 802.15.4b~\cite{ieee06}, formálne aj označovaný ako IEEE 802.15.4b-2006 vďaka roku svojho publikovania. Rozšíril možnosti modulácie signálu, a teda aj zvýšil maximálne prenosové rýchlosti vo frekvenčných pásmach 868/915 MHz. Umožnenie viacerých druhov modulácie v týchto prenosových pásmach umožnilo zjednodušenie samotných zariadení, pretože na komunikáciu v 868/915 MHz a 2.4 GHz už stačil iba jeden modulačný čip. Druhú vetvu vývoja prestavoval štandard označovaný ako IEEE 802.15.4a prípadne formálne IEEE 802.15.4a-2007, ktorý operuje v pásme Ultra-Wideband (UWB). Týmto sa však nebudeme v tejto práci zaoberať. Všetky nasledovné informácie sa budú viazať k verzii IEEE 802.15.4b-2006, ak nebude uvedené inak.\\
+\indent Všeobecne, IEEE 802.15.4 predstavuje základ pre tzv. LR-WPAN (Low-Rate Wireless PAN) siete. Naň sa spoliehajú technológie ako WirelessHART, MiWi, alebo aj ZigBee.
+
+\subsection{Fyzická vrstva}
+
+\indent\indent Ako už bolo spomenuté, jedná sa o technológiu pracujúcu so vzduchom ako zdieľaným médiom. Frekvenčné pásma,  v ktorých zariadenia operujú, sú uvedené v tabuľke 
+\begin{tabular}{c c l c c l}
+  \hline
+  PHY (MHz) & Frekvencia (MHz) & Modulácia & Bitrate & Symbol rate & Symboly \\ [0.5ex]
+  \hline
+  & 868--868.6 & BPSK & 20 & 40 & Binárne\\
+  \raisebox{1.5ex}{868/915} & 902--928 & BPSK & 40 & 40 & Binárne\\
+  \hline
+  & 868--868.6 & ASK & 250 & 12.5 & 20-bitové PSSS\\
+  \raisebox{1.5ex}{868/915} & 902--928 & ASK & 250 & 50 & 5-bitové PSSS\\
+  \hline
+\end{tabular} 
+Pre komunikáciu je vyhradených 27 kanálov, ktoré sú združené do troch tzv. stránok kanálov. Takýto sposob členenia je z historických dôvodov a z dôvodov spätnej kompatibility so zariadeniami fungujúcimi na IEEE 802.15.4-2003. 
