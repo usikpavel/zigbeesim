@@ -1,0 +1,66 @@
+\begin{thebibliography}{10}
+
+\bibitem{halas03}
+B.~Halás.
+\newblock {Návrh simulácie bezdrôtovej siete ZigBee 802.15.4 pomocou
+  simulačného systému OMNeT++}.
+\newblock Master's thesis, 2003.
+\newblock In Slovak.
+
+\bibitem{ieee03}
+{IEEE Computer Society}.
+\newblock Wireless medium access control and physical layer specifications for
+  low-rate wireless personal area networks, Oct 2003.
+
+\bibitem{ieee06}
+{IEEE Computer Society}.
+\newblock Wireless medium access control and physical layer specifications for
+  low-rate wireless personal area networks, Sep 2006.
+
+\bibitem{sbornik}
+{M. Haindl, Š. Kment, P. Slavík}.
+\newblock {Virtual Information Systems}.
+\newblock In {\em WSCG'2000 --- Short communication papers}, pages 22--27.
+  University of West Bohemia, Pilsen, 2000.
+
+\bibitem{clanek}
+P.~Slavík.
+\newblock {Grammars and Rewriting Systems as Models for Graphical User
+  Interfaces}.
+\newblock {\em Cognitive Systems}, 4-3(4):381--399, 1997.
+
+\bibitem{CSTUG}
+{CSTUG} --- {\CS}{\TeX} {U}sers {G}roup --- hlavní stránka.
+\newblock \\ \verb|http://www.cstug.cz/|.
+
+\bibitem{infodp}
+{K336} {I}nfo --- pokyny pro psaní diplomových prací.
+\newblock \\ \verb|https://info336.felk.cvut.cz/clanek.php?id=400|.
+
+\bibitem{www}
+{Knihovna Grafické skupiny}.
+\newblock \\ \verb|http://www.cgg.cvut.cz/Bib/library/|.
+
+\bibitem{ipe}
+Grafický vektorový editor pro práce vhodný pro práci {\LaTeX}em.
+\newblock \\ \verb|http://tclab.kaist.ac.kr/ipe/|.
+
+\bibitem{latexdocweb}
+{\LaTeX} --- online manuál.
+\newblock \\ \verb|http://www.cstug.cz/latex/lm/frames.html|.
+
+\bibitem{latexwiki}
+Wiki books {\LaTeX}.
+\newblock \\ \verb|http://en.wikibooks.org/wiki/LaTeX/|.
+
+\bibitem{zigbee08}
+{ZigBee Alliance, Inc.}
+\newblock Zigbee specification, Jan 2008.
+
+\bibitem{kniha}
+J.~Žára, B.~Beneš, and P.~Felkel.
+\newblock {\em Moderní počítačová grafika}.
+\newblock Computer Press s.r.o, Brno, 1st edition, 1998.
+\newblock In Czech.
+
+\end{thebibliography}

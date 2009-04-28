@@ -1,0 +1,43 @@
+\chapter{Špecifikácia požiadaviek na navrhovaný systém}
+
+\section{Popis problému}
+
+\indent\indent Špecifikácia siete ZigBee~\cite{zigbee08} predstavuje uzavretý dokument popisujúci udalosti, procesy a obsah komunikácie medzi jednotlivými modulmi v rámci hierarchie definovanej takisto týmto dokumentom. Štandard ZigBee hovorí o vyšších sieťových vrstvách. Vynecháva fyzickú a linkovú vrstvu. V daných prípadoch sa spolieha na iný dokument, na špecifikáciu protokolu IEEE 802.15.4$^{TM}$~\cite{ieee06}.\\
+\indent\indent Informácie obsiahnuté v týchto dvoch dokumentoch je nutné premietnuť do vnútornej štruktúry modelov simulátora pre získanie čo najvernejších výsledkov. Od modelu sa takisto očakáva reflektovanie nárokov vkladaných do reálnych sietí, a to mobilita daných prvkov, ktorá nie je bezdrôtovým senzorových sietí cudzia a určite zakomponovanie javov sprevádzajúcich šírenie elektromagnetického signálu vzduchom. Z experimenálnej stránky veci nás zaujíma aj možnosť nasadenia technológie TCP/IP nad technológiami ZigBee/IEEE 802.15.4
+
+\section{Požiadavky na model}
+
+\indent\indent Požiadavky kladené na simulačný model by sa dali zhrnúť do nasledujúcich niekoľko bodov:
+\begin{enumerate}
+  \item Obsiahnutie základných vlastností deklarovaných v štandardoch ZigBee a IEEE 802.15.4
+  \item Podpora mobility všetkých sieťových prvkov
+  \item Zahrnutie vplyvov prostredia (interferencia, šum, ...)
+  \item Modularita pre ľahké aktualizácie modelu v prípade vydania nových verzii štandardov
+  \item Výpočtová náročnosť vykonávaných simulácii v rozumných medziach
+\end{enumerate}
+
+\subsection{Vlastnosti sietí postavených na IEEE 802.15.4}
+
+\indent\indent Štandard uvedený technickej verejnosti v roku 2003 špecifikuje fyzickú a linkovú vrstvu Low-Rate WPAN (Wireless Personal Area Network) sietí. Charakteristické vlastnosti týchto sietí sú nízka spotreba, nízka datová priepustnosť, v prípade potreby garancia istého prenosového pásma a jednoduchosť jednotlivých procesov, z ktorej vyplývajú nevysoké požiadavky na riadiace procesory. Typická aktivita v čase zariadení tohoto typu je pod 0.1\%. Elementy, ktoré sú pri takto nastavených požiadavkách na sieť potrebné pre jej efektívne fungovanie a bez ktorých sa náš simulačný model nezaobíjde sú nasledovné:
+\begin{description}
+  \item[RFD/FFD prvky] koncové prvky siete (označujeme ich ako RFD prvky) sú konštrukčne jednoduchšie prvky v stromovej topológii. V teórii grafov by sme ich vďaka polohe označili listami. Odpoveď na to, prečo potrebujeme zložité a jednoduché prvky je v tom, že v rámci stromovej hierarchie len tie zariadenia nachádzajúce sa vyššie majú svoju úlohu doplnenú o posielanie beacon rámcov, smerovanie paketov, prijímanie žiadostí o asociáciu siete a pod.
+  \item[Beacon rámce] sú rámce vysielané v pravidelných intervaloch prvkom typu FFD a majú za úlohu informovať o plánovaných datových prenosoch, topológii a o konfiguračných premenných danej siete. Tieto rámce sa objavujú pravidelne a vďaka tomu príjemca vie, kedy si môže dovoliť vypnúť prijímač mikrovlnného signálu s cieľom šetriť energiu a zároveň s istotou nepremeškania žiadneho beacon rámca.
+  \item[CSMA-CA] je metóda prístupu k zdieľanému médiu. V našom prípade je médiom vzduch a metóda nám pomáha vyvarovať sa kolízii rámcov pri ich vysielaní a príjme.
+  \item[GTS mechanizmus] je systém periodického rezervovania časových slotov pre posielanie rámcov medzi prvkami v stromovej topológii. Môže byť v prípade potreby zárukou získania určitej šírky prenosového pásma pre jednotlivé sieťové prvky, a teda umožňovať komunikáciu s nízkou latenciou.
+
+ \end{description}
+\indent\indent O týchto vlastnostiach a o spôsobe ich prípadnej implementácie si povieme viac v neskorších kapitolách.
+
+\subsubsection{Mobilita}
+
+\indent\indent Na sieťové prvky bezdrôtových sietí je často kladený požiadavok mobility daného prvku v priestore, ktorý je v konečnom dôsledku premietaný do úprav pozície daného prvku v topológii siete. Pre simulátor teda vyplýva, že musí dynamicky v čase vedieť polohu prvku pre výpočet hodnôt fyzikálnych veličín charakterizujúcich prenos a následný príjem signálu.\\
+\indent Čo sa týka daného modelu, ten by mal mať schopnosť reagovať v prípade, že komunikačné cesty po zmene polohy už nie sú schopné dostatočne kvalitne prenášať rámce. Toto je vlastnosť prvkov, na ktorú sa v špecifikácii~\cite{ieee06} myslí, a teda vo finálnom modeli by mala byť zahrnutá.
+
+\subsubsection{Vlastnosti prenosového média}
+
+\indent\indent Siete, ktoré su predmetom nášho záujmu, pristupujú k zdieľanému médiu - vzduchu. Tým, že médium je spoločné pre všetky prvky siete, stav, v ktorom sa nachádza, má rôznou mierou vplyv na všetky prijímače elektromagnetického signálu. Mnohé simulátory sa zameriavajú práve na verné spracovanie tejto skutočnosti. Ich metódy napríklad pre výpočet prijímaného výkonu, alebo odstupu signálu od šumu (SNR) sú výborne spracované a budú pre náš simulátor užitočné.
+
+\subsection{Modularita návrhu}
+
+\indent\indent Podobne ako v predchádzajúcej práci~\cite{halas03} sa nám overil diferencovaný prístup k jednotlivým vrstvám  odvodený od OSI-ISO modelu, bude snaha o postavenie sieťových prvkov z viacerých častí, ktoré budú medzi sebou ideálne komunikovať len predávaním správ.\\
+\indent Tento pohľad na komplexnú štruktúru sieťových prvkov nám zaručí jednoduchosť prípadných neskorších zásahov napríklad z dôvodu zmeny v smerovacích mechanizmoch. V danom prípade bude nutné iba vykonať zmeny v module, ktorý zabezpečuje smerovanie paketov.
