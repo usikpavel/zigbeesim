@@ -364,8 +364,21 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 			sendMlmeUp(response);
 		}
 	} else if (msg->getKind() == PLME_CCA_CONFIRM) {
-		/** @comment channel clear, transmit the frame */
-		getMcps()->sendCapFrame();
+		PlmeCca_confirm *confirm = check_and_cast<PlmeCca_confirm *>(msg);
+		if (confirm->getStatus() == PHY_IDLE) {
+			/** @comment channel clear, transmit the frame */
+			getMcps()->sendCapFrame();
+		} else {
+			if (getNumberOfBacoffs() = getMacPib()->getMacMaxCSMABackoffs()
+				|| getBackoffExponent() = getMacPib()->getMacMaxBE()) {
+				setNumberOfBackoffs(0);
+				setBackoffExponent(getMacPib()->getMacMinBE());
+				/** @TODO reset the backoff period*/
+			}
+			setBackoffPeriod(2*getBackoffPeriod());
+			setNumberOfBackoffs(getNumberOfBacoffs() + 1);
+			setBackoffExponent(getBackoffExponent() + 1);
+		}
 	}
 	delete (msg);
 }
@@ -486,9 +499,7 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 		setRequest->setPibAttributeValue(0, associate->getLogicalChannel());
 		sendPlmeDown(setRequest);
 	} else if (msg->getKind() == MLME_ASSOCIATE_RESPONSE) {
-		MlmeAssociate_response* response = check_and_cast<
-				MlmeAssociate_response *> (msg);
-		/** @TODO here we are waiting for the data request frame from the child */
+		/** @note here we are waiting for the data request frame from the child */
 	}
 }
 
@@ -534,6 +545,26 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 			indication->setSecurityLevel(0x00);
 			sendMlmeUp(indication);
 			delete (command);
+		} else if (command->getCommandType() == DATA_REQUEST) {
+			if (getLastUpperMsg()->getKind() == MLME_ASSOCIATE_RESPONSE) {
+				unsigned short assocShortAddress;
+				MlmeAssociate_response *response = check_and_cast<MlmeAssociate_response *>(getLastUpperMsg()->dup());
+				MacCommand* macCommand = new MacCommand("Associate Response Command", MAC_COMMAND_FRAME);
+				macCommand->setCommandType(ASSOCIATE_RESPONSE);
+				macCommand->setCommandPayloadArraySize(3);
+				macCommand->setByteLength(4);
+				assocShortAddress = response->getAssocShortAddress();
+				unsigned char *commandPayload;
+				commandPayload = (unsigned char*) &assocShortAddress;
+				macCommand->setCommandPayload(0, commandPayload[0]);
+				macCommand->setCommandPayload(1, commandPayload[1]);
+				macCommand->setCommandPayload(2, response->getStatus());
+				McpsEncapsulation encapsulation;
+				encapsulation.destinationAddress = response->getDeviceAddress();
+				encapsulation.destinationPanIdentifier = getMacPib()->getMacPANId();
+				getMcps()->setNextEncapsulation(encapsulation);
+				sendMcps(macCommand);
+			}
 		}
 	} else if (msg->getKind() == MAC_BEACON_FRAME) {
 		std::string msgName = msg->getName();
@@ -557,14 +588,19 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 									== getMacPib()->getMacCoordShortAddress())) {
 				/** @comment now we found the beacon from the coordinator we'd like to work with */
 				/** @comment capSlotDuration = aBaseSlotDuration * 2^superframeOrder */
+				/** @FIXME random problems here with the SimTime :-\ */
+				std::stringstream commentStream;
+				commentStream << "Starting the Contention Access Period";
+				comment(COMMENT_SUPERFRAME, commentStream.str());
+				commentStream.str().clear();
 				setCapSlotDuration((SimTime) symbolsToSeconds(
 						getMacPib()->getBaseSlotDuration() * (1
 								<< macBeacon->getSuperframeOrder()),
 						getCurrentChannel(), getCurrentPage()));
+
 				setCapSlotNumber(1);
 				setSuperframePeriod(CAP);
-				std::stringstream commentStream;
-				commentStream << "Starting the Contention Access Period; CAP slot duration: " << getCapSlotDuration();
+				commentStream << "CAP slot duration: " << getCapSlotDuration();
 				comment(COMMENT_SUPERFRAME, commentStream.str());
 				scheduleAt(getPd()->getLastMsgTimestamp()
 						+ getCapSlotDuration(), capSlotTimer);

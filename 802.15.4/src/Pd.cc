@@ -141,7 +141,7 @@ Frame802154* Pd::encapsulatePd(PdMsg *msg) {
 		} else if (currentChannel <= 0x0A) {
 			setBitrate(40960);
 		} else {
-			setBitrate(40960);
+			setBitrate(256000);
 		}
 		break;
 	case 0x01:
