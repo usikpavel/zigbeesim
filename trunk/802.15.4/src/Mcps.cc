@@ -113,6 +113,19 @@ void Mcps::handlePdMsg(cMessage *msg) {
 			macCommand->setKind(MAC_COMMAND_FRAME);
 			sendMlme(macCommand, ackTime + ifsPeriod);
 		} else if (pdMsg->getFrameType() == ACK) {
+			if (getPriorityFrameQueueLength() > 0) {
+				if (pdMsg->getSequenceNumber() == priorityFrameQueue.front()->getSequenceNumber()) {
+					priorityFrameQueue.pop_front();
+					setPriorityFrameQueueLength(getPriorityFrameQueueLength() - 1);
+				}
+			} else if (getFrameQueueLength() > 0) {
+				if (pdMsg->getSequenceNumber() == frameQueue.front()->getSequenceNumber()) {
+					frameQueue.pop_front();
+					setFrameQueueLength(getFrameQueueLength() - 1);
+				}
+			} else {
+				commentError("Unexpected ACK received, queues are empty");
+			}
 			sendMlme(decapsulatePd(pdMsg), ackTime + ifsPeriod);
 		}
 	}
@@ -137,6 +150,8 @@ void Mcps::handleMlmeMsg(cMessage *msg) {
 		} else if (command->getCommandType() == DATA_REQUEST) {
 			setPriorityFrameQueueLength(getPriorityFrameQueueLength() + 1);
 			priorityFrameQueue.push_back(encapsulateMcps(command));
+		} else if (command->getCommandType() == ASSOCIATE_RESPONSE) {
+			sendPdDown(encapsulateMcps(command));
 		}
 	} else if (msg->getKind() == MAC_BEACON_FRAME) {
 		MacBeacon* beacon = check_and_cast<MacBeacon *> (msg);
@@ -145,14 +160,17 @@ void Mcps::handleMlmeMsg(cMessage *msg) {
 }
 
 void Mcps::sendCapFrame() {
+	PdMsg *pdMsg;
 	if (getPriorityFrameQueueLength() > 0) {
-		sendPdDown(priorityFrameQueue.front());
+		pdMsg = priorityFrameQueue.front();
 		priorityFrameQueue.pop_front();
-		setPriorityFrameQueueLength(getPriorityFrameQueueLength() - 1);
+		priorityFrameQueue.push_front(pdMsg->dup());
+		sendPdDown(pdMsg);
 	} else if (getFrameQueueLength() > 0) {
-		sendPdDown(frameQueue.front());
+		pdMsg = frameQueue.front();
 		frameQueue.pop_front();
-		setFrameQueueLength(getFrameQueueLength() - 1);
+		frameQueue.push_front(pdMsg->dup());
+		sendPdDown(pdMsg);
 	}
 }
 
@@ -250,6 +268,17 @@ PdMsg* Mcps::encapsulateMcps(McpsMsg *msg) {
 			request->setAckRequest(true);
 			request->setFramePending(false);
 			request->setPanIdCompression(true);
+		} else if (command->getCommandType() == ASSOCIATE_RESPONSE) {
+			request->setName("Associate Response");
+			request->setByteLength(22);
+			request->setSourceAddressingMode(LONG_ADDRESS);
+			request->setSourceAddress(getMacPib()->getExtendedAddress());
+			request->setDestinationAddressingMode(LONG_ADDRESS);
+			request->setDestinationAddress(getNextEncapsulation()->destinationAddress);
+			request->setDestinationPanIdentifier(getNextEncapsulation()->destinationPanIdentifier);
+			request->setAckRequest(true);
+			request->setFramePending(false);
+			request->setPanIdCompression(true);
 		}
 		request->setSequenceNumber(getMacPib()->getMacDSN());
 		getMacPib()->setMacDSN(getMacPib()->getMacDSN() + 1);
@@ -314,7 +343,5 @@ McpsMsg* Mcps::decapsulatePd(PdMsg *msg) {
 }
 
 Mcps::~Mcps() {
-	delete (lastLowerMsg);
-	delete (lastUpperMsg);
-	delete (ackTimer);
+
 }
