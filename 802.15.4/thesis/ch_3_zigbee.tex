@@ -5,14 +5,37 @@
 \section{IEEE 802.15.4}
 
 \indent\indent Tento štandard definujúci fyzickú (PHY) a linkovú (MAC) vrstvu bol prvý krát predstavený v roku 2003~\cite{ieee03}. Od toho momentu je ďalej vyvíjaný dvoma smermi. Jeden bol predstavený v roku 2006 pod označením IEEE 802.15.4b~\cite{ieee06}, formálne aj označovaný ako IEEE 802.15.4b-2006 vďaka roku svojho publikovania. Rozšíril možnosti modulácie signálu, a teda aj zvýšil maximálne prenosové rýchlosti vo frekvenčných pásmach 868/915 MHz. Umožnenie viacerých druhov modulácie v týchto prenosových pásmach umožnilo zjednodušenie samotných zariadení, pretože na komunikáciu v 868/915 MHz a 2.4 GHz už stačil iba jeden modulačný čip. Druhú vetvu vývoja prestavoval štandard označovaný ako IEEE 802.15.4a prípadne formálne IEEE 802.15.4a-2007, ktorý operuje v pásme Ultra-Wideband (UWB). Týmto sa však nebudeme v tejto práci zaoberať. Všetky nasledovné informácie sa budú viazať k verzii IEEE 802.15.4b-2006, ak nebude uvedené inak.\\
+\indent Siete postavené podľa IEEE 802.15.4b-2006 sú charakteristické tým, že ponúkajú
+\begin{itemize}
+\item Prevádzka v bezlicencovaných frekvenčných pásmach
+\item Prenosové rýchlosti na úrovniach 250, 100, 40, alebo 20 kb/s
+\item Topológia v tvare hviezda, alebo každý s každým (peer-to-peer)
+\item Komunikácia pomocou 64-bitových, alebo 16-bitových adries
+\item Mechanizmus alokácie časových slotov (GTS)
+\item Prístup na médium vyhýbajúci sa kolíziám (CSMA-CA)
+\item Spoľahlivý prenos dát s mechanizmom kotroly integrity (FCS)a potvrdzovaním dát
+\item Aktivita zariadení priemerne na úrovni 0.1\% doby cyklu
+\end{itemize}
 \indent Všeobecne, IEEE 802.15.4 predstavuje základ pre tzv. LR-WPAN (Low-Rate Wireless PAN) siete. Naň sa spoliehajú technológie ako WirelessHART, MiWi, alebo aj ZigBee.
+
+\subsection{Topológia}
+
+\indent\indent Pre vytvorenie PAN siete je potrebné, aby minimálne jeden z prvkov bol typu FFD (Full Functionality Device). Tieto zariadenia majú schopnosť vytvárať WPAN sieť (v prípade, že fungujú aj ako PAN koordinátor), okrem toho aj prideľujú sieťové adresy, asociujú nové prvky do siete a vysielajú tzv. beacon rámce.\\
+\indent Prvky FFD a RFD môžu tvoriť 2 druhy usporiadaní z pohľadu topológie siete - hviezdu a každý s každým. TODO: obrazky dodat
+
+\subsubsection{Hviezda (Star)}
+\indent\indent Siete typu Hviezda fungujú na sebe nezávisle a bez problémov ich môže operovať viac vo svojom vzájomnom dosahu. Každá z nich musí byť ale jednoznačne identifikovateľná svojím PAN identifikátorom. V centre siete je PAN koordinátor. Zariadenie, či už FFD, alebo RFD si pri pripájaní do siete môže vybrať ľubovoľný PAN koordinátor vo svojom dosahu a požiadať ho o asociáciu.\\
+\subsubsection{Každý s každým (Peer-to-Peer)}
+\indent\indent V tomto type topológie je implementovaný nápad aby mohlo každé zariadenie komunikovať s ľubovoľným iným vo svojom dosahu. Takisto v takýchto sieťach existuje jeden FFD prvok v roli PAN kooridnátora.\\
+\indent Z tohoto typu sietí je odvodený variant Zhluk stromov (Cluster Tree) TODO obrazok. V takejto topológii je prevažná väčšina zariadení typu FFD. Zariadenia typu RFD sa pripájajú k stromu ako listy. Všetky FFD sú schopné vysielať synchronizačné beacon rámce. Z nich môže byť však len jeden PAN koordinátor. Ak bude asociácia zariadenia do siete z nejakého dôvodu odmietnutá, prvok môže vyhľadať iné FFD zariadenie a skúsiť asociáciu u neho.\\
+\indent V prípade, že sú splnené určité podmienky, PAN koordinátor môže požiadať FFD prvok v rámci svojej siete, aby  zformoval novú PAN sieť s novým PAN identifikátorom. Ostatné zariadenia sa potom môžu pripájať až budú tvoriť podobné štruktúry, ako je tá na obr. TODO Tento model ponúka plošne široké pokrytie, na druhú stranu však správy pri prechode cez viaceré PAN zvyšuju svoju latenciu.\\
 
 \subsection{Fyzická vrstva}
 
-\indent\indent Ako už bolo spomenuté, jedná sa o technológiu pracujúcu so vzduchom ako zdieľaným médiom. Frekvenčné pásma,  v ktorých zariadenia operujú, sú uvedené v tabuľke 
+\indent\indent Ako už bolo spomenuté, jedná sa o technológiu pracujúcu so vzduchom ako zdieľaným médiom. Frekvenčné pásma, v ktorých zariadenia operujú, sú uvedené v tabuľke 
 \begin{tabular}{c c l c c l}
   \hline\hline
-  PHY (MHz) & Frekvencia (MHz) & Modulácia & Bitrate & Symbol rate & Symboly \\ [0.5ex]
+  PHY (MHz) & Frekvencia (MHz) & Modulácia & Prenosová rýchlosť & Symbol rate & Symboly \\ [0.5ex]
   \hline
   & 868--868.6 & BPSK & 20 & 40 & Binárne\\
   \raisebox{1.5ex}{868/915} & 902--928 & BPSK & 40 & 40 & Binárne\\ [0.5ex]
@@ -26,4 +49,8 @@
   2450 & 2400--2483.5 & O-QPSK & 250 & 62.5 & 16-kové ortogonálne\\ [0.5ex]
   \hline
 \end{tabular} 
-Pre komunikáciu je vyhradených 27 kanálov, ktoré sú združené do troch tzv. stránok kanálov. Takýto sposob členenia je z historických dôvodov a z dôvodov spätnej kompatibility so zariadeniami fungujúcimi na IEEE 802.15.4-2003. 
+Pre komunikáciu je vyhradených 27 kanálov, ktoré sú združené do troch tzv. stránok kanálov. Takýto sposob členenia je z historických dôvodov a z dôvodov spätnej kompatibility so zariadeniami fungujúcimi na IEEE 802.15.4-2003. Stránky sú očíslované v rozsahu 0--31, pričom v aktuálne sú stránky 3--31 rezervované do budúcna.\\ 
+\indent Na definovanie frekvencie, prenosovej rýchlosti a modulácie je nutné poznať kombináciu hodnoty stránky kanálu a označenie kanálu (z rozsahu 0--26). Pre určenie stránky kanálu je využitých horných 5 bitov (MSB - most significant bit). Pre označenie kanálu sa používa 27-bitová mapa. To znamená, že informácia definujúca potrebné parametre pre komunikáciu na úrovni fyzickej vrstvy sa kompletne obsiahne do 32-bitového identifikátora (TODO viď obr.). Jednotlivé kombinácie hodnôt stránky kanálov a samotného kanálu sú bližšie rozpísané v tabuľke TODO\\
+
+\subsection{Linková vrstva}
+\indent\indent
