@@ -1,20 +1,26 @@
-/* -*-	mode:c++ -*- *******************************************************
- * file:        SnrDecider.cc
+/* -*- mode:c++ -*- ********************************************************
+ * file:        SnrDecider802154.h
  *
- * author:      Marc Loebbers
+ * author:      Bernard Halas
  *
- * copyright:   (C) 2004 Telecommunication Networks Group (TKN) at
- *              Technische Universitaet Berlin, Germany.
+ * copyright:   (C) 2009 Czech Technical University, Faculty of
+ *              Electrical Engineering
  *
  *              This program is free software; you can redistribute it
  *              and/or modify it under the terms of the GNU General Public
  *              License as published by the Free Software Foundation; either
  *              version 2 of the License, or (at your option) any later
  *              version.
- *              For further information see file COPYING
- *              in the top level directory
  ***************************************************************************
- * part of:     framework implementation developed by tkn
+ * part of:     ZigBee Simulation model
+ * description: - Module handling the message error detection
+ ***************************************************************************
+ * based on:    SnrDecider.h
+ *
+ * author:      Marc Loebbers
+ *
+ * copyright:   (C) 2004 Telecommunication Networks Group (TKN) at
+ *              Technische Universitaet Berlin, Germany.
  ***************************************************************************/
 
 

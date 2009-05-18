@@ -1,5 +1,5 @@
 /* -*- mode:c++ -*- ********************************************************
- * file:        SimpleArp.h
+ * file:        ZigBeeArp.h
  *
  * author:      Daniel Willkomm
  *
@@ -16,7 +16,6 @@
  ***************************************************************************
  * part of:     framework implementation developed by tkn
  ***************************************************************************/
-
 #ifndef ZIGBEEARP_H
 #define ZIGBEEARP_H
 
