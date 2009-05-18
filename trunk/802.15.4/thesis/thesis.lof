@@ -3,16 +3,39 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Topol\IeC {\'o}gia typu hviezda}}{9}{figure.3.1}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Topol\IeC {\'o}gia typu ka\IeC {\v z}d\IeC {\'y} s ka\IeC {\v z}d\IeC {\'y}m}}{10}{figure.3.2}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Topol\IeC {\'o}gia typu zhluk stromov}}{11}{figure.3.3}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces 32-bitov\IeC {\'y} identifik\IeC {\'a}tor kan\IeC {\'a}lov a str\IeC {\'a}nky kan\IeC {\'a}lov}}{12}{figure.3.4}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces \IeC {\v S}trukt\IeC {\'u}ra superframe r\IeC {\'a}mca (obr\IeC {\'a}zok nie je v mierke)}}{14}{figure.3.5}
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Vz\IeC {\v t}ah medzi ZigBee Alliance a IEEE 802.15.4}}{16}{figure.3.6}
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Zn\IeC {\'a}zornenie vrstvovej architekt\IeC {\'u}ry siete ZigBee}}{17}{figure.3.7}
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Pou\IeC {\v z}itie dopl\IeC {\v n}uj\IeC {\'u}cich vrstiev v komunik\IeC {\'a}cii medzi linkovou a sie\IeC {\v t}ovou vrstvou}}{19}{figure.3.8}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Pr\IeC {\'a}ca so sign\IeC {\'a}lovou \IeC {\v c}as\IeC {\v t}ou simul\IeC {\'a}cie vo frameworku MiXiM}}{24}{figure.4.1}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Ignorovanie spojen\IeC {\'\i } medzi uzlami z kvadrantov, ktor\IeC {\'y}ch vzdialenos\IeC {\v t} presahuje hodnotu interferen\IeC {\v c}nej vzdialenosti}}{26}{figure.4.2}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Komunik\IeC {\'a}cia medzi modulmi \ttfamily Mobility \rmfamily a \ttfamily ChannelControl\rmfamily }}{27}{figure.4.3}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Z\IeC {\'a}kladn\IeC {\'y} poh\IeC {\v l}ad na nami navrhovan\IeC {\'y} simula\IeC {\v c}n\IeC {\'y} model}}{32}{figure.5.1}
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Referen\IeC {\v c}n\IeC {\'y} model sie\IeC {\v t}ovej vrstvy}}{34}{figure.5.2}
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Podoba implementovan\IeC {\'e}ho modelu sie\IeC {\v t}ovej vrstvy}}{36}{figure.5.3}
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Referen\IeC {\v c}n\IeC {\'y} model linkovej vrstvy}}{38}{figure.5.4}
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Sp\IeC {\^o}sob enkapsul\IeC {\'a}cie MPDU na linkovej vrstve}}{39}{figure.5.5}
+\contentsline {figure}{\numberline {5.6}{\ignorespaces \IeC {\v C}asov\IeC {\'e} odstupy medzi jednotliv\IeC {\'y}mi r\IeC {\'a}mcami}}{39}{figure.5.6}
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Podoba implementovan\IeC {\'e}ho modelu linkovej vrstvy}}{41}{figure.5.7}
+\contentsline {figure}{\numberline {5.8}{\ignorespaces Referen\IeC {\v c}n\IeC {\'y} model fyzickej vrstvy}}{42}{figure.5.8}
+\contentsline {figure}{\numberline {5.9}{\ignorespaces Sp\IeC {\^o}sob enkapsul\IeC {\'a}cie PSDU na fyzickej vrstve}}{43}{figure.5.9}
+\contentsline {figure}{\numberline {5.10}{\ignorespaces Podoba implementovan\IeC {\'e}ho modelu fyzickej vrstvy}}{44}{figure.5.10}
+\contentsline {figure}{\numberline {5.11}{\ignorespaces Modul rozhrania 802.15.4 a jeho \IeC {\v s}trukt\IeC {\'u}ra v kontexte s roz\IeC {\v s}\IeC {\'\i }ren\IeC {\'\i }m Mobility Framework}}{46}{figure.5.11}
+\contentsline {figure}{\numberline {5.12}{\ignorespaces Architekt\IeC {\'u}ra modulu komunikuj\IeC {\'u}ceho IP protokolmi na LR-WPAN sieti}}{48}{figure.5.12}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Inicializ\IeC {\'a}cia koordin\IeC {\'a}tora, ED sken}}{51}{figure.6.1}
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Vysielanie a prijatie beacon r\IeC {\'a}mcov}}{52}{figure.6.2}
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Spracovanie \IeC {\v z}iadosti o asoci\IeC {\'a}ciu}}{53}{figure.6.3}
+\contentsline {figure}{\numberline {6.4}{\ignorespaces \IeC {\v Z}iados\IeC {\v t} o zaslanie d\IeC {\'a}t, CCA proced\IeC {\'u}ra}}{54}{figure.6.4}
+\contentsline {figure}{\numberline {6.5}{\ignorespaces Odpove\IeC {\v d} na \IeC {\v z}iados\IeC {\v t} o asoci\IeC {\'a}ciu, jej spracovanie}}{55}{figure.6.5}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\contentsline {figure}{\numberline {B.1}{\ignorespaces Popiska obr\IeC {\'a}zku}}{24}{figure.B.1}
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\contentsline {figure}{\numberline {F.1}{\ignorespaces Seznam p\IeC {\v r}ilo\IeC {\v z}en\IeC {\'e}ho CD --- p\IeC {\v r}\IeC {\'\i }klad}}{37}{figure.F.1}
+\contentsline {figure}{\numberline {10.1}{\ignorespaces Seznam p\IeC {\v r}ilo\IeC {\v z}en\IeC {\'e}ho CD --- p\IeC {\v r}\IeC {\'\i }klad}}{67}{figure.10.1}
