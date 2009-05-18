@@ -1,10 +1,15 @@
 \begin{thebibliography}{10}
 
+\bibitem{miximvision08}
+{A. Köpke, M. Swigulski, K. Wessel, D. Willkomm}.
+\newblock {Simulating Wireless and Mobile Networks in OMNeT++ The MiXiM
+  Vision}.
+\newblock 2008.
+
 \bibitem{halas03}
 B.~Halás.
 \newblock {Návrh simulácie bezdrôtovej siete ZigBee 802.15.4 pomocou
-  simulačného systému OMNeT++}.
-\newblock Master's thesis, 2003.
+  simulačného systému OMNeT++}, 2003.
 \newblock In Slovak.
 
 \bibitem{ieee03}
@@ -17,50 +22,52 @@ B.~Halás.
 \newblock Wireless medium access control and physical layer specifications for
   low-rate wireless personal area networks, Sep 2006.
 
-\bibitem{sbornik}
-{M. Haindl, Š. Kment, P. Slavík}.
-\newblock {Virtual Information Systems}.
-\newblock In {\em WSCG'2000 --- Short communication papers}, pages 22--27.
-  University of West Bohemia, Pilsen, 2000.
+\bibitem{rfc_4919}
+{IETF 6LoWPAN Taskgroup}.
+\newblock {IPv6 over Low-Power Wireless Personal Area Networks
+  (6LoWPANs):Overview, Assumptions, Problem Statement, and Goals}, 2007.
+\newblock {RFC4919}.
 
-\bibitem{clanek}
-P.~Slavík.
-\newblock {Grammars and Rewriting Systems as Models for Graphical User
-  Interfaces}.
-\newblock {\em Cognitive Systems}, 4-3(4):381--399, 1997.
+\bibitem{rfc_4944}
+{IETF 6LoWPAN Taskgroup}.
+\newblock {Transmission of IPv6 Packets over IEEE 802.15.4 Networks}, 2007.
+\newblock {RFC 4944}.
 
-\bibitem{CSTUG}
-{CSTUG} --- {\CS}{\TeX} {U}sers {G}roup --- hlavní stránka.
-\newblock \\ \verb|http://www.cstug.cz/|.
+\bibitem{massmobility99}
+C.~E. Perkins and K.~yeh Wang.
+\newblock Optimized smooth handoffs in mobile ip.
+\newblock In {\em In Proceedings of ISCC}, pages 340--346, 1999.
+
+\bibitem{ansim_homepage}
+Ansim homepage.
+\newblock \\ \verb|http://www.ansim.info/|.
+
+\bibitem{bonnmotion_homepage}
+Bonnmotion tool homepage.
+\newblock \\ \verb|http://iv.cs.uni-bonn.de/wg/cs/applications/bonnmotion/|.
+
+\bibitem{forster_homepage}
+Anna forster's plugins homepage.
+\newblock \\ \verb|http://www.inf.unisi.ch/phd/foerster/downloads.html/|.
 
 \bibitem{infodp}
 {K336} {I}nfo --- pokyny pro psaní diplomových prací.
 \newblock \\ \verb|https://info336.felk.cvut.cz/clanek.php?id=400|.
 
-\bibitem{www}
-{Knihovna Grafické skupiny}.
-\newblock \\ \verb|http://www.cgg.cvut.cz/Bib/library/|.
+\bibitem{mf_homepage}
+{Mobility Framework (MF) for OMNeT++ Homepage}.
+\newblock \\ \verb|mobility-fw.sourceforge.net/|.
 
-\bibitem{ipe}
-Grafický vektorový editor pro práce vhodný pro práci {\LaTeX}em.
-\newblock \\ \verb|http://tclab.kaist.ac.kr/ipe/|.
+\bibitem{pawis_homepage}
+Pawis simulation framework homepage.
+\newblock \\ \verb|http://pawis.sourceforge.net/|.
 
-\bibitem{latexdocweb}
-{\LaTeX} --- online manuál.
-\newblock \\ \verb|http://www.cstug.cz/latex/lm/frames.html|.
-
-\bibitem{latexwiki}
-Wiki books {\LaTeX}.
-\newblock \\ \verb|http://en.wikibooks.org/wiki/LaTeX/|.
+\bibitem{zigbee_homepage}
+Zigbee alliance homepage.
+\newblock \\ \verb|http://www.zigbee.org/|.
 
 \bibitem{zigbee08}
 {ZigBee Alliance, Inc.}
 \newblock Zigbee specification, Jan 2008.
-
-\bibitem{kniha}
-J.~Žára, B.~Beneš, and P.~Felkel.
-\newblock {\em Moderní počítačová grafika}.
-\newblock Computer Press s.r.o, Brno, 1st edition, 1998.
-\newblock In Czech.
 
 \end{thebibliography}

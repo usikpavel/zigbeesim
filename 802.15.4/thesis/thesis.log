@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2008.12.4)  27 APR 2009 21:02
+This is pdfTeX, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2008.12.4)  17 MAY 2009 11:17
 entering extended mode
 **thesis.tex
 (./thesis.tex
@@ -293,11 +293,14 @@ File: pdftex.def 2007/01/08 v0.04d Graphics/color for pdfTeX
 ))
 \Gin@req@height=\dimen104
 \Gin@req@width=\dimen105
+)
+(/usr/share/texmf/tex/latex/multirow/multirow.sty
+\bigstrutjot=\dimen106
 ) (./k336_thesis_macros.sty)
 Diplomova prace
 (/usr/share/texmf/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2007/02/07 v6.75r Hypertext links for LaTeX
-\@linkdim=\dimen106
+\@linkdim=\dimen107
 \Hy@linkcounter=\count90
 \Hy@pagecounter=\count91
 
@@ -337,8 +340,8 @@ Package: url 2005/06/27  ver 3.2  Verb mode for urls, etc.
 )
 LaTeX Info: Redefining \url on input line 2599.
 \Fld@menulength=\count92
-\Field@Width=\dimen107
-\Fld@charsize=\dimen108
+\Field@Width=\dimen108
+\Fld@charsize=\dimen109
 \Choice@toks=\toks17
 \Field@toks=\toks18
 Package hyperref Info: Hyper figures OFF on input line 3102.
@@ -355,27 +358,28 @@ Package hyperref Info: Link coloring ON on input line 3120.
 File: hpdftex.def 2007/02/07 v6.75r Hyperref driver for pdfTeX
 \Fld@listcount=\count96
 ) (./thesis.aux
-(./ch_1_introduction.aux) (./ch_2_goals.aux) (./ch_3_zigbee.aux))
+(./ch_1_introduction.aux) (./ch_2_goals.aux) (./ch_3_zigbee.aux)
+(./ch_4_variants.aux) (./ch_5_model.aux) (./ch_6_functionality.aux)
+(./ch_7_conclusion.aux))
 \openout1 = `thesis.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 96.
-LaTeX Font Info:    ... okay on input line 96.
-
-(/usr/share/texmf/tex/latex/graphics/color.sty
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+ (/usr/share/texmf/tex/latex/graphics/color.sty
 Package: color 2005/11/14 v1.0j Standard LaTeX Color (DPC)
 
 (/usr/lib/texmf/tex/latex/config/color.cfg
@@ -383,7 +387,7 @@ File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 )
 Package color Info: Driver file: pdftex.def on input line 130.
 )
-Package hyperref Info: Link coloring ON on input line 96.
+Package hyperref Info: Link coloring ON on input line 97.
 
 (/usr/share/texmf/tex/latex/hyperref/nameref.sty
 Package: nameref 2006/12/27 v2.28 Cross-referencing by name of section
@@ -393,8 +397,8 @@ Package: refcount 2006/02/20 v3.0 Data extraction from references (HO)
 )
 \c@section@level=\count97
 )
-LaTeX Info: Redefining \ref on input line 96.
-LaTeX Info: Redefining \pageref on input line 96.
+LaTeX Info: Redefining \ref on input line 97.
+LaTeX Info: Redefining \pageref on input line 97.
  (./thesis.out)
 (./thesis.out)
 \@outlinefile=\write3
@@ -411,7 +415,7 @@ Jmeno: Bc. Bernard Hal\IeC {\'a}s
 Nazev prace: Model siete ZigBee
 Vedouci prace: doc. Ing. Jan Jane\IeC {\v c}ek, CSc
 ***************************************************
-<figures/LogoCVUT.pdf, id=143, 93.34875pt x 70.2625pt>
+<figures/LogoCVUT.pdf, id=251, 93.34875pt x 70.2625pt>
 File: figures/LogoCVUT.pdf Graphic file (type pdf)
 
 <use figures/LogoCVUT.pdf> [3
@@ -423,9 +427,9 @@ File: figures/LogoCVUT.pdf Graphic file (type pdf)
 ] [5] [6
 
 ]
-Overfull \hbox (0.32956pt too wide) in paragraph at lines 165--167
-\T1/cmr/m/n/12 Nemám zá-vaºný dô-vod proti uºi-tiu tohto ²kol-ského diela v zmy
-sle Ÿ60 Zá-kona £. 121/2000
+Overfull \hbox (17.88388pt too wide) in paragraph at lines 166--168
+\T1/cmr/m/n/12 I have no ob-jection to usage of this work in com-pli-ance with 
+the act Ÿ60 Zá-kon £. 121/2000Sb.
  []
 
 [7] [8
@@ -445,7 +449,12 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 \tf@toc=\write4
 \openout4 = `thesis.toc'.
 
- [12] (./thesis.lof)
+ [12] (./thesis.lof
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 17.
+
+(/usr/share/texmf/tex/latex/base/t1cmtt.fd
+File: t1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+))
 \tf@lof=\write5
 \openout5 = `thesis.lof'.
 
@@ -453,12 +462,12 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 
 ] [14
 
-]
-(./thesis.lot)
+] (./thesis.lot)
 \tf@lot=\write6
 \openout6 = `thesis.lot'.
 
- [15] [16
+ [15]
+[16
 
 ]
 \openout2 = `ch_1_introduction.aux'.
@@ -494,111 +503,597 @@ truk£ne
 
  (./ch_3_zigbee.tex
 Kapitola 3.
-)
-Overfull \hbox (57.37128pt too wide) in paragraph at lines 12--233
-[]
+
+Underfull \hbox (badness 10000) in paragraph at lines 3--4
+
  []
 
-[7
-
-
-] [8]
-Kapitola 4.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 239.
-
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 10.
 (/usr/share/texmf/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 239.
- [9
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 10.
+ [7
 
-
-] [10
 
 ]
+Underfull \hbox (badness 10000) in paragraph at lines 19--20
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 23--25
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 27--28
+
+ []
+
+<figures/topology_star.pdf, id=505, 409.53pt x 481.8pt>
+File: figures/topology_star.pdf Graphic file (type pdf)
+
+<use figures/topology_star.pdf>
+Underfull \hbox (badness 10000) in paragraph at lines 38--39
+
+ []
+
+<figures/topology_p2p.pdf, id=507, 409.53pt x 481.8pt>
+File: figures/topology_p2p.pdf Graphic file (type pdf)
+
+<use figures/topology_p2p.pdf>
+Underfull \hbox (badness 10000) in paragraph at lines 48--50
+
+ []
+
+[8] [9 <./figures/topology_star.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/topology_star.pdf): PDF inclu
+sion: Page Group detected which pdfTeX can't handle. Ignoring it.
+>] [10 <./figures/topology_p2p.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/topology_p2p.pdf): PDF inclus
+ion: Page Group detected which pdfTeX can't handle. Ignoring it.
+>] <figures/topology_cluster.pdf, id=539, 477.785pt x 521.95pt>
+File: figures/topology_cluster.pdf Graphic file (type pdf)
+
+<use figures/topology_cluster.pdf>
+Underfull \hbox (badness 10000) in paragraph at lines 61--62
+
+ []
+
+[11 <./figures/topology_cluster.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/topology_cluster.pdf): PDF in
+clusion: Page Group detected which pdfTeX can't handle. Ignoring it.
+>]
+Underfull \hbox (badness 10000) in paragraph at lines 88--90
+
+ []
+
+<figures/channel_page.pdf, id=557, 409.53pt x 120.45pt>
+File: figures/channel_page.pdf Graphic file (type pdf)
+
+<use figures/channel_page.pdf>
+Overfull \hbox (4.66406pt too wide) in paragraph at lines 101--128
+ [] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [12 <./figures/channel_page.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/channel_page.pdf): PDF inclus
+ion: Page Group detected which pdfTeX can't handle. Ignoring it.
+>]
+Underfull \hbox (badness 10000) in paragraph at lines 146--149
+
+ []
+
+[13]
+Underfull \hbox (badness 10000) in paragraph at lines 151--152
+
+ []
+
+<figures/superframe.pdf, id=580, 477.785pt x 240.9pt>
+File: figures/superframe.pdf Graphic file (type pdf)
+
+<use figures/superframe.pdf>
+Underfull \hbox (badness 10000) in paragraph at lines 162--164
+
+ []
+
+[14 <./figures/superframe.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/superframe.pdf): PDF inclusio
+n: Page Group detected which pdfTeX can't handle. Ignoring it.
+>]
+Underfull \hbox (badness 10000) in paragraph at lines 166--168
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 170--171
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 173--174
+
+ []
+
+[15] <figures/zigbee_ieee.pdf, id=603, 409.53pt x 248.93pt>
+File: figures/zigbee_ieee.pdf Graphic file (type pdf)
+
+<use figures/zigbee_ieee.pdf>
+Underfull \hbox (badness 10000) in paragraph at lines 183--184
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 186--187
+
+ []
+
+[16 <./figures/zigbee_ieee.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/zigbee_ieee.pdf): PDF inclusi
+on: Page Group detected which pdfTeX can't handle. Ignoring it.
+>] <figures/architecture_zigbee.pdf, id=619, 477.785pt x 449.68pt>
+File: figures/architecture_zigbee.pdf Graphic file (type pdf)
+
+<use figures/architecture_zigbee.pdf>
+Overfull \hbox (0.95152pt too wide) in paragraph at lines 197--198
+[]\T1/cmr/m/n/12 Poºiadavky na sie-´ovú vrstvu sú za-bez-pe-£o-va-nie správ-neh
+o fun-go-va-nia lin-ko-vej vrstvy
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 197--198
+
+ []
+
+[17 <./figures/architecture_zigbee.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/architecture_zigbee.pdf): PDF
+ inclusion: Page Group detected which pdfTeX can't handle. Ignoring it.
+>]
+Underfull \hbox (badness 10000) in paragraph at lines 200--201
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 203--204
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 206--207
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 209--210
+
+ []
+
+[18] <figures/architecture_sublayers.pdf, id=648, 409.53pt x 401.5pt>
+File: figures/architecture_sublayers.pdf Graphic file (type pdf)
+
+<use figures/architecture_sublayers.pdf>) [19 <./figures/architecture_sublayers
+.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/architecture_sublayers.pdf): 
+PDF inclusion: Page Group detected which pdfTeX can't handle. Ignoring it.
+>] [20
+
+
+]
+\openout2 = `ch_4_variants.aux'.
+
+ (./ch_4_variants.tex
+Kapitola 4.
+
+Underfull \hbox (badness 10000) in paragraph at lines 3--6
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 10--12
+
+ []
+
+[21
+
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 14--15
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 17--18
+
+ []
+
+[22]
+Overfull \hbox (3.89796pt too wide) in paragraph at lines 40--42
+ \T1/cmr/bx/n/12 Base-Phy-La-yer[] \T1/cmr/m/n/12 Je £isto OMNeT++ mo-dul. Ko-m
+u-ni-kuje s vy²-²ími vrst-vami cez správy,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 40--42
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 40--42
+
+ []
+
+<figures/architecture_mixim.pdf, id=682, 477.785pt x 521.95pt>
+File: figures/architecture_mixim.pdf Graphic file (type pdf)
+
+<use figures/architecture_mixim.pdf>
+Underfull \hbox (badness 10000) in paragraph at lines 53--54
+
+ []
+
+[23] [24 <./figures/architecture_mixim.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/architecture_mixim.pdf): PDF 
+inclusion: Page Group detected which pdfTeX can't handle. Ignoring it.
+>]
+Underfull \hbox (badness 10000) in paragraph at lines 56--57
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 59--61
+
+ []
+
+[25] <figures/channelcontrol_areas.pdf, id=716, 409.53pt x 457.71pt>
+File: figures/channelcontrol_areas.pdf Graphic file (type pdf)
+
+<use figures/channelcontrol_areas.pdf>
+Underfull \hbox (badness 10000) in paragraph at lines 71--72
+
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [26 <./figures/channelcontrol_areas.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/channelcontrol_areas.pdf): PD
+F inclusion: Page Group detected which pdfTeX can't handle. Ignoring it.
+>] <figures/topology_mobility.pdf, id=738, 409.53pt x 361.35pt>
+File: figures/topology_mobility.pdf Graphic file (type pdf)
+
+<use figures/topology_mobility.pdf>
+Underfull \hbox (badness 10000) in paragraph at lines 82--84
+
+ []
+
+[27 <./figures/topology_mobility.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/topology_mobility.pdf): PDF i
+nclusion: Page Group detected which pdfTeX can't handle. Ignoring it.
+>]
+Underfull \hbox (badness 10000) in paragraph at lines 86--87
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 89--90
+
+ []
+
+
+Overfull \hbox (2.58206pt too wide) in paragraph at lines 95--96
+ \T1/cmr/bx/n/12 Mi-XiM[] \T1/cmr/m/n/12 Aj v si-mu-lá-tore Mi-XiM je pri-pra-v
+ená im-ple-men-tá-cia ²tan-dardu IEEE 802.15.4.
+ []
+
+[28]) [29] [30
+
+
+]
+\openout2 = `ch_5_model.aux'.
+
+ (./ch_5_model.tex
 Kapitola 5.
-[11] [12
 
-]
+Underfull \hbox (badness 10000) in paragraph at lines 3--6
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 10--11
+
+ []
+
+<figures/architecture_model.pdf, id=776, 409.53pt x 562.1pt>
+File: figures/architecture_model.pdf Graphic file (type pdf)
+
+<use figures/architecture_model.pdf>
+Underfull \hbox (badness 10000) in paragraph at lines 20--22
+
+ []
+
+[31
+
+
+] [32 <./figures/architecture_model.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/architecture_model.pdf): PDF 
+inclusion: Page Group detected which pdfTeX can't handle. Ignoring it.
+>]
+Underfull \hbox (badness 10000) in paragraph at lines 24--25
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 27--28
+
+ []
+
+<figures/topology_net.pdf, id=795, 409.53pt x 329.23pt>
+File: figures/topology_net.pdf Graphic file (type pdf)
+
+<use figures/topology_net.pdf> [33]
+Underfull \hbox (badness 10000) in paragraph at lines 57--62
+
+ []
+
+[34 <./figures/topology_net.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/topology_net.pdf): PDF inclus
+ion: Page Group detected which pdfTeX can't handle. Ignoring it.
+>] <figures/architecture_net.pdf, id=813, 477.785pt x 457.71pt>
+File: figures/architecture_net.pdf Graphic file (type pdf)
+
+<use figures/architecture_net.pdf> [35] [36 <./figures/architecture_net.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/architecture_net.pdf): PDF in
+clusion: Page Group detected which pdfTeX can't handle. Ignoring it.
+>] <figures/topology_mac.pdf, id=832, 409.53pt x 329.23pt>
+File: figures/topology_mac.pdf Graphic file (type pdf)
+
+<use figures/topology_mac.pdf>
+Underfull \hbox (badness 10000) in paragraph at lines 99--100
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 102--103
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 105--106
+
+ []
+
+[37] <figures/frame_mac.pdf, id=840, 477.785pt x 96.36pt>
+File: figures/frame_mac.pdf Graphic file (type pdf)
+
+<use figures/frame_mac.pdf>
+Underfull \hbox (badness 10000) in paragraph at lines 115--116
+
+ []
+
+<figures/interframe_spacing.pdf, id=842, 409.53pt x 240.9pt>
+File: figures/interframe_spacing.pdf Graphic file (type pdf)
+
+<use figures/interframe_spacing.pdf>
+Underfull \vbox (badness 4181) has occurred while \output is active []
+
+ [38 <./figures/topology_mac.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/topology_mac.pdf): PDF inclus
+ion: Page Group detected which pdfTeX can't handle. Ignoring it.
+>] [39 <./figures/frame_mac.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/frame_mac.pdf): PDF inclusion
+: Page Group detected which pdfTeX can't handle. Ignoring it.
+> <./figures/interframe_spacing.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/interframe_spacing.pdf): PDF 
+inclusion: Page Group detected which pdfTeX can't handle. Ignoring it.
+>]
+Underfull \hbox (badness 10000) in paragraph at lines 131--133
+
+ []
+
+[40] <figures/architecture_mac.pdf, id=897, 477.785pt x 457.71pt>
+File: figures/architecture_mac.pdf Graphic file (type pdf)
+
+<use figures/architecture_mac.pdf>
+Underfull \hbox (badness 10000) in paragraph at lines 152--153
+
+ []
+
+[41 <./figures/architecture_mac.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/architecture_mac.pdf): PDF in
+clusion: Page Group detected which pdfTeX can't handle. Ignoring it.
+>] <figures/topology_phy.pdf, id=913, 409.53pt x 281.05pt>
+File: figures/topology_phy.pdf Graphic file (type pdf)
+
+<use figures/topology_phy.pdf>
+<figures/frame_phy.pdf, id=915, 477.785pt x 120.45pt>
+File: figures/frame_phy.pdf Graphic file (type pdf)
+
+<use figures/frame_phy.pdf>
+Underfull \hbox (badness 10000) in paragraph at lines 174--175
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 177--178
+
+ []
+
+[42 <./figures/topology_phy.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/topology_phy.pdf): PDF inclus
+ion: Page Group detected which pdfTeX can't handle. Ignoring it.
+>]
+Underfull \hbox (badness 10000) in paragraph at lines 180--182
+
+ []
+
+<figures/architecture_phy.pdf, id=929, 477.785pt x 457.71pt>
+File: figures/architecture_phy.pdf Graphic file (type pdf)
+
+<use figures/architecture_phy.pdf>
+Underfull \hbox (badness 10000) in paragraph at lines 192--193
+
+ []
+
+[43 <./figures/frame_phy.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/frame_phy.pdf): PDF inclusion
+: Page Group detected which pdfTeX can't handle. Ignoring it.
+>] [44 <./figures/architecture_phy.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/architecture_phy.pdf): PDF in
+clusion: Page Group detected which pdfTeX can't handle. Ignoring it.
+>] <figures/architecture_nic.pdf, id=964, 409.53pt x 618.31pt>
+File: figures/architecture_nic.pdf Graphic file (type pdf)
+
+<use figures/architecture_nic.pdf>
+Underfull \hbox (badness 10000) in paragraph at lines 203--204
+
+ []
+
+[45] [46 <./figures/architecture_nic.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/architecture_nic.pdf): PDF in
+clusion: Page Group detected which pdfTeX can't handle. Ignoring it.
+>]
+Underfull \hbox (badness 10000) in paragraph at lines 208--211
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 213--215
+
+ []
+
+[47] <figures/ip_ieee.pdf, id=1002, 409.53pt x 329.23pt>
+File: figures/ip_ieee.pdf Graphic file (type pdf)
+
+<use figures/ip_ieee.pdf>) [48 <./figures/ip_ieee.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/ip_ieee.pdf): PDF inclusion: 
+Page Group detected which pdfTeX can't handle. Ignoring it.
+>]
+\openout2 = `ch_6_functionality.aux'.
+
+ (./ch_6_functionality.tex
 Kapitola 6.
-[13] [14
+
+Underfull \hbox (badness 10000) in paragraph at lines 3--6
+
+ []
+
+[49
+
+
+
+
+] <figures/chart_init.png, id=1025, 803.0pt x 1204.5pt>
+File: figures/chart_init.png Graphic file (type png)
+
+<use figures/chart_init.png>
+<figures/chart_beacon.png, id=1026, 803.0pt x 1204.5pt>
+File: figures/chart_beacon.png Graphic file (type png)
+
+<use figures/chart_beacon.png>
+<figures/chart_associate_request.png, id=1027, 803.0pt x 1204.5pt>
+File: figures/chart_associate_request.png Graphic file (type png)
+
+<use figures/chart_associate_request.png>
+<figures/chart_data_request.png, id=1028, 803.0pt x 1204.5pt>
+File: figures/chart_data_request.png Graphic file (type png)
+
+<use figures/chart_data_request.png>
+<figures/chart_associate_response.png, id=1029, 803.0pt x 1204.5pt>
+File: figures/chart_associate_response.png Graphic file (type png)
+
+<use figures/chart_associate_response.png>) [50] [51 <./figures/chart_init.png>
+] [52 <./figures/chart_beacon.png>] [53 <./figures/chart_associate_request.png>
+] [54 <./figures/chart_data_request.png>] [55 <./figures/chart_associate_respon
+se.png>] [56
+
 
 ]
+\openout2 = `ch_7_conclusion.aux'.
+
+ (./ch_7_conclusion.tex
 Kapitola 7.
-[15] [16
+)
+Underfull \hbox (badness 10000) in paragraph at lines 2--241
 
-]
+ []
+
+[57
+
+
+] (./thesis.bbl [58
+
+
+] [59]) [60]
 Kapitola 8.
-(./thesis.bbl [17] [18
+[61
+
+
+] [62] [63] [64
 
 ]
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 34.
- (/usr/share/texmf/tex/latex/base/t1cmtt.fd
-File: t1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-)) [19]
-[20
+Kapitola 9.
+[65] [66
 
 ]
-Dodatek A.
-[21] [22]
-Dodatek B.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 325.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 325.
-File: figures/LogoCVUT.pdf Graphic file (type pdf)
-<use figures/LogoCVUT.pdf> [23
-
-] [24] [25] [26] [27] [28] [29] [30
-
-]
-Dodatek C.
-[31] [32
-
-]
-Dodatek D.
-[33] [34
-
-]
-Dodatek E.
-[35] [36
-
-]
-Dodatek F.
-<figures/seznamcd.pdf, id=468, 793.96625pt x 539.01375pt>
+Kapitola 10.
+<figures/seznamcd.pdf, id=1108, 793.96625pt x 539.01375pt>
 File: figures/seznamcd.pdf Graphic file (type pdf)
 
-<use figures/seznamcd.pdf> [37 <./figures/seznamcd.pdf>] [38] (./thesis.aux
-(./ch_1_introduction.aux) (./ch_2_goals.aux) (./ch_3_zigbee.aux)) ) 
+<use figures/seznamcd.pdf> [67 <./figures/seznamcd.pdf>] (./thesis.aux
+(./ch_1_introduction.aux) (./ch_2_goals.aux) (./ch_3_zigbee.aux)
+(./ch_4_variants.aux) (./ch_5_model.aux) (./ch_6_functionality.aux)
+(./ch_7_conclusion.aux)) ) 
 Here is how much of TeX's memory you used:
- 4301 strings out of 94070
- 52997 string characters out of 1165709
- 111022 words of memory out of 3500000
- 7386 multiletter control sequences out of 10000+50000
- 19199 words of font info for 41 fonts, out of 1200000 for 2000
+ 4627 strings out of 94070
+ 60238 string characters out of 1165709
+ 120911 words of memory out of 3500000
+ 7557 multiletter control sequences out of 10000+50000
+ 15821 words of font info for 36 fonts, out of 1200000 for 2000
  649 hyphenation exceptions out of 8191
- 25i,9n,38p,1083b,490s stack positions out of 5000i,500n,6000p,200000b,5000s
-{/usr/share/
-texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf/fonts/type1/bl
-uesky/cm/cmmi12.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmmi8.pfb></usr/sh
-are/texmf/fonts/type1/bluesky/cm/cmr12.pfb></usr/share/texmf/fonts/type1/bluesk
-y/cm/cmr8.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmsy10.pfb></usr/share/t
-exmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/pub
-lic/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx172
-8.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx2488.pfb></usr/share/te
-xmf/fonts/type1/public/cm-super/sfrm0600.pfb></usr/share/texmf/fonts/type1/publ
-ic/cm-super/sfrm0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800
-.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/tex
-mf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/publi
-c/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsl1200.
-pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1200.pfb></usr/share/texm
-f/fonts/type1/public/cm-super/sfti1728.pfb></usr/share/texmf/fonts/type1/public
-/cm-super/sftt1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.p
-fb>
-Output written on thesis.pdf (52 pages, 562335 bytes).
+ 25i,10n,41p,2565b,453s stack positions out of 5000i,500n,6000p,200000b,5000s
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t
+1.enc}</usr/share/texmf/fonts/type1/bluesky/cm/cmmi12.pfb></usr/share/texmf/fon
+ts/type1/bluesky/cm/cmmi8.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmr12.pf
+b></usr/share/texmf/fonts/type1/bluesky/cm/cmr8.pfb></usr/share/texmf/fonts/typ
+e1/bluesky/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1200
+.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/tex
+mf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type1/publi
+c/cm-super/sfbx2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0600.
+pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texm
+f/fonts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public
+/cm-super/sfsl1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1200.p
+fb></usr/share/texmf/fonts/type1/public/cm-super/sfti1728.pfb></usr/share/texmf
+/fonts/type1/public/cm-super/sftt1200.pfb>
+Output written on thesis.pdf (81 pages, 1467712 bytes).
 PDF statistics:
- 576 PDF objects out of 1000 (max. 8388607)
- 119 named destinations out of 1000 (max. 131072)
- 299 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1223 PDF objects out of 1440 (max. 8388607)
+ 219 named destinations out of 1000 (max. 131072)
+ 655 words of extra memory for PDF output out of 10000 (max. 10000000)
 

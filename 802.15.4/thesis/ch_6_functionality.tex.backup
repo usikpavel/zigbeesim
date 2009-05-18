@@ -1,0 +1,44 @@
+\chapter{Funkčnosť, výsledky testovania}
+
+\indent\indent OMNeT++ ponúka veľmi efektívne nástroje na spracovávanie výsledkov simulácii. Jedným z nich je aj tzv. Event Log Viewer. Priebeh simulácie vrátane popisu zasielaných správ, stavov a ich väzba na simulačný čas sú zaznamenávané do súboru. Následne je možnosť tieto priebehy spracovať cez zásuvný modul v nástroji Eclipse, ktorý je dodávaný spolu so štvrtou hlavnou verziou simulátora. Takýmto spôsobom sú na nasledujúcich stranách tejto kapitoly vyobrazené a popásanie niektoré zo základných implementovaných sekvencii z nášho modelu.\\
+\indent Na prvom z uvedenej série~\ref{fig:chart_init} je sekvencia opisujúca úvodnú postupnosť správ pre vytvorenie siete PAN koordinátorom. Na sieťovú vrstvu entitou \texttt{NLME} je prijatá správa NLME-NETWORK-FORMATION.request, ktorej obsah definuje konfiguračné parametre siete, ktorú chceme vytvoriť. Podľa akceptovanej množiny kanálov sú spustené procedúry pre preskenovanie kanálov a zistenie ich energetických hladín. Pre každý kanál to predstavuje vykonanie série testov, z ktorých \texttt{MLME} vrstva si vyberie ten pesimistický variant. Po vykonaní analýz na sa spustí tzv. aktívny sken na požadovaných kanáloch. Ten je doprevádzaný vysielaním požiadavku pre zaslanie beacon rámca. Po spracovaní výsledkov sa zapíšu konfiguračné premenné do informačnej bázy \texttt{NWK-PIB} a \texttt{MAC-PIB} a začína sa s rozposielaním beacon rámcov~\ref{fig:chart_beacon} (v prípade, že sa jedná o beaconing mód). Na príslušnom obrázku je vidieť, že nielen vysielanie rámca, ale aj šírenie signálu priestorom trvá istý interval. To je vďaka modulu \texttt{ChannelControl}. V prípade zvolenia vhodného kandidáta ako rodiča pre začlenenie sa do siete sa môže vyslať požiadavka pre asociáciu do siete. Táto správa je poslaná v CAP perióde. Na príslušnom grafe~\ref{fig:chart_associate_request} je možné spozorovať časovač \textbf{CAP slot timer}, ktorý určuje začiatok a koniec CAP slotov. Ďalej je daný obrázok hovorí o posielaní potvrdzujúceho rámca (žiadosť o asociáciu vyžaduje potvrdzovanie), ktorý je iniciovaný v \texttt{MCPS} vrstve cieľového zariadenia. 
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=140mm]{figures/chart_init}
+\caption{Init}
+\label{fig:chart_init}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=140mm]{figures/chart_beacon}
+\caption{Beacon}
+\label{fig:chart_beacon}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=140mm]{figures/chart_associate_request}
+\caption{Associate request}
+\label{fig:chart_associate_request}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=140mm]{figures/chart_data_request}
+\caption{Data request}
+\label{fig:chart_data_request}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=140mm]{figures/chart_associate_response}
+\caption{Associate response}
+\label{fig:chart_associate_response}
+\end{center}
+\end{figure}
