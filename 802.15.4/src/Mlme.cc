@@ -1,3 +1,20 @@
+/* -*- mode:c++ -*- ********************************************************
+ * file:        Mlme.cc
+ *
+ * author:      Bernard Halas
+ *
+ * copyright:   (C) 2009 Czech Technical University, Faculty of
+ *              Electrical Engineering
+ *
+ *              This program is free software; you can redistribute it
+ *              and/or modify it under the terms of the GNU General Public
+ *              License as published by the Free Software Foundation; either
+ *              version 2 of the License, or (at your option) any later
+ *              version.
+ ***************************************************************************
+ * part of:     ZigBee Simulation model
+ * description: - Module describing the behavior of the mac management entity
+ ***************************************************************************/
 #include "Mlme.h"
 
 Define_Module( Mlme);
@@ -311,6 +328,7 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 				for (unsigned int i = 0; i < sizeof(capability); i++) {
 					command->setCommandPayload(i, commandPayload[i]);
 				}
+				scheduleAt(simTime() + backoffPeriod, backoffTimer);
 				sendMcps(command);
 			}
 		}
@@ -368,16 +386,18 @@ void Mlme::handlePlmeMsg(cMessage *msg) {
 		if (confirm->getStatus() == PHY_IDLE) {
 			/** @comment channel clear, transmit the frame */
 			getMcps()->sendCapFrame();
+			resetBackoffPeriod();
 		} else {
-			if (getNumberOfBacoffs() = getMacPib()->getMacMaxCSMABackoffs()
-				|| getBackoffExponent() = getMacPib()->getMacMaxBE()) {
+			if (getNumberOfBacoffs() == getMacPib()->getMacMaxCSMABackoffs()
+				|| getBackoffExponent() == getMacPib()->getMacMaxBE()) {
 				setNumberOfBackoffs(0);
 				setBackoffExponent(getMacPib()->getMacMinBE());
 				/** @TODO reset the backoff period*/
+				resetBackoffPeriod();
+				/** @TODO send notice to upper layer that the channel is not accessible */
+			} else {
+				recalculateBackoffPeriod();
 			}
-			setBackoffPeriod(2*getBackoffPeriod());
-			setNumberOfBackoffs(getNumberOfBacoffs() + 1);
-			setBackoffExponent(getBackoffExponent() + 1);
 		}
 	}
 	delete (msg);
@@ -466,8 +486,7 @@ void Mlme::handleMlmeMsg(cMessage *msg) {
 			setBeaconPeriod(symbolsToSeconds(beaconDelaySymbols,
 					getCurrentChannel(), getCurrentPage()));
 			std::stringstream commentStream;
-			commentStream << "The beacon period set to: " << getBeaconPeriod()
-					<< " s.";
+			commentStream << "The beacon period set to: " << getBeaconPeriod() << " s.";
 			comment(COMMENT_BEACON, commentStream.str());
 			/** @note the value of startTime is ignored while we're coordinator */
 			if (getRole() == COORDINATOR) {
@@ -593,6 +612,10 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 				commentStream << "Starting the Contention Access Period";
 				comment(COMMENT_SUPERFRAME, commentStream.str());
 				commentStream.str().clear();
+				std::cout << "Calculating CAP slot duration: "
+					<< symbolsToSeconds(getMacPib()->getBaseSlotDuration()
+							* (1<< macBeacon->getSuperframeOrder()),
+						getCurrentChannel(), getCurrentPage()) << " s." << endl;
 				setCapSlotDuration((SimTime) symbolsToSeconds(
 						getMacPib()->getBaseSlotDuration() * (1
 								<< macBeacon->getSuperframeOrder()),
@@ -795,4 +818,20 @@ void Mlme::switchRadioToChannel(unsigned int channel) {
 	comment(COMMENT_CHANNEL, commentStream.str());
 	setCurrentChannel(channel);
 	sendPlmeDown(requestChannel);
+}
+
+void Mlme::recalculateBackoffPeriod() {
+	setNumberOfBackoffs(getNumberOfBacoffs() + 1);
+	setBackoffExponent(getBackoffExponent() + 1);
+	setBackoffPeriod(calculateBackoffPeriod());
+}
+
+void Mlme::resetBackoffPeriod() {
+	setNumberOfBackoffs(0);
+	setBackoffExponent(getMacPib()->getMacMinBE());
+	setBackoffPeriod(calculateBackoffPeriod());
+}
+
+SimTime Mlme::calculateBackoffPeriod() {
+	return (rand()%(1<<getBackoffExponent()))*getCapSlotDuration();
 }

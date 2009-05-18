@@ -1,5 +1,5 @@
 /* -*- mode:c++ -*- ********************************************************
- * file:        SimpleArp.cc
+ * file:        ZigBeeArp.cc
  *
  * author:      Daniel Willkomm
  *
