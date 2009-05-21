@@ -9,7 +9,7 @@
 % sjednoceni zdrojoveho kodu pro anglickou, ceskou, bakalarskou a diplomovou praci
 
 \documentclass[12pt,twoside,a4paper]{book}   %two-page printing
-\usepackage[czech, english]{babel}
+\usepackage[czech]{babel}
 \usepackage[T1]{fontenc} % pouzije EC fonty
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
@@ -100,46 +100,30 @@ unicode=true,
 % Zvolte jednu z moznosti 
 % Choose one of the following options
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\selectlanguage{czech}
+
 %\selectlanguage{english} 
 
 % prikaz \typeout vypise vyse uvedena nastaveni v prikazovem okne
 % pro pohodlne ladeni prace
 
 
-\iflanguage{czech}{
-	 \typeout{************************************************}
-	 \typeout{Zvoleny jazyk: cestina}
-	 \typeout{Typ prace: \TypeOfWork}
-	 \typeout{Studijni program: \StudProgram}
-	 \typeout{Obor: \StudBranch}
-	 \typeout{Jmeno: \FirstandFamilyName}
-	 \typeout{Nazev prace: \WorkTitle}
-	 \typeout{Vedouci prace: \Supervisor}
-	 \typeout{***************************************************}
-	 \newcommand\Department{Katedra počítačů}
-	 \newcommand\Faculty{Fakulta elektrotechnická}
-	 \newcommand\University{České vysoké učení technické v Praze}
-	 \newcommand\labelSupervisor{Vedúci práce}
-	 \newcommand\labelStudProgram{Študíjny program}
-	 \newcommand\labelStudBranch{Obor}
-}{
-	 \typeout{************************************************}
-	 \typeout{Language: english}
-	 \typeout{Type of Work: \TypeOfWork}
-	 \typeout{Study Program: \StudProgram}
-	 \typeout{Study Branch: \StudBranch}
-	 \typeout{Author: \FirstandFamilyName}
-	 \typeout{Title: \WorkTitle}
-	 \typeout{Supervisor: \Supervisor}
-	 \typeout{***************************************************}
-	 \newcommand\Department{Department of Computer Science and Engineering}
-	 \newcommand\Faculty{Faculty of Electrical Engineering}
-	 \newcommand\University{Czech Technical University in Prague}
-	 \newcommand\labelSupervisor{Supervisor}
-	 \newcommand\labelStudProgram{Study Programme} 
-	 \newcommand\labelStudBranch{Field of Study}
-}
+
+\typeout{************************************************}
+\typeout{Zvoleny jazyk: cestina}
+\typeout{Typ prace: \TypeOfWork}
+\typeout{Studijni program: \StudProgram}
+\typeout{Obor: \StudBranch}
+\typeout{Jmeno: \FirstandFamilyName}
+\typeout{Nazev prace: \WorkTitle}
+\typeout{Vedouci prace: \Supervisor}
+\typeout{***************************************************}
+\newcommand\Department{Katedra počítačů}
+\newcommand\Faculty{Fakulta elektrotechnická}
+\newcommand\University{České vysoké učení technické v Praze}
+\newcommand\labelSupervisor{Vedúci práce}
+\newcommand\labelStudProgram{Študíjny program}
+\newcommand\labelStudBranch{Obor}
+
 
 
 
@@ -181,7 +165,7 @@ This work describes a design of a LR-WPAN network model based on the ZigBee stan
 \vspace{8ex}
 
 \noindent
-Táto práca pojednáva o príprave modelu LR-WPAN siete postavenej na štandarde ZigBee v populárnom simulačnom nástroji OMNeT++. Spracováva a vyhodnocuje možnosti ponúkané doplnkovými rozšíreniami k danému simulátoru pre modelovanie bezdrôtových a mobilných sietí. Práca si dáva za cieľ ponúknuť jeden z možných prístupov založený na presnom premietnutí procesov definovaných v špecifikácii aj do vnútornej štruktúry produktu, čím sa snaží o prehľadnosť a o poskytnutie solídneho odrazového bodu pre prípadné rozširovanie, alebo aktualizáciu modelu.
+Táto práca pojednáva o príprave modelu LR-WPAN siete postavenej na štandarde Zig\-Bee v populárnom simulačnom nástroji OMNeT++. Spracováva a vyhodnocuje možnosti ponúkané doplnkovými rozšíreniami k danému simulátoru pre modelovanie bezdrôtových a mobilných sietí. Práca si dáva za cieľ ponúknuť jeden z možných prístupov založený na presnom premietnutí procesov definovaných v špecifikácii aj do vnútornej štruktúry produktu, čím sa snaží o prehľadnosť a o poskytnutie solídneho odrazového bodu pre prípadné rozširovanie, alebo aktualizáciu modelu.
 
 \noindent
 
@@ -261,6 +245,9 @@ Táto práca pojednáva o príprave modelu LR-WPAN siete postavenej na štandard
 % kdy citace ma tvar [AutorRok] (napriklad [Cook97]). Sice to asi neni  podle ceske normy (BTW BibTeX stejne neodpovida ceske norme), ale je to nejprehlednejsi.
 
 %*****************************************************************************
+
+\appendix
+
 \cleardoublepage\chapter{Zoznam použitých skratiek}
 
 \begin{description}
@@ -272,6 +259,7 @@ Táto práca pojednáva o príprave modelu LR-WPAN siete postavenej na štandard
 \item[APSME] Application Support Sublayer Management Entity
 \item[CSMA-CA] Carrier Sense Multiple Access - Collision Avoidance
 \item[ED] Energy Detection
+\item[FCS] Frame Check Sequence
 \item[FEC] Forward Error Correction
 \item[FFD] Full Functionality Device
 \item[GTS] Guaranteed Time Slot
@@ -285,9 +273,12 @@ Táto práca pojednáva o príprave modelu LR-WPAN siete postavenej na štandard
 \item[LR-WPAN] Low-Rate Wireless Personal Area Network
 \item[MAC] Medium Access Control
 \item[MAC-PIB] Medium Access Control layer Protocol Information Base
+\item[MCPS] MAC Common Part Sublayer
 \item[MF] Mobility Framework
 \item[MHz] Megahertz
 \item[MIMO] Multiple In, Multiple Out
+\item[MLME] MAC Sublayer Management Entity
+\item[MSB] Most Significant Bit
 \item[NET] Network
 \item[NLDE] Network Layer Data Entity
 \item[NLME] Network Layer Management Entity
@@ -297,12 +288,15 @@ Táto práca pojednáva o príprave modelu LR-WPAN siete postavenej na štandard
 \item[OEM] Original Equipment Manufacturer
 \item[OFDM] Orthogonal Frequency Division Multiplexing
 \item[PAN] Personal Area Network
+\item[PD] PHY Data
 \item[PDA] Personal Digital Assistent
 \item[PDU] Protocol Data Unit
-\item[PHY] Physical
 \item[RFD] Reduced Functionality Device
+\item[PHY] Physical
+\item[PLME] PHY Layer Management Entity
 \item[RSSI] Received Signal Strength Indication
 \item[SAP] Service Access Point
+\item[SAT] Signal Attenuation Threshold
 \item[SFD] Starting Frame Delimiter
 \item[SINR] Signal to Interference plus Noise Ratio
 \item[SNR] Signal to Noise Ratio
@@ -316,19 +310,16 @@ Táto práca pojednáva o príprave modelu LR-WPAN siete postavenej na štandard
 \end{description}
 
 %*****************************************************************************
-\chapter{UML diagramy}
-\textbf{\large Tato příloha není povinná a zřejmě se neobjeví v každé práci. Máte-li ale větší množství podobných diagramů popisujících systém, není nutné všechny umísťovat do hlavního textu, zvláště pokud by to snižovalo jeho čitelnost.}
+%\chapter{UML diagramy}
+
 
 %*****************************************************************************
-\chapter{Obsah přiloženého CD}
-\textbf{\large Tato příloha je povinná pro každou práci. Každá práce musí totiž obsahovat přiložené CD. Viz dále.}
-
-Může vypadat například takto. Váš seznam samozřejmě bude odpovídat typu vaší práce. (viz \cite{infodp}):
+\chapter{Obsah priloženého CD}
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=14cm]{figures/seznamcd}
-\caption{Seznam přiloženého CD --- příklad}
+\caption{Obsah priloženého CD}
 \label{fig:seznamcd}
 \end{center}
 \end{figure}
