@@ -528,6 +528,7 @@ void Mlme::handleMacPibMsg(cMessage *msg) {
 
 void Mlme::handleMcpsMsg(cMessage *msg) {
 	if (msg->getKind() == MAC_COMMAND_FRAME) {
+		std::string msgName = msg->getName();
 		MacCommand* command = check_and_cast<MacCommand *> (msg);
 		if (command->getCommandType() == BEACON_REQUEST) {
 			PlmeSetTrxState_request *request = new PlmeSetTrxState_request(
@@ -536,6 +537,10 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 			sendPlmeDown(request);
 			delete (command);
 		} else if (command->getCommandType() == ASSOCIATE_REQUEST) {
+			if (msgName == "Command sent") {
+				delete (msg);
+				return;
+			}
 			if (!getMacPib()->getMacAssociationPermit()) {
 				comment(COMMENT_PAN,
 						"Association not allowed, discarding request");
@@ -584,6 +589,9 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 				getMcps()->setNextEncapsulation(encapsulation);
 				sendMcps(macCommand);
 			}
+		} else if (command->getCommandType() == ASSOCIATE_RESPONSE) {
+			/** @TODO finish association process */
+			setLayerStage(0);
 		}
 	} else if (msg->getKind() == MAC_BEACON_FRAME) {
 		std::string msgName = msg->getName();
@@ -610,12 +618,6 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 				/** @FIXME random problems here with the SimTime :-\ */
 				std::stringstream commentStream;
 				commentStream << "Starting the Contention Access Period";
-				comment(COMMENT_SUPERFRAME, commentStream.str());
-				commentStream.str().clear();
-				std::cout << "Calculating CAP slot duration: "
-					<< symbolsToSeconds(getMacPib()->getBaseSlotDuration()
-							* (1<< macBeacon->getSuperframeOrder()),
-						getCurrentChannel(), getCurrentPage()) << " s." << endl;
 				setCapSlotDuration((SimTime) symbolsToSeconds(
 						getMacPib()->getBaseSlotDuration() * (1
 								<< macBeacon->getSuperframeOrder()),
@@ -623,7 +625,8 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 
 				setCapSlotNumber(1);
 				setSuperframePeriod(CAP);
-				commentStream << "CAP slot duration: " << getCapSlotDuration();
+				commentStream.str().clear();
+				commentStream << "; CAP slot duration: " << getCapSlotDuration();
 				comment(COMMENT_SUPERFRAME, commentStream.str());
 				scheduleAt(getPd()->getLastMsgTimestamp()
 						+ getCapSlotDuration(), capSlotTimer);
@@ -746,10 +749,11 @@ void Mlme::handleMcpsMsg(cMessage *msg) {
 			delete (msg);
 		}
 	} else if (msg->getKind() == MAC_ACK_FRAME) {
-		if (!getDataRequestScheduled()) {
+		if (!getDataRequestScheduled() && getLayerStage() == 0) {
 			if (getLastUpperMsg()->getKind() == MLME_ASSOCIATE_REQUEST) {
 				scheduleAt(simTime() + symbolsToSeconds(getMacPib()->getMacResponseWaitTime()*getMacPib()->getBaseSuperFrameDuration(), getCurrentChannel(), getCurrentPage()), dataRequestTimer);
 				setDataRequestScheduled(true);
+				setLayerStage(1);
 			}
 		}
 	}

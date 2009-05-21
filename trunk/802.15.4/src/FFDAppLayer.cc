@@ -53,7 +53,7 @@ void FFDAppLayer::initialize(int stage) {
 		} else if (getRole() == ROUTER) {
 			cMessage* msg = new cMessage("NLME-NETWORK-DISCOVERY.request",
 					TIMER_START);
-			scheduleAt(simTime() + uniform(0, 0.5), msg);
+			scheduleAt(simTime() + uniform(10, 15), msg);
 		}
 	}
 }

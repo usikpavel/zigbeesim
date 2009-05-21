@@ -13,7 +13,7 @@ import org.mf2.contrib.mobility.ConstSpeedMobility;
 module RFD
 {
     parameters:
-        @display("i=device/accesspoint");
+        @display("i=device/device");
     gates:
         input radioIn;
     submodules:
@@ -21,15 +21,15 @@ module RFD
             parameters:
                 //@display("p=200,75;b=30,25");
         }
-        //mobility: ConstSpeedMobility {
-        //    parameters:
-        //        //@display("p=200,150;b=30,25");
-        //}
-        app: RFDAppLayer {
+        mobility: ConstSpeedMobility {
+            parameters:
+                //@display("p=200,150;b=30,25");
+        }
+        app: FFDAppLayer {
             parameters:
                 //@display("p=90,50;b=100,20,rect");
         }
-        net: RFDNetLayer {
+        net: FFDNetLayer {
             parameters:
                 //@display("p=90,100;b=100,20,rect");
         }
@@ -40,14 +40,19 @@ module RFD
             parameters:
                 //@display("p=90,150;b=100,20,rect");
         }
-        
-    connections:
-        app.netOut --> net.appIn;
-        app.netIn <-- net.appOut;
-        
-        net.nicOut --> nic.netIn;
-        net.nicIn <-- nic.netOut;
-        
-        radioIn --> nic.radioIn;      
-}
 
+    connections:
+        app.nldeSapOut --> net.nldeSapIn;
+        app.nldeSapIn <-- net.nldeSapOut;
+
+        app.nlmeSapOut --> net.nlmeSapIn;
+        app.nlmeSapIn <-- net.nlmeSapOut;
+
+        net.mcpsSapOut --> nic.mcpsSapIn;
+        net.mcpsSapIn <-- nic.mcpsSapOut;
+
+        net.mlmeSapOut --> nic.mlmeSapIn;
+        net.mlmeSapIn <-- nic.mlmeSapOut;
+
+        radioIn --> nic.radioIn;
+}
