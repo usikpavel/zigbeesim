@@ -53,7 +53,7 @@ void FFDAppLayer::initialize(int stage) {
 		} else if (getRole() == ROUTER) {
 			cMessage* msg = new cMessage("NLME-NETWORK-DISCOVERY.request",
 					TIMER_START);
-			scheduleAt(simTime() + uniform(10, 15), msg);
+			scheduleAt(simTime() + 100 + uniform(10, 15), msg);
 		}
 	}
 }
@@ -93,6 +93,7 @@ void FFDAppLayer::handleNlmeMsg(cMessage* msg) {
 		/** @todo include the param into the omnetpp.ini */
 		request->setPermitDuration(0xFF);
 		sendNlmeDown(request);
+		recordScalar("Network Formation Time", simTime());
 	} else if (msg->getKind() == NLME_PERMIT_JOINING_CONFIRM) {
 	} else if (msg->getKind() == NLME_NETWORK_DISCOVERY_CONFIRM) {
 		NlmeNetworkDiscovery_confirm* confirm = check_and_cast<
@@ -132,7 +133,8 @@ void FFDAppLayer::handleSelfMsg(cMessage* msg) {
 			 * more info on this on page 6 in the notepad, or in the 802154 doc */
 			request->setName("NLME-NETWORK-FORMATION.request");
 			request->setKind(NLME_NETWORK_FORMATION_REQUEST);
-			request->setScanChannels(0x00001800);
+			//request->setScanChannels(0x00001800);
+			request->setScanChannels(0x00001803);
 			request->setScanDuration(0x00);
 			request->setBeaconOrder(0x0E);
 			request->setSuperframeOrder(0x0A);
