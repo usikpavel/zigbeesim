@@ -1,0 +1,18 @@
+version 2
+run General-0-20090525-20:57:13-5544
+attr configname General
+attr datetime 20090525-20:57:13
+attr experiment General
+attr inifile /home/bernard/projects/dip_802.15.4/simulations/omnetpp.ini
+attr iterationvars ""
+attr iterationvars2 $repetition=0
+attr measurement ""
+attr network ZigBee
+attr processid 5544
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 0
+attr seedset 0
+
+scalar ZigBee.coordinatorHost.app 	"Network Formation Time" 	0.440448
